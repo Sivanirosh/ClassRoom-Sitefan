@@ -219,18 +219,18 @@
                 alert("Veuillez entrer votre prénom complet ainsi que la première lettre de votre nom.");
                 return;
             }
-            localStorage.setItem('nomEleve', nom);
+            sessionStorage.setItem('nomEleve', nom);
             document.getElementById('display-name').innerText = nom;
             document.getElementById('login-screen').classList.add('hidden');
         }
 
         function changerUtilisateur() {
-            localStorage.removeItem('nomEleve');
+            sessionStorage.removeItem('nomEleve');
             document.getElementById('login-screen').classList.remove('hidden');
         }
 
         window.onload = function() {
-            const nomMemorise = localStorage.getItem('nomEleve');
+            const nomMemorise = sessionStorage.getItem('nomEleve');
             if (nomMemorise) {
                 document.getElementById('display-name').innerText = nomMemorise;
                 document.getElementById('login-screen').classList.add('hidden');
@@ -238,7 +238,7 @@
         }
 
         function ouvrirActivite(page) {
-            const nom = localStorage.getItem('nomEleve') || "Anonyme";
+            const nom = sessionStorage.getItem('nomEleve') || "Anonyme";
             window.location.href = `${page}?eleve=${encodeURIComponent(nom)}`;
         }
 
