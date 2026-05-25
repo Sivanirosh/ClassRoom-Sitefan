@@ -128,26 +128,26 @@
                         </button>
                     </div>
 
-                    <!-- Carte 2 : Le Défi des Formes (Lien vers formes.html) -->
+                    <!-- Carte 2 : Le Défi des Formes (Lien vers geometrie.html) -->
                     <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition-all flex flex-col justify-between group">
                         <div>
                             <span class="text-4xl mb-4 block group-hover:scale-110 transition-transform duration-200">📐</span>
                             <h4 class="font-bold text-lg text-slate-800">Le Défi des Formes</h4>
                             <p class="text-slate-500 text-xs mt-1 leading-relaxed">Apprends à identifier les formes géométriques complexes, leurs angles et leurs propriétés.</p>
                         </div>
-                        <button onclick="lancerActivite('formes.html')" class="mt-6 bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white font-bold text-sm py-3 rounded-xl transition-all">
+                        <button onclick="lancerActivite('geometrie.html')" class="mt-6 bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white font-bold text-sm py-3 rounded-xl transition-all">
                             Lancer le défi ➔
                         </button>
                     </div>
 
-                    <!-- Carte 3 : Le Calcul Décimal (Lien vers decimaux.html) -->
+                    <!-- Carte 3 : Le Calcul Décimal (Lien vers calculs.html) -->
                     <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition-all flex flex-col justify-between group">
                         <div>
                             <span class="text-4xl mb-4 block group-hover:scale-110 transition-transform duration-200">🔢</span>
                             <h4 class="font-bold text-lg text-slate-800">Le Calcul Décimal</h4>
                             <p class="text-slate-500 text-xs mt-1 leading-relaxed">Maîtrise les additions, soustractions et multiplications complexes avec les nombres à virgule.</p>
                         </div>
-                        <button onclick="lancerActivite('decimaux.html')" class="mt-6 bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white font-bold text-sm py-3 rounded-xl transition-all">
+                        <button onclick="lancerActivite('calculs.html')" class="mt-6 bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white font-bold text-sm py-3 rounded-xl transition-all">
                             Relever le défi ➔
                         </button>
                     </div>
@@ -176,8 +176,8 @@
                     <select id="teacher-filter-game" onchange="filtrerScores()" class="px-4 py-2 border rounded-xl text-sm focus:outline-none focus:border-indigo-500 bg-white">
                         <option value="all">Tous les exercices</option>
                         <option value="Livrets de multiplication">Livrets de multiplication</option>
-                        <option value="Le Défi des Formes">Le Défi des Formes</option>
-                        <option value="Le Calcul Décimal">Le Calcul Décimal</option>
+                        <option value="Défi Géométrie">Défi Géométrie</option>
+                        <option value="Calcul Décimal">Calcul Décimal</option>
                     </select>
                 </div>
                 <button onclick="effacerTousLesScores()" class="text-xs font-bold text-red-600 hover:underline">⚠️ Réinitialiser tous les scores</button>
@@ -323,8 +323,8 @@
 
         function validerEspaceEnseignant() {
             const mdp = document.getElementById('teacher-password').value;
-            // Mot de passe enseignant personnalisable (ici simple exemple '1234')
-            if (mdp === "1234" || mdp === "prof") {
+            // Mot de passe enseignant personnalisable
+            if (mdp === "Prof2026") {
                 document.getElementById('password-modal').classList.add('hidden');
                 document.getElementById('teacher-password').value = "";
                 
@@ -407,7 +407,7 @@
                 // Jauge de couleur pour la réussite
                 let couleurReussite = "bg-rose-100 text-rose-700";
                 if (pourcentage >= 80) couleurReussite = "bg-emerald-100 text-emerald-700";
-                else if (pourcentage >= 50) couleurReussite = "bg-amber-100 text-amber-700";
+                else if (pourcentage >= 50) couleurReussite = "bg-amber-105 text-amber-700";
 
                 return `
                     <tr class="hover:bg-slate-50 transition">
