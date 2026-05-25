@@ -3,306 +3,405 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Défi Géométrie - Apprentissage Adaptatif</title>
+    <title>Le Défi des Formes — Géométrie</title>
+    <!-- Tailwind CSS pour un design moderne et responsive -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- SDK Firebase -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "",
-            authDomain: "classe-numerique-prof.firebaseapp.com",
-            projectId: "classe-numerique-prof",
-            storageBucket: "classe-numerique-prof.appspot.com",
-            messagingSenderId: "123456789",
-            appId: "1:123456:web:abcde"
-        };
+        // Configuration Firebase dynamique de l'environnement
+        const firebaseConfig = typeof __firebase_config !== 'undefined' 
+            ? JSON.parse(__firebase_config) 
+            : {
+                apiKey: "",
+                authDomain: "classe-numerique-prof.firebaseapp.com",
+                projectId: "classe-numerique-prof",
+                storageBucket: "classe-numerique-prof.appspot.com",
+                messagingSenderId: "123456789",
+                appId: "1:123456:web:abcde"
+            };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        // Initialisation sécurisée
+        try {
+            const app = initializeApp(firebaseConfig);
+            const auth = getAuth(app);
+            const db = getFirestore(app);
+            const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const nomEleve = urlParams.get('eleve') || "Élève Mystère";
-        window.nomEleve = nomEleve;
+            window.db = db;
+            window.appId = appId;
 
-        // Récupérer l'historique et préparer la liste des figures cibles (Apprentissage Adaptatif)
-        async function analyserHistoriqueGeometrie() {
-            try {
-                const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'scores');
-                const snapshot = await getDocs(colRef);
-                const historique = [];
+            // Connexion anonyme automatique requise avant d'interroger ou d'enregistrer sur la BDD
+            const initAuth = async () => {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            };
+            initAuth();
 
-                snapshot.forEach(doc => {
-                    const data = doc.data();
-                    if (data.nomEleve === nomEleve && data.exercice === "Défi Géométrie") {
-                        historique.push(data);
-                    }
-                });
-
-                // Compter les échecs par type de figure pour donner une priorité
-                const erreursFormes = {};
-                historique.forEach(session => {
-                    if (session.details) {
-                        session.details.forEach(q => {
-                            if (!q.isCorrect) {
-                                erreursFormes[q.correctAnswer] = (erreursFormes[q.correctAnswer] || 0) + 1;
-                            }
-                        });
-                    }
-                });
-
-                window.erreursFormesHistorique = erreursFormes;
-                document.getElementById('loading-overlay').classList.add('hidden');
-                determinerOrdreQuestions();
-
-            } catch (e) {
-                console.error("Erreur d'analyse. Mode normal.", e);
-                window.erreursFormesHistorique = {};
-                document.getElementById('loading-overlay').classList.add('hidden');
-                determinerOrdreQuestions();
-            }
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    window.currentUser = user;
+                    // Dès que l'authentification réussit, on libère l'accès
+                    annulerChargementEtDemarrer();
+                }
+            });
+        } catch (e) {
+            console.error("Erreur d'initialisation Firebase :", e);
+            annulerChargementEtDemarrer();
         }
-
-        async function enregistrerSession(corrects, erreurs, detailQuestions) {
-            try {
-                const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'scores');
-                await addDoc(colRef, {
-                    nomEleve: nomEleve,
-                    exercice: "Défi Géométrie",
-                    corrects: corrects,
-                    erreurs: erreurs,
-                    timestamp: Date.now(),
-                    details: detailQuestions
-                });
-                console.log("Session de géométrie sauvegardée.");
-            } catch (e) {
-                console.error("Échec de sauvegarde géométrie :", e);
-            }
-        }
-
-        window.analyserHistoriqueGeometrie = analyserHistoriqueGeometrie;
-        window.enregistrerSession = enregistrerSession;
     </script>
 </head>
-<body class="bg-slate-50 min-h-screen flex items-center justify-center p-4">
+<body class="bg-slate-50 min-h-screen font-sans flex flex-col justify-between">
 
-    <!-- ÉCRAN DE CHARGEMENT PROFIL ADAPTATIF -->
-    <div id="loading-overlay" class="fixed inset-0 bg-blue-900/95 z-50 flex flex-col items-center justify-center text-white p-6">
-        <span class="text-6xl animate-bounce mb-4">🧠</span>
-        <h2 class="text-2xl font-bold mb-2">Chargement de ton profil personnalisé</h2>
-        <p class="text-blue-200 text-sm max-w-sm text-center">Nous analysons tes tentatives précédentes pour ajuster la priorité des formes géométriques...</p>
+    <!-- ÉCRAN DE CHARGEMENT SÉCURISÉ AVEC TIMEOUT ANTI-BLOCAGE -->
+    <div id="loading-overlay" class="fixed inset-0 bg-slate-900 text-white flex flex-col items-center justify-center z-50 p-6 transition-opacity duration-500">
+        <div class="text-center max-w-md">
+            <span class="text-6xl animate-bounce mb-6 block">📐</span>
+            <h2 class="text-2xl font-bold mb-3">Chargement de ton profil personnalisé</h2>
+            <p class="text-slate-400 text-sm mb-6">Nous analysons tes tentatives précédentes pour ajuster la difficulté des formes...</p>
+            <div class="w-16 h-16 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto mb-6"></div>
+            <p class="text-xs text-slate-500 italic">Démarrage automatique dans un instant si la connexion est ralentie.</p>
+        </div>
     </div>
 
-    <div class="bg-white p-6 md:p-8 rounded-3xl shadow-xl max-w-xl w-full text-center relative border border-slate-100">
-        <div class="flex justify-between items-center mb-6">
-            <button onclick="window.location.href='index.html'" class="text-blue-600 hover:underline font-bold text-sm flex items-center gap-1">◀ Accueil</button>
-            <div id="badge-question" class="text-xs bg-slate-100 text-slate-500 font-bold px-3 py-1 rounded-full">Forme 1 / 5</div>
+    <!-- HAUT DE PAGE -->
+    <header class="bg-indigo-900 text-white shadow-md">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <span class="text-2xl">📐</span>
+                <div>
+                    <h1 class="text-lg font-bold">Le Défi des Formes</h1>
+                    <p class="text-xs text-indigo-200">Reconnaissance géométrique et propriétés</p>
+                </div>
+            </div>
+            <div class="text-right">
+                <span class="text-xs text-indigo-200 block">Élève :</span>
+                <span id="nom-eleve-badge" class="font-bold text-amber-300">Visiteur</span>
+            </div>
         </div>
+    </header>
 
-        <h1 class="text-2xl font-bold text-slate-800">Défi Géométrie 📐</h1>
-        <p class="text-xs text-slate-400 mt-1">Élève : <span id="student-tag" class="font-bold text-slate-600">...</span></p>
+    <!-- ZONE DE JEU -->
+    <main class="max-w-4xl mx-auto px-4 py-6 flex-grow w-full flex flex-col justify-center">
         
-        <div class="flex justify-center gap-6 my-6 bg-slate-50 py-3 rounded-2xl border border-slate-100/50">
-            <div class="text-green-600 font-bold">Justes : <span id="score-c">0</span></div>
-            <div class="text-red-500 font-bold">Faux : <span id="score-w">0</span></div>
-        </div>
+        <!-- ÉCRAN PRINCIPAL DE JEU -->
+        <div id="game-card" class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100 max-w-2xl mx-auto w-full">
+            
+            <!-- Progression de l'exercice -->
+            <div class="flex justify-between items-center mb-6">
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Question <span id="num-question" class="text-indigo-600">1</span> / 10</span>
+                <div class="flex gap-1" id="dots-container">
+                    <!-- Rempli en JS par des billes de statut -->
+                </div>
+                <span class="text-xs font-bold text-emerald-600">Score : <span id="score-live">0</span>/10</span>
+            </div>
 
-        <div id="game-zone">
-            <!-- Zone d'affichage SVG -->
-            <div class="bg-slate-50 rounded-2xl h-48 flex justify-center items-center p-4 border border-slate-150 mb-6">
-                <svg viewBox="0 0 200 200" class="w-full h-full max-h-40">
-                    <polygon id="svg-polygon" points="50,50 150,50 150,150 50,150" 
-                             class="fill-blue-50/70 stroke-blue-600 stroke-[4] stroke-linejoin-round" />
+            <!-- Rendu Visuel de la Forme (SVG Interactif) -->
+            <div class="bg-slate-50 rounded-2xl p-4 mb-6 flex items-center justify-center border border-slate-100 h-64 relative overflow-hidden">
+                <svg id="svg-shape" class="w-full h-full max-h-56" viewBox="0 0 400 300">
+                    <!-- Généré dynamiquement en JS -->
                 </svg>
             </div>
 
-            <div id="question-text" class="text-lg font-bold text-slate-700 mb-6 leading-relaxed">...</div>
-
-            <!-- Boutons de réponses -->
-            <div id="choices-grid" class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
-                <!-- Boutons générés en JS -->
+            <!-- Énoncé de la question -->
+            <div class="mb-6 text-center">
+                <p id="enonce-question" class="text-lg font-bold text-slate-800 leading-snug"></p>
+                <p id="aide-visuelle" class="text-xs text-slate-400 mt-1 italic"></p>
             </div>
 
-            <p id="feedback" class="font-bold text-md min-h-[1.5em] mb-4"></p>
-            <button id="next-btn" onclick="prochaineForme()" class="w-full bg-emerald-500 text-white font-bold py-4 rounded-2xl hover:bg-emerald-600 transition hidden shadow-md">Continuer ➔</button>
+            <!-- Zone de réponse dynamique -->
+            <div id="options-container" class="grid grid-cols-2 gap-4">
+                <!-- Boutons d'options générés dynamiquement -->
+            </div>
+
+            <!-- Feedback de validation -->
+            <div id="feedback" class="mt-6 p-4 rounded-2xl hidden text-center font-bold"></div>
         </div>
 
-        <!-- Zone fin de jeu -->
-        <div id="finish-zone" class="hidden py-8">
-            <span class="text-6xl my-4 block">🏆</span>
-            <h2 class="text-3xl font-bold text-slate-800 mb-2 font-serif">Défi terminé !</h2>
-            <p class="text-slate-500 mb-6 text-sm">Tes tentatives ont bien été archivées dans l'espace de l'enseignant.</p>
-            <div class="text-5xl font-black text-blue-600 mb-8" id="final-score">0 / 5</div>
-            <button onclick="window.location.href='index.html'" class="w-full bg-blue-600 text-white font-bold py-4 rounded-2xl hover:bg-blue-700 transition shadow-md">Retourner au portail</button>
-        </div>
-    </div>
+        <!-- ÉCRAN DE FIN DE PARTIE -->
+        <div id="end-card" class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 max-w-md mx-auto w-full text-center hidden space-y-6">
+            <span class="text-6xl block">🏆</span>
+            <h2 class="text-2xl font-bold text-slate-800">Défi Terminé !</h2>
+            <p class="text-slate-500 text-sm">Félicitations pour tes efforts, tes résultats ont été enregistrés pour ton enseignant.</p>
+            
+            <div class="bg-slate-50 p-6 rounded-2xl border">
+                <p class="text-sm text-slate-400 font-bold uppercase">Ton Score Final</p>
+                <p class="text-4xl font-extrabold text-indigo-600 my-1"><span id="final-score">0</span> / 10</p>
+                <p id="appreciation" class="text-xs font-semibold text-slate-500"></p>
+            </div>
 
+            <button onclick="retourPortail()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-2xl transition shadow-md">
+                Retourner à l'accueil ➔
+            </button>
+        </div>
+
+    </main>
+
+    <!-- PIED DE PAGE -->
+    <footer class="bg-slate-900 text-slate-500 py-4 text-center text-xs">
+        <p>© 2026 Classe Numérique Premium — Défi Géométrie.</p>
+    </footer>
+
+    <!-- CODE DU JEU ET DES FORMES -->
     <script>
-        document.getElementById('student-tag').innerText = window.nomEleve;
+        // Extraction du prénom depuis l'URL
+        const params = new URLSearchParams(window.location.search);
+        const nomEleve = params.get('eleve') || "Visiteur";
+        document.getElementById('nom-eleve-badge').innerText = nomEleve;
 
-        // Base de données des questions
-        const figuresBase = [
+        // --- SÉCURITÉ ANTI-BLOCAGE : TIMEOUT DE 2 SECONDES ---
+        let loadingFini = false;
+        const securiteTimeout = setTimeout(() => {
+            if (!loadingFini) {
+                console.warn("Délai d'attente dépassé (2s) - Lancement du mode autonome.");
+                annulerChargementEtDemarrer();
+            }
+        }, 2000);
+
+        function annulerChargementEtDemarrer() {
+            if (loadingFini) return;
+            loadingFini = true;
+            clearTimeout(securiteTimeout);
+            
+            // Masquage fluide de l'overlay de chargement
+            const overlay = document.getElementById('loading-overlay');
+            overlay.classList.add('opacity-0');
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                initJeu();
+            }, 500);
+        }
+
+        // --- DONNÉES DU JEU DES FORMES ---
+        const figures = [
             {
-                name: "Triangle Équilatéral",
-                text: "J'ai 3 côtés de même longueur et 3 angles égaux de 60°. Qui suis-je ?",
-                points: "100,30 170,150 30,150",
-                options: ["Triangle Équilatéral", "Triangle Isocèle", "Triangle Rectangle", "Losange"],
-                correct: "Triangle Équilatéral",
-                desc: "Parfait ! Un triangle régulier à 3 côtés est équilatéral."
+                nom: "Carré",
+                points: "100,50 300,50 300,250 100,250",
+                color: "#6366f1",
+                questions: [
+                    { q: "Quelle est cette figure géométrique ?", r: "Carré", options: ["Carré", "Rectangle", "Losange", "Triangle"] },
+                    { q: "Combien d'angles droits possède cette figure ?", r: "4", options: ["2", "3", "4", "0"] },
+                    { q: "Quelle est la propriété principale de ses 4 côtés ?", r: "Ils sont tous de même longueur", options: ["Ils sont tous de même longueur", "Seuls les opposés sont égaux", "Ils n'ont aucun lien", "Deux sont plus grands"] }
+                ]
             },
             {
-                name: "Carré",
-                text: "J'ai 4 côtés égaux et mes 4 angles sont tous droits. Qui suis-je ?",
-                points: "50,50 150,50 150,150 50,150",
-                options: ["Rectangle", "Carré", "Losange", "Parallélogramme"],
-                correct: "Carré",
-                desc: "Exact ! Le carré réunit toutes ces propriétés."
+                nom: "Rectangle",
+                points: "60,80 340,80 340,220 60,220",
+                color: "#10b981",
+                questions: [
+                    { q: "Quelle est cette figure ?", r: "Rectangle", options: ["Rectangle", "Carré", "Parallélogramme", "Trapèze"] },
+                    { q: "Combien de côtés parallèles possède-t-elle par paires ?", r: "2 paires", options: ["1 paire", "2 paires", "Aucune", "3 paires"] },
+                    { q: "Les angles de cette figure sont tous...", r: "des angles droits", options: ["des angles droits", "des angles aigus", "des angles obtus", "différents"] }
+                ]
             },
             {
-                name: "Triangle Rectangle",
-                text: "Je possède un angle droit et deux de mes côtés sont perpendiculaires. Qui suis-je ?",
-                points: "50,50 150,150 50,150",
-                options: ["Triangle Rectangle", "Triangle Isocèle", "Trapèze", "Carré"],
-                correct: "Triangle Rectangle",
-                desc: "Très bien ! L'angle droit définit le triangle rectangle."
+                nom: "Triangle Rectangle",
+                points: "100,50 100,250 300,250",
+                color: "#f43f5e",
+                questions: [
+                    { q: "Comment s'appelle ce triangle particulier ?", r: "Triangle rectangle", options: ["Triangle rectangle", "Triangle équilatéral", "Triangle isocèle", "Triangle quelconque"] },
+                    { q: "Où se situe l'angle droit (90°) dans cette figure ?", r: "Dans le coin inférieur gauche", options: ["Dans le coin inférieur gauche", "Tout en haut", "Dans le coin inférieur droit", "Il n'y en a pas"] }
+                ]
             },
             {
-                name: "Losange",
-                text: "Mes 4 côtés sont égaux mais je n'ai aucun angle droit. Mes diagonales se croisent à 90°. Qui suis-je ?",
-                points: "100,30 160,100 100,170 40,100",
-                options: ["Rectangle", "Carré", "Losange", "Parallélogramme"],
-                correct: "Losange",
-                desc: "Excellent ! Les diagonales perpendiculaires sont typiques du losange."
+                nom: "Triangle Équilatéral",
+                points: "200,50 100,223 300,223",
+                color: "#eab308",
+                questions: [
+                    { q: "Ce triangle a tous ses côtés égaux. C'est un triangle...", r: "équilatéral", options: ["équilatéral", "isocèle", "scalène", "rectangle"] }
+                ]
             },
             {
-                name: "Rectangle",
-                text: "Mes côtés opposés sont parallèles et égaux, et j'ai 4 angles droits. Mes diagonales sont égales mais pas perpendiculaires. Qui suis-je ?",
-                points: "30,60 170,60 170,140 30,140",
-                options: ["Carré", "Rectangle", "Trapèze", "Losange"],
-                correct: "Rectangle",
-                desc: "Bravo ! C'est la définition parfaite du rectangle."
+                nom: "Losange",
+                points: "200,50 320,150 200,250 80,150",
+                color: "#a855f7",
+                questions: [
+                    { q: "Cette figure a 4 côtés égaux mais pas d'angle droit. C'est un...", r: "Losange", options: ["Losange", "Rectangle", "Carré", "Trapèze"] }
+                ]
             }
         ];
 
-        let questionsDeLaSession = [];
-        let indexForme = 0;
-        let corrects = 0;
-        let erreurs = 0;
-        let essais = 0;
+        let questionsPartie = [];
+        let indexQuestionCourante = 0;
+        let score = 0;
+        let reponseSelectionnee = false;
 
-        let detailsSession = [];
-        let essaisActuelsQuestion = [];
-
-        // Algorithme adaptatif : Trier les questions pour placer celles qui ont causé le plus d'erreurs en tête de file
-        function determinerOrdreQuestions() {
-            const erreursHistorique = window.erreursFormesHistorique || {};
+        function initJeu() {
+            // Génération de 10 questions aléatoires à partir de notre banque de figures
+            questionsPartie = [];
+            const tempFigures = [...figures];
             
-            // On calcule un score de priorité pour chaque figure de la base
-            const poolTrie = [...figuresBase].map(fig => {
-                const nbErreurs = erreursHistorique[fig.name] || 0;
-                return { ...fig, priorite: nbErreurs + Math.random() * 0.1 }; // Petit aléatoire pour rompre les égalités
-            });
-
-            // On trie par priorité décroissante (les plus problématiques d'abord)
-            poolTrie.sort((a, b) => b.priorite - a.priorite);
-
-            // On retient 5 questions pour la session
-            questionsDeLaSession = poolTrie.slice(0, 5);
-            chargerForme();
-        }
-
-        function chargerForme() {
-            essais = 0;
-            essaisActuelsQuestion = [];
-            document.getElementById('feedback').innerText = "";
-            document.getElementById('next-btn').classList.add('hidden');
-            document.getElementById('badge-question').innerText = `Forme ${indexForme + 1} / ${questionsDeLaSession.length}`;
-
-            const f = questionsDeLaSession[indexForme];
-            document.getElementById('svg-polygon').setAttribute('points', f.points);
-            document.getElementById('question-text').innerText = f.text;
-
-            const grid = document.getElementById('choices-grid');
-            grid.innerHTML = "";
-
-            f.options.forEach((opt) => {
-                const btn = document.createElement('button');
-                btn.className = "w-full bg-slate-50 border border-slate-200 text-slate-800 font-semibold py-3.5 px-4 rounded-xl hover:bg-blue-50 hover:border-blue-300 transition text-left";
-                btn.innerText = opt;
-                btn.onclick = () => verifier(opt, btn);
-                grid.appendChild(btn);
-            });
-        }
-
-        function verifier(nomChoisi, btnElement) {
-            const f = questionsDeLaSession[indexForme];
-            const feedback = document.getElementById('feedback');
-
-            essaisActuelsQuestion.push(nomChoisi);
-
-            const buttons = document.querySelectorAll('#choices-grid button');
-
-            if (nomChoisi === f.correct) {
-                feedback.innerText = f.desc;
-                feedback.className = "font-bold text-md text-green-600 mb-4";
-                btnElement.className = "w-full bg-green-100 border-2 border-green-500 text-green-800 font-bold py-3.5 px-4 rounded-xl text-left";
-                corrects++;
-                document.getElementById('score-c').innerText = corrects;
+            for (let i = 0; i < 10; i++) {
+                const figRand = tempFigures[Math.floor(Math.random() * tempFigures.length)];
+                const questRand = figRand.questions[Math.floor(Math.random() * figRand.questions.length)];
                 
-                detailsSession.push({
-                    questionText: f.text,
-                    correctAnswer: f.correct,
-                    attempts: [...essaisActuelsQuestion],
-                    isCorrect: true
+                questionsPartie.push({
+                    figName: figRand.nom,
+                    points: figRand.points,
+                    color: figRand.color,
+                    enonce: questRand.q,
+                    bonneReponse: questRand.r,
+                    options: melangerTableau([...questRand.options])
                 });
+            }
 
-                terminerForme(buttons);
+            // Création des ronds indicateurs
+            const dotsContainer = document.getElementById('dots-container');
+            dotsContainer.innerHTML = '';
+            for (let i = 0; i < 10; i++) {
+                dotsContainer.innerHTML += `<div id="dot-${i}" class="w-3 h-3 rounded-full bg-slate-200 transition"></div>`;
+            }
+
+            indexQuestionCourante = 0;
+            score = 0;
+            chargerQuestion();
+        }
+
+        function chargerQuestion() {
+            reponseSelectionnee = false;
+            document.getElementById('num-question').innerText = indexQuestionCourante + 1;
+            document.getElementById('score-live').innerText = score;
+            document.getElementById('feedback').classList.add('hidden');
+
+            const questionData = questionsPartie[indexQuestionCourante];
+
+            // Rendu du SVG de la forme
+            const svg = document.getElementById('svg-shape');
+            svg.innerHTML = `
+                <polygon points="${questionData.points}" fill="none" stroke="${questionData.color}" stroke-width="8" stroke-linejoin="round" />
+            `;
+
+            // Énoncé
+            document.getElementById('enonce-question').innerText = questionData.enonce;
+
+            // Boutons d'options
+            const containerOptions = document.getElementById('options-container');
+            containerOptions.innerHTML = '';
+            questionData.options.forEach(option => {
+                containerOptions.innerHTML += `
+                    <button onclick="validerReponse('${option}', this)" class="bg-slate-50 hover:bg-indigo-50 border-2 border-slate-100 hover:border-indigo-200 font-bold text-slate-700 py-4 px-6 rounded-2xl transition text-sm">
+                        ${option}
+                    </button>
+                `;
+            });
+        }
+
+        function validerReponse(option, bouton) {
+            if (reponseSelectionnee) return;
+            reponseSelectionnee = true;
+
+            const questionData = questionsPartie[indexQuestionCourante];
+            const feedback = document.getElementById('feedback');
+            const dot = document.getElementById(`dot-${indexQuestionCourante}`);
+
+            if (option === questionData.bonneReponse) {
+                // Correct
+                score++;
+                bouton.classList.remove('bg-slate-50', 'border-slate-100');
+                bouton.classList.add('bg-emerald-500', 'text-white', 'border-emerald-500');
+                dot.classList.add('bg-emerald-500');
+                
+                feedback.innerHTML = "✨ Super ! C'est la bonne réponse !";
+                feedback.className = "mt-6 p-4 rounded-2xl text-center font-bold bg-emerald-100 text-emerald-800";
+                jouerSon(true);
             } else {
-                essais++;
-                if (essais < 2) {
-                    feedback.innerText = "❌ Ce n'est pas tout à fait ça ! Réobserve bien la forme.";
-                    feedback.className = "font-bold text-md text-orange-500 mb-4";
-                    btnElement.className = "w-full bg-orange-100 border border-orange-300 text-orange-700 font-semibold py-3.5 px-4 rounded-xl text-left";
+                // Incorrect
+                bouton.classList.remove('bg-slate-50', 'border-slate-100');
+                bouton.classList.add('bg-rose-500', 'text-white', 'border-rose-500');
+                dot.classList.add('bg-rose-500');
+
+                feedback.innerHTML = `❌ Oups ! La bonne réponse était : <strong>${questionData.bonneReponse}</strong>`;
+                feedback.className = "mt-6 p-4 rounded-2xl text-center font-bold bg-rose-100 text-rose-800";
+                jouerSon(false);
+            }
+
+            feedback.classList.remove('hidden');
+
+            // Passage à la question suivante après 2 secondes
+            setTimeout(() => {
+                indexQuestionCourante++;
+                if (indexQuestionCourante < 10) {
+                    chargerQuestion();
                 } else {
-                    feedback.innerText = `❌ Oups ! La bonne réponse était : ${f.correct}.`;
-                    feedback.className = "font-bold text-md text-red-500 mb-4";
-                    btnElement.className = "w-full bg-red-100 border-2 border-red-500 text-red-800 font-bold py-3.5 px-4 rounded-xl text-left";
-                    erreurs++;
-                    document.getElementById('score-w').innerText = erreurs;
+                    terminerPartie();
+                }
+            }, 2000);
+        }
 
-                    detailsSession.push({
-                        questionText: f.text,
-                        correctAnswer: f.correct,
-                        attempts: [...essaisActuelsQuestion],
-                        isCorrect: false
+        async function terminerPartie() {
+            document.getElementById('game-card').classList.add('hidden');
+            const endCard = document.getElementById('end-card');
+            endCard.classList.remove('hidden');
+
+            document.getElementById('final-score').innerText = score;
+
+            // Appréciation personnalisée
+            let appreciation = "";
+            if (score === 10) appreciation = "Parfait ! Tu es un véritable as de la géométrie ! 🏆";
+            else if (score >= 8) appreciation = "Excellent travail ! Bravo pour tes compétences ! 🌟";
+            else if (score >= 5) appreciation = "Bon score ! Continue à t'entraîner régulièrement.";
+            else appreciation = "Ne te décourage pas, l'apprentissage demande de l'entraînement. Réessaie ! 💪";
+
+            document.getElementById('appreciation').innerText = appreciation;
+
+            // Enregistrement sur Firebase (Règles 1 & 3)
+            if (window.db && window.currentUser) {
+                try {
+                    const colRef = collection(window.db, 'artifacts', window.appId, 'public', 'data', 'scores');
+                    await addDoc(colRef, {
+                        nomEleve: nomEleve,
+                        exercice: "Défi Géométrie",
+                        corrects: score,
+                        erreurs: 10 - score,
+                        timestamp: Date.now()
                     });
-
-                    terminerForme(buttons);
+                    console.log("Score enregistré avec succès !");
+                } catch (e) {
+                    console.error("Erreur d'enregistrement Firebase :", e);
                 }
             }
         }
 
-        function terminerForme(buttons) {
-            buttons.forEach(btn => btn.disabled = true);
-            document.getElementById('next-btn').classList.remove('hidden');
+        function retourPortail() {
+            window.location.href = `index.html`;
         }
 
-        function prochaineForme() {
-            indexForme++;
-            if (indexForme >= questionsDeLaSession.length) {
-                document.getElementById('game-zone').classList.add('hidden');
-                document.getElementById('finish-zone').classList.remove('hidden');
-                document.getElementById('final-score').innerText = `${corrects} / ${questionsDeLaSession.length}`;
-                
-                window.enregistrerSession(corrects, erreurs, detailsSession);
-            } else {
-                chargerForme();
-            }
+        // Synthétiseur audio Web local
+        function jouerSon(correct) {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                if (correct) {
+                    osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
+                    osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.1); // E5
+                    gain.gain.setValueAtTime(0.2, ctx.currentTime);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.3);
+                } else {
+                    osc.frequency.setValueAtTime(220, ctx.currentTime); // A3
+                    osc.frequency.setValueAtTime(147, ctx.currentTime + 0.1); // D3
+                    gain.gain.setValueAtTime(0.2, ctx.currentTime);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.3);
+                }
+            } catch(e) {}
         }
 
-        // Lancement du chargement asynchrone adaptatif
-        window.analyserHistoriqueGeometrie();
+        // Utilitaires de tableau
+        function melangerTableau(arr) {
+            return arr.sort(() => Math.random() - 0.5);
+        }
     </script>
 </body>
 </html>
