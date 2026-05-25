@@ -1,399 +1,370 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="fr">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2685.4">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #8486ff; -webkit-text-stroke: #8486ff}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #fc7dd1; -webkit-text-stroke: #fc7dd1}
-    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #fed611; -webkit-text-stroke: #fed611}
-    p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #53d160; -webkit-text-stroke: #53d160}
-    p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #ffffff; -webkit-text-stroke: #ffffff}
-    p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #626262; -webkit-text-stroke: #626262}
-    p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #ffffff; -webkit-text-stroke: #ffffff; min-height: 16.0px}
-    span.s1 {font-kerning: none; background-color: #101010}
-    span.s2 {font-kerning: none; color: #ffffff; background-color: #101010; -webkit-text-stroke: 0px #ffffff}
-    span.s3 {font-kerning: none; color: #626262; background-color: #101010; -webkit-text-stroke: 0px #626262}
-    span.s4 {font-kerning: none; color: #fed611; background-color: #101010; -webkit-text-stroke: 0px #fed611}
-    span.s5 {font-kerning: none; color: #53d160; background-color: #101010; -webkit-text-stroke: 0px #53d160}
-    span.s6 {font-kerning: none; color: #fc7dd1; background-color: #101010; -webkit-text-stroke: 0px #fc7dd1}
-    span.s7 {font-kerning: none; color: #8486ff; background-color: #101010; -webkit-text-stroke: 0px #8486ff}
-    span.s8 {font-kerning: none}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ma Classe Numérique - Portail Pro</title>
+    <!-- Chargement de Tailwind CSS pour un design moderne et responsive -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Utilisation de la configuration dynamique de l'environnement (Règle 1 & Évitement d'erreur API Key)
+        const firebaseConfig = typeof __firebase_config !== 'undefined' 
+            ? JSON.parse(__firebase_config) 
+            : {
+                apiKey: "",
+                authDomain: "classe-numerique-prof.firebaseapp.com",
+                projectId: "classe-numerique-prof",
+                storageBucket: "classe-numerique-prof.appspot.com",
+                messagingSenderId: "123456789",
+                appId: "1:123456:web:abcde"
+            };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+
+        window.db = db;
+        window.appId = appId;
+
+        // Authentification Firebase (Règle 3)
+        async function initAuth() {
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (error) {
+                console.error("Erreur d'authentification Firebase:", error);
+            }
+        }
+        initAuth();
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                window.currentUser = user;
+                chargerResultats();
+            }
+        });
+
+        // Lecture des scores en temps réel (Règle 2)
+        function chargerResultats() {
+            if (!window.currentUser) return;
+            const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'scores');
+            
+            onSnapshot(colRef, (snapshot) => {
+                const liste = [];
+                snapshot.forEach((doc) => {
+                    liste.push({ id: doc.id, ...doc.data() });
+                });
+                // Tri par date décroissante
+                liste.sort((a, b) => b.timestamp - a.timestamp);
+                window.scoresData = liste;
+                window.afficherTableauScores(liste);
+            }, (error) => {
+                console.error("Erreur lors de la lecture des scores :", error);
+            });
+        }
+    </script>
 </head>
-<body>
-<p class="p1"><span class="s1">&lt;!DOCTYPE</span><span class="s2"> html</span><span class="s1">&gt;</span></p>
-<p class="p2"><span class="s3">&lt;</span><span class="s1">html</span><span class="s2"> </span><span class="s4">lang</span><span class="s3">=</span><span class="s5">"fr"</span><span class="s3">&gt;</span></p>
-<p class="p2"><span class="s3">&lt;</span><span class="s1">head</span><span class="s3">&gt;</span></p>
-<p class="p3"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s6">meta</span><span class="s2"> </span><span class="s1">charset</span><span class="s3">=</span><span class="s5">"UTF-8"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s6">meta</span><span class="s2"> </span><span class="s4">name</span><span class="s3">=</span><span class="s1">"viewport"</span><span class="s2"> </span><span class="s4">content</span><span class="s3">=</span><span class="s1">"width=device-width, initial-scale=1.0"</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s6">title</span><span class="s3">&gt;</span><span class="s1">Ma Classe Numérique - Portail Pro</span><span class="s3">&lt;/</span><span class="s6">title</span><span class="s3">&gt;</span></p>
-<p class="p6"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s1">&lt;!-- Chargement de Tailwind CSS pour un design moderne et responsive --&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s6">script</span><span class="s2"> </span><span class="s4">src</span><span class="s3">=</span><span class="s1">"https://cdn.tailwindcss.com"</span><span class="s3">&gt;&lt;/</span><span class="s6">script</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s6">script</span><span class="s2"> </span><span class="s4">type</span><span class="s3">=</span><span class="s1">"module"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s7">import</span><span class="s2"> </span><span class="s3">{</span><span class="s2"> initializeApp </span><span class="s3">}</span><span class="s2"> </span><span class="s7">from</span><span class="s2"> </span><span class="s1">"https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js"</span><span class="s3">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">import</span><span class="s1"> </span><span class="s3">{</span><span class="s1"> getAuth</span><span class="s3">,</span><span class="s1"> signInAnonymously</span><span class="s3">,</span><span class="s1"> signInWithCustomToken</span><span class="s3">,</span><span class="s1"> onAuthStateChanged </span><span class="s3">}</span><span class="s1"> </span><span class="s7">from</span><span class="s1"> </span><span class="s5">"https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js"</span><span class="s3">;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s7">import</span><span class="s2"> </span><span class="s3">{</span><span class="s2"> getFirestore</span><span class="s3">,</span><span class="s2"> collection</span><span class="s3">,</span><span class="s2"> onSnapshot </span><span class="s3">}</span><span class="s2"> </span><span class="s7">from</span><span class="s2"> </span><span class="s1">"https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js"</span><span class="s3">;</span></p>
-<p class="p7"><span class="s8"></span><br></p>
-<p class="p6"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s1">// Utilisation de la configuration dynamique de l'environnement (Règle 1 &amp; Évitement d'erreur API Key)</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">const</span><span class="s1"> firebaseConfig </span><span class="s3">=</span><span class="s1"> </span><span class="s7">typeof</span><span class="s1"> __firebase_config </span><span class="s3">!==</span><span class="s1"> </span><span class="s5">'undefined'</span><span class="s1"><span class="Apple-converted-space"> </span></span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">?</span><span class="s1"> </span><span class="s6">JSON</span><span class="s3">.</span><span class="s1">parse</span><span class="s3">(</span><span class="s1">__firebase_config</span><span class="s3">)</span><span class="s1"><span class="Apple-converted-space"> </span></span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">:</span><span class="s1"> </span><span class="s3">{</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>apiKey</span><span class="s3">:</span><span class="s1"> </span><span class="s5">""</span><span class="s3">,</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">                </span>authDomain</span><span class="s3">:</span><span class="s2"> </span><span class="s1">"classe-numerique-prof.firebaseapp.com"</span><span class="s3">,</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>projectId</span><span class="s3">:</span><span class="s1"> </span><span class="s5">"classe-numerique-prof"</span><span class="s3">,</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">                </span>storageBucket</span><span class="s3">:</span><span class="s2"> </span><span class="s1">"classe-numerique-prof.appspot.com"</span><span class="s3">,</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>messagingSenderId</span><span class="s3">:</span><span class="s1"> </span><span class="s5">"123456789"</span><span class="s3">,</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>appId</span><span class="s3">:</span><span class="s1"> </span><span class="s5">"1:123456:web:abcde"</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">};</span></p>
-<p class="p7"><span class="s8"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">const</span><span class="s1"> app </span><span class="s3">=</span><span class="s1"> initializeApp</span><span class="s3">(</span><span class="s1">firebaseConfig</span><span class="s3">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">const</span><span class="s1"> auth </span><span class="s3">=</span><span class="s1"> getAuth</span><span class="s3">(</span><span class="s1">app</span><span class="s3">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">const</span><span class="s1"> db </span><span class="s3">=</span><span class="s1"> getFirestore</span><span class="s3">(</span><span class="s1">app</span><span class="s3">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">const</span><span class="s1"> appId </span><span class="s3">=</span><span class="s1"> </span><span class="s7">typeof</span><span class="s1"> __app_id </span><span class="s3">!==</span><span class="s1"> </span><span class="s5">'undefined'</span><span class="s1"> </span><span class="s3">?</span><span class="s1"> __app_id </span><span class="s3">:</span><span class="s1"> </span><span class="s5">'default-app-id'</span><span class="s3">;</span></p>
-<p class="p7"><span class="s8"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>window</span><span class="s3">.</span><span class="s1">db </span><span class="s3">=</span><span class="s1"> db</span><span class="s3">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>window</span><span class="s3">.</span><span class="s1">appId </span><span class="s3">=</span><span class="s1"> appId</span><span class="s3">;</span></p>
-<p class="p7"><span class="s8"></span><br></p>
-<p class="p6"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s1">// Authentification Firebase (Règle 3)</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">async</span><span class="s1"> </span><span class="s7">function</span><span class="s1"> initAuth</span><span class="s3">()</span><span class="s1"> </span><span class="s3">{</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">try</span><span class="s1"> </span><span class="s3">{</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s7">if</span><span class="s1"> </span><span class="s3">(</span><span class="s7">typeof</span><span class="s1"> __initial_auth_token </span><span class="s3">!==</span><span class="s1"> </span><span class="s5">'undefined'</span><span class="s1"> </span><span class="s3">&amp;&amp;</span><span class="s1"> __initial_auth_token</span><span class="s3">)</span><span class="s1"> </span><span class="s3">{</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s7">await</span><span class="s1"> signInWithCustomToken</span><span class="s3">(</span><span class="s1">auth</span><span class="s3">,</span><span class="s1"> __initial_auth_token</span><span class="s3">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s3">}</span><span class="s1"> </span><span class="s7">else</span><span class="s1"> </span><span class="s3">{</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s7">await</span><span class="s1"> signInAnonymously</span><span class="s3">(</span><span class="s1">auth</span><span class="s3">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s3">}</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">}</span><span class="s1"> </span><span class="s7">catch</span><span class="s1"> </span><span class="s3">(</span><span class="s1">error</span><span class="s3">)</span><span class="s1"> </span><span class="s3">{</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">                </span>console</span><span class="s3">.</span><span class="s2">error</span><span class="s3">(</span><span class="s1">"Erreur d'authentification Firebase:"</span><span class="s3">,</span><span class="s2"> error</span><span class="s3">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">}</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s3">}</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>initAuth</span><span class="s3">();</span></p>
-<p class="p7"><span class="s8"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>onAuthStateChanged</span><span class="s3">(</span><span class="s1">auth</span><span class="s3">,</span><span class="s1"> </span><span class="s3">(</span><span class="s1">user</span><span class="s3">)</span><span class="s1"> </span><span class="s3">=&gt;</span><span class="s1"> </span><span class="s3">{</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">if</span><span class="s1"> </span><span class="s3">(</span><span class="s1">user</span><span class="s3">)</span><span class="s1"> </span><span class="s3">{</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>window</span><span class="s3">.</span><span class="s1">currentUser </span><span class="s3">=</span><span class="s1"> user</span><span class="s3">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>chargerResultats</span><span class="s3">();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">}</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s3">});</span></p>
-<p class="p7"><span class="s8"></span><br></p>
-<p class="p6"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s1">// Lecture des scores en temps réel (Règle 2)</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s1"> chargerResultats</span><span class="s3">()</span><span class="s1"> </span><span class="s3">{</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">if</span><span class="s1"> </span><span class="s3">(!</span><span class="s1">window</span><span class="s3">.</span><span class="s1">currentUser</span><span class="s3">)</span><span class="s1"> </span><span class="s7">return</span><span class="s3">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> colRef </span><span class="s3">=</span><span class="s1"> collection</span><span class="s3">(</span><span class="s1">db</span><span class="s3">,</span><span class="s1"> </span><span class="s5">'artifacts'</span><span class="s3">,</span><span class="s1"> appId</span><span class="s3">,</span><span class="s1"> </span><span class="s5">'public'</span><span class="s3">,</span><span class="s1"> </span><span class="s5">'data'</span><span class="s3">,</span><span class="s1"> </span><span class="s5">'scores'</span><span class="s3">);</span></p>
-<p class="p7"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>onSnapshot</span><span class="s3">(</span><span class="s1">colRef</span><span class="s3">,</span><span class="s1"> </span><span class="s3">(</span><span class="s1">snapshot</span><span class="s3">)</span><span class="s1"> </span><span class="s3">=&gt;</span><span class="s1"> </span><span class="s3">{</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s7">const</span><span class="s1"> liste </span><span class="s3">=</span><span class="s1"> </span><span class="s3">[];</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>snapshot</span><span class="s3">.</span><span class="s1">forEach</span><span class="s3">((</span><span class="s1">doc</span><span class="s3">)</span><span class="s1"> </span><span class="s3">=&gt;</span><span class="s1"> </span><span class="s3">{</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>liste</span><span class="s3">.</span><span class="s1">push</span><span class="s3">({</span><span class="s1"> id</span><span class="s3">:</span><span class="s1"> doc</span><span class="s3">.</span><span class="s1">id</span><span class="s3">,</span><span class="s1"> </span><span class="s3">...</span><span class="s1">doc</span><span class="s3">.</span><span class="s1">data</span><span class="s3">()</span><span class="s1"> </span><span class="s3">});</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s3">});</span></p>
-<p class="p6"><span class="s2"><span class="Apple-converted-space">                </span></span><span class="s1">// Tri par date décroissante</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>liste</span><span class="s3">.</span><span class="s1">sort</span><span class="s3">((</span><span class="s1">a</span><span class="s3">,</span><span class="s1"> b</span><span class="s3">)</span><span class="s1"> </span><span class="s3">=&gt;</span><span class="s1"> b</span><span class="s3">.</span><span class="s1">timestamp </span><span class="s3">-</span><span class="s1"> a</span><span class="s3">.</span><span class="s1">timestamp</span><span class="s3">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>window</span><span class="s3">.</span><span class="s1">scoresData </span><span class="s3">=</span><span class="s1"> liste</span><span class="s3">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>window</span><span class="s3">.</span><span class="s1">afficherTableauScores</span><span class="s3">(</span><span class="s1">liste</span><span class="s3">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">},</span><span class="s1"> </span><span class="s3">(</span><span class="s1">error</span><span class="s3">)</span><span class="s1"> </span><span class="s3">=&gt;</span><span class="s1"> </span><span class="s3">{</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">                </span>console</span><span class="s3">.</span><span class="s2">error</span><span class="s3">(</span><span class="s1">"Erreur lors de la lecture des scores :"</span><span class="s3">,</span><span class="s2"> error</span><span class="s3">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">});</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s3">}</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;/</span><span class="s1">script</span><span class="s3">&gt;</span></p>
-<p class="p2"><span class="s3">&lt;/</span><span class="s1">head</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s3">&lt;</span><span class="s6">body</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"bg-slate-50 min-h-screen font-sans flex flex-col justify-between"</span><span class="s3">&gt;</span></p>
-<p class="p7"><span class="s8"></span><br></p>
-<p class="p6"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s1">&lt;!-- ÉCRAN DE CONNEXION ÉLÈVE --&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s2"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"login-screen"</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"fixed inset-0 bg-blue-950 z-50 flex flex-col items-center justify-center p-4"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"bg-white p-8 rounded-3xl shadow-2xl max-w-md w-full text-center border border-slate-100"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">span</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"text-6xl mb-4 block"</span><span class="s3">&gt;</span><span class="s2">🎓</span><span class="s3">&lt;/</span><span class="s6">span</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">h1</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"text-3xl font-bold text-slate-800 mb-2 font-serif"</span><span class="s3">&gt;</span><span class="s2">Ma Classe Virtuelle</span><span class="s3">&lt;/</span><span class="s6">h1</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">p</span><span class="s1"> </span><span class="s4">class</span><span class="s3">=</span><span class="s5">"text-slate-500 mb-6"</span><span class="s3">&gt;</span><span class="s1">Entre ton prénom et nom (ex: Lucas M.) pour commencer à t'entraîner.</span><span class="s3">&lt;/</span><span class="s6">p</span><span class="s3">&gt;</span></p>
-<p class="p7"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s1"> </span><span class="s4">class</span><span class="s3">=</span><span class="s5">"space-y-4"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">input</span><span class="s2"> </span><span class="s4">type</span><span class="s3">=</span><span class="s1">"text"</span><span class="s2"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"student-name"</span><span class="s2"> </span><span class="s4">placeholder</span><span class="s3">=</span><span class="s1">"Prénom et Nom..."</span><span class="s2"><span class="Apple-converted-space"> </span></span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">                       </span></span><span class="s4">class</span><span class="s3">=</span><span class="s1">"w-full px-4 py-3 border-2 border-slate-200 rounded-2xl text-lg text-center font-semibold focus:border-blue-500 focus:outline-none transition-all"</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">button</span><span class="s1"> </span><span class="s4">onclick</span><span class="s3">=</span><span class="s5">"seConnecter()"</span><span class="s1"><span class="Apple-converted-space"> </span></span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">                        </span></span><span class="s4">class</span><span class="s3">=</span><span class="s1">"w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-2xl text-lg transition-all transform active:scale-95 shadow-lg"</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>Rejoindre la classe ➔</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;/</span><span class="s6">button</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p7"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">button</span><span class="s2"> </span><span class="s4">onclick</span><span class="s3">=</span><span class="s1">"ouvrirAdmin()"</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"mt-8 text-sm text-slate-400 hover:text-blue-500 underline transition"</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>Accès Enseignant (Suivi détaillé)</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;/</span><span class="s6">button</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p7"><span class="s8"></span><br></p>
-<p class="p6"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s1">&lt;!-- EN-TÊTE DU SITE --&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s6">header</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"bg-blue-900 text-white py-6 px-4 shadow-md"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"text-center sm:text-left"</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">h1</span><span class="s1"> </span><span class="s4">class</span><span class="s3">=</span><span class="s5">"text-3xl font-bold tracking-tight"</span><span class="s3">&gt;</span><span class="s1">🎒 Portail de la Classe</span><span class="s3">&lt;/</span><span class="s6">h1</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">p</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"text-blue-200 text-sm mt-1"</span><span class="s3">&gt;</span><span class="s2">Élève connecté : </span><span class="s3">&lt;</span><span class="s6">span</span><span class="s2"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"display-name"</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"font-bold text-emerald-400"</span><span class="s3">&gt;</span><span class="s2">...</span><span class="s3">&lt;/</span><span class="s6">span</span><span class="s3">&gt;&lt;/</span><span class="s6">p</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">button</span><span class="s2"> </span><span class="s4">onclick</span><span class="s3">=</span><span class="s1">"changerUtilisateur()"</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"text-xs bg-blue-800 hover:bg-blue-700 px-4 py-2 rounded-xl transition-all"</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>Changer de compte</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;/</span><span class="s6">button</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;/</span><span class="s1">header</span><span class="s3">&gt;</span></p>
-<p class="p7"><span class="s8"></span><br></p>
-<p class="p6"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s1">&lt;!-- PORTAIL D'ACTIVITÉS --&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s6">main</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"max-w-5xl mx-auto px-4 py-10 flex-grow w-full"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 mb-8 border border-blue-100"</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">h2</span><span class="s1"> </span><span class="s4">class</span><span class="s3">=</span><span class="s5">"text-lg font-bold text-blue-950 font-serif"</span><span class="s3">&gt;</span><span class="s1">🧠 Apprentissage Adaptatif activé !</span><span class="s3">&lt;/</span><span class="s6">h2</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">p</span><span class="s1"> </span><span class="s4">class</span><span class="s3">=</span><span class="s5">"text-blue-900/80 text-sm mt-1"</span><span class="s3">&gt;</span><span class="s1">Le système mémorise tes difficultés. Les questions ou multiplications ratées reviendront plus souvent pour t'aider à progresser et à les retenir durablement !</span><span class="s3">&lt;/</span><span class="s6">p</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p7"><span class="s8"></span><br></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;</span><span class="s6">h2</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"text-2xl font-bold text-slate-800 mb-6"</span><span class="s3">&gt;</span><span class="s2">Choisis ton atelier :</span><span class="s3">&lt;/</span><span class="s6">h2</span><span class="s3">&gt;</span></p>
-<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span></span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"grid grid-cols-1 md:grid-cols-3 gap-6"</span><span class="s3">&gt;</span></p>
-<p class="p6"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s1">&lt;!-- ACTIVITÉ 1: CALCUL MENTAL --&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">a</span><span class="s2"> </span><span class="s4">href</span><span class="s3">=</span><span class="s1">"#"</span><span class="s2"> </span><span class="s4">onclick</span><span class="s3">=</span><span class="s1">"ouvrirActivite('calculs.html')"</span><span class="s2"><span class="Apple-converted-space"> </span></span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">               </span></span><span class="s4">class</span><span class="s3">=</span><span class="s1">"bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl hover:border-blue-350 transition-all flex flex-col justify-between group"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"flex items-start gap-4"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">                    </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"bg-blue-50 p-4 rounded-2xl text-4xl group-hover:scale-110 transition-transform"</span><span class="s3">&gt;</span><span class="s2">🧮</span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">                        </span></span><span class="s3">&lt;</span><span class="s6">h3</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"text-xl font-bold text-slate-800 group-hover:text-blue-900 transition-colors"</span><span class="s3">&gt;</span><span class="s2">Calcul Décimal</span><span class="s3">&lt;/</span><span class="s6">h3</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span></span><span class="s3">&lt;</span><span class="s6">p</span><span class="s1"> </span><span class="s4">class</span><span class="s3">=</span><span class="s5">"text-slate-500 mt-1 text-sm leading-relaxed"</span><span class="s3">&gt;</span><span class="s1">Additions &amp; soustractions à virgule.</span><span class="s3">&lt;/</span><span class="s6">p</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"text-blue-600 font-bold text-sm mt-4 text-right group-hover:translate-x-1 transition-transform"</span><span class="s3">&gt;</span><span class="s2">S'entraîner ➔</span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;/</span><span class="s6">a</span><span class="s3">&gt;</span></p>
-<p class="p7"><span class="s8"></span><br></p>
-<p class="p6"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s1">&lt;!-- ACTIVITÉ 2: GÉOMÉTRIE --&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">a</span><span class="s2"> </span><span class="s4">href</span><span class="s3">=</span><span class="s1">"#"</span><span class="s2"> </span><span class="s4">onclick</span><span class="s3">=</span><span class="s1">"ouvrirActivite('geometrie.html')"</span><span class="s2"><span class="Apple-converted-space"> </span></span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">               </span></span><span class="s4">class</span><span class="s3">=</span><span class="s1">"bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl hover:border-emerald-305 transition-all flex flex-col justify-between group"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"flex items-start gap-4"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">                    </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"bg-emerald-50 p-4 rounded-2xl text-4xl group-hover:scale-110 transition-transform"</span><span class="s3">&gt;</span><span class="s2">📐</span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">                        </span></span><span class="s3">&lt;</span><span class="s6">h3</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"text-xl font-bold text-slate-800 group-hover:text-emerald-950 transition-colors"</span><span class="s3">&gt;</span><span class="s2">Défi Formes</span><span class="s3">&lt;/</span><span class="s6">h3</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span></span><span class="s3">&lt;</span><span class="s6">p</span><span class="s1"> </span><span class="s4">class</span><span class="s3">=</span><span class="s5">"text-slate-500 mt-1 text-sm leading-relaxed"</span><span class="s3">&gt;</span><span class="s1">Triangles &amp; quadrilatères géométriques.</span><span class="s3">&lt;/</span><span class="s6">p</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"text-emerald-600 font-bold text-sm mt-4 text-right group-hover:translate-x-1 transition-transform"</span><span class="s3">&gt;</span><span class="s2">S'entraîner ➔</span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;/</span><span class="s6">a</span><span class="s3">&gt;</span></p>
-<p class="p7"><span class="s8"></span><br></p>
-<p class="p6"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s1">&lt;!-- ACTIVITÉ 3: LIVRETS DE MULTIPLICATION --&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">a</span><span class="s2"> </span><span class="s4">href</span><span class="s3">=</span><span class="s1">"#"</span><span class="s2"> </span><span class="s4">onclick</span><span class="s3">=</span><span class="s1">"ouvrirActivite('livrets.html')"</span><span class="s2"><span class="Apple-converted-space"> </span></span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">               </span></span><span class="s4">class</span><span class="s3">=</span><span class="s1">"bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl hover:border-violet-300 transition-all flex flex-col justify-between group"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"flex items-start gap-4"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">                    </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"bg-violet-50 p-4 rounded-2xl text-4xl group-hover:scale-110 transition-transform"</span><span class="s3">&gt;</span><span class="s2">✖️</span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">                        </span></span><span class="s3">&lt;</span><span class="s6">h3</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"text-xl font-bold text-slate-800 group-hover:text-violet-900 transition-colors"</span><span class="s3">&gt;</span><span class="s2">Les Livrets</span><span class="s3">&lt;/</span><span class="s6">h3</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span></span><span class="s3">&lt;</span><span class="s6">p</span><span class="s1"> </span><span class="s4">class</span><span class="s3">=</span><span class="s5">"text-slate-500 mt-1 text-sm leading-relaxed"</span><span class="s3">&gt;</span><span class="s1">Multiplications de 1x1 à 10x10 avec aide interactive.</span><span class="s3">&lt;/</span><span class="s6">p</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"text-violet-600 font-bold text-sm mt-4 text-right group-hover:translate-x-1 transition-transform"</span><span class="s3">&gt;</span><span class="s2">S'entraîner ➔</span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;/</span><span class="s6">a</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;/</span><span class="s6">main</span><span class="s3">&gt;</span></p>
-<p class="p7"><span class="s8"></span><br></p>
-<p class="p6"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s1">&lt;!-- TABLEAU DE BORD ENSEIGNANT --&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s2"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"admin-panel"</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"fixed inset-0 bg-slate-900/70 z-40 hidden flex items-center justify-center p-4"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"bg-white w-full max-w-5xl h-[85vh] rounded-3xl shadow-2xl flex flex-col overflow-hidden"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"bg-slate-900 text-white p-6 flex justify-between items-center"</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s3">&lt;</span><span class="s6">h2</span><span class="s1"> </span><span class="s4">class</span><span class="s3">=</span><span class="s5">"text-2xl font-bold"</span><span class="s3">&gt;</span><span class="s1">📋 Espace Enseignant</span><span class="s3">&lt;/</span><span class="s6">h2</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s3">&lt;</span><span class="s6">p</span><span class="s1"> </span><span class="s4">class</span><span class="s3">=</span><span class="s5">"text-xs text-slate-400 mt-1"</span><span class="s3">&gt;</span><span class="s1">Cliquez sur une ligne pour voir le détail des essais de l'élève question par question.</span><span class="s3">&lt;/</span><span class="s6">p</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">button</span><span class="s2"> </span><span class="s4">onclick</span><span class="s3">=</span><span class="s1">"fermerAdmin()"</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"bg-slate-800 hover:bg-slate-700 px-4 py-2 rounded-xl transition text-sm"</span><span class="s3">&gt;</span><span class="s2">Quitter</span><span class="s3">&lt;/</span><span class="s6">button</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p7"><span class="s1"><span class="Apple-converted-space">            </span></span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"p-6 flex-grow overflow-y-auto"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">table</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"w-full text-left border-collapse"</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s3">&lt;</span><span class="s6">thead</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">                        </span></span><span class="s3">&lt;</span><span class="s6">tr</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"border-b-2 border-slate-200 text-slate-500 uppercase text-xs tracking-wider"</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                            </span></span><span class="s3">&lt;</span><span class="s6">th</span><span class="s1"> </span><span class="s4">class</span><span class="s3">=</span><span class="s5">"py-3 px-4"</span><span class="s3">&gt;</span><span class="s1">Élève</span><span class="s3">&lt;/</span><span class="s6">th</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                            </span></span><span class="s3">&lt;</span><span class="s6">th</span><span class="s1"> </span><span class="s4">class</span><span class="s3">=</span><span class="s5">"py-3 px-4"</span><span class="s3">&gt;</span><span class="s1">Exercice</span><span class="s3">&lt;/</span><span class="s6">th</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                            </span></span><span class="s3">&lt;</span><span class="s6">th</span><span class="s1"> </span><span class="s4">class</span><span class="s3">=</span><span class="s5">"py-3 px-4 text-center"</span><span class="s3">&gt;</span><span class="s1">Score obtenu</span><span class="s3">&lt;/</span><span class="s6">th</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                            </span></span><span class="s3">&lt;</span><span class="s6">th</span><span class="s1"> </span><span class="s4">class</span><span class="s3">=</span><span class="s5">"py-3 px-4"</span><span class="s3">&gt;</span><span class="s1">Date &amp; Heure</span><span class="s3">&lt;/</span><span class="s6">th</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                            </span></span><span class="s3">&lt;</span><span class="s6">th</span><span class="s1"> </span><span class="s4">class</span><span class="s3">=</span><span class="s5">"py-3 px-4 text-right"</span><span class="s3">&gt;</span><span class="s1">Action</span><span class="s3">&lt;/</span><span class="s6">th</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span></span><span class="s3">&lt;/</span><span class="s6">tr</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s3">&lt;/</span><span class="s6">thead</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">                    </span></span><span class="s3">&lt;</span><span class="s6">tbody</span><span class="s2"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"scores-table-body"</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"text-slate-700"</span><span class="s3">&gt;</span></p>
-<p class="p6"><span class="s2"><span class="Apple-converted-space">                        </span></span><span class="s1">&lt;!-- Rempli dynamiquement --&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s3">&lt;/</span><span class="s6">tbody</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;/</span><span class="s6">table</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p7"><span class="s8"></span><br></p>
-<p class="p6"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s1">&lt;!-- MODAL DE DÉTAIL D'UNE SESSION --&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s2"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"detail-modal"</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"fixed inset-0 bg-slate-950/80 z-50 hidden flex items-center justify-center p-4"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"bg-white w-full max-w-3xl rounded-3xl shadow-2xl overflow-hidden max-h-[85vh] flex flex-col"</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"bg-blue-900 text-white p-6 flex justify-between items-center"</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">                    </span></span><span class="s3">&lt;</span><span class="s6">h3</span><span class="s2"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"modal-student-title"</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"text-xl font-bold"</span><span class="s3">&gt;</span><span class="s2">...</span><span class="s3">&lt;/</span><span class="s6">h3</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">                    </span></span><span class="s3">&lt;</span><span class="s6">p</span><span class="s2"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"modal-exercise-subtitle"</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"text-sm text-blue-200"</span><span class="s3">&gt;</span><span class="s2">...</span><span class="s3">&lt;/</span><span class="s6">p</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">                </span></span><span class="s3">&lt;</span><span class="s6">button</span><span class="s2"> </span><span class="s4">onclick</span><span class="s3">=</span><span class="s1">"fermerDetailModal()"</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"text-white hover:text-slate-200 text-2xl font-bold"</span><span class="s3">&gt;</span><span class="s2">&amp;times;</span><span class="s3">&lt;/</span><span class="s6">button</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;</span><span class="s6">div</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"p-6 overflow-y-auto space-y-4"</span><span class="s2"> </span><span class="s4">id</span><span class="s3">=</span><span class="s1">"modal-questions-list"</span><span class="s3">&gt;</span></p>
-<p class="p6"><span class="s2"><span class="Apple-converted-space">                </span></span><span class="s1">&lt;!-- Rempli en JS --&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;/</span><span class="s6">div</span><span class="s3">&gt;</span></p>
-<p class="p7"><span class="s8"></span><br></p>
-<p class="p6"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s1">&lt;!-- PIED DE PAGE --&gt;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s6">footer</span><span class="s2"> </span><span class="s4">class</span><span class="s3">=</span><span class="s1">"bg-slate-900 text-slate-500 py-6 text-center text-xs"</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s3">&lt;</span><span class="s6">p</span><span class="s3">&gt;</span><span class="s1">© 2026 Classe Numérique Premium — Apprentissage Personnalisé &amp; Suivi Temps Réel.</span><span class="s3">&lt;/</span><span class="s6">p</span><span class="s3">&gt;</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;/</span><span class="s1">footer</span><span class="s3">&gt;</span></p>
-<p class="p7"><span class="s8"></span><br></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;</span><span class="s1">script</span><span class="s3">&gt;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s1"> seConnecter</span><span class="s3">()</span><span class="s1"> </span><span class="s3">{</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> input </span><span class="s3">=</span><span class="s1"> document</span><span class="s3">.</span><span class="s1">getElementById</span><span class="s3">(</span><span class="s5">'student-name'</span><span class="s3">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> nom </span><span class="s3">=</span><span class="s1"> input</span><span class="s3">.</span><span class="s1">value</span><span class="s3">.</span><span class="s1">trim</span><span class="s3">();</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">if</span><span class="s1"> </span><span class="s3">(</span><span class="s1">nom</span><span class="s3">.</span><span class="s1">length </span><span class="s3">&lt;</span><span class="s1"> </span><span class="s4">3</span><span class="s3">)</span><span class="s1"> </span><span class="s3">{</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">                </span>alert</span><span class="s3">(</span><span class="s1">"Veuillez entrer votre prénom complet ainsi que la première lettre de votre nom."</span><span class="s3">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s7">return</span><span class="s3">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">}</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>localStorage</span><span class="s3">.</span><span class="s1">setItem</span><span class="s3">(</span><span class="s5">'nomEleve'</span><span class="s3">,</span><span class="s1"> nom</span><span class="s3">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>document</span><span class="s3">.</span><span class="s1">getElementById</span><span class="s3">(</span><span class="s5">'display-name'</span><span class="s3">).</span><span class="s1">innerText </span><span class="s3">=</span><span class="s1"> nom</span><span class="s3">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>document</span><span class="s3">.</span><span class="s1">getElementById</span><span class="s3">(</span><span class="s5">'login-screen'</span><span class="s3">).</span><span class="s1">classList</span><span class="s3">.</span><span class="s1">add</span><span class="s3">(</span><span class="s5">'hidden'</span><span class="s3">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s3">}</span></p>
-<p class="p7"><span class="s8"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s1"> changerUtilisateur</span><span class="s3">()</span><span class="s1"> </span><span class="s3">{</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>localStorage</span><span class="s3">.</span><span class="s1">removeItem</span><span class="s3">(</span><span class="s5">'nomEleve'</span><span class="s3">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>document</span><span class="s3">.</span><span class="s1">getElementById</span><span class="s3">(</span><span class="s5">'login-screen'</span><span class="s3">).</span><span class="s1">classList</span><span class="s3">.</span><span class="s1">remove</span><span class="s3">(</span><span class="s5">'hidden'</span><span class="s3">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s3">}</span></p>
-<p class="p7"><span class="s8"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>window</span><span class="s3">.</span><span class="s1">onload </span><span class="s3">=</span><span class="s1"> </span><span class="s7">function</span><span class="s3">()</span><span class="s1"> </span><span class="s3">{</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> nomMemorise </span><span class="s3">=</span><span class="s1"> localStorage</span><span class="s3">.</span><span class="s1">getItem</span><span class="s3">(</span><span class="s5">'nomEleve'</span><span class="s3">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">if</span><span class="s1"> </span><span class="s3">(</span><span class="s1">nomMemorise</span><span class="s3">)</span><span class="s1"> </span><span class="s3">{</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>document</span><span class="s3">.</span><span class="s1">getElementById</span><span class="s3">(</span><span class="s5">'display-name'</span><span class="s3">).</span><span class="s1">innerText </span><span class="s3">=</span><span class="s1"> nomMemorise</span><span class="s3">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>document</span><span class="s3">.</span><span class="s1">getElementById</span><span class="s3">(</span><span class="s5">'login-screen'</span><span class="s3">).</span><span class="s1">classList</span><span class="s3">.</span><span class="s1">add</span><span class="s3">(</span><span class="s5">'hidden'</span><span class="s3">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">}</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s3">}</span></p>
-<p class="p7"><span class="s8"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s1"> ouvrirActivite</span><span class="s3">(</span><span class="s1">page</span><span class="s3">)</span><span class="s1"> </span><span class="s3">{</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> nom </span><span class="s3">=</span><span class="s1"> localStorage</span><span class="s3">.</span><span class="s1">getItem</span><span class="s3">(</span><span class="s5">'nomEleve'</span><span class="s3">)</span><span class="s1"> </span><span class="s3">||</span><span class="s1"> </span><span class="s5">"Anonyme"</span><span class="s3">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>window</span><span class="s3">.</span><span class="s1">location</span><span class="s3">.</span><span class="s1">href </span><span class="s3">=</span><span class="s1"> </span><span class="s5">`</span><span class="s3">${</span><span class="s1">page</span><span class="s3">}</span><span class="s5">?eleve=</span><span class="s3">${</span><span class="s1">encodeURIComponent</span><span class="s3">(</span><span class="s1">nom</span><span class="s3">)}</span><span class="s5">`</span><span class="s3">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s3">}</span></p>
-<p class="p7"><span class="s8"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s1"> ouvrirAdmin</span><span class="s3">()</span><span class="s1"> </span><span class="s3">{</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s2"> code </span><span class="s3">=</span><span class="s2"> prompt</span><span class="s3">(</span><span class="s1">"Veuillez saisir votre code d'accès enseignant :"</span><span class="s3">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">if</span><span class="s1"> </span><span class="s3">(</span><span class="s1">code </span><span class="s3">===</span><span class="s1"> </span><span class="s5">"Prof2026"</span><span class="s3">)</span><span class="s1"> </span><span class="s3">{</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>document</span><span class="s3">.</span><span class="s1">getElementById</span><span class="s3">(</span><span class="s5">'admin-panel'</span><span class="s3">).</span><span class="s1">classList</span><span class="s3">.</span><span class="s1">remove</span><span class="s3">(</span><span class="s5">'hidden'</span><span class="s3">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">}</span><span class="s1"> </span><span class="s7">else</span><span class="s1"> </span><span class="s7">if</span><span class="s1"> </span><span class="s3">(</span><span class="s1">code </span><span class="s3">!==</span><span class="s1"> </span><span class="s7">null</span><span class="s3">)</span><span class="s1"> </span><span class="s3">{</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">                </span>alert</span><span class="s3">(</span><span class="s1">"Accès refusé. Code erroné."</span><span class="s3">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">}</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s3">}</span></p>
-<p class="p7"><span class="s8"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s1"> fermerAdmin</span><span class="s3">()</span><span class="s1"> </span><span class="s3">{</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>document</span><span class="s3">.</span><span class="s1">getElementById</span><span class="s3">(</span><span class="s5">'admin-panel'</span><span class="s3">).</span><span class="s1">classList</span><span class="s3">.</span><span class="s1">add</span><span class="s3">(</span><span class="s5">'hidden'</span><span class="s3">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s3">}</span></p>
-<p class="p7"><span class="s8"></span><br></p>
-<p class="p6"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s1">// Affiche le tableau de suivi enseignant</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>window</span><span class="s3">.</span><span class="s1">afficherTableauScores </span><span class="s3">=</span><span class="s1"> </span><span class="s7">function</span><span class="s3">(</span><span class="s1">liste</span><span class="s3">)</span><span class="s1"> </span><span class="s3">{</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> tbody </span><span class="s3">=</span><span class="s1"> document</span><span class="s3">.</span><span class="s1">getElementById</span><span class="s3">(</span><span class="s5">'scores-table-body'</span><span class="s3">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">if</span><span class="s1"> </span><span class="s3">(</span><span class="s1">liste</span><span class="s3">.</span><span class="s1">length </span><span class="s3">===</span><span class="s1"> </span><span class="s4">0</span><span class="s3">)</span><span class="s1"> </span><span class="s3">{</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">                </span>tbody</span><span class="s3">.</span><span class="s2">innerHTML </span><span class="s3">=</span><span class="s2"> </span><span class="s1">`&lt;tr&gt;&lt;td colspan="5" class="py-8 text-center text-slate-400 italic"&gt;Aucune tentative enregistrée pour le moment.&lt;/td&gt;&lt;/tr&gt;`</span><span class="s3">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s7">return</span><span class="s3">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">}</span></p>
-<p class="p7"><span class="s8"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>tbody</span><span class="s3">.</span><span class="s1">innerHTML </span><span class="s3">=</span><span class="s1"> listTemplate</span><span class="s3">(</span><span class="s1">liste</span><span class="s3">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s3">}</span></p>
-<p class="p7"><span class="s8"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s1"> listTemplate</span><span class="s3">(</span><span class="s1">liste</span><span class="s3">)</span><span class="s1"> </span><span class="s3">{</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">return</span><span class="s1"> liste</span><span class="s3">.</span><span class="s1">map</span><span class="s3">((</span><span class="s1">item</span><span class="s3">,</span><span class="s1"> idx</span><span class="s3">)</span><span class="s1"> </span><span class="s3">=&gt;</span><span class="s1"> </span><span class="s3">{</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s7">const</span><span class="s1"> date </span><span class="s3">=</span><span class="s1"> item</span><span class="s3">.</span><span class="s1">timestamp </span><span class="s3">?</span><span class="s1"> </span><span class="s7">new</span><span class="s1"> </span><span class="s6">Date</span><span class="s3">(</span><span class="s1">item</span><span class="s3">.</span><span class="s1">timestamp</span><span class="s3">).</span><span class="s1">toLocaleString</span><span class="s3">(</span><span class="s5">'fr-FR'</span><span class="s3">)</span><span class="s1"> </span><span class="s3">:</span><span class="s1"> </span><span class="s5">'Date inconnue'</span><span class="s3">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s7">const</span><span class="s1"> total </span><span class="s3">=</span><span class="s1"> item</span><span class="s3">.</span><span class="s1">corrects </span><span class="s3">+</span><span class="s1"> item</span><span class="s3">.</span><span class="s1">erreurs</span><span class="s3">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s7">const</span><span class="s1"> ratio </span><span class="s3">=</span><span class="s1"> total </span><span class="s3">&gt;</span><span class="s1"> </span><span class="s4">0</span><span class="s1"> </span><span class="s3">?</span><span class="s1"> </span><span class="s3">(</span><span class="s1">item</span><span class="s3">.</span><span class="s1">corrects </span><span class="s3">/</span><span class="s1"> total </span><span class="s3">*</span><span class="s1"> </span><span class="s4">100</span><span class="s3">).</span><span class="s1">toFixed</span><span class="s3">(</span><span class="s4">0</span><span class="s3">)</span><span class="s1"> </span><span class="s3">:</span><span class="s1"> </span><span class="s4">0</span><span class="s3">;</span></p>
-<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span></span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s7">let</span><span class="s1"> badgeColor </span><span class="s3">=</span><span class="s1"> </span><span class="s5">'bg-red-100 text-red-700'</span><span class="s3">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s7">if</span><span class="s1"> </span><span class="s3">(</span><span class="s1">ratio </span><span class="s3">&gt;=</span><span class="s1"> </span><span class="s4">80</span><span class="s3">)</span><span class="s1"> badgeColor </span><span class="s3">=</span><span class="s1"> </span><span class="s5">'bg-green-100 text-green-700'</span><span class="s3">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s7">else</span><span class="s1"> </span><span class="s7">if</span><span class="s1"> </span><span class="s3">(</span><span class="s1">ratio </span><span class="s3">&gt;=</span><span class="s1"> </span><span class="s4">50</span><span class="s3">)</span><span class="s1"> badgeColor </span><span class="s3">=</span><span class="s1"> </span><span class="s5">'bg-amber-100 text-amber-700'</span><span class="s3">;</span></p>
-<p class="p7"><span class="s8"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s7">return</span><span class="s1"> </span><span class="s5">`</span></p>
-<p class="p4"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;tr onclick="ouvrirDetails(</span><span class="s3">${</span><span class="s2">idx</span><span class="s3">}</span><span class="s1">)" class="border-b border-slate-100 hover:bg-blue-50/50 cursor-pointer transition"&gt;</span></p>
-<p class="p4"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;td class="py-4 px-4 font-bold text-slate-800"&gt;</span><span class="s3">${</span><span class="s2">item</span><span class="s3">.</span><span class="s2">nomEleve</span><span class="s3">}</span><span class="s1">&lt;/td&gt;</span></p>
-<p class="p4"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;td class="py-4 px-4 text-slate-600"&gt;</span><span class="s3">${</span><span class="s2">item</span><span class="s3">.</span><span class="s2">exercice</span><span class="s3">}</span><span class="s1">&lt;/td&gt;</span></p>
-<p class="p4"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;td class="py-4 px-4 text-center"&gt;</span></p>
-<p class="p4"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;span class="px-3 py-1 rounded-full text-xs font-bold </span><span class="s3">${</span><span class="s2">badgeColor</span><span class="s3">}</span><span class="s1">"&gt;</span></p>
-<p class="p4"><span class="s1"><span class="Apple-converted-space">                                </span></span><span class="s3">${</span><span class="s2">item</span><span class="s3">.</span><span class="s2">corrects</span><span class="s3">}</span><span class="s1"> / </span><span class="s3">${</span><span class="s2">total</span><span class="s3">}</span><span class="s1"> (</span><span class="s3">${</span><span class="s2">ratio</span><span class="s3">}</span><span class="s1">%)</span></p>
-<p class="p4"><span class="s1"><span class="Apple-converted-space">                            </span>&lt;/span&gt;</span></p>
-<p class="p4"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/td&gt;</span></p>
-<p class="p4"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;td class="py-4 px-4 text-sm text-slate-500"&gt;</span><span class="s3">${</span><span class="s2">date</span><span class="s3">}</span><span class="s1">&lt;/td&gt;</span></p>
-<p class="p4"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;td class="py-4 px-4 text-right text-blue-600 font-bold hover:underline text-sm"&gt;Consulter ➔&lt;/td&gt;</span></p>
-<p class="p4"><span class="s1"><span class="Apple-converted-space">                    </span>&lt;/tr&gt;</span></p>
-<p class="p4"><span class="s1"><span class="Apple-converted-space">                </span>`</span><span class="s3">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">}).</span><span class="s1">join</span><span class="s3">(</span><span class="s5">''</span><span class="s3">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s3">}</span></p>
-<p class="p7"><span class="s8"></span><br></p>
-<p class="p6"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s1">// Ouvre le détail complet d'une session</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span>window</span><span class="s3">.</span><span class="s1">ouvrirDetails </span><span class="s3">=</span><span class="s1"> </span><span class="s7">function</span><span class="s3">(</span><span class="s1">index</span><span class="s3">)</span><span class="s1"> </span><span class="s3">{</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> item </span><span class="s3">=</span><span class="s1"> window</span><span class="s3">.</span><span class="s1">scoresData</span><span class="s3">[</span><span class="s1">index</span><span class="s3">];</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">if</span><span class="s1"> </span><span class="s3">(!</span><span class="s1">item</span><span class="s3">)</span><span class="s1"> </span><span class="s7">return</span><span class="s3">;</span></p>
-<p class="p7"><span class="s8"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>document</span><span class="s3">.</span><span class="s1">getElementById</span><span class="s3">(</span><span class="s5">'modal-student-title'</span><span class="s3">).</span><span class="s1">innerText </span><span class="s3">=</span><span class="s1"> </span><span class="s5">`Tentative de </span><span class="s3">${</span><span class="s1">item</span><span class="s3">.</span><span class="s1">nomEleve</span><span class="s3">}</span><span class="s5">`</span><span class="s3">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> date </span><span class="s3">=</span><span class="s1"> item</span><span class="s3">.</span><span class="s1">timestamp </span><span class="s3">?</span><span class="s1"> </span><span class="s7">new</span><span class="s1"> </span><span class="s6">Date</span><span class="s3">(</span><span class="s1">item</span><span class="s3">.</span><span class="s1">timestamp</span><span class="s3">).</span><span class="s1">toLocaleString</span><span class="s3">(</span><span class="s5">'fr-FR'</span><span class="s3">)</span><span class="s1"> </span><span class="s3">:</span><span class="s1"> </span><span class="s5">'Date inconnue'</span><span class="s3">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>document</span><span class="s3">.</span><span class="s1">getElementById</span><span class="s3">(</span><span class="s5">'modal-exercise-subtitle'</span><span class="s3">).</span><span class="s1">innerText </span><span class="s3">=</span><span class="s1"> </span><span class="s5">`</span><span class="s3">${</span><span class="s1">item</span><span class="s3">.</span><span class="s1">exercice</span><span class="s3">}</span><span class="s5"> — Réalisé le </span><span class="s3">${</span><span class="s1">date</span><span class="s3">}</span><span class="s5">`</span><span class="s3">;</span></p>
-<p class="p7"><span class="s8"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">const</span><span class="s1"> container </span><span class="s3">=</span><span class="s1"> document</span><span class="s3">.</span><span class="s1">getElementById</span><span class="s3">(</span><span class="s5">'modal-questions-list'</span><span class="s3">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>container</span><span class="s3">.</span><span class="s1">innerHTML </span><span class="s3">=</span><span class="s1"> </span><span class="s5">""</span><span class="s3">;</span></p>
-<p class="p7"><span class="s8"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s7">if</span><span class="s1"> </span><span class="s3">(!</span><span class="s1">item</span><span class="s3">.</span><span class="s1">details </span><span class="s3">||</span><span class="s1"> item</span><span class="s3">.</span><span class="s1">details</span><span class="s3">.</span><span class="s1">length </span><span class="s3">===</span><span class="s1"> </span><span class="s4">0</span><span class="s3">)</span><span class="s1"> </span><span class="s3">{</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">                </span>container</span><span class="s3">.</span><span class="s2">innerHTML </span><span class="s3">=</span><span class="s2"> </span><span class="s1">`&lt;p class="text-slate-500 italic text-center py-6"&gt;Aucun détail disponible pour cette session.&lt;/p&gt;`</span><span class="s3">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">}</span><span class="s1"> </span><span class="s7">else</span><span class="s1"> </span><span class="s3">{</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span>item</span><span class="s3">.</span><span class="s1">details</span><span class="s3">.</span><span class="s1">forEach</span><span class="s3">((</span><span class="s1">q</span><span class="s3">,</span><span class="s1"> i</span><span class="s3">)</span><span class="s1"> </span><span class="s3">=&gt;</span><span class="s1"> </span><span class="s3">{</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s7">const</span><span class="s1"> block </span><span class="s3">=</span><span class="s1"> document</span><span class="s3">.</span><span class="s1">createElement</span><span class="s3">(</span><span class="s5">'div'</span><span class="s3">);</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">                    </span>block</span><span class="s3">.</span><span class="s2">className </span><span class="s3">=</span><span class="s2"> </span><span class="s1">"p-5 rounded-2xl border border-slate-100 bg-slate-50 space-y-3 shadow-sm"</span><span class="s3">;</span></p>
-<p class="p7"><span class="s8"></span><br></p>
-<p class="p6"><span class="s2"><span class="Apple-converted-space">                    </span></span><span class="s1">// En-tête de la question</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s7">const</span><span class="s1"> header </span><span class="s3">=</span><span class="s1"> document</span><span class="s3">.</span><span class="s1">createElement</span><span class="s3">(</span><span class="s5">'div'</span><span class="s3">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>header</span><span class="s3">.</span><span class="s1">className </span><span class="s3">=</span><span class="s1"> </span><span class="s5">"flex justify-between items-start"</span><span class="s3">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>header</span><span class="s3">.</span><span class="s1">innerHTML </span><span class="s3">=</span><span class="s1"> </span><span class="s5">`</span></p>
-<p class="p4"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;span class="font-bold text-slate-800 text-md font-serif"&gt;Question </span><span class="s3">${</span><span class="s2">i </span><span class="s3">+</span><span class="s2"> </span><span class="s4">1</span><span class="s3">}</span><span class="s1"> :&lt;/span&gt;</span></p>
-<p class="p4"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;span class="px-2 py-1 rounded-lg text-xs font-bold </span><span class="s3">${</span><span class="s2">q</span><span class="s3">.</span><span class="s2">isCorrect </span><span class="s3">?</span><span class="s2"> </span><span class="s1">'bg-green-100 text-green-800'</span><span class="s2"> </span><span class="s3">:</span><span class="s2"> </span><span class="s1">'bg-red-100 text-red-800'</span><span class="s3">}</span><span class="s1">"&gt;</span></p>
-<p class="p4"><span class="s1"><span class="Apple-converted-space">                            </span></span><span class="s3">${</span><span class="s2">q</span><span class="s3">.</span><span class="s2">isCorrect </span><span class="s3">?</span><span class="s2"> </span><span class="s1">'Réussi'</span><span class="s2"> </span><span class="s3">:</span><span class="s2"> </span><span class="s1">'Échec final'</span><span class="s3">}</span></p>
-<p class="p4"><span class="s1"><span class="Apple-converted-space">                        </span>&lt;/span&gt;</span></p>
-<p class="p4"><span class="s1"><span class="Apple-converted-space">                    </span>`</span><span class="s3">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>block</span><span class="s3">.</span><span class="s1">appendChild</span><span class="s3">(</span><span class="s1">header</span><span class="s3">);</span></p>
-<p class="p7"><span class="s8"></span><br></p>
-<p class="p6"><span class="s2"><span class="Apple-converted-space">                    </span></span><span class="s1">// Intitulé de la question</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s7">const</span><span class="s1"> prompt </span><span class="s3">=</span><span class="s1"> document</span><span class="s3">.</span><span class="s1">createElement</span><span class="s3">(</span><span class="s5">'p'</span><span class="s3">);</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">                    </span>prompt</span><span class="s3">.</span><span class="s2">className </span><span class="s3">=</span><span class="s2"> </span><span class="s1">"text-slate-700 font-semibold text-lg bg-white p-3 rounded-xl border border-slate-100"</span><span class="s3">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>prompt</span><span class="s3">.</span><span class="s1">innerText </span><span class="s3">=</span><span class="s1"> q</span><span class="s3">.</span><span class="s1">questionText</span><span class="s3">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>block</span><span class="s3">.</span><span class="s1">appendChild</span><span class="s3">(</span><span class="s1">prompt</span><span class="s3">);</span></p>
-<p class="p7"><span class="s8"></span><br></p>
-<p class="p6"><span class="s2"><span class="Apple-converted-space">                    </span></span><span class="s1">// Bonne réponse attendue</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s7">const</span><span class="s1"> ans </span><span class="s3">=</span><span class="s1"> document</span><span class="s3">.</span><span class="s1">createElement</span><span class="s3">(</span><span class="s5">'p'</span><span class="s3">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>ans</span><span class="s3">.</span><span class="s1">className </span><span class="s3">=</span><span class="s1"> </span><span class="s5">"text-sm text-slate-500"</span><span class="s3">;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">                    </span>ans</span><span class="s3">.</span><span class="s2">innerHTML </span><span class="s3">=</span><span class="s2"> </span><span class="s1">`Réponse attendue : &lt;strong class="text-slate-800"&gt;</span><span class="s3">${</span><span class="s2">q</span><span class="s3">.</span><span class="s2">correctAnswer</span><span class="s3">}</span><span class="s1">&lt;/strong&gt;`</span><span class="s3">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>block</span><span class="s3">.</span><span class="s1">appendChild</span><span class="s3">(</span><span class="s1">ans</span><span class="s3">);</span></p>
-<p class="p7"><span class="s8"></span><br></p>
-<p class="p6"><span class="s2"><span class="Apple-converted-space">                    </span></span><span class="s1">// Journal des essais de l'élève</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s7">const</span><span class="s1"> attemptsWrapper </span><span class="s3">=</span><span class="s1"> document</span><span class="s3">.</span><span class="s1">createElement</span><span class="s3">(</span><span class="s5">'div'</span><span class="s3">);</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">                    </span>attemptsWrapper</span><span class="s3">.</span><span class="s2">className </span><span class="s3">=</span><span class="s2"> </span><span class="s1">"space-y-1.5 pt-2 border-t border-slate-200/60"</span><span class="s3">;</span></p>
-<p class="p7"><span class="s1"><span class="Apple-converted-space">                    </span></span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s7">if</span><span class="s1"> </span><span class="s3">(</span><span class="s1">q</span><span class="s3">.</span><span class="s1">attempts </span><span class="s3">&amp;&amp;</span><span class="s1"> q</span><span class="s3">.</span><span class="s1">attempts</span><span class="s3">.</span><span class="s1">length </span><span class="s3">&gt;</span><span class="s1"> </span><span class="s4">0</span><span class="s3">)</span><span class="s1"> </span><span class="s3">{</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span>q</span><span class="s3">.</span><span class="s1">attempts</span><span class="s3">.</span><span class="s1">forEach</span><span class="s3">((</span><span class="s1">att</span><span class="s3">,</span><span class="s1"> attIdx</span><span class="s3">)</span><span class="s1"> </span><span class="s3">=&gt;</span><span class="s1"> </span><span class="s3">{</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                            </span></span><span class="s7">const</span><span class="s1"> isLastAndWin </span><span class="s3">=</span><span class="s1"> </span><span class="s3">(</span><span class="s1">attIdx </span><span class="s3">===</span><span class="s1"> q</span><span class="s3">.</span><span class="s1">attempts</span><span class="s3">.</span><span class="s1">length </span><span class="s3">-</span><span class="s1"> </span><span class="s4">1</span><span class="s3">)</span><span class="s1"> </span><span class="s3">&amp;&amp;</span><span class="s1"> q</span><span class="s3">.</span><span class="s1">isCorrect</span><span class="s3">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                            </span></span><span class="s7">const</span><span class="s1"> attDiv </span><span class="s3">=</span><span class="s1"> document</span><span class="s3">.</span><span class="s1">createElement</span><span class="s3">(</span><span class="s5">'div'</span><span class="s3">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                            </span>attDiv</span><span class="s3">.</span><span class="s1">className </span><span class="s3">=</span><span class="s1"> </span><span class="s5">"flex items-center gap-2 text-sm"</span><span class="s3">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                            </span>attDiv</span><span class="s3">.</span><span class="s1">innerHTML </span><span class="s3">=</span><span class="s1"> </span><span class="s5">`</span></p>
-<p class="p4"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;span class="text-xs text-slate-400"&gt;Essai </span><span class="s3">${</span><span class="s2">attIdx </span><span class="s3">+</span><span class="s2"> </span><span class="s4">1</span><span class="s3">}</span><span class="s1"> :&lt;/span&gt;</span></p>
-<p class="p4"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;span class="font-semibold text-slate-800"&gt;</span><span class="s3">${</span><span class="s2">att</span><span class="s3">}</span><span class="s1">&lt;/span&gt;</span></p>
-<p class="p4"><span class="s1"><span class="Apple-converted-space">                                </span>&lt;span&gt;</span><span class="s3">${</span><span class="s2">isLastAndWin </span><span class="s3">?</span><span class="s2"> </span><span class="s1">'✅'</span><span class="s2"> </span><span class="s3">:</span><span class="s2"> </span><span class="s1">'❌'</span><span class="s3">}</span><span class="s1">&lt;/span&gt;</span></p>
-<p class="p4"><span class="s1"><span class="Apple-converted-space">                            </span>`</span><span class="s3">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                            </span>attemptsWrapper</span><span class="s3">.</span><span class="s1">appendChild</span><span class="s3">(</span><span class="s1">attDiv</span><span class="s3">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                        </span></span><span class="s3">});</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s3">}</span><span class="s1"> </span><span class="s7">else</span><span class="s1"> </span><span class="s3">{</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">                        </span>attemptsWrapper</span><span class="s3">.</span><span class="s2">innerHTML </span><span class="s3">=</span><span class="s2"> </span><span class="s1">`&lt;span class="text-xs text-slate-400 italic"&gt;Aucun essai enregistré.&lt;/span&gt;`</span><span class="s3">;</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span></span><span class="s3">}</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>block</span><span class="s3">.</span><span class="s1">appendChild</span><span class="s3">(</span><span class="s1">attemptsWrapper</span><span class="s3">);</span></p>
-<p class="p7"><span class="s8"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                    </span>container</span><span class="s3">.</span><span class="s1">appendChild</span><span class="s3">(</span><span class="s1">block</span><span class="s3">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">                </span></span><span class="s3">});</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span></span><span class="s3">}</span></p>
-<p class="p7"><span class="s8"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>document</span><span class="s3">.</span><span class="s1">getElementById</span><span class="s3">(</span><span class="s5">'detail-modal'</span><span class="s3">).</span><span class="s1">classList</span><span class="s3">.</span><span class="s1">remove</span><span class="s3">(</span><span class="s5">'hidden'</span><span class="s3">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s3">}</span></p>
-<p class="p7"><span class="s8"></span><br></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s7">function</span><span class="s1"> fermerDetailModal</span><span class="s3">()</span><span class="s1"> </span><span class="s3">{</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">            </span>document</span><span class="s3">.</span><span class="s1">getElementById</span><span class="s3">(</span><span class="s5">'detail-modal'</span><span class="s3">).</span><span class="s1">classList</span><span class="s3">.</span><span class="s1">add</span><span class="s3">(</span><span class="s5">'hidden'</span><span class="s3">);</span></p>
-<p class="p5"><span class="s1"><span class="Apple-converted-space">        </span></span><span class="s3">}</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s3">&lt;/</span><span class="s1">script</span><span class="s3">&gt;</span></p>
-<p class="p2"><span class="s3">&lt;/</span><span class="s1">body</span><span class="s3">&gt;</span></p>
-<p class="p2"><span class="s3">&lt;/</span><span class="s1">html</span><span class="s3">&gt;</span></p>
+<body class="bg-slate-50 min-h-screen font-sans flex flex-col justify-between">
+
+    <!-- ÉCRAN DE CONNEXION ÉLÈVE -->
+    <div id="login-screen" class="fixed inset-0 bg-blue-950 z-50 flex flex-col items-center justify-center p-4">
+        <div class="bg-white p-8 rounded-3xl shadow-2xl max-w-md w-full text-center border border-slate-100">
+            <span class="text-6xl mb-4 block">🎓</span>
+            <h1 class="text-3xl font-bold text-slate-800 mb-2 font-serif">Ma Classe Virtuelle</h1>
+            <p class="text-slate-500 mb-6">Entre ton prénom et nom (ex: Lucas M.) pour commencer à t'entraîner.</p>
+            
+            <div class="space-y-4">
+                <input type="text" id="student-name" placeholder="Prénom et Nom..." 
+                       class="w-full px-4 py-3 border-2 border-slate-200 rounded-2xl text-lg text-center font-semibold focus:border-blue-500 focus:outline-none transition-all">
+                <button onclick="seConnecter()" 
+                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-2xl text-lg transition-all transform active:scale-95 shadow-lg">
+                    Rejoindre la classe ➔
+                </button>
+            </div>
+            
+            <button onclick="ouvrirAdmin()" class="mt-8 text-sm text-slate-400 hover:text-blue-500 underline transition">
+                Accès Enseignant (Suivi détaillé)
+            </button>
+        </div>
+    </div>
+
+    <!-- EN-TÊTE DU SITE -->
+    <header class="bg-blue-900 text-white py-6 px-4 shadow-md">
+        <div class="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="text-center sm:text-left">
+                <h1 class="text-3xl font-bold tracking-tight">🎒 Portail de la Classe</h1>
+                <p class="text-blue-200 text-sm mt-1">Élève connecté : <span id="display-name" class="font-bold text-emerald-400">...</span></p>
+            </div>
+            <button onclick="changerUtilisateur()" class="text-xs bg-blue-800 hover:bg-blue-700 px-4 py-2 rounded-xl transition-all">
+                Changer de compte
+            </button>
+        </div>
+    </header>
+
+    <!-- PORTAIL D'ACTIVITÉS -->
+    <main class="max-w-5xl mx-auto px-4 py-10 flex-grow w-full">
+        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 mb-8 border border-blue-100">
+            <h2 class="text-lg font-bold text-blue-950 font-serif">🧠 Apprentissage Adaptatif activé !</h2>
+            <p class="text-blue-900/80 text-sm mt-1">Le système mémorise tes difficultés. Les questions ou multiplications ratées reviendront plus souvent pour t'aider à progresser et à les retenir durablement !</p>
+        </div>
+
+        <h2 class="text-2xl font-bold text-slate-800 mb-6">Choisis ton atelier :</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- ACTIVITÉ 1: CALCUL MENTAL -->
+            <a href="#" onclick="ouvrirActivite('calculs.html')" 
+               class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl hover:border-blue-350 transition-all flex flex-col justify-between group">
+                <div class="flex items-start gap-4">
+                    <div class="bg-blue-50 p-4 rounded-2xl text-4xl group-hover:scale-110 transition-transform">🧮</div>
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-800 group-hover:text-blue-900 transition-colors">Calcul Décimal</h3>
+                        <p class="text-slate-500 mt-1 text-sm leading-relaxed">Additions & soustractions à virgule.</p>
+                    </div>
+                </div>
+                <div class="text-blue-600 font-bold text-sm mt-4 text-right group-hover:translate-x-1 transition-transform">S'entraîner ➔</div>
+            </a>
+
+            <!-- ACTIVITÉ 2: GÉOMÉTRIE -->
+            <a href="#" onclick="ouvrirActivite('geometrie.html')" 
+               class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl hover:border-emerald-305 transition-all flex flex-col justify-between group">
+                <div class="flex items-start gap-4">
+                    <div class="bg-emerald-50 p-4 rounded-2xl text-4xl group-hover:scale-110 transition-transform">📐</div>
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-800 group-hover:text-emerald-950 transition-colors">Défi Formes</h3>
+                        <p class="text-slate-500 mt-1 text-sm leading-relaxed">Triangles & quadrilatères géométriques.</p>
+                    </div>
+                </div>
+                <div class="text-emerald-600 font-bold text-sm mt-4 text-right group-hover:translate-x-1 transition-transform">S'entraîner ➔</div>
+            </a>
+
+            <!-- ACTIVITÉ 3: LIVRETS DE MULTIPLICATION -->
+            <a href="#" onclick="ouvrirActivite('livrets.html')" 
+               class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl hover:border-violet-300 transition-all flex flex-col justify-between group">
+                <div class="flex items-start gap-4">
+                    <div class="bg-violet-50 p-4 rounded-2xl text-4xl group-hover:scale-110 transition-transform">✖️</div>
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-800 group-hover:text-violet-900 transition-colors">Les Livrets</h3>
+                        <p class="text-slate-500 mt-1 text-sm leading-relaxed">Multiplications de 1x1 à 10x10 avec aide interactive.</p>
+                    </div>
+                </div>
+                <div class="text-violet-600 font-bold text-sm mt-4 text-right group-hover:translate-x-1 transition-transform">S'entraîner ➔</div>
+            </a>
+        </div>
+    </main>
+
+    <!-- TABLEAU DE BORD ENSEIGNANT -->
+    <div id="admin-panel" class="fixed inset-0 bg-slate-900/70 z-40 hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-5xl h-[85vh] rounded-3xl shadow-2xl flex flex-col overflow-hidden">
+            <div class="bg-slate-900 text-white p-6 flex justify-between items-center">
+                <div>
+                    <h2 class="text-2xl font-bold">📋 Espace Enseignant</h2>
+                    <p class="text-xs text-slate-400 mt-1">Cliquez sur une ligne pour voir le détail des essais de l'élève question par question.</p>
+                </div>
+                <button onclick="fermerAdmin()" class="bg-slate-800 hover:bg-slate-700 px-4 py-2 rounded-xl transition text-sm">Quitter</button>
+            </div>
+            
+            <div class="p-6 flex-grow overflow-y-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b-2 border-slate-200 text-slate-500 uppercase text-xs tracking-wider">
+                            <th class="py-3 px-4">Élève</th>
+                            <th class="py-3 px-4">Exercice</th>
+                            <th class="py-3 px-4 text-center">Score obtenu</th>
+                            <th class="py-3 px-4">Date & Heure</th>
+                            <th class="py-3 px-4 text-right">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="scores-table-body" class="text-slate-700">
+                        <!-- Rempli dynamiquement -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE DÉTAIL D'UNE SESSION -->
+    <div id="detail-modal" class="fixed inset-0 bg-slate-950/80 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-3xl rounded-3xl shadow-2xl overflow-hidden max-h-[85vh] flex flex-col">
+            <div class="bg-blue-900 text-white p-6 flex justify-between items-center">
+                <div>
+                    <h3 id="modal-student-title" class="text-xl font-bold">...</h3>
+                    <p id="modal-exercise-subtitle" class="text-sm text-blue-200">...</p>
+                </div>
+                <button onclick="fermerDetailModal()" class="text-white hover:text-slate-200 text-2xl font-bold">&times;</button>
+            </div>
+            <div class="p-6 overflow-y-auto space-y-4" id="modal-questions-list">
+                <!-- Rempli en JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- PIED DE PAGE -->
+    <footer class="bg-slate-900 text-slate-500 py-6 text-center text-xs">
+        <p>© 2026 Classe Numérique Premium — Apprentissage Personnalisé & Suivi Temps Réel.</p>
+    </footer>
+
+    <script>
+        function seConnecter() {
+            const input = document.getElementById('student-name');
+            const nom = input.value.trim();
+            if (nom.length < 3) {
+                alert("Veuillez entrer votre prénom complet ainsi que la première lettre de votre nom.");
+                return;
+            }
+            localStorage.setItem('nomEleve', nom);
+            document.getElementById('display-name').innerText = nom;
+            document.getElementById('login-screen').classList.add('hidden');
+        }
+
+        function changerUtilisateur() {
+            localStorage.removeItem('nomEleve');
+            document.getElementById('login-screen').classList.remove('hidden');
+        }
+
+        window.onload = function() {
+            const nomMemorise = localStorage.getItem('nomEleve');
+            if (nomMemorise) {
+                document.getElementById('display-name').innerText = nomMemorise;
+                document.getElementById('login-screen').classList.add('hidden');
+            }
+        }
+
+        function ouvrirActivite(page) {
+            const nom = localStorage.getItem('nomEleve') || "Anonyme";
+            window.location.href = `${page}?eleve=${encodeURIComponent(nom)}`;
+        }
+
+        function ouvrirAdmin() {
+            const code = prompt("Veuillez saisir votre code d'accès enseignant :");
+            if (code === "Prof2026") {
+                document.getElementById('admin-panel').classList.remove('hidden');
+            } else if (code !== null) {
+                alert("Accès refusé. Code erroné.");
+            }
+        }
+
+        function fermerAdmin() {
+            document.getElementById('admin-panel').classList.add('hidden');
+        }
+
+        // Affiche le tableau de suivi enseignant
+        window.afficherTableauScores = function(liste) {
+            const tbody = document.getElementById('scores-table-body');
+            if (liste.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-slate-400 italic">Aucune tentative enregistrée pour le moment.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = listTemplate(liste);
+        }
+
+        function listTemplate(liste) {
+            return liste.map((item, idx) => {
+                const date = item.timestamp ? new Date(item.timestamp).toLocaleString('fr-FR') : 'Date inconnue';
+                const total = item.corrects + item.erreurs;
+                const ratio = total > 0 ? (item.corrects / total * 100).toFixed(0) : 0;
+                
+                let badgeColor = 'bg-red-100 text-red-700';
+                if (ratio >= 80) badgeColor = 'bg-green-100 text-green-700';
+                else if (ratio >= 50) badgeColor = 'bg-amber-100 text-amber-700';
+
+                return `
+                    <tr onclick="ouvrirDetails(${idx})" class="border-b border-slate-100 hover:bg-blue-50/50 cursor-pointer transition">
+                        <td class="py-4 px-4 font-bold text-slate-800">${item.nomEleve}</td>
+                        <td class="py-4 px-4 text-slate-600">${item.exercice}</td>
+                        <td class="py-4 px-4 text-center">
+                            <span class="px-3 py-1 rounded-full text-xs font-bold ${badgeColor}">
+                                ${item.corrects} / ${total} (${ratio}%)
+                            </span>
+                        </td>
+                        <td class="py-4 px-4 text-sm text-slate-500">${date}</td>
+                        <td class="py-4 px-4 text-right text-blue-600 font-bold hover:underline text-sm">Consulter ➔</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Ouvre le détail complet d'une session
+        window.ouvrirDetails = function(index) {
+            const item = window.scoresData[index];
+            if (!item) return;
+
+            document.getElementById('modal-student-title').innerText = `Tentative de ${item.nomEleve}`;
+            const date = item.timestamp ? new Date(item.timestamp).toLocaleString('fr-FR') : 'Date inconnue';
+            document.getElementById('modal-exercise-subtitle').innerText = `${item.exercice} — Réalisé le ${date}`;
+
+            const container = document.getElementById('modal-questions-list');
+            container.innerHTML = "";
+
+            if (!item.details || item.details.length === 0) {
+                container.innerHTML = `<p class="text-slate-500 italic text-center py-6">Aucun détail disponible pour cette session.</p>`;
+            } else {
+                item.details.forEach((q, i) => {
+                    const block = document.createElement('div');
+                    block.className = "p-5 rounded-2xl border border-slate-100 bg-slate-50 space-y-3 shadow-sm";
+
+                    // En-tête de la question
+                    const header = document.createElement('div');
+                    header.className = "flex justify-between items-start";
+                    header.innerHTML = `
+                        <span class="font-bold text-slate-800 text-md font-serif">Question ${i + 1} :</span>
+                        <span class="px-2 py-1 rounded-lg text-xs font-bold ${q.isCorrect ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                            ${q.isCorrect ? 'Réussi' : 'Échec final'}
+                        </span>
+                    `;
+                    block.appendChild(header);
+
+                    // Intitulé de la question
+                    const prompt = document.createElement('p');
+                    prompt.className = "text-slate-700 font-semibold text-lg bg-white p-3 rounded-xl border border-slate-100";
+                    prompt.innerText = q.questionText;
+                    block.appendChild(prompt);
+
+                    // Bonne réponse attendue
+                    const ans = document.createElement('p');
+                    ans.className = "text-sm text-slate-500";
+                    ans.innerHTML = `Réponse attendue : <strong class="text-slate-800">${q.correctAnswer}</strong>`;
+                    block.appendChild(ans);
+
+                    // Journal des essais de l'élève
+                    const attemptsWrapper = document.createElement('div');
+                    attemptsWrapper.className = "space-y-1.5 pt-2 border-t border-slate-200/60";
+                    
+                    if (q.attempts && q.attempts.length > 0) {
+                        q.attempts.forEach((att, attIdx) => {
+                            const isLastAndWin = (attIdx === q.attempts.length - 1) && q.isCorrect;
+                            const attDiv = document.createElement('div');
+                            attDiv.className = "flex items-center gap-2 text-sm";
+                            attDiv.innerHTML = `
+                                <span class="text-xs text-slate-400">Essai ${attIdx + 1} :</span>
+                                <span class="font-semibold text-slate-800">${att}</span>
+                                <span>${isLastAndWin ? '✅' : '❌'}</span>
+                            `;
+                            attemptsWrapper.appendChild(attDiv);
+                        });
+                    } else {
+                        attemptsWrapper.innerHTML = `<span class="text-xs text-slate-400 italic">Aucun essai enregistré.</span>`;
+                    }
+                    block.appendChild(attemptsWrapper);
+
+                    container.appendChild(block);
+                });
+            }
+
+            document.getElementById('detail-modal').classList.remove('hidden');
+        }
+
+        function fermerDetailModal() {
+            document.getElementById('detail-modal').classList.add('hidden');
+        }
+    </script>
 </body>
 </html>
