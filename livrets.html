@@ -6,6 +6,629 @@
     <title>Atelier des Livrets — Multiplications</title>
     <!-- Chargement de Tailwind CSS pour un design moderne -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Configuration Firebase dynamique de l'environnement
+        const firebaseConfig = typeof __firebase_config !== 'undefined' 
+            ? JSON.parse(__firebase_config) 
+            : {
+                apiKey: "",
+                authDomain: "classe-numerique-prof.firebaseapp.com",
+                projectId: "classe-numerique-prof",
+                storageBucket: "classe-numerique-prof.appspot.com",
+                messagingSenderId: "123456789",
+                appId: "1:123456:web:abcde"
+            };
+
+        // Initialisation sécurisée de Firebase
+        try {
+            const app = initializeApp(firebaseConfig);
+            const auth = getAuth(app);
+            const db = getFirestore(app);
+            const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+
+            window.db = db;
+            window.appId = appId;
+
+            // Connexion anonyme Firebase (Règle 3)
+            const initAuth = async () => {
+                try {
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+                } catch (error) {
+                    console.warn("Connexion en mode local :", error);
+                    lancerSansFirebase();
+                }
+            };
+            initAuth();
+
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    window.currentUser = user;
+                    chargerHistoriqueEtCalculerPriorites();
+                }
+            });
+        } catch (e) {
+            console.warn("Firebase indisponible. Mode local activé.", e);
+            lancerSansFirebase();
+        }
+
+        // Si Firebase est bloqué, on démarre le jeu directement
+        function lancerSansFirebase() {
+            window.erreursMultiplicationsHistorique = {};
+            window.succesMultiplicationsHistorique = {};
+            document.addEventListener("DOMContentLoaded", () => {
+                document.getElementById('loading-overlay').classList.add('hidden');
+            });
+        }
+
+        // Charge l'historique complet pour calibrer l'algorithme adaptatif (Règle 2)
+        async function chargerHistoriqueEtCalculerPriorites() {
+            try {
+                const colRef = collection(window.db, 'artifacts', window.appId, 'public', 'data', 'scores');
+                const querySnapshot = await getDocs(colRef);
+                
+                const erreurs = {};
+                const succes = {};
+
+                querySnapshot.forEach(doc => {
+                    const data = doc.data();
+                    // On ne filtre que l'historique de l'élève courant
+                    if (data.nomEleve === window.nomEleve && data.exercice === "Livrets de multiplication") {
+                        if (data.details) {
+                            data.details.forEach(q => {
+                                const cle = q.questionText.replace('·', 'x').replace('×', 'x').trim(); // Normaliser la clé (ex: "7 x 8")
+                                if (q.isCorrect) {
+                                    succes[cle] = (succes[cle] || 0) + 1;
+                                } else {
+                                    erreurs[cle] = (erreurs[cle] || 0) + 1;
+                                }
+                            });
+                        }
+                    }
+                });
+
+                window.erreursMultiplicationsHistorique = erreurs;
+                window.succesMultiplicationsHistorique = succes;
+                
+                // Fin du chargement
+                document.getElementById('loading-overlay').classList.add('hidden');
+            } catch (e) {
+                console.error("Erreur de calcul adaptatif :", e);
+                lancerSansFirebase();
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 min-h-screen font-sans flex flex-col justify-between select-none">
+
+    <!-- ÉCRAN DE CHARGEMENT PROFIL ADAPTATIF -->
+    <div id="loading-overlay" class="fixed inset-0 bg-indigo-950 z-50 flex flex-col items-center justify-center text-white p-6">
+        <span class="text-6xl animate-pulse mb-4">🧠</span>
+        <h2 class="text-2xl font-bold mb-2 font-serif">Ajustement pédagogique...</h2>
+        <p class="text-indigo-200 text-sm max-w-sm text-center">Nous analysons tes réussites et tes erreurs passées pour te proposer un entraînement sur-mesure.</p>
+    </div>
+
+    <!-- EN-TÊTE -->
+    <header class="bg-indigo-900 text-white py-4 px-4 shadow-md">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <span class="text-2xl">✖️</span>
+                <div>
+                    <h1 class="text-lg font-bold">L'Atelier des Livrets</h1>
+                    <p class="text-indigo-200 text-xs">Élève : <span id="display-name" class="font-bold text-emerald-400">...</span></p>
+                </div>
+            </div>
+            <button onclick="retourPortail()" class="bg-indigo-800 hover:bg-indigo-750 text-xs px-4 py-2 rounded-xl transition-all font-semibold">
+                ↩ Retour au Portail
+            </button>
+        </div>
+    </header>
+
+    <!-- ZONE PRINCIPALE -->
+    <main class="max-w-4xl mx-auto px-4 py-8 flex-grow w-full">
+        
+        <!-- ÉCRAN 1 : CHOIX DES TABLES -->
+        <div id="selection-screen" class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-800 font-serif">Quels livrets veux-tu réviser ?</h2>
+                    <p class="text-slate-500 text-sm mt-1">Sélectionne les tables de ton choix. Le système adaptera les questions selon tes difficultés.</p>
+                </div>
+                <!-- BOUTON CHEAT SHEET (Toutes les tables) -->
+                <button onclick="ouvrirAideComplete()" class="bg-amber-100 hover:bg-amber-200 text-amber-800 border border-amber-300 font-bold px-4 py-2.5 rounded-xl text-xs transition-all flex items-center gap-1.5 shadow-sm active:scale-95">
+                    📋 Réviser toutes les tables (1 à 10)
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-4 mb-8">
+                <!-- Boutons de sélection de tables de 1 à 10 -->
+                <button onclick="toggleTable(1)" id="btn-table-1" class="py-4 rounded-2xl border-2 border-slate-200 text-lg font-bold hover:border-indigo-500 transition-all text-slate-700">Table de 1</button>
+                <button onclick="toggleTable(2)" id="btn-table-2" class="py-4 rounded-2xl border-2 border-slate-200 text-lg font-bold hover:border-indigo-500 transition-all text-slate-700">Table de 2</button>
+                <button onclick="toggleTable(3)" id="btn-table-3" class="py-4 rounded-2xl border-2 border-slate-200 text-lg font-bold hover:border-indigo-500 transition-all text-slate-700">Table de 3</button>
+                <button onclick="toggleTable(4)" id="btn-table-4" class="py-4 rounded-2xl border-2 border-slate-200 text-lg font-bold hover:border-indigo-500 transition-all text-slate-700">Table de 4</button>
+                <button onclick="toggleTable(5)" id="btn-table-5" class="py-4 rounded-2xl border-2 border-slate-200 text-lg font-bold hover:border-indigo-500 transition-all text-slate-700">Table de 5</button>
+                <button onclick="toggleTable(6)" id="btn-table-6" class="py-4 rounded-2xl border-2 border-slate-200 text-lg font-bold hover:border-indigo-500 transition-all text-slate-700">Table de 6</button>
+                <button onclick="toggleTable(7)" id="btn-table-7" class="py-4 rounded-2xl border-2 border-slate-200 text-lg font-bold hover:border-indigo-500 transition-all text-slate-700">Table de 7</button>
+                <button onclick="toggleTable(8)" id="btn-table-8" class="py-4 rounded-2xl border-2 border-slate-200 text-lg font-bold hover:border-indigo-500 transition-all text-slate-700">Table de 8</button>
+                <button onclick="toggleTable(9)" id="btn-table-9" class="py-4 rounded-2xl border-2 border-slate-200 text-lg font-bold hover:border-indigo-500 transition-all text-slate-700">Table de 9</button>
+                <button onclick="toggleTable(10)" id="btn-table-10" class="py-4 rounded-2xl border-2 border-slate-200 text-lg font-bold hover:border-indigo-500 transition-all text-slate-700">Table de 10</button>
+            </div>
+
+            <div class="flex flex-wrap gap-4 justify-between items-center border-t pt-6">
+                <button onclick="selectionnerTout()" class="text-sm font-bold text-indigo-600 hover:underline">⚡ Tout sélectionner (Mélange général)</button>
+                <button onclick="demarrerJeu()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-8 py-4 rounded-2xl text-lg transition-all shadow-md transform active:scale-95">
+                    Commencer l'entraînement ➔
+                </button>
+            </div>
+        </div>
+
+        <!-- ÉCRAN 2 : LE JEU EN COURS -->
+        <div id="game-screen" class="hidden grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+            <!-- Colonne de gauche & milieu : Jeu et Clavier -->
+            <div class="md:col-span-2 space-y-6">
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 flex flex-col justify-between relative min-h-[320px]">
+                    <!-- Barre de progression -->
+                    <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden mb-6 flex">
+                        <div id="progress-bar" class="bg-indigo-500 h-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
+
+                    <!-- Question principale sans LaTeX, avec point médian stylisé -->
+                    <div class="text-center my-6 select-none">
+                        <span class="text-slate-400 text-xs block uppercase tracking-wider mb-2 font-bold" id="question-index">Question 1 sur 10</span>
+                        <div class="text-6xl font-black text-slate-800 tracking-wide flex justify-center items-center gap-4" id="math-question">
+                            <span id="q-val1">7</span>
+                            <span class="text-indigo-500 font-bold text-5xl">·</span>
+                            <span id="q-val2">8</span>
+                            <span class="text-slate-400">=</span>
+                            <span class="text-indigo-600">?</span>
+                        </div>
+                    </div>
+
+                    <!-- Input réponse -->
+                    <div class="flex justify-center max-w-xs mx-auto mb-4">
+                        <input type="number" id="answer-input" readonly placeholder="?"
+                               class="w-full text-center bg-slate-50 border-2 border-indigo-100 text-4xl font-extrabold py-3 rounded-2xl focus:outline-none focus:border-indigo-500 text-slate-800 placeholder-slate-300">
+                    </div>
+
+                    <!-- Messages et feedbacks intégrés -->
+                    <div id="message-area" class="text-center font-bold text-sm min-h-[44px] text-slate-500 py-2 flex items-center justify-center rounded-xl transition-all">
+                        Saisis ta réponse à l'aide du clavier virtuel ou physique.
+                    </div>
+                </div>
+
+                <!-- Clavier numérique virtuel tactile -->
+                <div class="bg-slate-100 p-4 rounded-3xl grid grid-cols-3 gap-3">
+                    <button onclick="pressKey(1)" class="bg-white hover:bg-slate-200 py-4 rounded-2xl font-bold text-2xl text-slate-800 shadow-sm active:scale-95 transition">1</button>
+                    <button onclick="pressKey(2)" class="bg-white hover:bg-slate-200 py-4 rounded-2xl font-bold text-2xl text-slate-800 shadow-sm active:scale-95 transition">2</button>
+                    <button onclick="pressKey(3)" class="bg-white hover:bg-slate-200 py-4 rounded-2xl font-bold text-2xl text-slate-800 shadow-sm active:scale-95 transition">3</button>
+                    <button onclick="pressKey(4)" class="bg-white hover:bg-slate-200 py-4 rounded-2xl font-bold text-2xl text-slate-800 shadow-sm active:scale-95 transition">4</button>
+                    <button onclick="pressKey(5)" class="bg-white hover:bg-slate-200 py-4 rounded-2xl font-bold text-2xl text-slate-800 shadow-sm active:scale-95 transition">5</button>
+                    <button onclick="pressKey(6)" class="bg-white hover:bg-slate-200 py-4 rounded-2xl font-bold text-2xl text-slate-800 shadow-sm active:scale-95 transition">6</button>
+                    <button onclick="pressKey(7)" class="bg-white hover:bg-slate-200 py-4 rounded-2xl font-bold text-2xl text-slate-800 shadow-sm active:scale-95 transition">7</button>
+                    <button onclick="pressKey(8)" class="bg-white hover:bg-slate-200 py-4 rounded-2xl font-bold text-2xl text-slate-800 shadow-sm active:scale-95 transition">8</button>
+                    <button onclick="pressKey(9)" class="bg-white hover:bg-slate-200 py-4 rounded-2xl font-bold text-2xl text-slate-800 shadow-sm active:scale-95 transition">9</button>
+                    <button onclick="pressKey('C')" class="bg-rose-50 hover:bg-rose-100 py-4 rounded-2xl font-bold text-lg text-rose-600 shadow-sm active:scale-95 transition">Effacer</button>
+                    <button onclick="pressKey(0)" class="bg-white hover:bg-slate-200 py-4 rounded-2xl font-bold text-2xl text-slate-800 shadow-sm active:scale-95 transition">0</button>
+                    <button id="ok-btn" onclick="validerReponse()" class="bg-emerald-600 hover:bg-emerald-700 py-4 rounded-2xl font-bold text-xl text-white shadow-md active:scale-95 transition">OK ✓</button>
+                </div>
+            </div>
+
+            <!-- Colonne de droite : Aide visuelle ou Table de Pythagore à la demande -->
+            <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex flex-col justify-between">
+                <div>
+                    <h3 class="font-bold text-slate-800 text-lg mb-2 flex items-center gap-2">💡 Aide Visuelle</h3>
+                    <p class="text-xs text-slate-500 mb-4">Compte le nombre de points colorés pour t'aider à calculer.</p>
+                    
+                    <div id="dot-grid" class="grid gap-1 bg-slate-50 p-4 rounded-2xl border border-slate-100 justify-center overflow-auto max-h-[220px]">
+                        <!-- Rempli en JS -->
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <button onclick="ouvrirAideComplete()" class="w-full bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 font-bold py-3 rounded-xl text-xs transition active:scale-95 flex items-center justify-center gap-1.5 shadow-sm">
+                        📋 Ouvrir la table d'aide (1 à 10)
+                    </button>
+                    <div class="bg-indigo-50 p-4 rounded-2xl border border-indigo-100">
+                        <p class="text-xs text-indigo-900 font-semibold">Rappel mathématique :</p>
+                        <p class="text-xs text-indigo-700/90 mt-1 leading-relaxed">Multiplier, c'est additionner plusieurs fois le même nombre. Par exemple, 3 · 4 c'est 4 + 4 + 4 = 12.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ÉCRAN 3 : COMPTE RENDU ET BRAVO -->
+        <div id="summary-screen" class="hidden bg-white p-8 rounded-3xl shadow-sm border border-slate-100 text-center max-w-md mx-auto">
+            <span class="text-6xl mb-4 block animate-bounce">🏆</span>
+            <h2 class="text-3xl font-bold text-slate-800 mb-2 font-serif">Défi Terminé !</h2>
+            <p class="text-slate-500 mb-6 text-sm">Félicitations pour tes efforts. Ton score a été envoyé en temps réel à l'enseignant.</p>
+
+            <div class="bg-slate-50 p-6 rounded-2xl border border-slate-150 mb-6">
+                <span class="text-slate-500 text-xs uppercase font-bold tracking-wider">Score Final</span>
+                <div class="text-5xl font-black text-indigo-600 mt-1" id="final-score">8 / 10</div>
+            </div>
+
+            <div class="space-y-3">
+                <button onclick="recommencerJeu()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-2xl transition shadow-md active:scale-95">
+                    Recommencer un défi
+                </button>
+                <button onclick="retourPortail()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 rounded-2xl transition">
+                    Retourner au portail
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- MODAL D'AIDE COMPLÈTE : TABLE DE PYTHAGORE INTERACTIVE -->
+    <div id="aide-complete-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl p-6 flex flex-col max-h-[90vh]">
+            <div class="flex justify-between items-center border-b pb-4 mb-4">
+                <div>
+                    <h3 class="text-xl font-bold text-slate-800 font-serif">Table de Pythagore</h3>
+                    <p class="text-xs text-slate-400 mt-0.5">Survole ou clique sur une case pour réviser le livret correspondant.</p>
+                </div>
+                <button onclick="fermerAideComplete()" class="text-slate-400 hover:text-slate-700 text-3xl font-bold transition">&times;</button>
+            </div>
+
+            <div class="flex-grow overflow-auto p-2 bg-slate-50 rounded-2xl border border-slate-200">
+                <!-- Grille interactive de Pythagore -->
+                <div class="grid grid-cols-11 gap-1 text-center font-bold text-xs min-w-[500px]" id="pythagore-grid">
+                    <!-- Généré dynamiquement en JS -->
+                </div>
+            </div>
+            
+            <div class="mt-4 text-center bg-indigo-50 border border-indigo-100 p-3.5 rounded-2xl font-bold text-indigo-950 text-sm" id="selection-display">
+                Sélectionne une case pour voir la formule complète !
+            </div>
+        </div>
+    </div>
+
+    <!-- POPUP DE NOTIFICATION INTERNE -->
+    <div id="custom-alert" class="fixed bottom-4 right-4 bg-slate-900 text-white px-6 py-4 rounded-2xl shadow-xl transform translate-y-20 opacity-0 transition-all duration-300 z-50 max-w-sm">
+        <p id="custom-alert-text" class="text-sm font-semibold"></p>
+    </div>
+
+    <!-- PIED DE PAGE -->
+    <footer class="bg-slate-900 text-slate-500 py-6 text-center text-xs">
+        <p>© 2026 Classe Numérique Premium — Apprentissage Personnalisé.</p>
+    </footer>
+
+    <script>
+        // Utilisation de sessionStorage pour la déconnexion automatique au clic / fermeture
+        const urlParams = new URLSearchParams(window.location.search);
+        let nomEleve = urlParams.get('eleve') || sessionStorage.getItem('nomEleve');
+
+        // Sécurisation de l'environnement de test (Canvas d'aperçu)
+        if (window.location.protocol === 'blob:') {
+            nomEleve = "Élève de Test";
+        }
+
+        if (!nomEleve || nomEleve === "Anonyme") {
+            window.location.href = "index.html";
+        } else {
+            sessionStorage.setItem('nomEleve', nomEleve);
+            document.getElementById('display-name').innerText = nomEleve;
+        }
+
+        let selectedTables = [];
+        let questions = [];
+        let currentQuestionIdx = 0;
+        let corrects = 0;
+        let erreurs = 0;
+        let attemptsLog = [];
+        let finalDetails = [];
+
+        function afficherMessageNotification(texte) {
+            const alertBox = document.getElementById('custom-alert');
+            document.getElementById('custom-alert-text').innerText = texte;
+            alertBox.classList.remove('translate-y-20', 'opacity-0');
+            
+            setTimeout(() => {
+                alertBox.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        function toggleTable(num) {
+            const btn = document.getElementById(`btn-table-${num}`);
+            if (selectedTables.includes(num)) {
+                selectedTables = selectedTables.filter(t => t !== num);
+                btn.classList.remove('bg-indigo-100', 'border-indigo-500', 'text-indigo-700');
+            } else {
+                selectedTables.push(num);
+                btn.classList.add('bg-indigo-100', 'border-indigo-500', 'text-indigo-700');
+            }
+        }
+
+        function selectionnerTout() {
+            for (let i = 1; i <= 10; i++) {
+                if (!selectedTables.includes(i)) {
+                    toggleTable(i);
+                }
+            }
+        }
+
+        // --- ALGORITHME ADAPTATIF SÉCURISÉ ---
+        function demarrerJeu() {
+            if (selectedTables.length === 0) {
+                afficherMessageNotification("Choisis au moins une table de multiplication pour commencer !");
+                return;
+            }
+
+            questions = generateQuestionsList();
+            currentQuestionIdx = 0;
+            corrects = 0;
+            erreurs = 0;
+            finalDetails = [];
+
+            document.getElementById('selection-screen').classList.add('hidden');
+            document.getElementById('game-screen').classList.remove('hidden');
+            chargerQuestion();
+        }
+
+        // Génère les 10 questions de manière hautement adaptative
+        function generateQuestionsList() {
+            const erreursHistorique = window.erreursMultiplicationsHistorique || {};
+            const succesHistorique = window.succesMultiplicationsHistorique || {};
+
+            let pool = [];
+            // 1. On liste l'ensemble des combinaisons possibles pour les tables sélectionnées
+            selectedTables.forEach(t => {
+                for (let i = 1; i <= 10; i++) {
+                    const cleNorm1 = `${t} x ${i}`;
+                    const cleNorm2 = `${i} x ${t}`;
+
+                    // On compte le nombre cumulé de réussites et d'échecs historiques pour cette question
+                    const nbErreurs = (erreursHistorique[cleNorm1] || 0) + (erreursHistorique[cleNorm2] || 0);
+                    const nbSucces = (succesHistorique[cleNorm1] || 0) + (succesHistorique[cleNorm2] || 0);
+
+                    // Calcul du poids de priorité adaptatif :
+                    // - Plus l'élève a fait d'erreurs, plus la question pèse lourd (priorité élevée)
+                    // - Plus l'élève a réussi cette question du premier coup, plus son poids diminue
+                    let poidsPriorite = 1.0 + (nbErreurs * 3.5) - (nbSucces * 0.5);
+                    if (poidsPriorite < 0.1) poidsPriorite = 0.1; // Seuil minimum pour laisser une chance à la question de ressortir
+
+                    // On applique une légère variation aléatoire pour ne pas avoir un ordre strictement identique d'une session à l'autre
+                    const scoreFinal = poidsPriorite * (0.6 + Math.random() * 0.8);
+
+                    pool.push({ a: t, b: i, scorePriorite: scoreFinal });
+                }
+            });
+
+            // 2. Tri décroissant par rapport à notre score adaptatif
+            pool.sort((a, b) => b.scorePriorite - a.scorePriorite);
+
+            // 3. On sélectionne les 10 questions prioritaires pour l'élève
+            return pool.slice(0, 10);
+        }
+
+        function chargerQuestion() {
+            if (currentQuestionIdx >= questions.length) {
+                finDuDefi();
+                return;
+            }
+
+            const q = questions[currentQuestionIdx];
+            attemptsLog = [];
+            
+            const prg = (currentQuestionIdx / 10) * 100;
+            document.getElementById('progress-bar').style.width = `${prg}%`;
+            document.getElementById('question-index').innerText = `Question ${currentQuestionIdx + 1} sur 10`;
+
+            // Injection des valeurs du livret dans l'HTML épuré sans LaTeX
+            document.getElementById('q-val1').innerText = q.a;
+            document.getElementById('q-val2').innerText = q.b;
+
+            document.getElementById('answer-input').value = "";
+            document.getElementById('message-area').innerText = "Saisis ta réponse à l'aide du clavier.";
+            document.getElementById('message-area').className = "text-center font-bold text-sm min-h-[44px] text-slate-500 py-2 flex items-center justify-center rounded-xl transition-all";
+
+            dessinerGrille(q.a, q.b);
+        }
+
+        // Dessine la grille visuelle (Aide interactive)
+        function dessinerGrille(rows, cols) {
+            const grid = document.getElementById('dot-grid');
+            grid.innerHTML = "";
+            grid.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
+
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    const dot = document.createElement('div');
+                    dot.className = "w-3.5 h-3.5 rounded-full bg-indigo-400 hover:bg-indigo-600 transition shadow-sm cursor-pointer";
+                    grid.appendChild(dot);
+                }
+            }
+        }
+
+        function pressKey(key) {
+            const input = document.getElementById('answer-input');
+            if (key === 'C') {
+                input.value = "";
+            } else {
+                if (input.value.length < 3) {
+                    input.value += key;
+                }
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('game-screen').classList.contains('hidden')) return;
+
+            if (e.key >= '0' && e.key <= '9') {
+                pressKey(parseInt(e.key));
+            } else if (e.key === 'Backspace') {
+                pressKey('C');
+            } else if (e.key === 'Enter') {
+                validerReponse();
+            }
+        });
+
+        function validerReponse() {
+            const input = document.getElementById('answer-input');
+            const reponseText = input.value.trim();
+            if (reponseText === "") return;
+
+            const reponse = parseInt(reponseText);
+            const q = questions[currentQuestionIdx];
+            const correctResult = q.a * q.b;
+
+            attemptsLog.push(reponse);
+
+            if (reponse === correctResult) {
+                corrects++;
+                document.getElementById('message-area').innerText = "🎉 Excellent ! Bonne réponse.";
+                document.getElementById('message-area').className = "text-center font-bold text-sm min-h-[44px] text-emerald-700 bg-emerald-50 py-2 px-4 rounded-xl border border-emerald-100 flex items-center justify-center w-full";
+                
+                finalDetails.push({
+                    questionText: `${q.a} x ${q.b}`,
+                    correctAnswer: correctResult.toString(),
+                    isCorrect: true,
+                    attempts: [...attemptsLog]
+                });
+
+                prochaineEtape();
+            } else {
+                if (attemptsLog.length === 1) {
+                    document.getElementById('message-area').innerText = "❌ Oups, ce n'est pas ça ! Aide-toi de la grille de points ou réessaie.";
+                    document.getElementById('message-area').className = "text-center font-bold text-sm min-h-[44px] text-amber-700 bg-amber-50 py-2 px-4 rounded-xl border border-amber-100 flex items-center justify-center w-full";
+                    input.value = "";
+                } else {
+                    erreurs++;
+                    document.getElementById('message-area').innerText = `😢 Ce n'est pas tout à fait ça. La bonne réponse était ${correctResult}.`;
+                    document.getElementById('message-area').className = "text-center font-bold text-sm min-h-[44px] text-red-750 bg-red-50 py-2 px-4 rounded-xl border border-red-100 flex items-center justify-center w-full";
+                    
+                    // Ré-apprentissage adaptatif en cours de partie : la question est repoussée pour révision
+                    questions.push(q);
+
+                    finalDetails.push({
+                        questionText: `${q.a} x ${q.b}`,
+                        correctAnswer: correctResult.toString(),
+                        isCorrect: false,
+                        attempts: [...attemptsLog]
+                    });
+
+                    prochaineEtape();
+                }
+            }
+        }
+
+        function prochaineEtape() {
+            // Désactiver temporairement le bouton OK pour empêcher le spam
+            const okBtn = document.getElementById('ok-btn');
+            okBtn.disabled = true;
+
+            setTimeout(() => {
+                currentQuestionIdx++;
+                okBtn.disabled = false;
+                chargerQuestion();
+            }, 2500);
+        }
+
+        async function finDuDefi() {
+            document.getElementById('game-screen').classList.add('hidden');
+            document.getElementById('summary-screen').classList.remove('hidden');
+            document.getElementById('final-score').innerText = `${corrects} / 10`;
+
+            if (window.currentUser && window.db) {
+                try {
+                    const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'scores');
+                    await addDoc(colRef, {
+                        nomEleve: nomEleve,
+                        exercice: "Livrets de multiplication",
+                        corrects: corrects,
+                        erreurs: erreurs,
+                        timestamp: Date.now(),
+                        details: finalDetails
+                    });
+                    console.log("Score de livret synchronisé !");
+                } catch (e) {
+                    console.warn("Échec d'envoi du score (non bloquant) :", e);
+                }
+            }
+        }
+
+        function recommencerJeu() {
+            document.getElementById('summary-screen').classList.add('hidden');
+            document.getElementById('selection-screen').classList.remove('hidden');
+        }
+
+        function retourPortail() {
+            window.location.href = `index.html?eleve=${encodeURIComponent(nomEleve)}`;
+        }
+
+        // --- GESTION DE LA TABLE DE PYTHAGORE COMPLETE ---
+        function ouvrirAideComplete() {
+            document.getElementById('aide-complete-modal').classList.remove('hidden');
+            genererGrillePythagore();
+        }
+
+        function fermerAideComplete() {
+            document.getElementById('aide-complete-modal').classList.add('hidden');
+        }
+
+        function genererGrillePythagore() {
+            const grid = document.getElementById('pythagore-grid');
+            grid.innerHTML = "";
+
+            // Coin vide
+            const corner = document.createElement('div');
+            corner.className = "bg-slate-200 text-slate-800 p-2.5 border border-slate-300 font-extrabold flex justify-center items-center rounded-tl-xl";
+            corner.innerText = "·";
+            grid.appendChild(corner);
+
+            // Entête colonne
+            for (let c = 1; c <= 10; c++) {
+                const headerCol = document.createElement('div');
+                headerCol.className = "bg-indigo-50 text-indigo-900 p-2.5 border border-slate-300 font-black flex justify-center items-center text-sm";
+                headerCol.innerText = c;
+                grid.appendChild(headerCol);
+            }
+
+            // Génération des lignes de multiplication
+            for (let r = 1; r <= 10; r++) {
+                // Entête ligne
+                const headerRow = document.createElement('div');
+                headerRow.className = "bg-indigo-50 text-indigo-900 p-2.5 border border-slate-300 font-black flex justify-center items-center text-sm";
+                headerRow.innerText = r;
+                grid.appendChild(headerRow);
+
+                for (let col = 1; col <= 10; col++) {
+                    const val = r * col;
+                    const cell = document.createElement('div');
+                    cell.className = "bg-white p-2.5 border border-slate-200 hover:bg-amber-100 hover:text-amber-900 hover:scale-110 cursor-pointer font-bold flex justify-center items-center rounded transition-all select-none";
+                    cell.innerText = val;
+                    
+                    // Interaction au survol / clic
+                    cell.onmouseenter = () => {
+                        document.getElementById('selection-display').innerHTML = `Formule : <span class="text-indigo-600 font-extrabold text-lg">${r} · ${col} = ${val}</span>`;
+                    };
+                    cell.onclick = () => {
+                        document.getElementById('selection-display').innerHTML = `Formule : <span class="text-emerald-600 font-extrabold text-lg">${r} · ${col} = ${val}</span>`;
+                    };
+
+                    grid.appendChild(cell);
+                }
+            }
+        }
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atelier des Livrets — Multiplications</title>
+    <!-- Chargement de Tailwind CSS pour un design moderne -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <!-- Librairie MathJax pour l'affichage LaTeX des formules mathématiques -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es6/jax/tex-mml-chtml.js"></script>
