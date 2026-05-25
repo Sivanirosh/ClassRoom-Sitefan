@@ -231,6 +231,23 @@
         </div>
     </div>
 
+    <!-- MODAL D'INFORMATION POUR L'APERÇU SÉCURISÉ -->
+    <div id="preview-modal" class="fixed inset-0 bg-slate-950/80 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white p-6 rounded-3xl shadow-2xl max-w-md w-full text-center border border-slate-100">
+            <span class="text-6xl mb-4 block">🚀</span>
+            <h3 class="text-2xl font-bold text-slate-800 mb-2">Navigation dans l'aperçu</h3>
+            <p class="text-slate-500 mb-6 text-sm">
+                Vous tentez d'ouvrir l'activité <strong id="preview-modal-target" class="text-indigo-600">...</strong>.
+                <br><br>
+                Dans cet aperçu, les fichiers sont isolés. Cette redirection et l'affichage des jeux fonctionneront à la perfection une fois vos fichiers publiés ensemble sur <strong>GitHub Pages</strong> !
+            </p>
+            <button onclick="document.getElementById('preview-modal').classList.add('hidden')" 
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-2xl text-lg transition-all transform active:scale-95 shadow-md">
+                D'accord, j'ai compris !
+            </button>
+        </div>
+    </div>
+
     <!-- POPUP DE NOTIFICATION INTERNE -->
     <div id="custom-alert" class="fixed bottom-4 right-4 bg-slate-900 text-white px-6 py-4 rounded-2xl shadow-xl transform translate-y-20 opacity-0 transition-all duration-300 z-50 max-w-sm">
         <p id="custom-alert-text" class="text-sm font-semibold"></p>
@@ -299,14 +316,41 @@
             document.getElementById('teacher-dashboard').classList.add('hidden');
         }
 
-        // Redirection vers le jeu autonome en transmettant le nom en paramètre d'URL
+        // Redirection vers le jeu autonome en transmettant le nom en paramètre d'URL (Résolution ultra-robuste de dossier)
         function lancerActivite(pageHtml) {
             if (!nomEleve) {
                 afficherMessageNotification("Erreur de session, merci de ressaisir votre prénom.");
                 afficherFormulaireLogin();
                 return;
             }
-            window.location.href = `${pageHtml}?eleve=${encodeURIComponent(nomEleve)}`;
+
+            const queryParams = `?eleve=${encodeURIComponent(nomEleve)}`;
+
+            // Gestion de l'environnement d'aperçu (blob URL)
+            if (window.location.protocol === 'blob:') {
+                console.log("Navigation simulée dans l'aperçu :", pageHtml);
+                document.getElementById('preview-modal-target').innerText = pageHtml;
+                document.getElementById('preview-modal').classList.remove('hidden');
+                return;
+            }
+
+            // Résolution robuste pour éviter les pièges de GitHub Pages sans trailing slash
+            let baseDir = window.location.pathname;
+            const lastSegment = baseDir.split('/').pop();
+            
+            // Si le dernier segment de l'URL ne contient pas de point (ex: /ma-classe ou /ma-classe/), c'est un dossier
+            if (lastSegment && !lastSegment.includes('.')) {
+                if (!baseDir.endsWith('/')) {
+                    baseDir += '/';
+                }
+            } else {
+                // C'est un fichier (ex: index.html), on tronque pour ne garder que le dossier parent
+                baseDir = baseDir.substring(0, baseDir.lastIndexOf('/') + 1);
+            }
+
+            // On reconstruit l'URL absolue de redirection
+            const targetUrl = window.location.origin + baseDir + pageHtml + queryParams;
+            window.location.href = targetUrl;
         }
 
         // --- GESTION ESPACE ENSEIGNANT ---
@@ -407,7 +451,7 @@
                 // Jauge de couleur pour la réussite
                 let couleurReussite = "bg-rose-100 text-rose-700";
                 if (pourcentage >= 80) couleurReussite = "bg-emerald-100 text-emerald-700";
-                else if (pourcentage >= 50) couleurReussite = "bg-amber-105 text-amber-700";
+                else if (pourcentage >= 50) couleurReussite = "bg-amber-100 text-amber-700";
 
                 return `
                     <tr class="hover:bg-slate-50 transition">
