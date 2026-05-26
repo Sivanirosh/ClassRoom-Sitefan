@@ -51,12 +51,14 @@
                 appId: "1:123456:web:abcde"
             };
 
+        // Identifiant de classe fixé pour éviter les conflits d'environnement
+        const appId = "classe-primaire-2026";
+
         // Initialisation sécurisée de Firebase
         try {
             const app = initializeApp(firebaseConfig);
             const auth = getAuth(app);
             const db = getFirestore(app);
-            const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 
             window.db = db;
             window.appId = appId;
@@ -576,6 +578,7 @@
             document.getElementById('selection-screen').classList.remove('hidden');
         }
 
+        // Retour robuste avec nom de l'élève mémorisé
         function retourPortail() {
             window.location.href = `index.html?eleve=${encodeURIComponent(nomEleve)}`;
         }
