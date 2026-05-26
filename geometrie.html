@@ -25,12 +25,14 @@
                 appId: "1:123456:web:abcde"
             };
 
+        // Identifiant de classe fixé pour éviter les conflits d'environnement
+        const appId = "classe-primaire-2026";
+
         // Initialisation sécurisée
         try {
             const app = initializeApp(firebaseConfig);
             const auth = getAuth(app);
             const db = getFirestore(app);
-            const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 
             window.db = db;
             window.appId = appId;
