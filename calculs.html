@@ -4,31 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Le Calcul Décimal — Classe Primaire</title>
-    <!-- Tailwind CSS pour un design moderne et pro -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- SDK Firebase -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Configuration Firebase dynamique de l'environnement
-        const firebaseConfig = typeof __firebase_config !== 'undefined' 
-            ? JSON.parse(__firebase_config) 
-            : {
-                apiKey: "",
-                authDomain: "classe-numerique-prof.firebaseapp.com",
-                projectId: "classe-numerique-prof",
-                storageBucket: "classe-numerique-prof.appspot.com",
-                messagingSenderId: "123456789",
-                appId: "1:123456:web:abcde"
-            };
+        // Votre configuration Firebase officielle
+        const firebaseConfig = {
+            apiKey: "AIzaSyAvXQI3f34J5htG-t9kroM4ynIqCgO9xXI",
+            authDomain: "ma-classe-179de.firebaseapp.com",
+            projectId: "ma-classe-179de",
+            storageBucket: "ma-classe-179de.firebasestorage.app",
+            messagingSenderId: "413792574665",
+            appId: "1:413792574665:web:87c29e054af287018e0118"
+        };
 
-        // Identifiant de classe fixé pour éviter les conflits d'environnement
         const appId = "classe-primaire-2026";
 
-        // Initialisation sécurisée
         try {
             const app = initializeApp(firebaseConfig);
             const auth = getAuth(app);
@@ -37,7 +31,6 @@
             window.db = db;
             window.appId = appId;
 
-            // Connexion anonyme automatique requise avant d'interroger ou d'enregistrer sur la BDD
             const initAuth = async () => {
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                     await signInWithCustomToken(auth, __initial_auth_token);
@@ -50,10 +43,26 @@
             onAuthStateChanged(auth, (user) => {
                 if (user) {
                     window.currentUser = user;
-                    // Dès que l'authentification réussit, on libère l'accès
                     annulerChargementEtDemarrer();
                 }
             });
+
+            window.enregistrerScoreFirebase = async function(exercice, corrects, erreurs) {
+                try {
+                    const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'scores');
+                    await addDoc(colRef, {
+                        nomEleve: window.nomEleve,
+                        exercice: ejercicio,
+                        corrects: corrects,
+                        erreurs: erreurs,
+                        timestamp: Date.now()
+                    });
+                    console.log("Score de calcul décimal synchronisé !");
+                } catch (err) {
+                    console.error("Erreur d'écriture Firebase :", err);
+                }
+            };
+
         } catch (e) {
             console.error("Erreur d'initialisation Firebase :", e);
             annulerChargementEtDemarrer();
@@ -62,18 +71,15 @@
 </head>
 <body class="bg-slate-50 min-h-screen font-sans flex flex-col justify-between">
 
-    <!-- ÉCRAN DE CHARGEMENT SÉCURISÉ AVEC TIMEOUT ANTI-BLOCAGE -->
     <div id="loading-overlay" class="fixed inset-0 bg-slate-900 text-white flex flex-col items-center justify-center z-50 p-6 transition-opacity duration-500">
         <div class="text-center max-w-md">
             <span class="text-6xl animate-bounce mb-6 block">🔢</span>
             <h2 class="text-2xl font-bold mb-3">Chargement de ton profil personnalisé</h2>
             <p class="text-slate-400 text-sm mb-6">Nous analysons tes tentatives précédentes pour ajuster la difficulté des calculs...</p>
             <div class="w-16 h-16 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto mb-6"></div>
-            <p class="text-xs text-slate-500 italic">Démarrage automatique dans un instant si la connexion est ralentie.</p>
         </div>
     </div>
 
-    <!-- HAUT DE PAGE -->
     <header class="bg-indigo-900 text-white shadow-md">
         <div class="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
@@ -90,167 +96,101 @@
         </div>
     </header>
 
-    <!-- ZONE DE CALCULS -->
     <main class="max-w-4xl mx-auto px-4 py-6 flex-grow w-full flex flex-col justify-center">
-        
-        <!-- MODULE DE JEU ET RECHERCHE -->
         <div id="game-container" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            
-            <!-- Carte principale de l'exercice (2/3 de l'espace) -->
             <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100 md:col-span-2 flex flex-col justify-between">
                 <div>
-                    <!-- Barre de progression -->
                     <div class="flex justify-between items-center mb-6">
                         <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Calcul <span id="num-calcul" class="text-indigo-600">1</span> / 10</span>
                         <div class="flex gap-1" id="dots-container"></div>
                         <span class="text-xs font-bold text-emerald-600">Score : <span id="score-live">0</span>/10</span>
                     </div>
 
-                    <!-- Énoncé de l'opération -->
                     <div class="bg-slate-50 p-8 rounded-2xl border text-center mb-6">
                         <p class="text-sm text-indigo-500 font-semibold mb-2">Pose l'opération sur ton ardoise de droite si besoin, puis résous :</p>
                         <p id="enonce-calcul" class="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-tight"></p>
                     </div>
 
-                    <!-- Formulaire d'entrée de réponse -->
                     <form onsubmit="soumettreReponse(event)" class="space-y-4">
                         <div class="relative">
                             <input type="text" id="student-answer" required autocomplete="off" placeholder="Inscris ta réponse ici (ex: 15.4)"
                                    class="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 focus:border-indigo-500 rounded-2xl text-center text-2xl font-bold text-slate-700 focus:outline-none">
-                            <span class="absolute right-4 top-1/2 transform -translate-y-1/2 text-xs text-slate-400 font-bold bg-white px-2 py-1 border rounded-lg">Virgule : .</span>
                         </div>
-                        <button type="submit" id="btn-valider" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-2xl transition shadow-md">
-                            Valider ma réponse ➔
-                        </button>
+                        <button type="submit" id="btn-valider" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-2xl transition shadow-md">Valider ma réponse ➔</button>
                     </form>
                 </div>
-
-                <!-- Feedback interactif -->
                 <div id="feedback" class="mt-6 p-4 rounded-2xl hidden text-center font-bold"></div>
             </div>
 
-            <!-- Ardoise virtuelle de calcul (Notepad / Grille) -->
             <div class="bg-indigo-950 p-5 rounded-3xl text-white flex flex-col justify-between h-[450px] shadow-lg">
-                <div>
-                    <div class="flex justify-between items-center mb-3">
-                        <span class="text-xs font-bold uppercase text-indigo-300">📝 Ardoise Tactile</span>
-                        <button onclick="effacerArdoise()" class="text-xs font-semibold bg-indigo-800 hover:bg-indigo-700 px-3 py-1.5 rounded-lg transition">
-                            Effacer 🧹
-                        </button>
-                    </div>
-                    <p class="text-[10px] text-indigo-200 mb-2 leading-relaxed">Utilise ton doigt ou ta souris pour poser tes retenues et aligner tes nombres.</p>
+                <div class="flex justify-between items-center mb-3">
+                    <span class="text-xs font-bold uppercase text-indigo-300">📝 Ardoise Tactile</span>
+                    <button onclick="effacerArdoise()" class="text-xs font-semibold bg-indigo-800 hover:bg-indigo-750 px-3 py-1.5 rounded-lg transition">Effacer 🧹</button>
                 </div>
-
-                <!-- Zone interactive Canvas -->
                 <div class="bg-white rounded-2xl flex-grow relative overflow-hidden h-full">
                     <canvas id="canvas-ardoise" class="absolute inset-0 cursor-crosshair w-full h-full"></canvas>
                 </div>
             </div>
-
         </div>
 
-        <!-- ÉCRAN DE FIN DE PARTIE -->
         <div id="end-card" class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 max-w-md mx-auto w-full text-center hidden space-y-6">
             <span class="text-6xl block">🏆</span>
             <h2 class="text-2xl font-bold text-slate-800">Défi Décimal Terminé !</h2>
-            <p class="text-slate-500 text-sm">Tes calculs ont été analysés et enregistrés sur la plateforme.</p>
-            
             <div class="bg-slate-50 p-6 rounded-2xl border">
                 <p class="text-sm text-slate-400 font-bold uppercase">Résultat Final</p>
                 <p class="text-4xl font-extrabold text-indigo-600 my-1"><span id="final-score">0</span> / 10</p>
                 <p id="appreciation" class="text-xs font-semibold text-slate-500"></p>
             </div>
-
-            <button onclick="retourPortail()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-2xl transition shadow-md">
-                Retourner à l'accueil ➔
-            </button>
+            <button onclick="retourPortail()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-2xl transition shadow-md">Retourner à l'accueil ➔</button>
         </div>
-
     </main>
 
-    <!-- PIED DE PAGE -->
     <footer class="bg-slate-900 text-slate-500 py-4 text-center text-xs">
         <p>© 2026 Classe Numérique Premium — Calcul Décimal.</p>
     </footer>
 
-    <!-- CODE DU JEU ET DES CALCULS -->
     <script>
-        // Extraction du prénom depuis l'URL
         const params = new URLSearchParams(window.location.search);
         const nomEleve = params.get('eleve') || "Visiteur";
         document.getElementById('nom-eleve-badge').innerText = nomEleve;
+        window.nomEleve = nomEleve;
 
-        // --- SÉCURITÉ ANTI-BLOCAGE : TIMEOUT DE 2 SECONDES ---
         let loadingFini = false;
-        const securiteTimeout = setTimeout(() => {
-            if (!loadingFini) {
-                console.warn("Délai d'attente dépassé (2s) - Mode autonome activé.");
-                annulerChargementEtDemarrer();
-            }
-        }, 2000);
+        const securiteTimeout = setTimeout(() => { if (!loadingFini) { annulerChargementEtDemarrer(); } }, 2000);
 
         function annulerChargementEtDemarrer() {
-            if (loadingFini) return;
-            loadingFini = true;
-            clearTimeout(securiteTimeout);
-            
-            // Masquage de l'overlay de chargement
+            if (loadingFini) return; loadingFini = true; clearTimeout(securiteTimeout);
             const overlay = document.getElementById('loading-overlay');
-            overlay.classList.add('opacity-0');
-            setTimeout(() => {
-                overlay.style.display = 'none';
-                initJeu();
-                initArdoise();
-            }, 500);
+            if (overlay) {
+                overlay.classList.add('opacity-0');
+                setTimeout(() => { overlay.style.display = 'none'; initJeu(); initArdoise(); }, 500);
+            }
         }
 
-        // --- GESTION DU JEU ---
-        let calculsPartie = [];
-        let indexCourant = 0;
-        let score = 0;
-        let reponseSelectionnee = false;
+        let calculsPartie = []; let indexCourant = 0; let score = 0; let reponseSelectionnee = false;
 
-        // Génération automatique d'opérations adaptées aux programmes du CM1 / CM2
         function genererCalculs() {
             const operations = [];
-            
-            // 4 Additions, 4 Soustractions et 2 Multiplications simples
             for (let i = 0; i < 10; i++) {
                 if (i < 4) {
-                    // Addition
-                    const a = (Math.random() * 40 + 10).toFixed(1);
-                    const b = (Math.random() * 40 + 5).toFixed(1);
-                    const rep = parseFloat(a) + parseFloat(b);
-                    operations.push({ op: `${a} + ${b}`, r: rep.toFixed(1) });
+                    const a = (Math.random() * 40 + 10).toFixed(1); const b = (Math.random() * 40 + 5).toFixed(1);
+                    operations.push({ op: `${a} + ${b}`, r: (parseFloat(a) + parseFloat(b)).toFixed(1) });
                 } else if (i < 8) {
-                    // Soustraction
-                    const a = (Math.random() * 50 + 20).toFixed(1);
-                    const b = (Math.random() * 15 + 2).toFixed(1);
-                    const rep = parseFloat(a) - parseFloat(b);
-                    operations.push({ op: `${a} - ${b}`, r: rep.toFixed(1) });
+                    const a = (Math.random() * 50 + 20).toFixed(1); const b = (Math.random() * 15 + 2).toFixed(1);
+                    operations.push({ op: `${a} - ${b}`, r: (parseFloat(a) - parseFloat(b)).toFixed(1) });
                 } else {
-                    // Multiplication simple
-                    const a = (Math.random() * 8 + 2).toFixed(1);
-                    const b = Math.floor(Math.random() * 4) + 2;
-                    const rep = parseFloat(a) * b;
-                    operations.push({ op: `${a} × ${b}`, r: rep.toFixed(1) });
+                    const a = (Math.random() * 8 + 2).toFixed(1); const b = Math.floor(Math.random() * 4) + 2;
+                    operations.push({ op: `${a} × ${b}`, r: (parseFloat(a) * b).toFixed(1) });
                 }
             }
             return operations;
         }
 
         function initJeu() {
-            calculsPartie = genererCalculs();
-            indexCourant = 0;
-            score = 0;
-
-            // Création des ronds indicateurs
+            calculsPartie = genererCalculs(); indexCourant = 0; score = 0;
             const dotsContainer = document.getElementById('dots-container');
             dotsContainer.innerHTML = '';
-            for (let i = 0; i < 10; i++) {
-                dotsContainer.innerHTML += `<div id="dot-${i}" class="w-3 h-3 rounded-full bg-slate-200 transition"></div>`;
-            }
-
+            for (let i = 0; i < 10; i++) { dotsContainer.innerHTML += `<div id="dot-${i}" class="w-3 h-3 rounded-full bg-slate-200 transition"></div>`; }
             chargerCalcul();
         }
 
@@ -262,199 +202,65 @@
             document.getElementById('student-answer').value = '';
             document.getElementById('student-answer').disabled = false;
             document.getElementById('btn-valider').disabled = false;
-
-            const calculData = calculsPartie[indexCourant];
-            document.getElementById('enonce-calcul').innerText = calculData.op;
-            document.getElementById('student-answer').focus();
+            document.getElementById('enonce-calcul').innerText = calculsPartie[indexCourant].op;
         }
 
         function soumettreReponse(event) {
-            event.preventDefault();
-            if (reponseSelectionnee) return;
-            reponseSelectionnee = true;
-
+            event.preventDefault(); if (reponseSelectionnee) return; reponseSelectionnee = true;
             const saisie = document.getElementById('student-answer').value.replace(',', '.').trim();
             const calculData = calculsPartie[indexCourant];
             const feedback = document.getElementById('feedback');
             const dot = document.getElementById(`dot-${indexCourant}`);
 
-            const reponseEleveFloat = parseFloat(saisie);
-            const reponseCorrecteFloat = parseFloat(calculData.r);
-
             document.getElementById('student-answer').disabled = true;
             document.getElementById('btn-valider').disabled = true;
 
-            if (!isNaN(reponseEleveFloat) && reponseEleveFloat.toFixed(1) === reponseCorrecteFloat.toFixed(1)) {
-                // Gagné
-                score++;
-                dot.classList.add('bg-emerald-500');
+            if (parseFloat(saisie).toFixed(1) === parseFloat(calculData.r).toFixed(1)) {
+                score++; dot.classList.add('bg-emerald-500');
                 feedback.innerHTML = "✨ Excellent ! C'est le bon résultat !";
                 feedback.className = "mt-6 p-4 rounded-2xl text-center font-bold bg-emerald-100 text-emerald-800";
-                jouerSon(true);
             } else {
-                // Perdu
                 dot.classList.add('bg-rose-500');
                 feedback.innerHTML = `❌ Oups ! Le résultat attendu était : <strong>${calculData.r}</strong>`;
                 feedback.className = "mt-6 p-4 rounded-2xl text-center font-bold bg-rose-100 text-rose-800";
-                jouerSon(false);
             }
-
             feedback.classList.remove('hidden');
-
-            // Passage au suivant après 2.5 secondes
-            setTimeout(() => {
-                indexCourant++;
-                if (indexCourant < 10) {
-                    chargerCalcul();
-                } else {
-                    terminerPartie();
-                }
-            }, 2500);
+            setTimeout(() => { indexCourant++; if (indexCourant < 10) { chargerCalcul(); } else { terminerPartie(); } }, 2500);
         }
 
         async function terminerPartie() {
             document.getElementById('game-container').classList.add('hidden');
-            const endCard = document.getElementById('end-card');
-            endCard.classList.remove('hidden');
-
+            document.getElementById('end-card').classList.remove('hidden');
             document.getElementById('final-score').innerText = score;
-
-            let appreciation = "";
-            if (score === 10) appreciation = "Incroyable ! Tu as réussi un sans-faute parfait ! 🏆";
-            else if (score >= 8) appreciation = "Superbe maîtrise du calcul décimal ! Bravo ! 🌟";
-            else if (score >= 5) appreciation = "C'est un bon score ! Entraîne-toi encore un peu.";
-            else appreciation = "Prends bien le temps de poser tes opérations sur l'ardoise et réessaie ! 💪";
-
-            document.getElementById('appreciation').innerText = appreciation;
-
-            // Enregistrement sur Firebase (Règles 1 & 3)
-            if (window.db && window.currentUser) {
-                try {
-                    const colRef = collection(window.db, 'artifacts', window.appId, 'public', 'data', 'scores');
-                    await addDoc(colRef, {
-                        nomEleve: nomEleve,
-                        exercice: "Calcul Décimal",
-                        corrects: score,
-                        erreurs: 10 - score,
-                        timestamp: Date.now()
-                    });
-                } catch (e) {
-                    console.error("Erreur d'enregistrement Firebase :", e);
-                }
+            if (typeof window.enregistrerScoreFirebase === 'function') {
+                await window.enregistrerScoreFirebase("Le Calcul Décimal", score, 10 - score);
             }
         }
 
-        function retourPortail() {
-            window.location.href = `index.html`;
-        }
+        function retourPortail() { window.location.href = `index.html`; }
 
-        // --- GESTION DE L'ARDOISE TACTILE ---
         let canvas, ctx, dessin = false;
-
         function initArdoise() {
-            canvas = document.getElementById('canvas-ardoise');
-            ctx = canvas.getContext('2d');
-
-            // Redimensionnement dynamique pour s'adapter à la carte
-            redimensionnerCanvas();
-            window.addEventListener('resize', redimensionnerCanvas);
-
-            // Événements Souris
-            canvas.addEventListener('mousedown', demarrerDessin);
-            canvas.addEventListener('mouseup', arreterDessin);
-            canvas.addEventListener('mousemove', dessiner);
-
-            // Événements Tactiles (Doigt / Stylet)
-            canvas.addEventListener('touchstart', (e) => {
-                const touch = e.touches[0];
-                const rect = canvas.getBoundingClientRect();
-                demarrerDessin({ clientX: touch.clientX, clientY: touch.clientY });
-                e.preventDefault();
-            });
-            canvas.addEventListener('touchend', arreterDessin);
-            canvas.addEventListener('touchmove', (e) => {
-                const touch = e.touches[0];
-                dessiner({ clientX: touch.clientX, clientY: touch.clientY });
-                e.preventDefault();
+            canvas = document.getElementById('canvas-ardoise'); ctx = canvas.getContext('2d');
+            redimensionnerCanvas(); window.addEventListener('resize', redimensionnerCanvas);
+            canvas.addEventListener('mousedown', (e) => { dessin = true; ctx.beginPath(); const rect = canvas.getBoundingClientRect(); ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top); });
+            canvas.addEventListener('mouseup', () => dessin = false);
+            canvas.addEventListener('mousemove', (e) => {
+                if (!dessin) return; ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.strokeStyle = '#1e1b4b';
+                const rect = canvas.getBoundingClientRect(); ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top); ctx.stroke();
             });
         }
 
         function redimensionnerCanvas() {
-            if (!canvas) return;
-            const style = getComputedStyle(canvas);
-            canvas.width = parseInt(style.width);
-            canvas.height = parseInt(style.height);
-            effacerArdoise();
-        }
-
-        function demarrerDessin(e) {
-            dessin = true;
-            ctx.beginPath();
-            const rect = canvas.getBoundingClientRect();
-            ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
-        }
-
-        function dessiner(e) {
-            if (!dessin) return;
-            ctx.lineWidth = 3;
-            ctx.lineCap = 'round';
-            ctx.strokeStyle = '#1e1b4b'; // Couleur d'encre bleu marine foncé
-            
-            const rect = canvas.getBoundingClientRect();
-            ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
-            ctx.stroke();
-        }
-
-        function arreterDessin() {
-            dessin = false;
+            if (!canvas) return; const style = getComputedStyle(canvas);
+            canvas.width = parseInt(style.width); canvas.height = parseInt(style.height); effacerArdoise();
         }
 
         function effacerArdoise() {
-            if (!ctx || !canvas) return;
-            ctx.fillStyle = "#ffffff";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            // Tracer de petites lignes de repère quadrillées (style cahier d'écolier)
-            ctx.strokeStyle = "#e2e8f0";
-            ctx.lineWidth = 1;
-            const tailleCarreau = 25;
-            for (let x = 0; x < canvas.width; x += tailleCarreau) {
-                ctx.beginPath();
-                ctx.moveTo(x, 0);
-                ctx.lineTo(x, canvas.height);
-                ctx.stroke();
-            }
-            for (let y = 0; y < canvas.height; y += tailleCarreau) {
-                ctx.beginPath();
-                ctx.moveTo(0, y);
-                ctx.lineTo(canvas.width, y);
-                ctx.stroke();
-            }
-        }
-
-        // Synthétiseur audio Web local
-        function jouerSon(correct) {
-            try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-
-                if (correct) {
-                    osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
-                    osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1); // E5
-                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-                    osc.start();
-                    osc.stop(audioCtx.currentTime + 0.3);
-                } else {
-                    osc.frequency.setValueAtTime(220, audioCtx.currentTime); // A3
-                    osc.frequency.setValueAtTime(147, audioCtx.currentTime + 0.1); // D3
-                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-                    osc.start();
-                    osc.stop(audioCtx.currentTime + 0.3);
-                }
-            } catch(e) {}
+            if (!ctx || !canvas) return; ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = "#e2e8f0"; ctx.lineWidth = 1;
+            for (let x = 0; x < canvas.width; x += 25) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke(); }
+            for (let y = 0; y < canvas.height; y += 25) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke(); }
         }
     </script>
 </body>
