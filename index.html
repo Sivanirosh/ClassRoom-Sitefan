@@ -4,33 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portail Numérique — Classe Primaire</title>
-    <!-- Chargement de Tailwind CSS pour un design pro et moderne -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- SDK Firebase -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, query, onSnapshot, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Configuration Firebase dynamique de l'environnement
-        const firebaseConfig = typeof __firebase_config !== 'undefined' 
-            ? JSON.parse(__firebase_config) 
-            : {
-                apiKey: "",
-                authDomain: "classe-numerique-prof.firebaseapp.com",
-                projectId: "classe-numerique-prof",
-                storageBucket: "classe-numerique-prof.appspot.com",
-                messagingSenderId: "123456789",
-                appId: "1:123456:web:abcde"
-            };
+        // Votre configuration Firebase officielle
+        const firebaseConfig = {
+            apiKey: "AIzaSyAvXQI3f34J5htG-t9kroM4ynIqCgO9xXI",
+            authDomain: "ma-classe-179de.firebaseapp.com",
+            projectId: "ma-classe-179de",
+            storageBucket: "ma-classe-179de.firebasestorage.app",
+            messagingSenderId: "413792574665",
+            appId: "1:413792574665:web:87c29e054af287018e0118"
+        };
+
+        // Identifiant de classe fixé pour éviter les conflits d'environnement
+        const appId = "classe-primaire-2026";
 
         // Initialisation sécurisée
         try {
             const app = initializeApp(firebaseConfig);
             const auth = getAuth(app);
             const db = getFirestore(app);
-            const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 
             window.db = db;
             window.appId = appId;
@@ -48,7 +46,7 @@
             onAuthStateChanged(auth, (user) => {
                 if (user) {
                     window.currentUser = user;
-                    // Une fois connecté, on peut démarrer l'écoute des scores pour l'enseignant
+                    // Une fois connecté, on démarre l'écoute des scores pour l'enseignant
                     initScoresListener();
                 }
             });
@@ -59,7 +57,6 @@
 </head>
 <body class="bg-slate-50 min-h-screen font-sans flex flex-col justify-between">
 
-    <!-- BARRE DE NAVIGATION PRINCIPALE -->
     <header class="bg-indigo-900 text-white shadow-md">
         <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
@@ -69,17 +66,14 @@
                     <p class="text-xs text-indigo-200">Espace numérique d'apprentissage autonome</p>
                 </div>
             </div>
-            <!-- Bouton d'accès au Tableau de bord enseignant -->
             <button onclick="ouvrirEspaceEnseignant()" class="bg-indigo-800 hover:bg-indigo-750 text-xs font-semibold px-4 py-2 rounded-xl transition-all flex items-center gap-1">
                 ⚙️ Espace Enseignant
             </button>
         </div>
     </header>
 
-    <!-- ZONE PRINCIPALE -->
     <main class="max-w-6xl mx-auto px-4 py-8 flex-grow w-full">
         
-        <!-- SECTION 1 : ÉCRAN DE CONNEXION ÉLÈVE (Visible si non connecté) -->
         <div id="login-section" class="max-w-md mx-auto bg-white p-8 rounded-3xl shadow-sm border border-slate-100 my-12">
             <div class="text-center mb-6">
                 <span class="text-5xl mb-2 block">👋</span>
@@ -99,7 +93,6 @@
             </form>
         </div>
 
-        <!-- SECTION 2 : LE TABLEAU DE BORD ÉLÈVE (S'affiche si connecté) -->
         <div id="student-dashboard" class="hidden space-y-8">
             <div class="bg-gradient-to-r from-indigo-900 to-indigo-800 text-white p-6 rounded-3xl shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
@@ -111,12 +104,10 @@
                 </button>
             </div>
 
-            <!-- GRILLE DES ACTIVITÉS / JEUX INDÉPENDANTS -->
             <div>
                 <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">🎯 Les Défis Disponibles</h3>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     
-                    <!-- Carte 1 : Les Livrets de Multiplication (Lien vers livrets.html) -->
                     <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition-all flex flex-col justify-between group">
                         <div>
                             <span class="text-4xl mb-4 block group-hover:scale-110 transition-transform duration-200">✖️</span>
@@ -128,7 +119,6 @@
                         </button>
                     </div>
 
-                    <!-- Carte 2 : Le Défi des Formes (Lien vers geometrie.html) -->
                     <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition-all flex flex-col justify-between group">
                         <div>
                             <span class="text-4xl mb-4 block group-hover:scale-110 transition-transform duration-200">📐</span>
@@ -140,7 +130,6 @@
                         </button>
                     </div>
 
-                    <!-- Carte 3 : Le Calcul Décimal (Lien vers calculs.html) -->
                     <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition-all flex flex-col justify-between group">
                         <div>
                             <span class="text-4xl mb-4 block group-hover:scale-110 transition-transform duration-200">🔢</span>
@@ -156,7 +145,6 @@
             </div>
         </div>
 
-        <!-- SECTION 3 : TABLEAU DE BORD ENSEIGNANT (Suivi des scores, masqué par défaut) -->
         <div id="teacher-dashboard" class="hidden space-y-6">
             <div class="flex justify-between items-center">
                 <div>
@@ -168,7 +156,6 @@
                 </button>
             </div>
 
-            <!-- Outils de filtrage rapides -->
             <div class="bg-white p-4 rounded-2xl border border-slate-100 flex flex-wrap gap-4 items-center justify-between">
                 <div class="flex items-center gap-2">
                     <input type="text" id="teacher-search" oninput="filtrerScores()" placeholder="Rechercher un élève..." 
@@ -183,7 +170,6 @@
                 <button onclick="effacerTousLesScores()" class="text-xs font-bold text-red-600 hover:underline">⚠️ Réinitialiser tous les scores</button>
             </div>
 
-            <!-- Tableau des résultats -->
             <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden shadow-sm">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
@@ -198,7 +184,6 @@
                             </tr>
                         </thead>
                         <tbody id="scores-table-body" class="divide-y divide-slate-100 text-sm text-slate-700">
-                            <!-- Rempli dynamiquement en JS -->
                             <tr>
                                 <td colspan="6" class="p-8 text-center text-slate-400">Aucun score enregistré pour le moment. En attente de données...</td>
                             </tr>
@@ -210,7 +195,6 @@
 
     </main>
 
-    <!-- MODAL DE SÉCURITÉ ENSEIGNANT (Mot de passe) -->
     <div id="password-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
         <div class="bg-white p-6 rounded-3xl shadow-xl w-full max-w-sm border border-slate-100">
             <h3 class="font-bold text-slate-800 text-lg mb-2">Accès Enseignant</h3>
@@ -231,7 +215,6 @@
         </div>
     </div>
 
-    <!-- MODAL D'INFORMATION POUR L'APERÇU SÉCURISÉ -->
     <div id="preview-modal" class="fixed inset-0 bg-slate-950/80 z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white p-6 rounded-3xl shadow-2xl max-w-md w-full text-center border border-slate-100">
             <span class="text-6xl mb-4 block">🚀</span>
@@ -248,22 +231,18 @@
         </div>
     </div>
 
-    <!-- POPUP DE NOTIFICATION INTERNE -->
     <div id="custom-alert" class="fixed bottom-4 right-4 bg-slate-900 text-white px-6 py-4 rounded-2xl shadow-xl transform translate-y-20 opacity-0 transition-all duration-300 z-50 max-w-sm">
         <p id="custom-alert-text" class="text-sm font-semibold"></p>
     </div>
 
-    <!-- PIED DE PAGE -->
     <footer class="bg-slate-900 text-slate-500 py-6 text-center text-xs">
         <p>© 2026 Classe Numérique Premium — Apprentissage Personnalisé.</p>
     </footer>
 
     <script>
-        // Utilisation stricte de sessionStorage pour la déconnexion automatique à la fermeture d'onglet
         let nomEleve = sessionStorage.getItem('nomEleve');
-        let allScores = []; // Liste de tous les scores récupérés de Firebase
+        let allScores = [];
 
-        // Initialisation de l'affichage
         window.addEventListener('load', () => {
             if (nomEleve) {
                 afficherDashboardEleve(nomEleve);
@@ -291,7 +270,6 @@
                 return;
             }
 
-            // Enregistrement uniquement dans la Session
             sessionStorage.setItem('nomEleve', prenom);
             nomEleve = prenom;
             afficherDashboardEleve(prenom);
@@ -316,7 +294,6 @@
             document.getElementById('teacher-dashboard').classList.add('hidden');
         }
 
-        // Redirection vers le jeu autonome en transmettant le nom en paramètre d'URL (Résolution ultra-robuste de dossier)
         function lancerActivite(pageHtml) {
             if (!nomEleve) {
                 afficherMessageNotification("Erreur de session, merci de ressaisir votre prénom.");
@@ -326,34 +303,26 @@
 
             const queryParams = `?eleve=${encodeURIComponent(nomEleve)}`;
 
-            // Gestion de l'environnement d'aperçu (blob URL)
             if (window.location.protocol === 'blob:') {
-                console.log("Navigation simulée dans l'aperçu :", pageHtml);
                 document.getElementById('preview-modal-target').innerText = pageHtml;
                 document.getElementById('preview-modal').classList.remove('hidden');
                 return;
             }
 
-            // Résolution robuste pour éviter les pièges de GitHub Pages sans trailing slash
             let baseDir = window.location.pathname;
             const lastSegment = baseDir.split('/').pop();
             
-            // Si le dernier segment de l'URL ne contient pas de point (ex: /ma-classe ou /ma-classe/), c'est un dossier
             if (lastSegment && !lastSegment.includes('.')) {
                 if (!baseDir.endsWith('/')) {
                     baseDir += '/';
                 }
             } else {
-                // C'est un fichier (ex: index.html), on tronque pour ne garder que le dossier parent
                 baseDir = baseDir.substring(0, baseDir.lastIndexOf('/') + 1);
             }
 
-            // On reconstruit l'URL absolue de redirection
             const targetUrl = window.location.origin + baseDir + pageHtml + queryParams;
             window.location.href = targetUrl;
         }
-
-        // --- GESTION ESPACE ENSEIGNANT ---
 
         function ouvrirEspaceEnseignant() {
             document.getElementById('password-modal').classList.remove('hidden');
@@ -367,17 +336,15 @@
 
         function validerEspaceEnseignant() {
             const mdp = document.getElementById('teacher-password').value;
-            // Mot de passe enseignant personnalisable
             if (mdp === "Prof2026") {
                 document.getElementById('password-modal').classList.add('hidden');
                 document.getElementById('teacher-password').value = "";
                 
-                // On cache l'espace élève, on affiche le tableau de bord enseignant
                 document.getElementById('login-section').classList.add('hidden');
                 document.getElementById('student-dashboard').classList.add('hidden');
                 document.getElementById('teacher-dashboard').classList.remove('hidden');
                 
-                filtrerScores(); // Rafraîchir l'affichage
+                filtrerScores();
             } else {
                 afficherMessageNotification("Mot de passe incorrect !");
             }
@@ -391,25 +358,20 @@
             }
         }
 
-        // Écoute en direct des scores enregistrés sur Firebase (Règles 1 & 3)
         function initScoresListener() {
-            if (!window.db || !window.currentUser) return;
+            if (!window.db || !window.appId || !window.currentUser) return;
 
             try {
-                // Chemin d'accès strict (Règle 1) : artifacts/{appId}/public/data/scores
                 const colRef = collection(window.db, 'artifacts', window.appId, 'public', 'data', 'scores');
                 
-                // Écoute en temps réel sans filtre complexe sur le serveur (Règle 2)
                 onSnapshot(colRef, (snapshot) => {
                     allScores = [];
                     snapshot.forEach((doc) => {
                         allScores.push({ id: doc.id, ...doc.data() });
                     });
                     
-                    // Tri local en mémoire JavaScript (Règle 2 : pas de orderBy sur Firestore)
                     allScores.sort((a, b) => b.timestamp - a.timestamp);
                     
-                    // On met à jour l'affichage si l'enseignant est actuellement sur son tableau de bord
                     if (!document.getElementById('teacher-dashboard').classList.contains('hidden')) {
                         filtrerScores();
                     }
@@ -421,13 +383,11 @@
             }
         }
 
-        // Filtrage local en mémoire des scores (Règle 2)
         function filtrerScores() {
             const tableBody = document.getElementById('scores-table-body');
             const searchVal = document.getElementById('teacher-search').value.toLowerCase().trim();
             const selectedGame = document.getElementById('teacher-filter-game').value;
 
-            // Filtrage des résultats
             const filtered = allScores.filter(score => {
                 const matchName = score.nomEleve ? score.nomEleve.toLowerCase().includes(searchVal) : false;
                 const matchGame = selectedGame === 'all' || score.exercice === selectedGame;
@@ -444,11 +404,9 @@
                 const affichageScore = totalQuestions > 0 ? `${score.corrects} / ${totalQuestions}` : `${score.corrects || 0} / 10`;
                 const pourcentage = totalQuestions > 0 ? Math.round((score.corrects / totalQuestions) * 100) : 0;
                 
-                // Formatage de la date
                 const date = score.timestamp ? new Date(score.timestamp) : new Date();
                 const affichageDate = date.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' }) + ' à ' + date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
 
-                // Jauge de couleur pour la réussite
                 let couleurReussite = "bg-rose-100 text-rose-700";
                 if (pourcentage >= 80) couleurReussite = "bg-emerald-100 text-emerald-700";
                 else if (pourcentage >= 50) couleurReussite = "bg-amber-100 text-amber-700";
@@ -470,13 +428,11 @@
             }).join('');
         }
 
-        // Supprime une ligne de score spécifique
         async function effacerScoreUnique(id) {
             if (!confirm("Voulez-vous vraiment supprimer ce résultat ?")) return;
             if (!window.db) return;
 
             try {
-                // Chemin d'accès strict (Règle 1) : artifacts/{appId}/public/data/scores/{id}
                 const docRef = doc(window.db, 'artifacts', window.appId, 'public', 'data', 'scores', id);
                 await deleteDoc(docRef);
                 afficherMessageNotification("Score supprimé !");
@@ -485,13 +441,11 @@
             }
         }
 
-        // Supprime l'intégralité de la collection pour vider le tableau (Réinitialisation)
         async function effacerTousLesScores() {
             if (!confirm("⚠️ ATTENTION : Voulez-vous vraiment supprimer TOUS les scores de la classe ? Cette opération est irréversible.")) return;
             if (!window.db) return;
 
             try {
-                // Suppression de chaque document de notre liste locale
                 for (const score of allScores) {
                     const docRef = doc(window.db, 'artifacts', window.appId, 'public', 'data', 'scores', score.id);
                     await deleteDoc(docRef);
