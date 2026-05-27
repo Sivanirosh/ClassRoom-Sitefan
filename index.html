@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portail Numérique — Classe Primaire</title>
+    <!-- Chargement de Tailwind CSS pour un design pro et moderne -->
     <script src="https://cdn.tailwindcss.com"></script>
     
+    <!-- SDK Firebase -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -329,12 +331,14 @@
             document.getElementById('teacher-password').focus();
         }
 
-        function annulerEspaceEnseignant() {
+        // Annuler la saisie du mot de passe
+        window.annulerEspaceEnseignant = function() {
             document.getElementById('password-modal').classList.add('hidden');
             document.getElementById('teacher-password').value = "";
         }
 
-        function validerEspaceEnseignant() {
+        // Validation du mot de passe enseignant
+        window.validerEspaceEnseignant = function() {
             const mdp = document.getElementById('teacher-password').value;
             if (mdp === "Prof2026") {
                 document.getElementById('password-modal').classList.add('hidden');
@@ -344,6 +348,7 @@
                 document.getElementById('student-dashboard').classList.add('hidden');
                 document.getElementById('teacher-dashboard').classList.remove('hidden');
                 
+                // Forcer le rendu immédiat des scores lors de l'accès au tableau de bord
                 filtrerScores();
             } else {
                 afficherMessageNotification("Mot de passe incorrect !");
@@ -370,11 +375,11 @@
                         allScores.push({ id: doc.id, ...doc.data() });
                     });
                     
+                    // Tri local par ordre chronologique décroissant (plus récent au début)
                     allScores.sort((a, b) => b.timestamp - a.timestamp);
                     
-                    if (!document.getElementById('teacher-dashboard').classList.contains('hidden')) {
-                        filtrerScores();
-                    }
+                    // Mettre à jour l'affichage en direct
+                    filtrerScores();
                 }, (error) => {
                     console.error("Erreur d'écoute Firestore :", error);
                 });
@@ -383,10 +388,15 @@
             }
         }
 
-        function filtrerScores() {
+        window.filtrerScores = function() {
             const tableBody = document.getElementById('scores-table-body');
-            const searchVal = document.getElementById('teacher-search').value.toLowerCase().trim();
-            const selectedGame = document.getElementById('teacher-filter-game').value;
+            if (!tableBody) return;
+
+            const searchInput = document.getElementById('teacher-search');
+            const gameFilter = document.getElementById('teacher-filter-game');
+
+            const searchVal = searchInput ? searchInput.value.toLowerCase().trim() : "";
+            const selectedGame = gameFilter ? gameFilter.value : "all";
 
             const filtered = allScores.filter(score => {
                 const matchName = score.nomEleve ? score.nomEleve.toLowerCase().includes(searchVal) : false;
@@ -428,7 +438,7 @@
             }).join('');
         }
 
-        async function effacerScoreUnique(id) {
+        window.effacerScoreUnique = async function(id) {
             if (!confirm("Voulez-vous vraiment supprimer ce résultat ?")) return;
             if (!window.db) return;
 
@@ -441,7 +451,7 @@
             }
         }
 
-        async function effacerTousLesScores() {
+        window.effacerTousLesScores = async function() {
             if (!confirm("⚠️ ATTENTION : Voulez-vous vraiment supprimer TOUS les scores de la classe ? Cette opération est irréversible.")) return;
             if (!window.db) return;
 
