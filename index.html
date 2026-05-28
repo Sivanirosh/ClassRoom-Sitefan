@@ -35,12 +35,16 @@
             window.db = db;
             window.appId = appId;
 
-            // Connexion anonyme automatique requise avant d'interroger la BDD
+            // Connexion anonyme automatique requise avant d'interroger la BDD (Règle 3)
             const initAuth = async () => {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
+                try {
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+                } catch (err) {
+                    console.error("Erreur de connexion Firebase Auth :", err);
                 }
             };
             initAuth();
@@ -48,12 +52,49 @@
             onAuthStateChanged(auth, (user) => {
                 if (user) {
                     window.currentUser = user;
-                    // Une fois connecté, on démarre l'écoute des scores pour l'enseignant
+                    console.log("Enseignant connecté anonymement :", user.uid);
+                    // On démarre l'écoute des scores UNIQUEMENT après validation de l'authentification (Règle 3)
                     initScoresListener();
                 }
             });
         } catch (e) {
             console.error("Erreur d'initialisation Firebase :", e);
+        }
+
+        function initScoresListener() {
+            if (!window.db || !window.appId || !window.currentUser) return;
+
+            try {
+                // Chemin d'accès strict (Règle 1) : artifacts/classe-primaire-2026/public/data/scores
+                const colRef = collection(window.db, 'artifacts', window.appId, 'public', 'data', 'scores');
+                
+                // Écoute en temps réel avec fonction de rappel pour succès et erreur (Règle d'or de débogage)
+                onSnapshot(colRef, (snapshot) => {
+                    console.log("Nouvelle mise à jour des scores reçue de Firebase. Nb documents :", snapshot.size);
+                    const list = [];
+                    snapshot.forEach((doc) => {
+                        list.push({ id: doc.id, ...doc.data() });
+                    });
+                    
+                    // Tri local par date décroissante (Règle 2 : évite les requêtes de tri complexes Firestore)
+                    list.sort((a, b) => b.timestamp - a.timestamp);
+                    window.allScores = list;
+                    
+                    // Rafraîchir l'affichage du tableau
+                    if (typeof window.filtrerScores === 'function') {
+                        window.filtrerScores();
+                    }
+                }, (error) => {
+                    console.error("Erreur d'accès à la base de données Firestore :", error);
+                    // Message d'erreur visuel dans la console ou l'interface pour aider au diagnostic
+                    const tbody = document.getElementById('scores-table-body');
+                    if (tbody) {
+                        tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-red-500 font-bold bg-red-50">⚠️ Erreur de connexion avec la base de données. Vérifiez que Firestore est configuré en mode test et actif. Error: ${error.message}</td></tr>`;
+                    }
+                });
+            } catch (e) {
+                console.error("Impossible de lancer l'écouteur de résultats :", e);
+            }
         }
     </script>
 </head>
@@ -68,7 +109,7 @@
                     <p class="text-xs text-indigo-200">Espace numérique d'apprentissage autonome</p>
                 </div>
             </div>
-            <button onclick="ouvrirEspaceEnseignant()" class="bg-indigo-800 hover:bg-indigo-750 text-xs font-semibold px-4 py-2 rounded-xl transition-all flex items-center gap-1">
+            <button onclick="ouvrirEspaceEnseignant()" class="bg-indigo-800 hover:bg-indigo-755 text-xs font-semibold px-4 py-2 rounded-xl transition-all flex items-center gap-1">
                 ⚙️ Espace Enseignant
             </button>
         </div>
@@ -76,6 +117,7 @@
 
     <main class="max-w-6xl mx-auto px-4 py-8 flex-grow w-full">
         
+        <!-- ÉCRAN DE CONNEXION ÉLÈVE -->
         <div id="login-section" class="max-w-md mx-auto bg-white p-8 rounded-3xl shadow-sm border border-slate-100 my-12">
             <div class="text-center mb-6">
                 <span class="text-5xl mb-2 block">👋</span>
@@ -95,6 +137,7 @@
             </form>
         </div>
 
+        <!-- TABLEAU DE BORD ÉLÈVE -->
         <div id="student-dashboard" class="hidden space-y-8">
             <div class="bg-gradient-to-r from-indigo-900 to-indigo-800 text-white p-6 rounded-3xl shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
@@ -147,6 +190,7 @@
             </div>
         </div>
 
+        <!-- TABLEAU DE BORD ENSEIGNANT -->
         <div id="teacher-dashboard" class="hidden space-y-6">
             <div class="flex justify-between items-center">
                 <div>
@@ -166,7 +210,7 @@
                         <option value="all">Tous les exercices</option>
                         <option value="Livrets de multiplication">Livrets de multiplication</option>
                         <option value="Défi Géométrie">Défi Géométrie</option>
-                        <option value="Calcul Décimal">Calcul Décimal</option>
+                        <option value="Le Calcul Décimal">Le Calcul Décimal</option>
                     </select>
                 </div>
                 <button onclick="effacerTousLesScores()" class="text-xs font-bold text-red-600 hover:underline">⚠️ Réinitialiser tous les scores</button>
@@ -243,7 +287,7 @@
 
     <script>
         let nomEleve = sessionStorage.getItem('nomEleve');
-        let allScores = [];
+        window.allScores = [];
 
         window.addEventListener('load', () => {
             if (nomEleve) {
@@ -262,7 +306,7 @@
             }, 3000);
         }
 
-        function connecterEleve(event) {
+        window.connecterEleve = function(event) {
             event.preventDefault();
             const input = document.getElementById('student-name');
             const prenom = input.value.trim();
@@ -277,7 +321,7 @@
             afficherDashboardEleve(prenom);
         }
 
-        function deconnecterEleve() {
+        window.deconnecterEleve = function() {
             sessionStorage.removeItem('nomEleve');
             nomEleve = null;
             afficherFormulaireLogin();
@@ -296,7 +340,7 @@
             document.getElementById('teacher-dashboard').classList.add('hidden');
         }
 
-        function lancerActivite(pageHtml) {
+        window.lancerActivite = function(pageHtml) {
             if (!nomEleve) {
                 afficherMessageNotification("Erreur de session, merci de ressaisir votre prénom.");
                 afficherFormulaireLogin();
@@ -326,18 +370,16 @@
             window.location.href = targetUrl;
         }
 
-        function ouvrirEspaceEnseignant() {
+        window.ouvrirEspaceEnseignant = function() {
             document.getElementById('password-modal').classList.remove('hidden');
             document.getElementById('teacher-password').focus();
         }
 
-        // Annuler la saisie du mot de passe
         window.annulerEspaceEnseignant = function() {
             document.getElementById('password-modal').classList.add('hidden');
             document.getElementById('teacher-password').value = "";
         }
 
-        // Validation du mot de passe enseignant
         window.validerEspaceEnseignant = function() {
             const mdp = document.getElementById('teacher-password').value;
             if (mdp === "Prof2026") {
@@ -348,43 +390,18 @@
                 document.getElementById('student-dashboard').classList.add('hidden');
                 document.getElementById('teacher-dashboard').classList.remove('hidden');
                 
-                // Forcer le rendu immédiat des scores lors de l'accès au tableau de bord
+                // Rendu des scores lors de l'accès
                 filtrerScores();
             } else {
                 afficherMessageNotification("Mot de passe incorrect !");
             }
         }
 
-        function fermerEspaceEnseignant() {
+        window.fermerEspaceEnseignant = function() {
             if (nomEleve) {
                 afficherDashboardEleve(nomEleve);
             } else {
                 afficherFormulaireLogin();
-            }
-        }
-
-        function initScoresListener() {
-            if (!window.db || !window.appId || !window.currentUser) return;
-
-            try {
-                const colRef = collection(window.db, 'artifacts', window.appId, 'public', 'data', 'scores');
-                
-                onSnapshot(colRef, (snapshot) => {
-                    allScores = [];
-                    snapshot.forEach((doc) => {
-                        allScores.push({ id: doc.id, ...doc.data() });
-                    });
-                    
-                    // Tri local par ordre chronologique décroissant (plus récent au début)
-                    allScores.sort((a, b) => b.timestamp - a.timestamp);
-                    
-                    // Mettre à jour l'affichage en direct
-                    filtrerScores();
-                }, (error) => {
-                    console.error("Erreur d'écoute Firestore :", error);
-                });
-            } catch (e) {
-                console.error("Erreur de chargement de l'écouteur en direct :", e);
             }
         }
 
@@ -398,7 +415,9 @@
             const searchVal = searchInput ? searchInput.value.toLowerCase().trim() : "";
             const selectedGame = gameFilter ? gameFilter.value : "all";
 
-            const filtered = allScores.filter(score => {
+            const scoresList = window.allScores || [];
+
+            const filtered = scoresList.filter(score => {
                 const matchName = score.nomEleve ? score.nomEleve.toLowerCase().includes(searchVal) : false;
                 const matchGame = selectedGame === 'all' || score.exercice === selectedGame;
                 return matchName && matchGame;
@@ -456,7 +475,8 @@
             if (!window.db) return;
 
             try {
-                for (const score of allScores) {
+                const scoresList = window.allScores || [];
+                for (const score of scoresList) {
                     const docRef = doc(window.db, 'artifacts', window.appId, 'public', 'data', 'scores', score.id);
                     await deleteDoc(docRef);
                 }
