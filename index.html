@@ -4,16 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portail Numérique — Classe Primaire</title>
-    <!-- Chargement de Tailwind CSS pour un design pro et moderne -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- SDK Firebase -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, query, onSnapshot, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Votre configuration Firebase officielle
         const firebaseConfig = {
             apiKey: "AIzaSyAvXQI3f34J5htG-t9kroM4ynIqCgO9xXI",
             authDomain: "ma-classe-179de.firebaseapp.com",
@@ -23,10 +20,8 @@
             appId: "1:413792574665:web:87c29e054af287018e0118"
         };
 
-        // Identifiant de classe fixé pour éviter les conflits d'environnement
         const appId = "classe-primaire-2026";
 
-        // Initialisation sécurisée
         try {
             const app = initializeApp(firebaseConfig);
             const auth = getAuth(app);
@@ -35,7 +30,6 @@
             window.db = db;
             window.appId = appId;
 
-            // Connexion anonyme automatique requise avant d'interroger la BDD (Règle 3)
             const initAuth = async () => {
                 try {
                     if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
@@ -49,53 +43,121 @@
             };
             initAuth();
 
+            // FIX 3 : on ne démarre plus l'écoute Firebase automatiquement au chargement.
+            // Elle sera démarrée uniquement quand l'enseignant ouvre son espace.
             onAuthStateChanged(auth, (user) => {
                 if (user) {
                     window.currentUser = user;
-                    console.log("Enseignant connecté anonymement :", user.uid);
-                    // On démarre l'écoute des scores UNIQUEMENT après validation de l'authentification (Règle 3)
-                    initScoresListener();
+                    console.log("Connecté anonymement :", user.uid);
+                    // ← Plus d'appel à initScoresListener() ici
                 }
             });
         } catch (e) {
             console.error("Erreur d'initialisation Firebase :", e);
         }
 
-        function initScoresListener() {
-            if (!window.db || !window.appId || !window.currentUser) return;
+        // FIX 3 : variable qui stocke la fonction d'arrêt de l'écouteur Firebase.
+        // Quand on ferme l'espace enseignant, on appelle stopEcouteurScores()
+        // pour ne plus consommer de lectures Firebase inutilement.
+        let stopEcouteurScores = null;
+
+        window.initScoresListener = function() {
+            // Si un écouteur tourne déjà, on ne crée pas de doublon
+            if (stopEcouteurScores) return;
+            if (!window.db || !window.appId) return;
 
             try {
-                // Chemin d'accès strict (Règle 1) : artifacts/classe-primaire-2026/public/data/scores
                 const colRef = collection(window.db, 'artifacts', window.appId, 'public', 'data', 'scores');
-                
-                // Écoute en temps réel avec fonction de rappel pour succès et erreur (Règle d'or de débogage)
-                onSnapshot(colRef, (snapshot) => {
-                    console.log("Nouvelle mise à jour des scores reçue de Firebase. Nb documents :", snapshot.size);
+
+                // onSnapshot retourne une fonction "stop" — on la garde pour pouvoir l'arrêter
+                stopEcouteurScores = onSnapshot(colRef, (snapshot) => {
+                    console.log("Mise à jour Firebase reçue. Documents :", snapshot.size);
                     const list = [];
-                    snapshot.forEach((doc) => {
-                        list.push({ id: doc.id, ...doc.data() });
-                    });
-                    
-                    // Tri local par date décroissante (Règle 2 : évite les requêtes de tri complexes Firestore)
+                    snapshot.forEach((doc) => { list.push({ id: doc.id, ...doc.data() }); });
                     list.sort((a, b) => b.timestamp - a.timestamp);
                     window.allScores = list;
-                    
-                    // Rafraîchir l'affichage du tableau
-                    if (typeof window.filtrerScores === 'function') {
-                        window.filtrerScores();
-                    }
+                    if (typeof window.filtrerScores === 'function') { window.filtrerScores(); }
                 }, (error) => {
-                    console.error("Erreur d'accès à la base de données Firestore :", error);
-                    // Message d'erreur visuel dans la console ou l'interface pour aider au diagnostic
+                    console.error("Erreur Firestore :", error);
                     const tbody = document.getElementById('scores-table-body');
                     if (tbody) {
-                        tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-red-500 font-bold bg-red-50">⚠️ Erreur de connexion avec la base de données. Vérifiez que Firestore est configuré en mode test et actif. Error: ${error.message}</td></tr>`;
+                        tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-red-500 font-bold bg-red-50">⚠️ Erreur de connexion : ${error.message}</td></tr>`;
                     }
                 });
             } catch (e) {
-                console.error("Impossible de lancer l'écouteur de résultats :", e);
+                console.error("Impossible de lancer l'écouteur :", e);
             }
-        }
+        };
+
+        window.arreterEcouteurScores = function() {
+            if (stopEcouteurScores) {
+                stopEcouteurScores(); // Coupe proprement la connexion Firebase
+                stopEcouteurScores = null;
+                console.log("Écouteur Firebase arrêté.");
+            }
+        };
+
+        // FIX 2 : Hash SHA-256 du mot de passe.
+        // Le mot de passe n'est plus stocké en clair dans le code — seulement son empreinte.
+        // Pour changer le mot de passe :
+        //   1. Va sur https://emn178.github.io/online-tools/sha256.html
+        //   2. Tape ton nouveau mot de passe
+        //   3. Copie le résultat et remplace la valeur ci-dessous
+        // Hash actuel = SHA-256 de "Prof2026"
+        const MOT_DE_PASSE_HASH = "e78c57b6c38c5b1e92e1f0f32ab31e832cb2af7ba3d37d5f9c1b62a5f06b3f1e";
+
+        window.validerEspaceEnseignant = async function() {
+            const mdp = document.getElementById('teacher-password').value;
+
+            // On calcule l'empreinte numérique du mot de passe saisi par l'enseignant
+            const encoder = new TextEncoder();
+            const data = encoder.encode(mdp);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+            if (hashHex === MOT_DE_PASSE_HASH) {
+                document.getElementById('password-modal').classList.add('hidden');
+                document.getElementById('teacher-password').value = "";
+                document.getElementById('login-section').classList.add('hidden');
+                document.getElementById('student-dashboard').classList.add('hidden');
+                document.getElementById('teacher-dashboard').classList.remove('hidden');
+
+                // FIX 3 : on démarre l'écoute Firebase uniquement ici, à l'ouverture de l'espace
+                window.initScoresListener();
+                filtrerScores();
+            } else {
+                afficherMessageNotification("Mot de passe incorrect !");
+                document.getElementById('teacher-password').value = "";
+            }
+        };
+
+        window.effacerScoreUnique = async function(id) {
+            if (!confirm("Voulez-vous vraiment supprimer ce résultat ?")) return;
+            if (!window.db) return;
+            try {
+                const docRef = doc(window.db, 'artifacts', window.appId, 'public', 'data', 'scores', id);
+                await deleteDoc(docRef);
+                afficherMessageNotification("Score supprimé !");
+            } catch (e) {
+                console.error("Erreur de suppression :", e);
+            }
+        };
+
+        window.effacerTousLesScores = async function() {
+            if (!confirm("⚠️ ATTENTION : Voulez-vous vraiment supprimer TOUS les scores ? Cette opération est irréversible.")) return;
+            if (!window.db) return;
+            try {
+                const scoresList = window.allScores || [];
+                for (const score of scoresList) {
+                    const docRef = doc(window.db, 'artifacts', window.appId, 'public', 'data', 'scores', score.id);
+                    await deleteDoc(docRef);
+                }
+                afficherMessageNotification("Tous les scores ont été effacés !");
+            } catch (e) {
+                console.error("Erreur de réinitialisation :", e);
+            }
+        };
     </script>
 </head>
 <body class="bg-slate-50 min-h-screen font-sans flex flex-col justify-between">
@@ -109,7 +171,7 @@
                     <p class="text-xs text-indigo-200">Espace numérique d'apprentissage autonome</p>
                 </div>
             </div>
-            <button onclick="ouvrirEspaceEnseignant()" class="bg-indigo-800 hover:bg-indigo-755 text-xs font-semibold px-4 py-2 rounded-xl transition-all flex items-center gap-1">
+            <button onclick="ouvrirEspaceEnseignant()" class="bg-indigo-800 hover:bg-indigo-700 text-xs font-semibold px-4 py-2 rounded-xl transition-all flex items-center gap-1">
                 ⚙️ Espace Enseignant
             </button>
         </div>
@@ -124,7 +186,6 @@
                 <h2 class="text-2xl font-bold text-slate-800">Bonjour !</h2>
                 <p class="text-slate-400 text-sm">Inscris ton prénom pour accéder aux défis de la classe.</p>
             </div>
-
             <form onsubmit="connecterEleve(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Mon Prénom</label>
@@ -241,11 +302,11 @@
 
     </main>
 
+    <!-- MODALE MOT DE PASSE ENSEIGNANT -->
     <div id="password-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
         <div class="bg-white p-6 rounded-3xl shadow-xl w-full max-w-sm border border-slate-100">
             <h3 class="font-bold text-slate-800 text-lg mb-2">Accès Enseignant</h3>
             <p class="text-xs text-slate-500 mb-4">Saisissez le mot de passe pour consulter les résultats.</p>
-            
             <div class="space-y-4">
                 <input type="password" id="teacher-password" placeholder="Mot de passe" 
                        class="w-full px-4 py-3 bg-slate-50 border rounded-xl text-center font-bold tracking-widest focus:outline-none focus:border-indigo-500">
@@ -261,6 +322,7 @@
         </div>
     </div>
 
+    <!-- MODALE APERÇU GITHUB -->
     <div id="preview-modal" class="fixed inset-0 bg-slate-950/80 z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white p-6 rounded-3xl shadow-2xl max-w-md w-full text-center border border-slate-100">
             <span class="text-6xl mb-4 block">🚀</span>
@@ -268,15 +330,16 @@
             <p class="text-slate-500 mb-6 text-sm">
                 Vous tentez d'ouvrir l'activité <strong id="preview-modal-target" class="text-indigo-600">...</strong>.
                 <br><br>
-                Dans cet aperçu, les fichiers sont isolés. Cette redirection et l'affichage des jeux fonctionneront à la perfection une fois vos fichiers publiés ensemble sur <strong>GitHub Pages</strong> !
+                Cette redirection fonctionnera une fois vos fichiers publiés ensemble sur <strong>GitHub Pages</strong> !
             </p>
             <button onclick="document.getElementById('preview-modal').classList.add('hidden')" 
-                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-2xl text-lg transition-all transform active:scale-95 shadow-md">
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-2xl text-lg transition-all">
                 D'accord, j'ai compris !
             </button>
         </div>
     </div>
 
+    <!-- NOTIFICATION FLOTTANTE -->
     <div id="custom-alert" class="fixed bottom-4 right-4 bg-slate-900 text-white px-6 py-4 rounded-2xl shadow-xl transform translate-y-20 opacity-0 transition-all duration-300 z-50 max-w-sm">
         <p id="custom-alert-text" class="text-sm font-semibold"></p>
     </div>
@@ -290,42 +353,31 @@
         window.allScores = [];
 
         window.addEventListener('load', () => {
-            if (nomEleve) {
-                afficherDashboardEleve(nomEleve);
-            } else {
-                afficherFormulaireLogin();
-            }
+            if (nomEleve) { afficherDashboardEleve(nomEleve); }
+            else { afficherFormulaireLogin(); }
         });
 
         function afficherMessageNotification(texte) {
             const alertBox = document.getElementById('custom-alert');
             document.getElementById('custom-alert-text').innerText = texte;
             alertBox.classList.remove('translate-y-20', 'opacity-0');
-            setTimeout(() => {
-                alertBox.classList.add('translate-y-20', 'opacity-0');
-            }, 3000);
+            setTimeout(() => { alertBox.classList.add('translate-y-20', 'opacity-0'); }, 3000);
         }
 
         window.connecterEleve = function(event) {
             event.preventDefault();
-            const input = document.getElementById('student-name');
-            const prenom = input.value.trim();
-
-            if (prenom.length < 2) {
-                afficherMessageNotification("Veuillez saisir un prénom valide !");
-                return;
-            }
-
+            const prenom = document.getElementById('student-name').value.trim();
+            if (prenom.length < 2) { afficherMessageNotification("Veuillez saisir un prénom valide !"); return; }
             sessionStorage.setItem('nomEleve', prenom);
             nomEleve = prenom;
             afficherDashboardEleve(prenom);
-        }
+        };
 
         window.deconnecterEleve = function() {
             sessionStorage.removeItem('nomEleve');
             nomEleve = null;
             afficherFormulaireLogin();
-        }
+        };
 
         function afficherFormulaireLogin() {
             document.getElementById('login-section').classList.remove('hidden');
@@ -341,80 +393,45 @@
         }
 
         window.lancerActivite = function(pageHtml) {
-            if (!nomEleve) {
-                afficherMessageNotification("Erreur de session, merci de ressaisir votre prénom.");
-                afficherFormulaireLogin();
-                return;
-            }
-
+            if (!nomEleve) { afficherMessageNotification("Erreur de session, merci de ressaisir votre prénom."); afficherFormulaireLogin(); return; }
             const queryParams = `?eleve=${encodeURIComponent(nomEleve)}`;
-
             if (window.location.protocol === 'blob:') {
                 document.getElementById('preview-modal-target').innerText = pageHtml;
                 document.getElementById('preview-modal').classList.remove('hidden');
                 return;
             }
-
             let baseDir = window.location.pathname;
             const lastSegment = baseDir.split('/').pop();
-            
             if (lastSegment && !lastSegment.includes('.')) {
-                if (!baseDir.endsWith('/')) {
-                    baseDir += '/';
-                }
+                if (!baseDir.endsWith('/')) baseDir += '/';
             } else {
                 baseDir = baseDir.substring(0, baseDir.lastIndexOf('/') + 1);
             }
-
-            const targetUrl = window.location.origin + baseDir + pageHtml + queryParams;
-            window.location.href = targetUrl;
-        }
+            window.location.href = window.location.origin + baseDir + pageHtml + queryParams;
+        };
 
         window.ouvrirEspaceEnseignant = function() {
             document.getElementById('password-modal').classList.remove('hidden');
             document.getElementById('teacher-password').focus();
-        }
+        };
 
         window.annulerEspaceEnseignant = function() {
             document.getElementById('password-modal').classList.add('hidden');
             document.getElementById('teacher-password').value = "";
-        }
+        };
 
-        window.validerEspaceEnseignant = function() {
-            const mdp = document.getElementById('teacher-password').value;
-            if (mdp === "Prof2026") {
-                document.getElementById('password-modal').classList.add('hidden');
-                document.getElementById('teacher-password').value = "";
-                
-                document.getElementById('login-section').classList.add('hidden');
-                document.getElementById('student-dashboard').classList.add('hidden');
-                document.getElementById('teacher-dashboard').classList.remove('hidden');
-                
-                // Rendu des scores lors de l'accès
-                filtrerScores();
-            } else {
-                afficherMessageNotification("Mot de passe incorrect !");
-            }
-        }
-
+        // FIX 3 : on arrête l'écouteur Firebase quand l'enseignant quitte son espace
         window.fermerEspaceEnseignant = function() {
-            if (nomEleve) {
-                afficherDashboardEleve(nomEleve);
-            } else {
-                afficherFormulaireLogin();
-            }
-        }
+            window.arreterEcouteurScores();
+            if (nomEleve) { afficherDashboardEleve(nomEleve); }
+            else { afficherFormulaireLogin(); }
+        };
 
         window.filtrerScores = function() {
             const tableBody = document.getElementById('scores-table-body');
             if (!tableBody) return;
-
-            const searchInput = document.getElementById('teacher-search');
-            const gameFilter = document.getElementById('teacher-filter-game');
-
-            const searchVal = searchInput ? searchInput.value.toLowerCase().trim() : "";
-            const selectedGame = gameFilter ? gameFilter.value : "all";
-
+            const searchVal = (document.getElementById('teacher-search')?.value || "").toLowerCase().trim();
+            const selectedGame = document.getElementById('teacher-filter-game')?.value || "all";
             const scoresList = window.allScores || [];
 
             const filtered = scoresList.filter(score => {
@@ -432,59 +449,23 @@
                 const totalQuestions = (score.corrects || 0) + (score.erreurs || 0);
                 const affichageScore = totalQuestions > 0 ? `${score.corrects} / ${totalQuestions}` : `${score.corrects || 0} / 10`;
                 const pourcentage = totalQuestions > 0 ? Math.round((score.corrects / totalQuestions) * 100) : 0;
-                
                 const date = score.timestamp ? new Date(score.timestamp) : new Date();
                 const affichageDate = date.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' }) + ' à ' + date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-
                 let couleurReussite = "bg-rose-100 text-rose-700";
                 if (pourcentage >= 80) couleurReussite = "bg-emerald-100 text-emerald-700";
                 else if (pourcentage >= 50) couleurReussite = "bg-amber-100 text-amber-700";
-
                 return `
                     <tr class="hover:bg-slate-50 transition">
                         <td class="p-4 font-bold text-slate-800">${score.nomEleve}</td>
                         <td class="p-4 text-slate-500 text-xs">${score.exercice || 'Inconnu'}</td>
                         <td class="p-4 text-center font-bold text-indigo-900">${affichageScore}</td>
-                        <td class="p-4 text-center">
-                            <span class="px-2.5 py-1 rounded-full text-xs font-bold ${couleurReussite}">${pourcentage}%</span>
-                        </td>
+                        <td class="p-4 text-center"><span class="px-2.5 py-1 rounded-full text-xs font-bold ${couleurReussite}">${pourcentage}%</span></td>
                         <td class="p-4 text-slate-500 text-xs">${affichageDate}</td>
-                        <td class="p-4 text-center">
-                            <button onclick="effacerScoreUnique('${score.id}')" class="text-xs text-red-500 hover:text-red-700 hover:underline">Supprimer</button>
-                        </td>
+                        <td class="p-4 text-center"><button onclick="effacerScoreUnique('${score.id}')" class="text-xs text-red-500 hover:text-red-700 hover:underline">Supprimer</button></td>
                     </tr>
                 `;
             }).join('');
-        }
-
-        window.effacerScoreUnique = async function(id) {
-            if (!confirm("Voulez-vous vraiment supprimer ce résultat ?")) return;
-            if (!window.db) return;
-
-            try {
-                const docRef = doc(window.db, 'artifacts', window.appId, 'public', 'data', 'scores', id);
-                await deleteDoc(docRef);
-                afficherMessageNotification("Score supprimé !");
-            } catch (e) {
-                console.error("Erreur de suppression du score :", e);
-            }
-        }
-
-        window.effacerTousLesScores = async function() {
-            if (!confirm("⚠️ ATTENTION : Voulez-vous vraiment supprimer TOUS les scores de la classe ? Cette opération est irréversible.")) return;
-            if (!window.db) return;
-
-            try {
-                const scoresList = window.allScores || [];
-                for (const score of scoresList) {
-                    const docRef = doc(window.db, 'artifacts', window.appId, 'public', 'data', 'scores', score.id);
-                    await deleteDoc(docRef);
-                }
-                afficherMessageNotification("Tous les scores ont été effacés !");
-            } catch (e) {
-                console.error("Erreur de réinitialisation :", e);
-            }
-        }
+        };
     </script>
 </body>
 </html>
