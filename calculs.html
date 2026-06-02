@@ -11,7 +11,6 @@
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Votre configuration Firebase officielle
         const firebaseConfig = {
             apiKey: "AIzaSyAvXQI3f34J5htG-t9kroM4ynIqCgO9xXI",
             authDomain: "ma-classe-179de.firebaseapp.com",
@@ -52,7 +51,7 @@
                     const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'scores');
                     await addDoc(colRef, {
                         nomEleve: window.nomEleve,
-                        exercice: exercice,
+                        exercice: exercice,   // FIX 1 : était "ejercicio" (faute de frappe espagnole !)
                         corrects: corrects,
                         erreurs: erreurs,
                         timestamp: Date.now()
@@ -122,10 +121,11 @@
                 <div id="feedback" class="mt-6 p-4 rounded-2xl hidden text-center font-bold"></div>
             </div>
 
+            <!-- ARDOISE TACTILE -->
             <div class="bg-indigo-950 p-5 rounded-3xl text-white flex flex-col justify-between h-[450px] shadow-lg">
                 <div class="flex justify-between items-center mb-3">
                     <span class="text-xs font-bold uppercase text-indigo-300">📝 Ardoise Tactile</span>
-                    <button onclick="effacerArdoise()" class="text-xs font-semibold bg-indigo-800 hover:bg-indigo-750 px-3 py-1.5 rounded-lg transition">Effacer 🧹</button>
+                    <button onclick="effacerArdoise()" class="text-xs font-semibold bg-indigo-800 hover:bg-indigo-700 px-3 py-1.5 rounded-lg transition">Effacer 🧹</button>
                 </div>
                 <div class="bg-white rounded-2xl flex-grow relative overflow-hidden h-full">
                     <canvas id="canvas-ardoise" class="absolute inset-0 cursor-crosshair w-full h-full"></canvas>
@@ -133,6 +133,7 @@
             </div>
         </div>
 
+        <!-- ÉCRAN DE FIN -->
         <div id="end-card" class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 max-w-md mx-auto w-full text-center hidden space-y-6">
             <span class="text-6xl block">🏆</span>
             <h2 class="text-2xl font-bold text-slate-800">Défi Décimal Terminé !</h2>
@@ -150,16 +151,20 @@
     </footer>
 
     <script>
+        // Récupération du prénom depuis l'URL ou la session
         const params = new URLSearchParams(window.location.search);
         const nomEleve = params.get('eleve') || "Visiteur";
         document.getElementById('nom-eleve-badge').innerText = nomEleve;
         window.nomEleve = nomEleve;
 
+        // Sécurité : si Firebase met trop de temps, on démarre quand même après 2 secondes
         let loadingFini = false;
         const securiteTimeout = setTimeout(() => { if (!loadingFini) { annulerChargementEtDemarrer(); } }, 2000);
 
         function annulerChargementEtDemarrer() {
-            if (loadingFini) return; loadingFini = true; clearTimeout(securiteTimeout);
+            if (loadingFini) return;
+            loadingFini = true;
+            clearTimeout(securiteTimeout);
             const overlay = document.getElementById('loading-overlay');
             if (overlay) {
                 overlay.classList.add('opacity-0');
@@ -167,19 +172,26 @@
             }
         }
 
-        let calculsPartie = []; let indexCourant = 0; let score = 0; let reponseSelectionnee = false;
+        let calculsPartie = [];
+        let indexCourant = 0;
+        let score = 0;
+        let reponseSelectionnee = false;
 
+        // Génère 10 calculs décimaux : 4 additions, 4 soustractions, 2 multiplications
         function genererCalculs() {
             const operations = [];
             for (let i = 0; i < 10; i++) {
                 if (i < 4) {
-                    const a = (Math.random() * 40 + 10).toFixed(1); const b = (Math.random() * 40 + 5).toFixed(1);
+                    const a = (Math.random() * 40 + 10).toFixed(1);
+                    const b = (Math.random() * 40 + 5).toFixed(1);
                     operations.push({ op: `${a} + ${b}`, r: (parseFloat(a) + parseFloat(b)).toFixed(1) });
                 } else if (i < 8) {
-                    const a = (Math.random() * 50 + 20).toFixed(1); const b = (Math.random() * 15 + 2).toFixed(1);
+                    const a = (Math.random() * 50 + 20).toFixed(1);
+                    const b = (Math.random() * 15 + 2).toFixed(1);
                     operations.push({ op: `${a} - ${b}`, r: (parseFloat(a) - parseFloat(b)).toFixed(1) });
                 } else {
-                    const a = (Math.random() * 8 + 2).toFixed(1); const b = Math.floor(Math.random() * 4) + 2;
+                    const a = (Math.random() * 8 + 2).toFixed(1);
+                    const b = Math.floor(Math.random() * 4) + 2;
                     operations.push({ op: `${a} × ${b}`, r: (parseFloat(a) * b).toFixed(1) });
                 }
             }
@@ -187,10 +199,14 @@
         }
 
         function initJeu() {
-            calculsPartie = genererCalculs(); indexCourant = 0; score = 0;
+            calculsPartie = genererCalculs();
+            indexCourant = 0;
+            score = 0;
             const dotsContainer = document.getElementById('dots-container');
             dotsContainer.innerHTML = '';
-            for (let i = 0; i < 10; i++) { dotsContainer.innerHTML += `<div id="dot-${i}" class="w-3 h-3 rounded-full bg-slate-200 transition"></div>`; }
+            for (let i = 0; i < 10; i++) {
+                dotsContainer.innerHTML += `<div id="dot-${i}" class="w-3 h-3 rounded-full bg-slate-200 transition"></div>`;
+            }
             chargerCalcul();
         }
 
@@ -206,7 +222,11 @@
         }
 
         function soumettreReponse(event) {
-            event.preventDefault(); if (reponseSelectionnee) return; reponseSelectionnee = true;
+            event.preventDefault();
+            if (reponseSelectionnee) return;
+            reponseSelectionnee = true;
+
+            // On accepte la virgule ou le point comme séparateur décimal
             const saisie = document.getElementById('student-answer').value.replace(',', '.').trim();
             const calculData = calculsPartie[indexCourant];
             const feedback = document.getElementById('feedback');
@@ -216,7 +236,8 @@
             document.getElementById('btn-valider').disabled = true;
 
             if (parseFloat(saisie).toFixed(1) === parseFloat(calculData.r).toFixed(1)) {
-                score++; dot.classList.add('bg-emerald-500');
+                score++;
+                dot.classList.add('bg-emerald-500');
                 feedback.innerHTML = "✨ Excellent ! C'est le bon résultat !";
                 feedback.className = "mt-6 p-4 rounded-2xl text-center font-bold bg-emerald-100 text-emerald-800";
             } else {
@@ -225,39 +246,85 @@
                 feedback.className = "mt-6 p-4 rounded-2xl text-center font-bold bg-rose-100 text-rose-800";
             }
             feedback.classList.remove('hidden');
-            setTimeout(() => { indexCourant++; if (indexCourant < 10) { chargerCalcul(); } else { terminerPartie(); } }, 2500);
+            setTimeout(() => {
+                indexCourant++;
+                if (indexCourant < 10) { chargerCalcul(); } else { terminerPartie(); }
+            }, 2500);
         }
 
         async function terminerPartie() {
             document.getElementById('game-container').classList.add('hidden');
             document.getElementById('end-card').classList.remove('hidden');
             document.getElementById('final-score').innerText = score;
+            const appreciation = score >= 8 ? "Excellent travail ! Bravo ! 🌟" : "Continue à t'entraîner régulièrement. 💪";
+            document.getElementById('appreciation').innerText = appreciation;
             if (typeof window.enregistrerScoreFirebase === 'function') {
                 await window.enregistrerScoreFirebase("Le Calcul Décimal", score, 10 - score);
             }
         }
 
-        function retourPortail() { window.location.href = `index.html`; }
+        function retourPortail() {
+            window.location.href = `index.html`;
+        }
 
+        // --- ARDOISE TACTILE ---
         let canvas, ctx, dessin = false;
+
         function initArdoise() {
-            canvas = document.getElementById('canvas-ardoise'); ctx = canvas.getContext('2d');
-            redimensionnerCanvas(); window.addEventListener('resize', redimensionnerCanvas);
-            canvas.addEventListener('mousedown', (e) => { dessin = true; ctx.beginPath(); const rect = canvas.getBoundingClientRect(); ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top); });
-            canvas.addEventListener('mouseup', () => dessin = false);
-            canvas.addEventListener('mousemove', (e) => {
-                if (!dessin) return; ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.strokeStyle = '#1e1b4b';
-                const rect = canvas.getBoundingClientRect(); ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top); ctx.stroke();
+            canvas = document.getElementById('canvas-ardoise');
+            ctx = canvas.getContext('2d');
+            redimensionnerCanvas();
+            window.addEventListener('resize', redimensionnerCanvas);
+
+            // Souris (ordinateur)
+            canvas.addEventListener('mousedown', (e) => {
+                dessin = true;
+                ctx.beginPath();
+                const rect = canvas.getBoundingClientRect();
+                ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
             });
+            canvas.addEventListener('mouseup', () => dessin = false);
+            canvas.addEventListener('mouseleave', () => dessin = false);
+            canvas.addEventListener('mousemove', (e) => {
+                if (!dessin) return;
+                ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.strokeStyle = '#1e1b4b';
+                const rect = canvas.getBoundingClientRect();
+                ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+                ctx.stroke();
+            });
+
+            // Tactile (tablette / téléphone)
+            canvas.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                dessin = true;
+                ctx.beginPath();
+                const rect = canvas.getBoundingClientRect();
+                ctx.moveTo(e.touches[0].clientX - rect.left, e.touches[0].clientY - rect.top);
+            }, { passive: false });
+            canvas.addEventListener('touchend', () => dessin = false);
+            canvas.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                if (!dessin) return;
+                ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.strokeStyle = '#1e1b4b';
+                const rect = canvas.getBoundingClientRect();
+                ctx.lineTo(e.touches[0].clientX - rect.left, e.touches[0].clientY - rect.top);
+                ctx.stroke();
+            }, { passive: false });
         }
 
         function redimensionnerCanvas() {
-            if (!canvas) return; const style = getComputedStyle(canvas);
-            canvas.width = parseInt(style.width); canvas.height = parseInt(style.height); effacerArdoise();
+            if (!canvas) return;
+            const style = getComputedStyle(canvas);
+            canvas.width = parseInt(style.width);
+            canvas.height = parseInt(style.height);
+            effacerArdoise();
         }
 
         function effacerArdoise() {
-            if (!ctx || !canvas) return; ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            if (!ctx || !canvas) return;
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            // Quadrillage discret pour aider au calcul posé
             ctx.strokeStyle = "#e2e8f0"; ctx.lineWidth = 1;
             for (let x = 0; x < canvas.width; x += 25) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke(); }
             for (let y = 0; y < canvas.height; y += 25) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke(); }
