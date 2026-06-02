@@ -52,7 +52,7 @@
                     const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'scores');
                     await addDoc(colRef, {
                         nomEleve: window.nomEleve,
-                        exercice: ejercicio,
+                        exercice: exercice,
                         corrects: corrects,
                         erreurs: erreurs,
                         timestamp: Date.now()
