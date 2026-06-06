@@ -3,12 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Le Calcul Décimal — Classe Primaire</title>
+    <title>Secteur : Calcul Décimal — Hub de Mission</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
+    <style>
+        body {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            line-height: 1.65;
+            letter-spacing: 0.04em;
+            background-color: #0b0f19;
+            color: #f1f5f9;
+        }
+        p, span, label, input, button {
+            letter-spacing: 0.04em;
+        }
+        .game-card {
+            background: linear-gradient(145deg, #161d30, #0f1524);
+            border: 1px solid #24324f;
+        }
+        .btn-game-active {
+            transform: translateY(0);
+            box-shadow: 0 4px 0px 0px #05070f;
+            transition: all 0.1s ease;
+        }
+        .btn-game-active:active {
+            transform: translateY(4px);
+            box-shadow: 0 0px 0px 0px #05070f;
+        }
+        canvas {
+            touch-action: none;
+        }
+    </style>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -20,315 +46,223 @@
             appId: "1:413792574665:web:87c29e054af287018e0118"
         };
 
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
         const appId = "classe-primaire-2026";
 
-        try {
-            const app = initializeApp(firebaseConfig);
-            const auth = getAuth(app);
-            const db = getFirestore(app);
-
-            window.db = db;
-            window.appId = appId;
-
-            const initAuth = async () => {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
-            };
-            initAuth();
-
-            onAuthStateChanged(auth, (user) => {
-                if (user) {
-                    window.currentUser = user;
-                    annulerChargementEtDemarrer();
-                }
-            });
-
-            window.enregistrerScoreFirebase = async function(exercice, corrects, erreurs) {
-                try {
-                    const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'scores');
-                    await addDoc(colRef, {
-                        nomEleve: window.nomEleve,
-                        exercice: exercice,   // FIX 1 : était "ejercicio" (faute de frappe espagnole !)
-                        corrects: corrects,
-                        erreurs: erreurs,
-                        timestamp: Date.now()
-                    });
-                    console.log("Score de calcul décimal synchronisé !");
-                } catch (err) {
-                    console.error("Erreur d'écriture Firebase :", err);
-                }
-            };
-
-        } catch (e) {
-            console.error("Erreur d'initialisation Firebase :", e);
-            annulerChargementEtDemarrer();
+        async function enregistrerScoreFirebase(exercice, corrects, fautes) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const nomEleve = urlParams.get('eleve') || sessionStorage.getItem('nomEleve') || "Anonyme";
+            
+            try {
+                await addDoc(collection(db, `artifacts/${appId}/public/data/scores`), {
+                    nomEleve: nomEleve,
+                    exercice: exercice,
+                    corrects: corrects,
+                    fautes: fautes,
+                    timestamp: Date.now()
+                });
+                console.log("Rapport transmis au QG.");
+            } catch (e) {
+                console.error("Erreur d'émission du rapport:", e);
+            }
         }
+        window.enregistrerScoreFirebase = enregistrerScoreFirebase;
     </script>
 </head>
-<body class="bg-slate-50 min-h-screen font-sans flex flex-col justify-between">
+<body class="min-h-screen flex flex-col antialiased">
 
-    <div id="loading-overlay" class="fixed inset-0 bg-slate-900 text-white flex flex-col items-center justify-center z-50 p-6 transition-opacity duration-500">
-        <div class="text-center max-w-md">
-            <span class="text-6xl animate-bounce mb-6 block">🔢</span>
-            <h2 class="text-2xl font-bold mb-3">Chargement de ton profil personnalisé</h2>
-            <p class="text-slate-400 text-sm mb-6">Nous analysons tes tentatives précédentes pour ajuster la difficulté des calculs...</p>
-            <div class="w-16 h-16 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto mb-6"></div>
-        </div>
-    </div>
-
-    <header class="bg-indigo-900 text-white shadow-md">
-        <div class="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
+    <header class="bg-[#0e1422] border-b border-slate-800 py-4 shadow-lg">
+        <div class="max-w-6xl mx-auto px-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <span class="text-2xl">🔢</span>
+                <div class="bg-gradient-to-br from-amber-500 to-orange-600 text-white p-2 rounded-xl border border-amber-400/30">
+                    <span class="text-xl">⚡</span>
+                </div>
                 <div>
-                    <h1 class="text-lg font-bold">Le Calcul Décimal</h1>
-                    <p class="text-xs text-indigo-200">Additions, soustractions et multiplications à virgule</p>
+                    <h1 class="text-md font-black text-white tracking-wide uppercase">Noyau : Calcul Décimal</h1>
+                    <p id="affichage-nom" class="text-xs font-bold text-amber-400 tracking-wider">Agent : Chargement...</p>
                 </div>
             </div>
-            <div class="text-right">
-                <span class="text-xs text-indigo-200 block">Élève :</span>
-                <span id="nom-eleve-badge" class="font-bold text-amber-300">Visiteur</span>
-            </div>
+            <a href="index.html" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-2 rounded-xl text-xs font-bold tracking-wider uppercase border border-slate-700 transition-all">
+                ↩ QG
+            </a>
         </div>
     </header>
 
-    <main class="max-w-4xl mx-auto px-4 py-6 flex-grow w-full flex flex-col justify-center">
-        <div id="game-container" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100 md:col-span-2 flex flex-col justify-between">
+    <main class="flex-grow max-w-6xl w-full mx-auto px-4 py-6 flex flex-col lg:flex-row gap-6">
+        
+        <!-- Zone de Jeu Principale -->
+        <section class="flex-grow lg:w-2/3 flex flex-col gap-6">
+            <div id="game-card" class="game-card rounded-2xl p-6 border shadow-xl flex-grow flex flex-col justify-between">
                 <div>
-                    <div class="flex justify-between items-center mb-6">
-                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Calcul <span id="num-calcul" class="text-indigo-600">1</span> / 10</span>
-                        <div class="flex gap-1" id="dots-container"></div>
-                        <span class="text-xs font-bold text-emerald-600">Score : <span id="score-live">0</span>/10</span>
+                    <div class="flex justify-between items-center mb-6 border-b border-slate-800 pb-3">
+                        <span class="text-xs font-bold text-slate-500 uppercase tracking-widest">Question <span id="num-question" class="text-amber-400 font-black">1</span> / 10</span>
+                        <span class="text-xs font-bold text-slate-500 uppercase tracking-widest">Score : <span id="score-actuel" class="text-emerald-400 font-black">0</span></span>
                     </div>
 
-                    <div class="bg-slate-50 p-8 rounded-2xl border text-center mb-6">
-                        <p class="text-sm text-indigo-500 font-semibold mb-2">Pose l'opération sur ton ardoise de droite si besoin, puis résous :</p>
-                        <p id="enonce-calcul" class="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-tight"></p>
-                    </div>
-
-                    <form onsubmit="soumettreReponse(event)" class="space-y-4">
-                        <div class="relative">
-                            <input type="text" id="student-answer" required autocomplete="off" placeholder="Inscris ta réponse ici (ex: 15.4)"
-                                   class="w-full px-5 py-4 bg-slate-50 border-2 border-slate-100 focus:border-indigo-500 rounded-2xl text-center text-2xl font-bold text-slate-700 focus:outline-none">
+                    <div class="text-center py-8">
+                        <p class="text-xs font-bold text-amber-500 uppercase tracking-widest mb-2">Résous l'opération suivante :</p>
+                        <div id="enonce" class="text-4xl font-black text-white tracking-wider font-mono bg-[#090d16] inline-block px-8 py-4 rounded-2xl border border-slate-800 shadow-inner">
+                            -- + --
                         </div>
-                        <button type="submit" id="btn-valider" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-2xl transition shadow-md">Valider ma réponse ➔</button>
-                    </form>
+                    </div>
                 </div>
-                <div id="feedback" class="mt-6 p-4 rounded-2xl hidden text-center font-bold"></div>
+
+                <div class="space-y-4">
+                    <div>
+                        <label for="reponse" class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 text-center">Saisis ta réponse de précision :</label>
+                        <input type="number" step="0.01" id="reponse" autofocus class="w-full text-center bg-[#172033] border-2 border-slate-700 text-white rounded-2xl px-4 py-4 font-black text-2xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 focus:outline-none transition-all placeholder-slate-600" placeholder="0.00">
+                    </div>
+                    
+                    <button onclick="validerReponse()" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-black px-4 py-4 rounded-xl text-xs uppercase tracking-widest border border-amber-400/30 shadow-lg btn-game-active">
+                        Soumettre le calcul ⚔️
+                    </button>
+                    
+                    <div id="feedback" class="text-center font-bold text-sm h-6"></div>
+                </div>
             </div>
 
-            <!-- ARDOISE TACTILE -->
-            <div class="bg-indigo-950 p-5 rounded-3xl text-white flex flex-col justify-between h-[450px] shadow-lg">
-                <div class="flex justify-between items-center mb-3">
-                    <span class="text-xs font-bold uppercase text-indigo-300">📝 Ardoise Tactile</span>
-                    <button onclick="effacerArdoise()" class="text-xs font-semibold bg-indigo-800 hover:bg-indigo-700 px-3 py-1.5 rounded-lg transition">Effacer 🧹</button>
+            <!-- Écran Fin de Mission -->
+            <div id="end-card" class="game-card rounded-2xl p-8 border shadow-xl text-center hidden space-y-6">
+                <h2 class="text-2xl font-black text-white uppercase tracking-wide">🏁 Mission Terminée !</h2>
+                <p class="text-slate-400 text-sm">Votre rapport d'exactitude a été transmis en direct sur la console maître.</p>
+                <div class="bg-[#090d16] p-6 rounded-2xl border border-slate-800 max-w-xs mx-auto">
+                    <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Score Final</p>
+                    <p class="text-4xl font-black text-amber-400"><span id="final-score">0</span> / 10</p>
                 </div>
-                <div class="bg-white rounded-2xl flex-grow relative overflow-hidden h-full">
-                    <canvas id="canvas-ardoise" class="absolute inset-0 cursor-crosshair w-full h-full"></canvas>
-                </div>
+                <p id="appreciation" class="font-bold text-white text-lg"></p>
+                <a href="index.html" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-black px-6 py-3.5 rounded-xl text-xs uppercase tracking-widest border border-indigo-400/30 shadow-lg btn-game-active">
+                    Retourner au Hub de Mission
+                </a>
             </div>
-        </div>
+        </section>
 
-        <!-- ÉCRAN DE FIN -->
-        <div id="end-card" class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 max-w-md mx-auto w-full text-center hidden space-y-6">
-            <span class="text-6xl block">🏆</span>
-            <h2 class="text-2xl font-bold text-slate-800">Défi Décimal Terminé !</h2>
-            <div class="bg-slate-50 p-6 rounded-2xl border">
-                <p class="text-sm text-slate-400 font-bold uppercase">Résultat Final</p>
-                <p class="text-4xl font-extrabold text-indigo-600 my-1"><span id="final-score">0</span> / 10</p>
-                <p id="appreciation" class="text-xs font-semibold text-slate-500"></p>
+        <!-- Ardoise Tactique Latérale -->
+        <aside class="lg:w-1/3 flex flex-col gap-3">
+            <div class="flex justify-between items-center">
+                <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest">📝 Ardoise Tactique de brouillon</h3>
+                <button onclick="clearCanvas()" class="text-[10px] font-bold uppercase bg-slate-800 hover:bg-rose-950 hover:text-rose-400 text-slate-400 border border-slate-700 px-2.5 py-1.5 rounded-lg transition-all">
+                    Effacer ×
+                </button>
             </div>
-            <button onclick="retourPortail()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-2xl transition shadow-md">Retourner à l'accueil ➔</button>
-        </div>
+            <div class="bg-[#111726] border border-slate-800 rounded-2xl p-2 shadow-xl flex-grow h-[320px] lg:h-auto min-h-[300px] relative">
+                <canvas id="brouillonCanvas" class="w-full h-full bg-[#090d16] rounded-xl cursor-crosshair border border-slate-900"></canvas>
+            </div>
+        </aside>
     </main>
 
-    <footer class="bg-slate-900 text-slate-500 py-4 text-center text-xs">
-        <p>© 2026 Classe Numérique Premium — Calcul Décimal.</p>
-    </footer>
-
     <script>
-        // Récupération du prénom depuis l'URL ou la session
-        const params = new URLSearchParams(window.location.search);
-        const nomEleve = params.get('eleve') || "Visiteur";
-        document.getElementById('nom-eleve-badge').innerText = nomEleve;
-        window.nomEleve = nomEleve;
-
-        // Sécurité : si Firebase met trop de temps, on démarre quand même après 2 secondes
-        let loadingFini = false;
-        const securiteTimeout = setTimeout(() => { if (!loadingFini) { annulerChargementEtDemarrer(); } }, 2000);
-
-        function annulerChargementEtDemarrer() {
-            if (loadingFini) return;
-            loadingFini = true;
-            clearTimeout(securiteTimeout);
-            const overlay = document.getElementById('loading-overlay');
-            if (overlay) {
-                overlay.classList.add('opacity-0');
-                setTimeout(() => { overlay.style.display = 'none'; initJeu(); initArdoise(); }, 500);
-            }
-        }
-
-        let calculsPartie = [];
-        let indexCourant = 0;
         let score = 0;
-        let reponseSelectionnee = false;
+        let questionActuelle = 1;
+        let reponseCorrecte = 0;
 
-        // Génère 10 calculs décimaux : 4 additions, 4 soustractions, 2 multiplications
-        function genererCalculs() {
-            const operations = [];
-            for (let i = 0; i < 10; i++) {
-                if (i < 4) {
-                    const a = (Math.random() * 40 + 10).toFixed(1);
-                    const b = (Math.random() * 40 + 5).toFixed(1);
-                    operations.push({ op: `${a} + ${b}`, r: (parseFloat(a) + parseFloat(b)).toFixed(1) });
-                } else if (i < 8) {
-                    const a = (Math.random() * 50 + 20).toFixed(1);
-                    const b = (Math.random() * 15 + 2).toFixed(1);
-                    operations.push({ op: `${a} - ${b}`, r: (parseFloat(a) - parseFloat(b)).toFixed(1) });
-                } else {
-                    const a = (Math.random() * 8 + 2).toFixed(1);
-                    const b = Math.floor(Math.random() * 4) + 2;
-                    operations.push({ op: `${a} × ${b}`, r: (parseFloat(a) * b).toFixed(1) });
-                }
+        const urlParams = new URLSearchParams(window.location.search);
+        const nomEleve = urlParams.get('eleve') || sessionStorage.getNomEleve || "Explorateur";
+        document.getElementById('affichage-nom').innerText = `Agent : ${nomEleve}`;
+
+        function genererQuestion() {
+            if (questionActuelle > 10) {
+                terminerPartie();
+                return;
             }
-            return operations;
-        }
+            document.getElementById('num-question').innerText = questionActuelle;
+            document.getElementById('reponse').value = '';
+            document.getElementById('feedback').innerText = '';
 
-        function initJeu() {
-            calculsPartie = genererCalculs();
-            indexCourant = 0;
-            score = 0;
-            const dotsContainer = document.getElementById('dots-container');
-            dotsContainer.innerHTML = '';
-            for (let i = 0; i < 10; i++) {
-                dotsContainer.innerHTML += `<div id="dot-${i}" class="w-3 h-3 rounded-full bg-slate-200 transition"></div>`;
-            }
-            chargerCalcul();
-        }
-
-        function chargerCalcul() {
-            reponseSelectionnee = false;
-            document.getElementById('num-calcul').innerText = indexCourant + 1;
-            document.getElementById('score-live').innerText = score;
-            document.getElementById('feedback').classList.add('hidden');
-            document.getElementById('student-answer').value = '';
-            document.getElementById('student-answer').disabled = false;
-            document.getElementById('btn-valider').disabled = false;
-            document.getElementById('enonce-calcul').innerText = calculsPartie[indexCourant].op;
-        }
-
-        function soumettreReponse(event) {
-            event.preventDefault();
-            if (reponseSelectionnee) return;
-            reponseSelectionnee = true;
-
-            // On accepte la virgule ou le point comme séparateur décimal
-            const saisie = document.getElementById('student-answer').value.replace(',', '.').trim();
-            const calculData = calculsPartie[indexCourant];
-            const feedback = document.getElementById('feedback');
-            const dot = document.getElementById(`dot-${indexCourant}`);
-
-            document.getElementById('student-answer').disabled = true;
-            document.getElementById('btn-valider').disabled = true;
-
-            if (parseFloat(saisie).toFixed(1) === parseFloat(calculData.r).toFixed(1)) {
-                score++;
-                dot.classList.add('bg-emerald-500');
-                feedback.innerHTML = "✨ Excellent ! C'est le bon résultat !";
-                feedback.className = "mt-6 p-4 rounded-2xl text-center font-bold bg-emerald-100 text-emerald-800";
+            let num1, num2, operation;
+            if (Math.random() > 0.5) {
+                num1 = (Math.random() * 50 + 10).toFixed(1);
+                num2 = (Math.random() * 40 + 5).toFixed(1);
+                operation = '+';
+                reponseCorrecte = (parseFloat(num1) + parseFloat(num2)).toFixed(1);
             } else {
-                dot.classList.add('bg-rose-500');
-                feedback.innerHTML = `❌ Oups ! Le résultat attendu était : <strong>${calculData.r}</strong>`;
-                feedback.className = "mt-6 p-4 rounded-2xl text-center font-bold bg-rose-100 text-rose-800";
+                num1 = (Math.random() * 80 + 20).toFixed(1);
+                num2 = (Math.random() * 19 + 1).toFixed(1);
+                operation = '-';
+                reponseCorrecte = (parseFloat(num1) - parseFloat(num2)).toFixed(1);
             }
-            feedback.classList.remove('hidden');
-            setTimeout(() => {
-                indexCourant++;
-                if (indexCourant < 10) { chargerCalcul(); } else { terminerPartie(); }
-            }, 2500);
+
+            document.getElementById('enonce').innerText = `${num1} ${operation} ${num2}`;
+            clearCanvas();
+        }
+
+        function validerReponse() {
+            const reponseEleve = parseFloat(document.getElementById('reponse').value);
+            const fb = document.getElementById('feedback');
+
+            if (isNaN(reponseEleve)) return;
+
+            if (Math.abs(reponseEleve - parseFloat(reponseCorrecte)) < 0.01) {
+                score++;
+                fb.className = "text-center font-bold text-sm text-emerald-400";
+                fb.innerText = "⚡ Analyse Correcte ! +1 Alignement";
+            } else {
+                fb.className = "text-center font-bold text-sm text-rose-400";
+                fb.innerText = `❌ Anomalie détectée. La cible était ${reponseCorrecte}`;
+            }
+
+            document.getElementById('score-actuel').innerText = score;
+            questionActuelle++;
+            setTimeout(genererQuestion, 2000);
         }
 
         async function terminerPartie() {
-            document.getElementById('game-container').classList.add('hidden');
+            document.getElementById('game-card').classList.add('hidden');
             document.getElementById('end-card').classList.remove('hidden');
             document.getElementById('final-score').innerText = score;
-            const appreciation = score >= 8 ? "Excellent travail ! Bravo ! 🌟" : "Continue à t'entraîner régulièrement. 💪";
+            
+            let appreciation = score >= 8 ? "🏆 Victoire éclatante ! Excellents calculs." : "⚔️ Objectif incomplet. Poursuis l'entraînement.";
             document.getElementById('appreciation').innerText = appreciation;
+
             if (typeof window.enregistrerScoreFirebase === 'function') {
-                await window.enregistrerScoreFirebase("Le Calcul Décimal", score, 10 - score);
+                await window.enregistrerScoreFirebase("Calcul Décimal", score, 10 - score);
             }
         }
 
-        function retourPortail() {
-            window.location.href = `index.html`;
+        // Script Ardoise Tactique
+        const canvas = document.getElementById('brouillonCanvas');
+        const ctx = canvas.getContext('2d');
+        let drawing = false;
+
+        function resizeCanvas() {
+            canvas.width = canvas.parentElement.clientWidth - 16;
+            canvas.height = canvas.parentElement.clientHeight - 16;
+            ctx.strokeStyle = '#38bdf8';
+            ctx.lineWidth = 3;
+            ctx.lineCap = 'round';
         }
 
-        // --- ARDOISE TACTILE ---
-        let canvas, ctx, dessin = false;
-
-        function initArdoise() {
-            canvas = document.getElementById('canvas-ardoise');
-            ctx = canvas.getContext('2d');
-            redimensionnerCanvas();
-            window.addEventListener('resize', redimensionnerCanvas);
-
-            // Souris (ordinateur)
-            canvas.addEventListener('mousedown', (e) => {
-                dessin = true;
-                ctx.beginPath();
-                const rect = canvas.getBoundingClientRect();
-                ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
-            });
-            canvas.addEventListener('mouseup', () => dessin = false);
-            canvas.addEventListener('mouseleave', () => dessin = false);
-            canvas.addEventListener('mousemove', (e) => {
-                if (!dessin) return;
-                ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.strokeStyle = '#1e1b4b';
-                const rect = canvas.getBoundingClientRect();
-                ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
-                ctx.stroke();
-            });
-
-            // Tactile (tablette / téléphone)
-            canvas.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                dessin = true;
-                ctx.beginPath();
-                const rect = canvas.getBoundingClientRect();
-                ctx.moveTo(e.touches[0].clientX - rect.left, e.touches[0].clientY - rect.top);
-            }, { passive: false });
-            canvas.addEventListener('touchend', () => dessin = false);
-            canvas.addEventListener('touchmove', (e) => {
-                e.preventDefault();
-                if (!dessin) return;
-                ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.strokeStyle = '#1e1b4b';
-                const rect = canvas.getBoundingClientRect();
-                ctx.lineTo(e.touches[0].clientX - rect.left, e.touches[0].clientY - rect.top);
-                ctx.stroke();
-            }, { passive: false });
+        function getPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            return { x: clientX - rect.left, y: clientY - rect.top };
         }
 
-        function redimensionnerCanvas() {
-            if (!canvas) return;
-            const style = getComputedStyle(canvas);
-            canvas.width = parseInt(style.width);
-            canvas.height = parseInt(style.height);
-            effacerArdoise();
+        function startDraw(e) { drawing = true; draw(e); }
+        function stopDraw() { drawing = false; ctx.beginPath(); }
+        function draw(e) {
+            if (!drawing) return;
+            e.preventDefault();
+            const pos = getPos(e);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(pos.x, pos.y);
         }
 
-        function effacerArdoise() {
-            if (!ctx || !canvas) return;
-            ctx.fillStyle = "#ffffff";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            // Quadrillage discret pour aider au calcul posé
-            ctx.strokeStyle = "#e2e8f0"; ctx.lineWidth = 1;
-            for (let x = 0; x < canvas.width; x += 25) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke(); }
-            for (let y = 0; y < canvas.height; y += 25) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke(); }
-        }
+        function clearCanvas() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
+
+        canvas.addEventListener('mousedown', startDraw);
+        canvas.addEventListener('mouseup', stopDraw);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('touchstart', startDraw);
+        canvas.addEventListener('touchend', stopDraw);
+        canvas.addEventListener('touchmove', draw);
+
+        window.addEventListener('resize', resizeCanvas);
+        setTimeout(resizeCanvas, 300);
+        genererQuestion();
     </script>
 </body>
 </html>
