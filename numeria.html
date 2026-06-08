@@ -5,68 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Les Royaumes de Numéria — Numération</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyAvXQI3f34J5htG-t9kroM4ynIqCgO9xXI",
-            authDomain: "ma-classe-179de.firebaseapp.com",
-            projectId: "ma-classe-179de",
-            storageBucket: "ma-classe-179de.firebasestorage.app",
-            messagingSenderId: "413792574665",
-            appId: "1:413792574665:web:87c29e054af287018e0118"
-        };
-
-        const appId = "classe-primaire-2026";
-
-        try {
-            const app = initializeApp(firebaseConfig);
-            const auth = getAuth(app);
-            const db = getFirestore(app);
-
-            window.db = db;
-            window.appId = appId;
-
-            const initAuth = async () => {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
-            };
-            initAuth();
-
-            onAuthStateChanged(auth, (user) => {
-                if (user) {
-                    window.currentUser = user;
-                    annulerChargementEtDemarrer();
-                }
-            });
-
-            window.enregistrerScoreFirebase = async function(exercice, corrects, erreurs) {
-                try {
-                    const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'scores');
-                    await addDoc(colRef, {
-                        nomEleve: window.nomEleve,
-                        exercice: exercice,
-                        corrects: corrects,
-                        erreurs: erreurs,
-                        timestamp: Date.now()
-                    });
-                    console.log("Score de numération synchronisé !");
-                } catch (err) {
-                    console.error("Erreur d'écriture Firebase :", err);
-                }
-            };
-
-        } catch (e) {
-            console.error("Erreur d'initialisation Firebase :", e);
-            annulerChargementEtDemarrer();
-        }
-    </script>
 </head>
 <body class="bg-slate-50 min-h-screen font-sans flex flex-col justify-between antialiased selection:bg-purple-200">
 
@@ -102,17 +40,17 @@
             <p class="text-sm text-slate-500 text-left leading-relaxed">Sélectionnez la difficulté pour commencer la quête de numération.</p>
             
             <div class="flex flex-col gap-4">
-                <button onclick="selectionnerNiveau(1)" class="w-full bg-slate-50 hover:bg-purple-50 border-2 border-slate-100 hover:border-purple-200 text-left p-5 rounded-2xl transition-all duration-150 flex flex-col gap-1">
+                <button onclick="window.selectionnerNiveau(1)" class="w-full bg-slate-50 hover:bg-purple-50 border-2 border-slate-100 hover:border-purple-200 text-left p-5 rounded-2xl transition-all duration-150 flex flex-col gap-1">
                     <span class="font-bold text-purple-700 text-base sm:text-lg leading-relaxed text-left">Niveau 1 : Le Royaume des Milliers</span>
                     <span class="text-sm text-slate-600 leading-relaxed text-left">Nombres jusqu'à 999'999 (Unités, dizaines et centaines de milliers).</span>
                 </button>
                 
-                <button onclick="selectionnerNiveau(2)" class="w-full bg-slate-50 hover:bg-purple-50 border-2 border-slate-100 hover:border-purple-200 text-left p-5 rounded-2xl transition-all duration-150 flex flex-col gap-1">
+                <button onclick="window.selectionnerNiveau(2)" class="w-full bg-slate-50 hover:bg-purple-50 border-2 border-slate-100 hover:border-purple-200 text-left p-5 rounded-2xl transition-all duration-150 flex flex-col gap-1">
                     <span class="font-bold text-purple-700 text-base sm:text-lg leading-relaxed text-left">Niveau 2 : Le Royaume des Millions</span>
                     <span class="text-sm text-slate-600 leading-relaxed text-left">Nombres jusqu'à 999'999'999 (Lecture, écriture et valeur de position).</span>
                 </button>
                 
-                <button onclick="selectionnerNiveau(3)" class="w-full bg-slate-50 hover:bg-purple-50 border-2 border-slate-100 hover:border-purple-200 text-left p-5 rounded-2xl transition-all duration-150 flex flex-col gap-1">
+                <button onclick="window.selectionnerNiveau(3)" class="w-full bg-slate-50 hover:bg-purple-50 border-2 border-slate-100 hover:border-purple-200 text-left p-5 rounded-2xl transition-all duration-150 flex flex-col gap-1">
                     <span class="font-bold text-purple-700 text-base sm:text-lg leading-relaxed text-left">Niveau 3 : Citadelle des Experts</span>
                     <span class="text-sm text-slate-600 leading-relaxed text-left">Calculs avancés (+100'000, -10'000) et décompositions complexes.</span>
                 </button>
@@ -145,15 +83,15 @@
             </div>
             
             <div class="flex flex-col gap-3">
-                <button onclick="rejouerMemeNiveau()" class="w-full bg-purple-700 hover:bg-purple-800 text-white font-bold py-3 px-4 rounded-2xl transition shadow-md text-left flex justify-between items-center">
+                <button onclick="window.rejouerMemeNiveau()" class="w-full bg-purple-700 hover:bg-purple-800 text-white font-bold py-3 px-4 rounded-2xl transition shadow-md text-left flex justify-between items-center">
                     <span>Rejouer ce niveau</span>
                     <span>🔄</span>
                 </button>
-                <button onclick="retourNiveaux()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 px-4 rounded-2xl transition border border-slate-200 text-left flex justify-between items-center">
+                <button onclick="window.retourNiveaux()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 px-4 rounded-2xl transition border border-slate-200 text-left flex justify-between items-center">
                     <span>Changer de niveau</span>
                     <span>🏰</span>
                 </button>
-                <button onclick="retourPortail()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 px-4 rounded-2xl transition shadow-md text-left flex justify-between items-center">
+                <button onclick="window.retourPortail()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 px-4 rounded-2xl transition shadow-md text-left flex justify-between items-center">
                     <span>Quitter vers le portail</span>
                     <span>➔</span>
                 </button>
@@ -165,19 +103,39 @@
         <p>© 2026 Classe Numérique Premium — Les Royaumes de Numéria.</p>
     </footer>
 
-    <script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Configuration Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyAvXQI3f34J5htG-t9kroM4ynIqCgO9xXI",
+            authDomain: "ma-classe-179de.firebaseapp.com",
+            projectId: "ma-classe-179de",
+            storageBucket: "ma-classe-179de.firebasestorage.app",
+            messagingSenderId: "413792574665",
+            appId: "1:413792574665:web:87c29e054af287018e0118"
+        };
+        const appId = "classe-primaire-2026";
+
+        // Récupération des paramètres élèves
         const params = new URLSearchParams(window.location.search);
         const nomEleve = params.get('eleve') || "Visiteur";
         document.getElementById('nom-eleve-badge').innerText = nomEleve;
         window.nomEleve = nomEleve;
 
         let loadingFini = false;
-        const securiteTimeout = setTimeout(() => { if (!loadingFini) { annulerChargementEtDemarrer(); } }, 2000);
+        let niveauChoisi = 1; 
+        let questionsPartie = []; 
+        let indexQuestionCourante = 0; 
+        let score = 0; 
+        let reponseSelectionnee = false;
 
+        // Fonction de suppression de l'écran de chargement
         function annulerChargementEtDemarrer() {
             if (loadingFini) return;
             loadingFini = true;
-            clearTimeout(securiteTimeout);
             const overlay = document.getElementById('loading-overlay');
             if (overlay) {
                 overlay.classList.add('opacity-0');
@@ -186,6 +144,57 @@
                     document.getElementById('level-card').classList.remove('hidden');
                 }, 500);
             }
+        }
+
+        // Sécurité : Force l'affichage si Firebase met plus de 1.5 seconde à répondre
+        setTimeout(() => {
+            annulerChargementEtDemarrer();
+        }, 1500);
+
+        // Initialisation Firebase & Auth
+        try {
+            const app = initializeApp(firebaseConfig);
+            const auth = getAuth(app);
+            const db = getFirestore(app);
+
+            window.db = db;
+            window.appId = appId;
+
+            const initAuth = async () => {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            };
+            initAuth().catch(() => annulerChargementEtDemarrer());
+
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    window.currentUser = user;
+                }
+                annulerChargementEtDemarrer();
+            });
+
+            window.enregistrerScoreFirebase = async function(exercice, corrects, erreurs) {
+                try {
+                    const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'scores');
+                    await addDoc(colRef, {
+                        nomEleve: window.nomEleve,
+                        exercice: exercice,
+                        corrects: corrects,
+                        erreurs: erreurs,
+                        timestamp: Date.now()
+                    });
+                    console.log("Score de numération synchronisé !");
+                } catch (err) {
+                    console.error("Erreur d'écriture Firebase :", err);
+                }
+            };
+
+        } catch (e) {
+            console.error("Erreur Firebase :", e);
+            annulerChargementEtDemarrer();
         }
 
         // Banque de questions classées par niveaux distincts
@@ -228,8 +237,6 @@
             ]
         };
 
-        let niveauChoisi = 1; let questionsPartie = []; let indexQuestionCourante = 0; let score = 0; let reponseSelectionnee = false;
-
         function selectionnerNiveau(niv) {
             niveauChoisi = niv;
             document.getElementById('level-card').classList.add('hidden');
@@ -241,7 +248,6 @@
             questionsPartie = [];
             const tempQuestions = [...banqueQuestions[niveauChoisi]];
             
-            // Mélanger et piocher 10 questions du niveau sélectionné
             for (let i = 0; i < 10; i++) {
                 const indexRand = Math.floor(Math.random() * tempQuestions.length);
                 questionsPartie.push(tempQuestions.splice(indexRand, 1)[0]);
@@ -271,7 +277,7 @@
             
             optionsMelangees.forEach(option => {
                 containerOptions.innerHTML += `
-                    <button onclick="validerReponse('${option.replace(/'/g, "\\'")}', this)" 
+                    <button onclick="window.validerReponse('${option.replace(/'/g, "\\'")}', this)" 
                             class="bg-slate-50 hover:bg-purple-50 border-2 border-slate-100 hover:border-purple-200 font-bold text-slate-700 py-4 px-6 rounded-2xl transition-all duration-150 text-left leading-relaxed text-base w-full">
                         ${option}
                     </button>`;
@@ -289,4 +295,58 @@
                 bouton.classList.add('bg-emerald-500', 'text-white', 'border-emerald-500'); 
                 dot.classList.add('bg-emerald-500');
                 feedback.innerHTML = "✨ Super ! C'est la bonne réponse !";
-                feedback.className = "mt-
+                feedback.className = "mt-6 p-4 rounded-2xl text-left font-bold bg-emerald-100 text-emerald-800 leading-relaxed";
+            } else {
+                bouton.classList.add('bg-rose-500', 'text-white', 'border-rose-500'); 
+                dot.classList.add('bg-rose-500');
+                feedback.innerHTML = `❌ Oups ! La bonne réponse était : <strong>${questionData.r}</strong>`;
+                feedback.className = "mt-6 p-4 rounded-2xl text-left font-bold bg-rose-100 text-rose-800 leading-relaxed";
+            }
+            feedback.classList.remove('hidden');
+            setTimeout(() => { 
+                indexQuestionCourante++; 
+                if (indexQuestionCourante < 10) { 
+                    chargerQuestion(); 
+                } else { 
+                    terminerPartie(); 
+                } 
+            }, 2500);
+        }
+
+        async function terminerPartie() {
+            document.getElementById('game-card').classList.add('hidden');
+            document.getElementById('end-card').classList.remove('hidden');
+            document.getElementById('final-score').innerText = score;
+            
+            let appreciation = score >= 8 
+                ? "Excellent travail dans les Royaumes ! Tu as maîtrisé la puissance de ces nombres. 🌟" 
+                : "Quête terminée. Continue à t'entraîner régulièrement pour mieux lire et écrire ces grands nombres. 💪";
+            document.getElementById('appreciation').innerText = appreciation;
+
+            if (typeof window.enregistrerScoreFirebase === 'function') {
+                await window.enregistrerScoreFirebase(`Numéria — Niveau ${niveauChoisi}`, score, 10 - score);
+            }
+        }
+
+        function rejouerMemeNiveau() {
+            document.getElementById('end-card').classList.add('hidden');
+            document.getElementById('game-card').classList.remove('hidden');
+            initJeu();
+        }
+
+        function retourNiveaux() {
+            document.getElementById('end-card').classList.add('hidden');
+            document.getElementById('level-card').classList.remove('hidden');
+        }
+
+        function retourPortail() { window.location.href = `index.html`; }
+
+        // Liaison des fonctions à l'objet global Window pour les appels HTML onclick
+        window.selectionnerNiveau = selectionnerNiveau;
+        window.validerReponse = validerReponse;
+        window.rejouerMemeNiveau = rejouerMemeNiveau;
+        window.retourNiveaux = retourNiveaux;
+        window.retourPortail = retourPortail;
+    </script>
+</body>
+</html>
