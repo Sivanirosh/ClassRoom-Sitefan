@@ -5,812 +5,490 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Les Royaumes Perdus de Numéria</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Thème Fantasy / Parchemin */
+        :root {
+            --parchment: #f4ebd8;
+            --ink: #2c1e16;
+            --accent-blue: #3b82f6;
+            --accent-gold: #d97706;
+            --accent-purple: #8b5cf6;
+        }
+        body {
+            background-color: var(--parchment);
+            color: var(--ink);
+            font-family: 'Georgia', serif;
+            background-image: radial-gradient(#e5d9c5 1px, transparent 1px);
+            background-size: 20px 20px;
+            user-select: none;
+        }
+        .parchment-box {
+            background: #fffdf5;
+            border: 2px solid #d4c4a8;
+            box-shadow: 4px 4px 0px rgba(212, 196, 168, 0.5);
+            border-radius: 8px;
+        }
+        .btn-fantasy {
+            background: linear-gradient(to bottom, #ffffff, #fef3c7);
+            border: 2px solid #b45309;
+            color: #78350f;
+            font-weight: bold;
+            transition: all 0.1s;
+        }
+        .btn-fantasy:hover:not(:disabled) {
+            background: #fef3c7;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 0px #b45309;
+        }
+        .btn-fantasy:active:not(:disabled) {
+            transform: translateY(2px);
+            box-shadow: 0 0px 0px #b45309;
+        }
+        .btn-fantasy:disabled {
+            filter: grayscale(100%);
+            opacity: 0.6;
+            cursor: not-allowed;
+            border-color: #9ca3af;
+            color: #4b5563;
+        }
+        .title-font {
+            font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+            text-shadow: 1px 1px 0px #fff;
+        }
+        .sortable-item { cursor: grab; }
+        .sortable-item:active { cursor: grabbing; }
+    </style>
 </head>
-<body class="bg-slate-50 min-h-screen font-sans flex flex-col justify-between antialiased selection:bg-purple-200 text-left">
+<body class="min-h-screen flex flex-col items-center py-6 px-4">
 
-    <div id="loading-overlay" class="fixed inset-0 bg-slate-900 text-white flex flex-col items-center justify-center z-50 p-6 transition-opacity duration-500">
-        <div class="text-left max-w-md w-full font-sans">
-            <span class="text-6xl animate-bounce mb-6 block text-left">📜</span>
-            <h2 class="text-2xl font-bold mb-3 leading-relaxed text-left">Ouverture du Codex de Numéria</h2>
-            <p class="text-slate-400 text-sm mb-6 leading-relaxed text-left">Préparation des quêtes de grands nombres et des artefacts magiques...</p>
-            <div class="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mb-6"></div>
+    <header class="w-full max-w-4xl flex justify-between items-center mb-8">
+        <div>
+            <h1 class="text-3xl font-bold title-font text-amber-900">Numéria</h1>
+            <p class="text-sm italic text-amber-700">Chroniques des nombres</p>
         </div>
-    </div>
-
-    <header class="bg-purple-950 text-white shadow-md font-sans">
-        <div class="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-3 text-left">
-                <span class="text-2xl">⚔️</span>
-                <div>
-                    <h1 class="text-base sm:text-lg font-bold leading-tight text-left">Les Royaumes Perdus de Numéria</h1>
-                    <p class="text-xs text-purple-200 leading-normal text-left">RPG de Consolidation Mathématique (Harmos 8H)</p>
-                </div>
-            </div>
-            <div class="text-right flex flex-col items-end">
-                <span class="text-xs text-purple-200 leading-tight">Aventurier :</span>
-                <span id="nom-eleve-badge" class="font-bold text-amber-300">Visiteur</span>
-            </div>
+        <div class="flex gap-4">
+            <button onclick="showScreen('screen-codex')" class="btn-fantasy px-4 py-2 rounded-md">📖 Codex</button>
+            <button onclick="showScreen('screen-map')" class="btn-fantasy px-4 py-2 rounded-md">🗺️ Carte</button>
         </div>
     </header>
 
-    <div class="max-w-4xl mx-auto px-4 mt-4 text-left">
-        <button onclick="window.basculerCodex()" class="bg-amber-100 hover:bg-amber-200 text-amber-900 px-4 py-2 rounded-xl text-xs font-bold border border-amber-300 transition-all flex items-center gap-2">
-            <span>📖 Ouvrir le Codex des Artefacts</span>
-        </button>
-    </div>
+    <main class="w-full max-w-4xl flex-grow flex flex-col relative">
 
-    <main class="max-w-4xl mx-auto px-4 py-4 flex-grow w-full flex flex-col justify-start font-sans">
-        
-        <div id="screen-world-map" class="space-y-6 w-full">
-            <div class="text-left bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
-                <h2 class="text-xl sm:text-2xl font-bold text-slate-800 leading-relaxed text-left">Carte du Monde de Numéria</h2>
-                <p class="text-sm text-slate-500 leading-relaxed text-left">Parcourez les royaumes oubliés pour restaurer l'ordre des mathématiques anciennes.</p>
-            </div>
-            <div id="realms-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-        </div>
+        <section id="screen-map" class="parchment-box p-8 flex-grow flex flex-col animate-in fade-in">
+            <h2 class="text-2xl font-bold text-center mb-8 title-font">La Carte des Royaumes</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="realms-container"></div>
+        </section>
 
-        <div id="screen-realm" class="space-y-6 w-full hidden">
-            <button onclick="window.afficherEcran('screen-world-map')" class="text-purple-700 hover:text-purple-900 font-bold text-sm flex items-center gap-2 mb-2">
-                <span>🪓 Retour à la Carte du Monde</span>
-            </button>
-            <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm text-left">
-                <h2 id="realm-title" class="text-2xl font-bold text-slate-800 leading-relaxed text-left"></h2>
-                <p id="realm-desc" class="text-sm text-slate-500 leading-relaxed text-left"></p>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="missions-list"></div>
-            <div class="pt-4 border-t border-slate-200" id="boss-container"></div>
-        </div>
+        <section id="screen-realm" class="hidden parchment-box p-8 flex-grow flex flex-col animate-in fade-in">
+            <button onclick="showScreen('screen-map')" class="self-start text-amber-700 hover:text-amber-900 font-bold mb-4">← Retour à la carte</button>
+            <h2 class="text-2xl font-bold text-center mb-2 title-font" id="realm-title">Nom du Royaume</h2>
+            <p class="text-center text-amber-800 italic mb-8" id="realm-desc">Description</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto w-full" id="missions-container"></div>
+        </section>
 
-        <div id="screen-mission" class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100 max-w-2xl mx-auto w-full hidden text-left">
-            <div class="flex justify-between items-center mb-6">
-                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider text-left">Quête : <span id="num-question" class="text-purple-600">1</span> / 5</span>
-                <div class="flex gap-1" id="dots-container"></div>
-                <span class="text-xs font-bold text-purple-700 text-right" id="mission-title-badge"></span>
+        <section id="screen-mission" class="hidden parchment-box p-8 flex-grow flex flex-col items-center justify-center animate-in zoom-in-95">
+            <div class="w-full flex justify-between mb-8 text-amber-800 font-bold">
+                <span id="mission-progress">Question 1 / 5</span>
+                <span id="mission-score">Étoiles : 0</span>
             </div>
 
-            <div class="bg-slate-50 rounded-2xl p-6 mb-6 border border-slate-200/60 text-left min-h-[90px] flex items-center">
-                <p id="enonce-question" class="text-base sm:text-lg font-bold text-slate-800 leading-relaxed text-left w-full"></p>
+            <div class="w-full max-w-xl text-center space-y-8">
+                <h3 class="text-2xl font-bold" id="question-text">Énoncé de la question</h3>
+                <div id="answer-zone" class="w-full flex flex-col gap-4 items-center"></div>
+                <div id="feedback-zone" class="hidden w-full p-4 rounded-md font-bold text-lg"></div>
+                <button id="btn-validate" onclick="checkAnswer()" class="btn-fantasy px-8 py-3 rounded-xl text-lg w-full max-w-xs mx-auto">Valider</button>
+                <button id="btn-next" onclick="nextQuestion()" class="hidden btn-fantasy px-8 py-3 rounded-xl text-lg w-full max-w-xs mx-auto">Continuer ➔</button>
             </div>
+        </section>
 
-            <div id="interaction-zone" class="space-y-4">
-                </div>
+        <section id="screen-result" class="hidden parchment-box p-8 flex-grow flex flex-col items-center justify-center text-center animate-in slide-in-from-bottom-8">
+            <h2 class="text-3xl font-bold text-amber-900 mb-4 title-font">Mission Achevée !</h2>
+            <div class="flex gap-2 text-4xl mb-6" id="result-stars">⭐⭐⭐</div>
+            <p class="text-xl mb-8">Score : <span id="result-score" class="font-bold"></span> / 5</p>
             
-            <div id="action-zone" class="mt-6 hidden">
-                <button id="btn-valider" onclick="window.verifierActionUtilisateur()" class="bg-purple-700 hover:bg-purple-800 text-white font-bold py-3.5 px-6 rounded-2xl transition w-full text-left flex justify-between items-center shadow-sm">
-                    <span>Inscrire l'action dans le grimoire</span>
-                    <span>➔</span>
-                </button>
+            <div id="reward-zone" class="hidden bg-amber-50 border border-amber-200 p-6 rounded-lg mb-8 max-w-md">
+                <p class="text-sm text-amber-600 font-bold uppercase mb-2">Nouvel artefact débloqué</p>
+                <h4 class="text-xl font-bold text-amber-900 mb-2" id="reward-name">Nom</h4>
+                <p class="italic text-amber-800" id="reward-desc">Desc</p>
             </div>
 
-            <div id="feedback" class="mt-6 p-4 rounded-2xl hidden text-left font-bold leading-relaxed transition-all"></div>
-            
-            <div id="next-zone" class="mt-6 hidden">
-                <button onclick="window.continuerMission()" class="bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 px-6 rounded-2xl transition w-full text-left flex justify-between items-center">
-                    <span>Continuer la quête</span>
-                    <span>✨</span>
-                </button>
-            </div>
-        </div>
+            <button onclick="showScreen('screen-realm')" class="btn-fantasy px-8 py-3 rounded-xl text-lg">Retour au Royaume</button>
+        </section>
 
-        <div id="screen-result" class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 max-w-md mx-auto w-full text-left hidden space-y-6">
-            <span class="text-6xl block text-left" id="result-icon">🏆</span>
-            <h2 class="text-2xl font-bold text-slate-800 text-left leading-relaxed">Rapport de Fin d'Étape</h2>
-            <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 text-left">
-                <p class="text-xs text-slate-400 font-bold uppercase leading-tight text-left">Défis Validés</p>
-                <p class="text-4xl font-extrabold text-purple-600 my-2 text-left"><span id="final-score">0</span> / 5</p>
-                <div class="flex gap-1 my-3 text-2xl" id="stars-reward-display"></div>
-                <p id="appreciation" class="text-sm font-semibold text-slate-600 leading-relaxed text-left"></p>
-            </div>
-
-            <div id="codex-unlock-alert" class="bg-amber-50 border border-amber-200 p-4 rounded-2xl hidden flex gap-3 items-start text-left">
-                <span class="text-3xl">🎁</span>
-                <div>
-                    <h4 class="text-amber-900 font-bold text-sm leading-relaxed text-left">Nouvel artefact ajouté au Codex !</h4>
-                    <p id="unlocked-item-desc" class="text-xs text-amber-800 leading-relaxed mt-0.5 text-left"></p>
-                </div>
-            </div>
-            
-            <button onclick="window.quitterVersRoyaume()" class="w-full bg-purple-700 hover:bg-purple-800 text-white font-bold py-3.5 px-4 rounded-2xl transition shadow-md text-left flex justify-between items-center">
-                <span>Retourner aux quêtes du Royaume</span>
-                <span>🏰</span>
-            </button>
-        </div>
-
-        <div id="screen-codex" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 hidden items-center justify-center p-4">
-            <div class="bg-white rounded-3xl shadow-xl border border-slate-200 w-full max-w-2xl p-6 flex flex-col max-h-[85vh] text-left">
-                <div class="flex justify-between items-center pb-4 border-b border-slate-100">
-                    <div>
-                        <h3 class="text-xl font-bold text-slate-900 leading-relaxed text-left">Le Codex de Numéria</h3>
-                        <p class="text-xs text-slate-500 leading-relaxed text-left">Objets, créatures et reliques magiques collectés au fil des missions.</p>
-                    </div>
-                    <button onclick="window.basculerCodex()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 w-10 h-10 rounded-full font-bold flex items-center justify-center">✕</button>
-                </div>
-                <div class="overflow-y-auto py-4 space-y-3 flex-grow" id="codex-items-list">
-                    </div>
-            </div>
-        </div>
+        <section id="screen-codex" class="hidden parchment-box p-8 flex-grow flex flex-col animate-in fade-in">
+            <button onclick="showScreen('screen-map')" class="self-start text-amber-700 hover:text-amber-900 font-bold mb-4">← Retour</button>
+            <h2 class="text-2xl font-bold text-center mb-8 title-font">Le Codex de Numéria</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="codex-container"></div>
+        </section>
 
     </main>
 
-    <footer class="bg-slate-900 text-slate-500 py-4 text-center text-xs font-sans">
-        <p>© 2026 École Numérique Premium — Les Royaumes Perdus de Numéria (8H).</p>
-    </footer>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // Configuration Firebase standardisée
-        const firebaseConfig = {
-            apiKey: "AIzaSyAvXQI3f34J5htG-t9kroM4ynIqCgO9xXI",
-            authDomain: "ma-classe-179de.firebaseapp.com",
-            projectId: "ma-classe-179de",
-            storageBucket: "ma-classe-179de.firebasestorage.app",
-            messagingSenderId: "413792574665",
-            appId: "1:413792574665:web:87c29e054af287018e0118"
-        };
-        const appId = "classe-primaire-2026";
-
-        // Traitement de l'identité de l'élève transmis par le portail
-        const params = new URLSearchParams(window.location.search);
-        const nomEleve = params.get('eleve') || "Aventurier Anonyme";
-        document.getElementById('nom-eleve-badge').innerText = nomEleve;
-        window.nomEleve = nomEleve;
-
-        let loadingFini = false;
-
-        // Fonction d'ouverture sécurisée des écrans de jeu
-        function leverEcranChargement() {
-            if (loadingFini) return;
-            loadingFini = true;
-            const overlay = document.getElementById('loading-overlay');
-            if (overlay) {
-                overlay.classList.add('opacity-0');
-                setTimeout(() => { 
-                    overlay.style.display = 'none'; 
-                    window.chargerDonneesEtCarte();
-                }, 500);
-            }
-        }
-
-        // Sécurité temps : Si la réponse réseau Firebase traîne, on force l'application à s'exécuter après 1,5s
-        setTimeout(() => {
-            leverEcranChargement();
-        }, 1500);
-
-        // Connexion Firebase & Initialisation
-        try {
-            const app = initializeApp(firebaseConfig);
-            const auth = getAuth(app);
-            const db = getFirestore(app);
-
-            window.db = db;
-
-            const initAuth = async () => {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
-            };
-            initAuth().catch(() => leverEcranChargement());
-
-            onAuthStateChanged(auth, (user) => {
-                leverEcranChargement();
-            });
-
-            // Sauvegarde décentralisée des scores de l'app
-            window.enregistrerScoreFirebase = async function(exercice, corrects, erreurs) {
-                try {
-                    const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'scores');
-                    await addDoc(colRef, {
-                        nomEleve: window.nomEleve,
-                        exercice: exercice,
-                        corrects: corrects,
-                        erreurs: erreurs,
-                        timestamp: Date.now()
-                    });
-                    console.log("Score enregistré sur Firebase.");
-                } catch (err) {
-                    console.error("Erreur d'écriture Firebase silencieuse :", err);
-                }
-            };
-        } catch (e) {
-            console.error("Erreur d'initialisation Firebase :", e);
-            leverEcranChargement();
-        }
-    </script>
-
     <script>
-        // --- 1. CONFIGURATION INTERNE DES ROYAUMES, MISSIONS ET CODEX ---
-        const configJeu = {
-            royaumes: {
-                1: { id: 1, nom: "Vallée des Fondations", desc: "Maîtrise des grands nombres jusqu'aux centaines de milliers.", icone: "🌾" },
-                2: { id: 2, nom: "Forêt des Géants", desc: "Immersion dans l'immensité des millions et de leurs positions.", icone: "🌲" },
-                3: { id: 3, nom: "Marais des Comparaisons", desc: "Ordonner, intercaler et dompter la valeur des signes.", icone: "🦎" },
-                4: { id: 4, nom: "Montagnes Décimales", desc: "Fragments d'unités, dixièmes, centièmes et valeurs partagées.", icone: "🏔️" },
-                5: { id: 5, nom: "Citadelle du Zéro", desc: "Le sanctuaire ultime des pièges de positionnement et grands calculs.", icone: "🏰" }
-            },
-            missions: {
-                // Royaume 1
-                "1_1": { id: "1_1", rId: 1, num: 1, nom: "La Lecture de l'Ancien", type: "qcm" },
-                "1_2": { id: "1_2", rId: 1, num: 2, nom: "Le Décompte des Pierres", type: "qcm" },
-                "1_3": { id: "1_3", rId: 1, num: 3, nom: "L'Assemblage des Pièces", type: "input" },
-                "1_4": { id: "1_4", rId: 1, num: 4, nom: "La Voie Alignée", type: "sorting" },
-                "1_boss": { id: "1_boss", rId: 1, num: "boss", nom: "Le Gardien des Milliers", type: "mix" },
-                // Royaume 2
-                "2_1": { id: "2_1", rId: 2, num: 1, nom: "L'Appel des Cimes", type: "qcm" },
-                "2_2": { id: "2_2", rId: 2, num: 2, nom: "L'Analyse des Écorces", type: "qcm" },
-                "2_3": { id: "2_3", rId: 2, num: 3, nom: "La Forge des Millions", type: "input" },
-                "2_4": { id: "2_4", rId: 2, num: 4, nom: "Le Défilé ordonné", type: "sorting" },
-                "2_boss": { id: "2_boss", rId: 2, num: "boss", nom: "L'Élémentaire Sylvestre", type: "mix" },
-                // Royaume 3
-                "3_1": { id: "3_1", rId: 3, num: 1, nom: "Le Fléau des Balances", type: "qcm" },
-                "3_2": { id: "3_2", rId: 3, num: 2, nom: "L'Ombre d'Avant", type: "input" },
-                "3_3": { id: "3_3", rId: 3, num: 3, nom: "La Marée Croissante", type: "sorting" },
-                "3_4": { id: "3_4", rId: 3, num: 4, nom: "Le Courant Décroissant", type: "sorting" },
-                "3_boss": { id: "3_boss", rId: 3, num: "boss", nom: "L'Hydre des Inégalités", type: "mix" },
-                // Royaume 4
-                "4_1": { id: "4_1", rId: 4, num: 1, nom: "La Poussière de Cristal", type: "qcm" },
-                "4_2": { id: "4_2", rId: 4, num: 2, nom: "Le Partage des Runes", type: "qcm" },
-                "4_3": { id: "4_3", rId: 4, num: 3, nom: "L'Équilibre Fin", type: "qcm" },
-                "4_4": { id: "4_4", rId: 4, num: 4, nom: "L'Échelle des Cimes", type: "sorting" },
-                "4_boss": { id: "4_boss", rId: 4, num: "boss", nom: "Le Golem de Verre", type: "mix" },
-                // Royaume 5
-                "5_1": { id: "5_1", rId: 5, num: 1, nom: "Le Saut Quantique", type: "qcm" },
-                "5_2": { id: "5_2", rId: 5, num: 2, nom: "Le Grand Vide Intercalé", type: "input" },
-                "5_3": { id: "5_3", rId: 5, num: 3, nom: "L'Amplification Magique", type: "qcm" },
-                "5_4": { id: "5_4", rId: 5, num: 4, nom: "La Toile des Experts", type: "input" },
-                "5_boss": { id: "5_boss", rId: 5, num: "boss", nom: "L'Archimage du Néant", type: "mix" }
-            },
-            codex: {
-                "1_1": { nom: "Plume de Gryphon", desc: "Une plume capable de retranscrire instantanément la parole en écriture chiffrée.", type: "Artefact" },
-                "1_2": { nom: "Lentille de Clarté", desc: "Permet de discerner sans erreur les paquets d'unités simples des milliers.", type: "Relique" },
-                "1_3": { nom: "Fragment de Stèle", desc: "Une roche calcaire gravée détaillant l'ordre ancestral des positions.", type: "Relique" },
-                "1_4": { nom: "Boussole Alignée", desc: "Indique la position absolue de n'importe quel nombre sur une ligne imaginaire.", type: "Artefact" },
-                "1_boss": { nom: "Écu des Milliers", desc: "Emblème remis par le protecteur de la Vallée après avoir prouvé sa valeur.", type: "Créature" },
-                "2_1": { nom: "Bourgeon Éternel", desc: "Un bourgeon végétal géant qui croît d'un million de millimètres chaque cycle.", type: "Créature" },
-                "2_2": { nom: "Sève Positionnelle", desc: "Liquide magique illuminant la colonne exacte d'un chiffre inséré.", type: "Relique" },
-                "2_3": { nom: "Enclume Magmatique", desc: "Utilisée pour assembler des dizaines de blocs d'unités lourdes.", type: "Artefact" },
-                "2_4": { nom: "Diadème Sylvestre", desc: "Couronne récompensant le rangement parfait des arbres de la Forêt.", type: "Artefact" },
-                "2_boss": { nom: "Cœur de la Forêt", desc: "Cristal organique renfermant l'essence stable des grands nombres.", type: "Créature" },
-                "3_1": { nom: "Balance d'Or", desc: "Affiche instantanément le symbole d'inégalité correct entre deux poids.", type: "Artefact" },
-                "3_2": { nom: "Sablier Temporel", desc: "Permet d'entrevoir le nombre exact qui précède la faille actuelle.", type: "Relique" },
-                "3_3": { nom: "Lézard des Vases", desc: "Petite créature agile capable de se faufiler exactement entre deux valeurs.", type: "Créature" },
-                "3_4": { nom: "Ancre de Flottaison", desc: "Maintient les nombres en ordre du plus lourd au plus léger.", type: "Artefact" },
-                "3_boss": { nom: "Écaille d'Hydre", desc: "Une armure résistante aux inversions de signes arithmétiques.", type: "Créature" },
-                "4_1": { nom: "Prisme de Quartz", desc: "Divise une unité pure en dix parts égales et visibles à l'œil nu.", type: "Artefact" },
-                "4_2": { nom: "Parchemin Fractionnaire", desc: "Traduit instantanément les partages en écritures à virgule.", type: "Relique" },
-                "4_3": { nom: "Balance de Précision", desc: "Sensible au millième de gramme près.", type: "Artefact" },
-                "4_4": { nom: "Bottes de Gravité", desc: "Aide à gravir les parois glissantes des nombres décimaux.", type: "Artefact" },
-                "4_boss": { nom: "Noyau Cristallin", desc: "Source d'énergie d'une infinie finesse géométrique.", type: "Créature" },
-                "5_1": { nom: "Orbe Temporelle", desc: "Permet d'ajouter ou soustraire 100'000 unités sans altérer l'espace.", type: "Artefact" },
-                "5_2": { nom: "Sceau du Néant", desc: "Marque symbolique empêchant d'ignorer la présence du chiffre zéro.", type: "Relique" },
-                "5_3": { nom: "Sifflet d'Amplification", desc: "Multiplie la portée des troupes par dix d'un simple souffle.", type: "Artefact" },
-                "5_4": { nom: "Grimoire de l'Expert", desc: "Manuel décrivant les décompositions les plus complexes connues.", type: "Relique" },
-                "5_boss": { nom: "Couronne du Néant", desc: "L'artefact suprême certifiant la maîtrise absolue de Numéria.", type: "Créature" }
-            }
+        // ==========================================
+        // 1. DONNÉES ET CONFIGURATION
+        // ==========================================
+        const REALMS = [
+            { id: 0, name: "Vallée des Fondations", desc: "Maîtrisez la valeur de chaque chiffre.", theme: "position" },
+            { id: 1, name: "Forêt des Géants", desc: "Affrontez les très grands nombres.", theme: "grands_nombres" },
+            { id: 2, name: "Marais des Comparaisons", desc: "Séparez le grand du petit.", theme: "comparaison" },
+            { id: 3, name: "Montagnes Décimales", desc: "Explorez les fragments de l'unité.", theme: "decimaux" },
+            { id: 4, name: "Citadelle du Zéro", desc: "L'épreuve finale de Numéria.", theme: "boss" }
+        ];
+
+        const CODEX_ITEMS = [
+            { id: "c1", name: "L'Amulette des Unités", desc: "Brille d'une lueur simple mais essentielle." },
+            { id: "c2", name: "Le Bâton des Dizaines", desc: "Multiplie la force de son porteur par 10." },
+            { id: "c3", name: "Le Heaume des Centaines", desc: "Offre une vision claire des grands ensembles." },
+            { id: "c4", name: "L'Épée du Millier", desc: "Tranche les nombres avec une précision légendaire." },
+            { id: "c5", name: "Le Grimoire du Million", desc: "Contient des secrets que peu d'érudits comprennent." },
+            { id: "c6", name: "La Balance de Justice", desc: "Indique toujours quel nombre pèse le plus lourd." },
+            { id: "c7", name: "La Gemme des Dixièmes", desc: "Un fragment parfait, coupé en dix parts égales." },
+            { id: "c8", name: "Le Sablier du Centième", desc: "Écoule le temps avec une infime précision." }
+        ];
+
+        // ==========================================
+        // 2. ÉTAT DU JEU ET LOCALSTORAGE (SÉCURISÉ)
+        // ==========================================
+        let gameState = {
+            unlockedRealms: [0, 1, 2, 3, 4], // Tout ouvert par défaut pour vos tests
+            missionsCompleted: {},
+            unlockedCodex: []
         };
 
-        // --- 2. GESTION DES DONNÉES / LOCALSTORAGE ---
-        let progression = {
-            royaumesDebloques: [1],
-            missionsCompletees: {}, // Format: {"1_1": true}
-            etoilesMissions: {},   // Format: {"1_1": 3}
-            codexDebloque: []       // Format: ["1_1", "1_2"]
-        };
-
-        function chargerDonneesEtCarte() {
-            const dataSauvegardee = localStorage.getItem('numeria_rpg_progression');
-            if (dataSauvegardee) {
-                try { progression = JSON.parse(dataSauvegardee); } catch(e) { console.error("Échec parse sauvegarde local."); }
-            }
-            // S'assurer que le premier royaume est toujours actif
-            if (!progression.royaumesDebloques.includes(1)) progression.royaumesDebloques.push(1);
-            construireCarteDuMonde();
+        function saveGame() { 
+            try {
+                localStorage.setItem('numeria_save', JSON.stringify(gameState)); 
+            } catch(e) { console.warn("Sauvegarde locale bloquée par le navigateur."); }
+        }
+        
+        function loadGame() {
+            try {
+                const saved = localStorage.getItem('numeria_save');
+                if (saved) gameState = JSON.parse(saved);
+            } catch(e) { console.warn("Lecture locale bloquée par le navigateur."); }
         }
 
-        function enregistrerProgression() {
-            localStorage.setItem('numeria_rpg_progression', JSON.stringify(progression));
-        }
+        // ==========================================
+        // 3. MOTEUR DE GÉNÉRATION DE QUESTIONS COMPORTANT DU MÉLANGE
+        // ==========================================
+        function rnd(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+        function shuffle(array) { return array.sort(() => Math.random() - 0.5); }
 
-        // --- 3. LOGIQUE DE NAVIGATION INTERNE ---
-        function afficherEcran(idEcran) {
-            ['screen-world-map', 'screen-realm', 'screen-mission', 'screen-result'].forEach(id => {
-                const ecran = document.getElementById(id);
-                if (ecran) ecran.classList.add('hidden');
-            });
-            document.getElementById(idEcran).classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // --- 4. CONSTRUIRE ÉCRAN 1 : CARTE DU MONDE ---
-        function construireCarteDuMonde() {
-            const conteneur = document.getElementById('realms-list');
-            conteneur.innerHTML = '';
-
-            Object.values(configJeu.royaumes).forEach(r => {
-                const estDebloque = progression.royaumesDebloques.includes(r.id);
-                const missionsDuRoyaume = Object.values(configJeu.missions).filter(m => m.rId === r.id && m.num !== 'boss');
-                const completesCount = missionsDuRoyaume.filter(m => progression.missionsCompletees[m.id]).length;
-                const bossBattu = progression.missionsCompletees[`${r.id}_boss`];
-
-                let statutTexte = `🔒 Royaume Verrouillé`;
-                let couleurClasse = "bg-slate-100 text-slate-400 border-slate-200 opacity-60 cursor-not-allowed";
-
-                if (estDebloque) {
-                    if (bossBattu) {
-                        statutTexte = `✨ Royaume Libéré (4/4 Quêtes + Boss)`;
-                        couleurClasse = "bg-emerald-50/70 border-emerald-200 hover:border-emerald-300 text-slate-800 cursor-pointer";
-                    } else {
-                        statutTexte = `⚔️ En cours (${completesCount} / 4 quêtes réussies)`;
-                        couleurClasse = "bg-white border-purple-200 hover:border-purple-400 text-slate-800 cursor-pointer shadow-sm";
-                    }
-                }
-
-                const cardHtml = `
-                    <button onclick="${estDebloque ? `window.ouvrirRoyaume(${r.id})` : ''}" class="w-full text-left p-6 rounded-3xl border-2 transition-all duration-150 flex flex-col gap-2 ${couleurClasse}">
-                        <div class="flex items-center gap-3 text-left">
-                            <span class="text-3xl">${r.icone}</span>
-                            <div>
-                                <h3 class="font-bold text-base sm:text-lg text-slate-800 leading-relaxed text-left">${r.id}. ${r.nom}</h3>
-                                <p class="text-xs text-slate-500 leading-relaxed text-left">${r.desc}</p>
-                            </div>
-                        </div>
-                        <span class="text-xs font-bold mt-2 leading-relaxed text-left block">${statutTexte}</span>
-                    </button>
-                `;
-                conteneur.innerHTML += cardHtml;
-            });
-            afficherEcran('screen-world-map');
-        }
-
-        // --- 5. CONSTRUIRE ÉCRAN 2 : VUE ROYAUME ---
-        let royaumeActuelId = 1;
-        function ouvrirRoyaume(idRoyaume) {
-            royaumeActuelId = idRoyaume;
-            const r = configJeu.royaumes[idRoyaume];
-            document.getElementById('realm-title').innerText = `${r.icone} ${r.nom}`;
-            document.getElementById('realm-desc').innerText = r.desc;
-
-            // Liste des 4 missions classiques
-            const listeMissionsConteneur = document.getElementById('missions-list');
-            listeMissionsConteneur.innerHTML = '';
+        function generateQuestion(theme) {
+            if (theme === "boss") theme = ["position", "grands_nombres", "comparaison", "decimaux"][rnd(0,3)];
             
-            const missionsFiltrees = Object.values(configJeu.missions).filter(m => m.rId === idRoyaume && m.num !== 'boss');
-            let toutesMissionsFaites = true;
+            let q = { text: "", type: "", options: [], answer: null };
+            const typeVariante = rnd(1, 2); // Alterne les structures d'exercices
 
-            missionsFiltrees.forEach(m => {
-                const faite = progression.missionsCompletees[m.id];
-                const etoiles = progression.etoilesMissions[m.id] || 0;
-                if (!faite) toutesMissionsFaites = false;
-
-                let etoilesHtml = '';
-                for(let i=0; i<3; i++) etoilesHtml += i < etoiles ? '⭐' : '⚫';
-
-                const missionCard = `
-                    <button onclick="window.lancerMission('${m.id}')" class="w-full bg-white hover:bg-purple-50/50 border border-slate-200 hover:border-purple-300 p-5 rounded-2xl transition text-left flex flex-col justify-between gap-2 shadow-sm">
-                        <div>
-                            <span class="text-xs uppercase tracking-wider font-bold text-purple-600 block text-left">Quête Numéro ${m.num}</span>
-                            <h4 class="font-bold text-base text-slate-800 leading-relaxed text-left mt-0.5">${m.nom}</h4>
-                        </div>
-                        <div class="flex justify-between items-center w-full mt-2">
-                            <span class="text-xs text-slate-400 font-bold leading-relaxed text-left">${faite ? '✔ Réussie' : '⭕ Non commencée'}</span>
-                            <span class="text-sm">${etoilesHtml}</span>
-                        </div>
-                    </button>
-                `;
-                listeMissionsConteneur.innerHTML += missionCard;
-            });
-
-            // Bloc du Boss final de zone
-            const bossConteneur = document.getElementById('boss-container');
-            const bossData = configJeu.missions[`${idRoyaume}_boss`];
-            const bossBattu = progression.missionsCompletees[bossData.id];
-
-            if (toutesMissionsFaites) {
-                bossConteneur.innerHTML = `
-                    <button onclick="window.lancerMission('${bossData.id}')" class="w-full bg-gradient-to-r from-red-50 to-amber-50 hover:from-red-100 hover:to-amber-100 border-2 border-red-200 p-6 rounded-2xl transition text-left flex justify-between items-center">
-                        <div class="text-left">
-                            <span class="bg-red-600 text-white font-bold text-[10px] px-2.5 py-0.5 rounded-full uppercase text-left tracking-wider">Épreuve du Boss</span>
-                            <h3 class="text-lg font-bold text-slate-900 leading-relaxed text-left mt-1">👹 Defier : ${bossData.nom}</h3>
-                            <p class="text-xs text-slate-600 leading-relaxed text-left">${bossBattu ? '🏆 Victoire acquise et scellée.' : '⚔️ Le combat final est accessible ! Complétez ce défi pour libérer la zone.'}</p>
-                        </div>
-                        <span class="text-3xl">${bossBattu ? '👑' : '🔥'}</span>
-                    </button>
-                `;
-            } else {
-                bossConteneur.innerHTML = `
-                    <div class="w-full bg-slate-100 border border-slate-200 p-6 rounded-2xl text-left flex justify-between items-center opacity-60 cursor-not-allowed">
-                        <div class="text-left">
-                            <span class="bg-slate-400 text-white font-bold text-[10px] px-2.5 py-0.5 rounded-full uppercase text-left tracking-wider">Boss Scellé</span>
-                            <h3 class="text-lg font-bold text-slate-500 leading-relaxed text-left mt-1">👹 ${bossData.nom}</h3>
-                            <p class="text-xs text-slate-400 leading-relaxed text-left">Terminez d'abord les 4 quêtes précédentes du royaume pour briser la barrière magique.</p>
-                        </div>
-                        <span class="text-3xl">🔒</span>
-                    </div>
-                `;
-            }
-
-            afficherEcran('screen-realm');
-        }
-
-        // --- 6. MOTEUR DE GÉNÉRATION DYNAMIQUE DE QUESTIONS (SANS HARDCODING) ---
-        let missionActuelle = null;
-        let pileQuestions = [];
-        let indexQuestion = 0;
-        let scoreMission = 0;
-        let questionEvaluee = false;
-        let reponseTriCourante = []; // Utile pour le type 3 (Classement)
-
-        function lancerMission(idMission) {
-            missionActuelle = configJeu.missions[idMission];
-            pileQuestions = genererQuestionsPourMission(missionActuelle);
-            indexQuestion = 0;
-            scoreMission = 0;
-
-            document.getElementById('mission-title-badge').innerText = missionActuelle.nom;
-            
-            // Fabriquer les points indicateurs de progression 1 à 5
-            const dots = document.getElementById('dots-container');
-            dots.innerHTML = '';
-            for(let i=0; i<5; i++) {
-                dots.innerHTML += `<div id="dot-m-${i}" class="w-2.5 h-2.5 rounded-full bg-slate-200 transition-all"></div>`;
-            }
-
-            chargerQuestionEtape();
-            afficherEcran('screen-mission');
-        }
-
-        function genererQuestionsPourMission(m) {
-            let questions = [];
-            const estBoss = m.num === 'boss';
-
-            for (let i = 0; i < 5; i++) {
-                // Si c'est un boss, on pioche un type aléatoire, sinon on utilise le type structurel
-                let selectType = estBoss ? ['qcm', 'input', 'sorting'][Math.floor(Math.random() * 3)] : m.type;
-                let targetRealm = m.rId;
-
-                let qObj = { type: selectType };
-
-                if (targetRealm === 1) { // Vallée des Fondations (Milliers)
-                    let baseVal = Math.floor(Math.random() * 899 + 100) * 1000 + Math.floor(Math.random() * 899 + 99);
-                    if (selectType === 'qcm') {
-                        qObj.q = `Dans le nombre ${formaterEspace(baseVal)}, quel est le chiffre des dizaines de milliers ?`;
-                        let dizMille = Math.floor((baseVal % 100000) / 10000);
-                        qObj.r = dizMille.toString();
-                        qObj.options = extraireDistracteursPlausibles(dizMille, [0,1,2,3,4,5,6,7,8,9]);
-                    } else if (selectType === 'input') {
-                        let c = Math.floor(Math.random() * 899 + 100);
-                        qObj.q = `Recomposez le nombre sous forme numérique condensée : (${c} × 1'000) + 45`;
-                        qObj.r = (c * 1000 + 45).toString();
-                    } else {
-                        qObj.q = `Sélectionnez et rangez ces nombres du plus PETIT au plus GRAND (Ordre Croissant) :`;
-                        let liste = [];
-                        for(let k=0; k<4; k++) liste.push(baseVal + (k * (Math.random() > 0.5 ? 250 : -410)));
-                        qObj.items = [...liste].sort(() => Math.random() - 0.5);
-                        qObj.r = [...liste].sort((a,b) => a - b).map(x => formaterEspace(x)).join(' | ');
-                    }
-                } 
-                else if (targetRealm === 2) { // Forêt des Géants (Millions)
-                    let baseVal = Math.floor(Math.random() * 89 + 2) * 1000000 + Math.floor(Math.random() * 899 + 10) * 1000;
-                    if (selectType === 'qcm') {
-                        qObj.q = `Que représente le chiffre 7 dans le nombre ${formaterEspace(baseVal + 70000)} ?`;
-                        qObj.r = "Dizaines de milliers";
-                        qObj.options = ["Dizaines de milliers", "Unités de millions", "Centaines de milliers", "Unités simples"];
-                    } else if (selectType === 'input') {
-                        let mil = Math.floor(Math.random() * 8 + 2);
-                        qObj.q = `Écris en chiffres le mot-nombre : "${mil} millions deux cent mille" (Ne pas mettre d'espaces ou apostrophes)`;
-                        qObj.r = `${mil}200000`;
-                    } else {
-                        qObj.q = `Triez ces grands territoires du plus GRAND au plus PETIT (Ordre Décroissant) :`;
-                        let liste = [baseVal, baseVal - 500000, baseVal + 1200000, baseVal - 1000000];
-                        qObj.items = [...liste].sort(() => Math.random() - 0.5);
-                        qObj.r = [...liste].sort((a,b) => b - a).map(x => formaterEspace(x)).join(' | ');
-                    }
-                }
-                else if (targetRealm === 3) { // Marais des Comparaisons
-                    let n1 = Math.floor(Math.random() * 400000 + 100000);
-                    if (selectType === 'qcm') {
-                        let n2 = Math.random() > 0.5 ? n1 + 1000 : n1 - 1000;
-                        qObj.q = `Quel symbole valide l'affirmation suivante ? <br> ${formaterEspace(n1)}  [ ? ]  ${formaterEspace(n2)}`;
-                        qObj.r = n1 > n2 ? ">" : "<";
-                        qObj.options = ["<", ">", "="];
-                    } else if (selectType === 'input') {
-                        qObj.q = `Quel est le nombre entier juste AVANT (prédécesseur de) ${formaterEspace(n1)} ? (Écrire sans espace)`;
-                        qObj.r = (n1 - 1).toString();
-                    } else {
-                        qObj.q = `Triez ces nombres du plus PETIT au plus GRAND :`;
-                        let liste = [n1, n1 - 50, n1 + 105, n1 + 20];
-                        qObj.items = [...liste].sort(() => Math.random() - 0.5);
-                        qObj.r = [...liste].sort((a,b) => a - b).map(x => formaterEspace(x)).join(' | ');
-                    }
-                }
-                else if (targetRealm === 4) { // Montagnes Décimales
-                    let dec = (Math.floor(Math.random() * 800 + 10) / 100);
-                    if (selectType === 'qcm') {
-                        qObj.q = `Dans le nombre décimal ${dec.toString().replace('.', ',')}, quel est le chiffre des centièmes ?`;
-                        let str = dec.toFixed(2);
-                        let centieme = str[str.length - 1];
-                        qObj.r = centieme;
-                        qObj.options = extraireDistracteursPlausibles(parseInt(centieme), [0,1,2,3,4,5]);
-                    } else if (selectType === 'input') {
-                        qObj.q = `Quelle est l'écriture décimale de la fraction 45/10 ? (Utilise la virgule)`;
-                        qObj.r = "4,5";
-                    } else {
-                        qObj.q = `Rangez ces mesures du plus PETIT au plus GRAND :`;
-                        let liste = [dec, dec + 0.12, dec - 0.05, dec + 0.02];
-                        qObj.items = [...liste].sort(() => Math.random() - 0.5);
-                        qObj.r = [...liste].sort((a,b) => a - b).map(x => x.toString().replace('.', ',')).join(' | ');
-                    }
-                }
-                else { // Citadelle du Zéro
-                    let zeroNum = Math.random() > 0.5 ? 504008 : 30040;
-                    if (selectType === 'qcm') {
-                        qObj.q = `Si on ajoute 100'000 au nombre ${formaterEspace(zeroNum)}, on obtient :`;
-                        qObj.r = formaterEspace(zeroNum + 100000);
-                        qObj.options = [formaterEspace(zeroNum + 100000), formaterEspace(zeroNum + 10000), formaterEspace(zeroNum + 1000000), formaterEspace(zeroNum + 100)];
-                    } else if (selectType === 'input') {
-                        qObj.q = `Quel nombre obtient-on si on prend 25 centaines de milliers complètes ? (Sans espace)`;
-                        qObj.r = "2500000";
-                    } else {
-                        qObj.q = `Classez du plus PETIT au plus GRAND :`;
-                        let liste = [zeroNum, zeroNum - 200, zeroNum + 5000, zeroNum - 4000];
-                        qObj.items = [...liste].sort(() => Math.random() - 0.5);
-                        qObj.r = [...liste].sort((a,b) => a - b).map(x => formaterEspace(x)).join(' | ');
-                    }
-                }
-
-                questions.push(qObj);
-            }
-            return questions;
-        }
-
-        function formaterEspace(num) {
-            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'");
-        }
-
-        function extraireDistracteursPlausibles(bonneRep, banque) {
-            let options = new Set([bonneRep.toString()]);
-            while(options.size < Math.min(banque.length, 4)) {
-                let r = banque[Math.floor(Math.random() * banque.length)].toString();
-                options.add(r);
-            }
-            return Array.from(options).sort(() => Math.random() - 0.5);
-        }
-
-        // --- 7. REPRODUCTION DE L'ÉTAPE DE JEU & INTERACTION ---
-        function chargerQuestionEtape() {
-            questionEvaluee = false;
-            document.getElementById('num-question').innerText = indexQuestion + 1;
-            document.getElementById('feedback').classList.add('hidden');
-            document.getElementById('next-zone').classList.add('hidden');
-            document.getElementById('action-zone').classList.add('hidden');
-
-            const q = pileQuestions[indexQuestion];
-            document.getElementById('enonce-question').innerHTML = q.q;
-
-            const conteneur = document.getElementById('interaction-zone');
-            conteneur.innerHTML = '';
-
-            if (q.type === 'qcm') {
-                q.options.forEach(opt => {
-                    conteneur.innerHTML += `
-                        <button onclick="window.soumettreChoixQcm('${opt.replace(/'/g, "\\'")}', this)" class="w-full bg-slate-50 hover:bg-purple-50/70 border-2 border-slate-200 p-4 rounded-xl text-left font-bold text-slate-700 transition leading-relaxed">
-                            ${opt}
-                        </button>
-                    `;
-                });
-            } 
-            else if (q.type === 'input') {
-                conteneur.innerHTML = `
-                    <input type="text" id="input-reponse" class="w-full border-2 border-slate-300 p-4 rounded-xl font-bold text-slate-800 text-left focus:border-purple-500 outline-none leading-relaxed" placeholder="Saisissez votre réponse ici...">
-                `;
-                document.getElementById('action-zone').classList.remove('hidden');
-                setTimeout(() => document.getElementById('input-reponse').focus(), 150);
-            } 
-            else if (q.type === 'sorting') {
-                reponseTriCourante = [];
-                let itemsHtml = q.items.map((item) => {
-                    let affichage = item.toString().includes('.') ? item.toString().replace('.', ',') : formaterEspace(item);
-                    return `<button onclick="window.clicElementTri('${affichage}', this)" class="bg-purple-50 hover:bg-purple-100 border border-purple-200 px-4 py-3 rounded-xl font-bold text-purple-950 text-sm transition-all shadow-sm">${affichage}</button>`;
-                }).join('');
-
-                conteneur.innerHTML = `
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 text-left">Éléments disponibles (cliquez pour sélectionner dans l'ordre) :</p>
-                    <div id="tri-dispo" class="flex flex-wrap gap-2 mb-4 text-left">${itemsHtml}</div>
-                    <p class="text-xs font-bold text-purple-500 uppercase tracking-wider mb-2 text-left">Votre ordre de rangement :</p>
-                    <div id="tri-choisi" class="flex flex-wrap gap-2 p-3 bg-purple-950/5 min-h-[55px] rounded-xl border border-dashed border-purple-300 text-left"></div>
-                    <button onclick="window.reinitialiserTri()" class="text-xs text-red-600 hover:underline font-bold mt-1 block text-left">⟲ Effacer et recommencer le tri</button>
-                `;
-                document.getElementById('action-zone').classList.remove('hidden');
-            }
-        }
-
-        // Actions Types de questions
-        function soumettreChoixQcm(valeur, bouton) {
-            if (questionEvaluee) return;
-            questionEvaluee = true;
-            const q = pileQuestions[indexQuestion];
-            validerEtapeResultat(valeur === q.r, q.r, bouton);
-        }
-
-        function clicElementTri(valeur, bouton) {
-            if (questionEvaluee) return;
-            if (reponseTriCourante.includes(valeur)) return;
-            
-            reponseTriCourante.push(valeur);
-            bouton.classList.add('opacity-30', 'pointer-events-none');
-
-            const conteneurChoisi = document.getElementById('tri-choisi');
-            conteneurChoisi.innerHTML += `<span class="bg-purple-600 text-white px-3 py-1.5 rounded-lg font-bold text-xs shadow-sm">${valeur}</span>`;
-        }
-
-        function reinitialiserTri() {
-            if (questionEvaluee) return;
-            chargerQuestionEtape();
-        }
-
-        function verifierActionUtilisateur() {
-            if (questionEvaluee) return;
-            questionEvaluee = true;
-            const q = pileQuestions[indexQuestion];
-
-            if (q.type === 'input') {
-                const userVal = document.getElementById('input-reponse').value.trim();
-                validerEtapeResultat(userVal.toLowerCase() === q.r.toLowerCase(), q.r, null);
-            } 
-            else if (q.type === 'sorting') {
-                const reponseGeneraleTri = reponseTriCourante.join(' | ');
-                validerEtapeResultat(reponseGeneraleTri === q.r, q.r, null);
-            }
-        }
-
-        function validerEtapeResultat(estCorrect, reponseCorrecte, boutonCible) {
-            const fd = document.getElementById('feedback');
-            const dot = document.getElementById(`dot-m-${indexQuestion}`);
-
-            if (estCorrect) {
-                scoreMission++;
-                if (boutonCible) boutonCible.className = "w-full bg-emerald-600 text-white border-2 border-emerald-600 p-4 rounded-xl text-left font-bold transition leading-relaxed";
-                if (dot) dot.className = "w-2.5 h-2.5 rounded-full bg-emerald-500";
-                fd.innerHTML = "✨ Excellent ! Votre parchemin valide cette réponse.";
-                fd.className = "mt-6 p-4 rounded-2xl text-left font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 leading-relaxed";
-            } else {
-                if (boutonCible) boutonCible.className = "w-full bg-rose-600 text-white border-2 border-rose-600 p-4 rounded-xl text-left font-bold transition leading-relaxed";
-                if (dot) dot.className = "w-2.5 h-2.5 rounded-full bg-rose-500";
-                fd.innerHTML = `❌ Erreur. La vérité magique était : <strong>${reponseCorrecte}</strong>`;
-                fd.className = "mt-6 p-4 rounded-2xl text-left font-bold bg-rose-100 text-rose-800 border border-rose-200 leading-relaxed";
-            }
-
-            fd.classList.remove('hidden');
-            document.getElementById('action-zone').classList.add('hidden');
-            document.getElementById('next-zone').classList.remove('hidden');
-        }
-
-        function continuerMission() {
-            indexQuestion++;
-            if (indexQuestion < 5) {
-                chargerQuestionEtape();
-            } else {
-                analyserFinDeMission();
-            }
-        }
-
-        // --- 8. TRAITEMENT ET AFFICHAGE DES RÉSULTATS DE QUÊTE ---
-        async function analyserFinDeMission() {
-            document.getElementById('screen-mission').classList.add('hidden');
-            
-            document.getElementById('final-score').innerText = scoreMission;
-            
-            // Calcul des étoiles
-            let etoilesGagnees = 0;
-            if (scoreMission === 5) etoilesGagnees = 3;
-            else if (scoreMission === 4) etoilesGagnees = 2;
-            else if (scoreMission === 3) etoilesGagnees = 1;
-
-            const etoilesConteneur = document.getElementById('stars-reward-display');
-            etoilesConteneur.innerHTML = '';
-            for(let i=0; i<3; i++) etoilesConteneur.innerHTML += i < etoilesGagnees ? '⭐' : '⚫';
-
-            const reussi = scoreMission >= 3;
-            const alerteCodex = document.getElementById('codex-unlock-alert');
-            alerteCodex.classList.add('hidden');
-
-            if (reussi) {
-                document.getElementById('result-icon').innerText = "🏆";
-                document.getElementById('appreciation').innerText = "Félicitations ! La quête est complétée avec succès.";
+            if (theme === "position") {
+                const num = rnd(1000, 99999);
+                const strNum = num.toString();
+                const digits = ["unités", "dizaines", "centaines", "unités de mille", "dizaines de mille"];
                 
-                // Sauvegarde de l'état
-                progression.missionsCompletees[missionActuelle.id] = true;
-                const ancienneEtoile = progression.etoilesMissions[missionActuelle.id] || 0;
-                if (etoilesGagnees > AM) progression.etoilesMissions[missionActuelle.id] = etoilesGagnees;
-
-                // Gestion du Codex de récompenses
-                if (!progression.codexDebloque.includes(missionActuelle.id)) {
-                    progression.codexDebloque.push(missionActuelle.id);
-                    const art = configJeu.codex[missionActuelle.id];
-                    if (art) {
-                        document.getElementById('unlocked-item-desc').innerHTML = `<strong>[${art.type}] ${art.nom}</strong> : ${art.desc}`;
-                        alerteCodex.classList.remove('hidden');
-                    }
-                }
-
-                // Si le boss du royaume est battu, on débloque le royaume suivant !
-                if (missionActuelle.num === 'boss') {
-                    const prochainId = royaumeActuelId + 1;
-                    if (configJeu.royaumes[prochainId] && !progression.royaumesDebloques.includes(prochainId)) {
-                        progression.royaumesDebloques.push(prochainId);
-                    }
-                }
-                
-                enregistrerProgression();
-            } else {
-                document.getElementById('result-icon').innerText = "💀";
-                document.getElementById('appreciation').innerText = "Échec de l'étape. Vous devez obtenir au moins 3/5 réponses exactes pour valider cette quête.";
-            }
-
-            // Envoi synchrone du score vers l'infrastructure Firebase commune
-            if (typeof window.enregistrerScoreFirebase === 'function') {
-                let nomExercicePourLogs = `Numéria — ${configJeu.royaumes[royaumeActuelId].nom} — Q.${missionActuelle.num}`;
-                await window.enregistrerScoreFirebase(nomExercicePourLogs, scoreMission, 5 - scoreMission);
-            }
-
-            afficherEcran('screen-result');
-        }
-
-        function quitterVersRoyaume() {
-            ouvrirRoyaume(royaumeActuelId);
-        }
-
-        // --- 9. STRUCTURE DU GRIMOIRE DU CODEX (OVERLAY) ---
-        function basculerCodex() {
-            const overlay = document.getElementById('screen-codex');
-            if (overlay.classList.contains('hidden')) {
-                const liste = document.getElementById('codex-items-list');
-                liste.innerHTML = '';
-
-                if (progression.codexDebloque.length === 0) {
-                    liste.innerHTML = `<p class="text-sm text-slate-400 italic leading-relaxed text-left p-4">Votre grimoire est vide pour le moment. Accomplissez des missions avec succès pour y inscrire vos trouvailles.</p>`;
+                if (typeVariante === 1) {
+                    const pos = rnd(0, strNum.length - 1);
+                    const targetDigit = digits[strNum.length - 1 - pos];
+                    q.text = `Quel est le chiffre des ${targetDigit} dans le nombre ${num} ?`;
+                    q.type = "qcm";
+                    q.answer = strNum[pos];
+                    let opts = new Set([q.answer]);
+                    while(opts.size < 4) opts.add(rnd(0, 9).toString());
+                    q.options = shuffle(Array.from(opts));
                 } else {
-                    progression.codexDebloque.forEach(idKey => {
-                        const art = configJeu.codex[idKey];
-                        const m = configJeu.missions[idKey];
-                        if (art) {
-                            liste.innerHTML += `
-                                <div class="bg-amber-50/50 border border-amber-200/80 p-4 rounded-xl text-left">
-                                    <div class="flex justify-between items-start">
-                                        <span class="font-bold text-sm text-amber-900 leading-relaxed text-left">🔮 ${art.nom}</span>
-                                        <span class="bg-amber-200/60 text-amber-950 font-bold text-[10px] px-2 py-0.5 rounded uppercase">${art.type}</span>
-                                    </div>
-                                    <p class="text-xs text-slate-600 leading-relaxed mt-1 text-left">${art.desc}</p>
-                                    <span class="text-[10px] text-slate-400 block mt-2 text-left">Obtenu dans : ${configJeu.royaumes[m.rId].nom} (${m.nom})</span>
-                                </div>
-                            `;
-                        }
-                    });
+                    // Variante composition
+                    const c = rnd(1, 9);
+                    const d = rnd(1, 9);
+                    const u = rnd(1, 9);
+                    q.text = `Quel nombre possède exactement ${c} centaines, ${d} dizaines et ${u} unités ?`;
+                    q.type = "qcm";
+                    q.answer = (c*100 + d*10 + u).toString();
+                    let opts = new Set([q.answer, `${c}${u}${d}`, `${d}${c}${u}`, `${c}${d}0`]);
+                    q.options = shuffle(Array.from(opts));
                 }
-                overlay.classList.remove('hidden');
-                overlay.classList.add('flex');
-            } else {
-                overlay.classList.remove('flex');
-                overlay.classList.add('hidden');
+            } 
+            else if (theme === "grands_nombres") {
+                const num = rnd(100000, 999000);
+                if (typeVariante === 1) {
+                    q.text = `Écris en chiffres le nombre : \n ${num.toLocaleString('fr-CH')}`;
+                    q.type = "free";
+                    q.answer = num.toString();
+                } else {
+                    // Variante décomposition textuelle
+                    const mille = Math.floor(num / 1000);
+                    q.text = `Écris en chiffres le nombre correspondant à : ${mille} milliers.`;
+                    q.type = "free";
+                    q.answer = (mille * 1000).toString();
+                }
+            }
+            else if (theme === "comparaison") {
+                const base = rnd(1000, 9000);
+                const nums = [base, base + rnd(10, 40), base - rnd(10, 40), base + rnd(50, 90)];
+                if (typeVariante === 1) {
+                    q.text = "Classe ces nombres du plus PETIT au plus GRAND :";
+                    q.type = "order";
+                    q.options = shuffle([...nums]);
+                    q.answer = [...nums].sort((a,b) => a - b).join(',');
+                } else {
+                    // Variante ordre décroissant
+                    q.text = "Classe ces nombres du plus GRAND au plus PETIT :";
+                    q.type = "order";
+                    q.options = shuffle([...nums]);
+                    q.answer = [...nums].sort((a,b) => b - a).join(',');
+                }
+            }
+            else if (theme === "decimaux") {
+                if (typeVariante === 1) {
+                    const num = (rnd(100, 999) / 100).toFixed(2);
+                    q.text = `Dans le nombre ${num.replace('.', ',')}, quel est le chiffre des dixièmes ?`;
+                    q.type = "qcm";
+                    q.answer = num.split('.')[1][0];
+                    let opts = new Set([q.answer, num.split('.')[1][1], num.split('.')[0], rnd(0,9).toString()]);
+                    q.options = shuffle(Array.from(opts));
+                } else {
+                    // Variante fractions simples
+                    const ent = rnd(1, 9);
+                    const dix = rnd(1, 9);
+                    q.text = `Trouve l'écriture décimale de : ${ent} unités + ${dix}/10`;
+                    q.type = "qcm";
+                    q.answer = `${ent},${dix}`;
+                    let opts = new Set([`${ent},${dix}`, `${dix},${ent}`, `${ent},0${dix}`, `${ent}${dix},0`]);
+                    q.options = shuffle(Array.from(opts));
+                }
+            }
+            return q;
+        }
+
+        // ==========================================
+        // 4. LOGIQUE DE JEU (MISSION)
+        // ==========================================
+        let currentMission = { realmId: null, mId: null, questions: [], currentQ: 0, score: 0 };
+        let draggedItem = null;
+
+        function startMission(realmId, mId) {
+            const theme = REALMS[realmId].theme;
+            currentMission = { realmId, mId, questions: [], currentQ: 0, score: 0 };
+            
+            for(let i=0; i<5; i++) {
+                currentMission.questions.push(generateQuestion(theme));
+            }
+            
+            showScreen('screen-mission');
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const q = currentMission.questions[currentMission.currentQ];
+            document.getElementById('mission-progress').innerText = `Question ${currentMission.currentQ + 1} / 5`;
+            document.getElementById('mission-score').innerText = `Score : ${currentMission.score}`;
+            document.getElementById('question-text').innerText = q.text;
+            
+            const zone = document.getElementById('answer-zone');
+            zone.innerHTML = "";
+            document.getElementById('feedback-zone').classList.add('hidden');
+            document.getElementById('btn-validate').classList.remove('hidden');
+            document.getElementById('btn-next').classList.add('hidden');
+
+            if (q.type === "qcm") {
+                const grid = document.createElement('div');
+                grid.className = "grid grid-cols-2 gap-4 w-full";
+                q.options.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.className = "btn-fantasy py-4 rounded-xl text-xl";
+                    btn.innerText = opt.toString().replace('.', ',');
+                    btn.onclick = () => {
+                        document.querySelectorAll('#answer-zone button').forEach(b => b.classList.remove('ring-4', 'ring-blue-500'));
+                        btn.classList.add('ring-4', 'ring-blue-500');
+                        zone.dataset.selected = opt;
+                    };
+                    grid.appendChild(btn);
+                });
+                zone.appendChild(grid);
+                zone.dataset.selected = "";
+            } 
+            else if (q.type === "free") {
+                const input = document.createElement('input');
+                input.type = "text"; /* Changé de number à text pour autoriser l'apostrophe suisse */
+                input.className = "w-full max-w-xs text-center border-2 border-amber-300 rounded-xl py-3 text-2xl focus:outline-none focus:ring-4 focus:ring-amber-500";
+                input.placeholder = "Ex: 434'434 ou 434434";
+                
+                // Nettoie les espaces, apostrophes et remplace virgule par point en arrière plan
+                input.oninput = (e) => zone.dataset.selected = e.target.value.replace(/[\s']/g, '').replace(',', '.');
+                zone.appendChild(input);
+                zone.dataset.selected = "";
+            }
+            else if (q.type === "order") {
+                const list = document.createElement('div');
+                list.className = "flex flex-col gap-2 w-full max-w-xs";
+                q.options.forEach(opt => {
+                    const item = document.createElement('div');
+                    item.className = "sortable-item bg-white border-2 border-amber-300 py-3 rounded-xl text-xl font-bold touch-none text-center";
+                    item.innerText = opt;
+                    item.draggable = true;
+                    item.ondragstart = (e) => { draggedItem = item; e.dataTransfer.effectAllowed = 'move'; };
+                    item.ondragover = (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; };
+                    item.ondrop = (e) => {
+                        e.preventDefault();
+                        if (draggedItem !== item) {
+                            let all = [...list.children];
+                            let draggedIdx = all.indexOf(draggedItem);
+                            let targetIdx = all.indexOf(item);
+                            if (draggedIdx < targetIdx) item.after(draggedItem);
+                            else item.before(draggedItem);
+                        }
+                    };
+                    list.appendChild(item);
+                });
+                zone.appendChild(list);
             }
         }
 
-        // --- 10. LIENS AVEC L'OBJET GLOBAL WINDOW POUR INTERACTION PARFAITE ---
-        window.ouvrirRoyaume = ouvrirRoyaume;
-        window.lancerMission = lancerMission;
-        window.soumettreChoixQcm = soumettreChoixQcm;
-        window.clicElementTri = clicElementTri;
-        window.reinitialiserTri = reinitialiserTri;
-        window.verifierActionUtilisateur = verifierActionUtilisateur;
-        window.continuerMission = continuerMission;
-        window.quitterVersRoyaume = quitterVersRoyaume;
-        window.basculerCodex = basculerCodex;
-        window.afficherEcran = afficherEcran;
-        window.chargerDonneesEtCarte = chargerDonneesEtCarte;
+        function checkAnswer() {
+            const q = currentMission.questions[currentMission.currentQ];
+            const zone = document.getElementById('answer-zone');
+            let userAnswer = "";
+
+            if (q.type === "order") {
+                userAnswer = [...zone.firstChild.children].map(el => el.innerText).join(',');
+            } else {
+                userAnswer = zone.dataset.selected.trim();
+            }
+
+            if (!userAnswer && q.type !== "order") return;
+
+            document.getElementById('btn-validate').classList.add('hidden');
+            document.getElementById('btn-next').classList.remove('hidden');
+            const fb = document.getElementById('feedback-zone');
+            fb.classList.remove('hidden');
+
+            // Formater pour l'affichage de la correction
+            let cleanAnswer = q.answer.toString().replace('.', ',');
+
+            if (userAnswer === q.answer) {
+                currentMission.score++;
+                fb.className = "w-full p-4 rounded-md font-bold text-lg bg-green-100 text-green-800 border-2 border-green-400";
+                fb.innerText = "✨ Excellent ! Bonne réponse.";
+            } else {
+                fb.className = "w-full p-4 rounded-md font-bold text-lg bg-red-100 text-red-800 border-2 border-red-400";
+                if(q.type === "order") cleanAnswer = q.answer.replace(/,/g, ' ➔ ');
+                fb.innerText = `⚔️ Raté... La bonne réponse était : ${cleanAnswer}`;
+            }
+        }
+
+        function nextQuestion() {
+            currentMission.currentQ++;
+            if (currentMission.currentQ < 5) renderQuestion();
+            else endMission();
+        }
+
+        function endMission() {
+            const stars = currentMission.score >= 4 ? 3 : (currentMission.score >= 3 ? 2 : (currentMission.score >= 1 ? 1 : 0));
+            const missionKey = `${currentMission.realmId}_${currentMission.mId}`;
+            
+            if (!gameState.missionsCompleted[missionKey] || gameState.missionsCompleted[missionKey] < stars) {
+                gameState.missionsCompleted[missionKey] = stars;
+            }
+
+            if (currentMission.mId === 4 && stars > 0) {
+                if (!gameState.unlockedRealms.includes(currentMission.realmId + 1) && currentMission.realmId < 4) {
+                    gameState.unlockedRealms.push(currentMission.realmId + 1);
+                }
+            }
+
+            document.getElementById('reward-zone').classList.add('hidden');
+            if (stars > 0) {
+                const availableItems = CODEX_ITEMS.filter(c => !gameState.unlockedCodex.includes(c.id));
+                if (availableItems.length > 0) {
+                    const reward = availableItems[rnd(0, availableItems.length - 1)];
+                    gameState.unlockedCodex.push(reward.id);
+                    document.getElementById('reward-zone').classList.remove('hidden');
+                    document.getElementById('reward-name').innerText = reward.name;
+                    document.getElementById('reward-desc').innerText = reward.desc;
+                }
+            }
+
+            saveGame();
+
+            showScreen('screen-result');
+            document.getElementById('result-score').innerText = currentMission.score;
+            document.getElementById('result-stars').innerText = '⭐'.repeat(stars) + '🕸️'.repeat(3 - stars);
+        }
+
+        function showScreen(id) {
+            ['screen-map', 'screen-realm', 'screen-mission', 'screen-result', 'screen-codex'].forEach(s => {
+                document.getElementById(s).classList.add('hidden');
+            });
+            document.getElementById(id).classList.remove('hidden');
+
+            if (id === 'screen-map') renderMap();
+            if (id === 'screen-codex') renderCodex();
+        }
+
+        function renderMap() {
+            const container = document.getElementById('realms-container');
+            container.innerHTML = "";
+            REALMS.forEach(r => {
+                const isUnlocked = gameState.unlockedRealms.includes(r.id);
+                const btn = document.createElement('button');
+                btn.className = `p-6 rounded-xl border-4 flex flex-col items-center gap-2 text-center transition-all ${isUnlocked ? 'bg-white border-amber-600 hover:scale-105 shadow-md cursor-pointer' : 'bg-gray-200 border-gray-400 opacity-70 cursor-not-allowed filter grayscale'}`;
+                btn.innerHTML = `
+                    <div class="text-4xl mb-2">${isUnlocked ? '🏰' : '🔒'}</div>
+                    <h3 class="font-bold text-lg text-amber-900">${r.name}</h3>
+                `;
+                if (isUnlocked) btn.onclick = () => renderRealm(r.id);
+                container.appendChild(btn);
+            });
+        }
+
+        function renderRealm(realmId) {
+            const realm = REALMS[realmId];
+            document.getElementById('realm-title').innerText = realm.name;
+            document.getElementById('realm-desc').innerText = realm.desc;
+            
+            const container = document.getElementById('missions-container');
+            container.innerHTML = "";
+            
+            let allMissionsPassed = true;
+            for(let i=0; i<5; i++) {
+                const isBoss = (i === 4);
+                const mKey = `${realmId}_${i}`;
+                const stars = gameState.missionsCompleted[mKey] || 0;
+                if(i < 4 && stars === 0) allMissionsPassed = false;
+
+                const isLocked = isBoss && !allMissionsPassed;
+
+                const btn = document.createElement('button');
+                btn.className = "btn-fantasy p-4 rounded-xl flex justify-between items-center";
+                btn.disabled = isLocked;
+                btn.innerHTML = `
+                    <span class="font-bold text-lg">${isBoss ? '🐉 Repaire du Gardien' : 'Mission ' + (i+1)}</span>
+                    <span class="tracking-widest">${isLocked ? '🔒' : (stars > 0 ? '⭐'.repeat(stars) : '○ ○ ○')}</span>
+                `;
+                if(!isLocked) btn.onclick = () => startMission(realmId, i);
+                container.appendChild(btn);
+            }
+            showScreen('screen-realm');
+        }
+
+        function renderCodex() {
+            const container = document.getElementById('codex-container');
+            container.innerHTML = "";
+            
+            CODEX_ITEMS.forEach(item => {
+                const isUnlocked = gameState.unlockedCodex.includes(item.id);
+                const div = document.createElement('div');
+                div.className = `p-4 rounded-lg border-2 ${isUnlocked ? 'bg-white border-amber-300' : 'bg-gray-100 border-gray-300 opacity-60'}`;
+                div.innerHTML = `
+                    <h4 class="font-bold text-amber-900 mb-1">${isUnlocked ? '✨ ' + item.name : '???'}</h4>
+                    <p class="text-sm italic text-gray-600">${isUnlocked ? item.desc : 'Artefact verrouillé. Réussissez des missions.'}</p>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        window.onload = () => {
+            loadGame();
+            showScreen('screen-map');
+        };
     </script>
 </body>
 </html>
