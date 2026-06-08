@@ -3,104 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Les Royaumes de Numéria — Numération</title>
+    <title>Les Royaumes Perdus de Numéria</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-50 min-h-screen font-sans flex flex-col justify-between antialiased selection:bg-purple-200">
+<body class="bg-slate-50 min-h-screen font-sans flex flex-col justify-between antialiased selection:bg-purple-200 text-left">
 
     <div id="loading-overlay" class="fixed inset-0 bg-slate-900 text-white flex flex-col items-center justify-center z-50 p-6 transition-opacity duration-500">
         <div class="text-left max-w-md w-full font-sans">
-            <span class="text-6xl animate-bounce mb-6 block">📜</span>
-            <h2 class="text-2xl font-bold mb-3 leading-relaxed">Ouverture du Codex de Numéria</h2>
-            <p class="text-slate-400 text-sm mb-6 leading-relaxed">Préparation des quêtes de grands nombres et des artefacts magiques...</p>
-            <div class="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-6"></div>
+            <span class="text-6xl animate-bounce mb-6 block text-left">📜</span>
+            <h2 class="text-2xl font-bold mb-3 leading-relaxed text-left">Ouverture du Codex de Numéria</h2>
+            <p class="text-slate-400 text-sm mb-6 leading-relaxed text-left">Préparation des quêtes de grands nombres et des artefacts magiques...</p>
+            <div class="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mb-6"></div>
         </div>
     </div>
 
     <header class="bg-purple-950 text-white shadow-md font-sans">
         <div class="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center gap-3 text-left">
-                <span class="text-2xl">📜</span>
+                <span class="text-2xl">⚔️</span>
                 <div>
-                    <h1 class="text-lg font-bold leading-tight text-left">Les Royaumes de Numéria</h1>
-                    <p class="text-xs text-purple-200 leading-normal text-left">Lecture, écriture et valeur positionnelle des grands nombres</p>
+                    <h1 class="text-base sm:text-lg font-bold leading-tight text-left">Les Royaumes Perdus de Numéria</h1>
+                    <p class="text-xs text-purple-200 leading-normal text-left">RPG de Consolidation Mathématique (Harmos 8H)</p>
                 </div>
             </div>
-            <div class="text-right">
-                <span class="text-xs text-purple-200 block leading-tight">Élève :</span>
+            <div class="text-right flex flex-col items-end">
+                <span class="text-xs text-purple-200 leading-tight">Aventurier :</span>
                 <span id="nom-eleve-badge" class="font-bold text-amber-300">Visiteur</span>
             </div>
         </div>
     </header>
 
-    <main class="max-w-4xl mx-auto px-4 py-6 flex-grow w-full flex flex-col justify-center font-sans">
+    <div class="max-w-4xl mx-auto px-4 mt-4 text-left">
+        <button onclick="window.basculerCodex()" class="bg-amber-100 hover:bg-amber-200 text-amber-900 px-4 py-2 rounded-xl text-xs font-bold border border-amber-300 transition-all flex items-center gap-2">
+            <span>📖 Ouvrir le Codex des Artefacts</span>
+        </button>
+    </div>
+
+    <main class="max-w-4xl mx-auto px-4 py-4 flex-grow w-full flex flex-col justify-start font-sans">
         
-        <div id="level-card" class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100 max-w-2xl mx-auto w-full text-left hidden space-y-4">
-            <h2 class="text-2xl font-bold text-slate-800 text-left leading-relaxed">Choisissez votre Royaume</h2>
-            <p class="text-sm text-slate-500 text-left leading-relaxed">Sélectionnez la difficulté pour commencer la quête de numération.</p>
-            
-            <div class="flex flex-col gap-4">
-                <button onclick="window.selectionnerNiveau(1)" class="w-full bg-slate-50 hover:bg-purple-50 border-2 border-slate-100 hover:border-purple-200 text-left p-5 rounded-2xl transition-all duration-150 flex flex-col gap-1">
-                    <span class="font-bold text-purple-700 text-base sm:text-lg leading-relaxed text-left">Niveau 1 : Le Royaume des Milliers</span>
-                    <span class="text-sm text-slate-600 leading-relaxed text-left">Nombres jusqu'à 999'999 (Unités, dizaines et centaines de milliers).</span>
-                </button>
-                
-                <button onclick="window.selectionnerNiveau(2)" class="w-full bg-slate-50 hover:bg-purple-50 border-2 border-slate-100 hover:border-purple-200 text-left p-5 rounded-2xl transition-all duration-150 flex flex-col gap-1">
-                    <span class="font-bold text-purple-700 text-base sm:text-lg leading-relaxed text-left">Niveau 2 : Le Royaume des Millions</span>
-                    <span class="text-sm text-slate-600 leading-relaxed text-left">Nombres jusqu'à 999'999'999 (Lecture, écriture et valeur de position).</span>
-                </button>
-                
-                <button onclick="window.selectionnerNiveau(3)" class="w-full bg-slate-50 hover:bg-purple-50 border-2 border-slate-100 hover:border-purple-200 text-left p-5 rounded-2xl transition-all duration-150 flex flex-col gap-1">
-                    <span class="font-bold text-purple-700 text-base sm:text-lg leading-relaxed text-left">Niveau 3 : Citadelle des Experts</span>
-                    <span class="text-sm text-slate-600 leading-relaxed text-left">Calculs avancés (+100'000, -10'000) et décompositions complexes.</span>
-                </button>
+        <div id="screen-world-map" class="space-y-6 w-full">
+            <div class="text-left bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+                <h2 class="text-xl sm:text-2xl font-bold text-slate-800 leading-relaxed text-left">Carte du Monde de Numéria</h2>
+                <p class="text-sm text-slate-500 leading-relaxed text-left">Parcourez les royaumes oubliés pour restaurer l'ordre des mathématiques anciennes.</p>
             </div>
+            <div id="realms-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
         </div>
 
-        <div id="game-card" class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100 max-w-2xl mx-auto w-full hidden">
+        <div id="screen-realm" class="space-y-6 w-full hidden">
+            <button onclick="window.afficherEcran('screen-world-map')" class="text-purple-700 hover:text-purple-900 font-bold text-sm flex items-center gap-2 mb-2">
+                <span>🪓 Retour à la Carte du Monde</span>
+            </button>
+            <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm text-left">
+                <h2 id="realm-title" class="text-2xl font-bold text-slate-800 leading-relaxed text-left"></h2>
+                <p id="realm-desc" class="text-sm text-slate-500 leading-relaxed text-left"></p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="missions-list"></div>
+            <div class="pt-4 border-t border-slate-200" id="boss-container"></div>
+        </div>
+
+        <div id="screen-mission" class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-100 max-w-2xl mx-auto w-full hidden text-left">
             <div class="flex justify-between items-center mb-6">
-                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider text-left">Défi <span id="num-question" class="text-purple-600">1</span> / 10</span>
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider text-left">Quête : <span id="num-question" class="text-purple-600">1</span> / 5</span>
                 <div class="flex gap-1" id="dots-container"></div>
-                <span class="text-xs font-bold text-emerald-600 text-right">Score : <span id="score-live">0</span>/10</span>
+                <span class="text-xs font-bold text-purple-700 text-right" id="mission-title-badge"></span>
             </div>
 
-            <div class="bg-purple-50/50 rounded-2xl p-6 mb-6 border border-purple-100/60 text-left min-h-[100px] flex items-center">
-                <p id="enonce-question" class="text-lg sm:text-xl font-bold text-slate-800 leading-relaxed text-left w-full"></p>
+            <div class="bg-slate-50 rounded-2xl p-6 mb-6 border border-slate-200/60 text-left min-h-[90px] flex items-center">
+                <p id="enonce-question" class="text-base sm:text-lg font-bold text-slate-800 leading-relaxed text-left w-full"></p>
             </div>
 
-            <div id="options-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+            <div id="interaction-zone" class="space-y-4">
+                </div>
             
-            <div id="feedback" class="mt-6 p-4 rounded-2xl hidden text-left font-bold leading-relaxed"></div>
-        </div>
-
-        <div id="end-card" class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 max-w-md mx-auto w-full text-left hidden space-y-6">
-            <span class="text-6xl block text-left">🏆</span>
-            <h2 class="text-2xl font-bold text-slate-800 text-left leading-relaxed">Quête Terminée !</h2>
-            <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 text-left">
-                <p class="text-sm text-slate-400 font-bold uppercase leading-tight text-left">Ton Score Final</p>
-                <p class="text-4xl font-extrabold text-purple-600 my-2 text-left"><span id="final-score">0</span> / 10</p>
-                <p id="appreciation" class="text-sm font-semibold text-slate-600 leading-relaxed text-left"></p>
-            </div>
-            
-            <div class="flex flex-col gap-3">
-                <button onclick="window.rejouerMemeNiveau()" class="w-full bg-purple-700 hover:bg-purple-800 text-white font-bold py-3 px-4 rounded-2xl transition shadow-md text-left flex justify-between items-center">
-                    <span>Rejouer ce niveau</span>
-                    <span>🔄</span>
-                </button>
-                <button onclick="window.retourNiveaux()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 px-4 rounded-2xl transition border border-slate-200 text-left flex justify-between items-center">
-                    <span>Changer de niveau</span>
-                    <span>🏰</span>
-                </button>
-                <button onclick="window.retourPortail()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 px-4 rounded-2xl transition shadow-md text-left flex justify-between items-center">
-                    <span>Quitter vers le portail</span>
+            <div id="action-zone" class="mt-6 hidden">
+                <button id="btn-valider" onclick="window.verifierActionUtilisateur()" class="bg-purple-700 hover:bg-purple-800 text-white font-bold py-3.5 px-6 rounded-2xl transition w-full text-left flex justify-between items-center shadow-sm">
+                    <span>Inscrire l'action dans le grimoire</span>
                     <span>➔</span>
                 </button>
             </div>
+
+            <div id="feedback" class="mt-6 p-4 rounded-2xl hidden text-left font-bold leading-relaxed transition-all"></div>
+            
+            <div id="next-zone" class="mt-6 hidden">
+                <button onclick="window.continuerMission()" class="bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 px-6 rounded-2xl transition w-full text-left flex justify-between items-center">
+                    <span>Continuer la quête</span>
+                    <span>✨</span>
+                </button>
+            </div>
         </div>
+
+        <div id="screen-result" class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 max-w-md mx-auto w-full text-left hidden space-y-6">
+            <span class="text-6xl block text-left" id="result-icon">🏆</span>
+            <h2 class="text-2xl font-bold text-slate-800 text-left leading-relaxed">Rapport de Fin d'Étape</h2>
+            <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 text-left">
+                <p class="text-xs text-slate-400 font-bold uppercase leading-tight text-left">Défis Validés</p>
+                <p class="text-4xl font-extrabold text-purple-600 my-2 text-left"><span id="final-score">0</span> / 5</p>
+                <div class="flex gap-1 my-3 text-2xl" id="stars-reward-display"></div>
+                <p id="appreciation" class="text-sm font-semibold text-slate-600 leading-relaxed text-left"></p>
+            </div>
+
+            <div id="codex-unlock-alert" class="bg-amber-50 border border-amber-200 p-4 rounded-2xl hidden flex gap-3 items-start text-left">
+                <span class="text-3xl">🎁</span>
+                <div>
+                    <h4 class="text-amber-900 font-bold text-sm leading-relaxed text-left">Nouvel artefact ajouté au Codex !</h4>
+                    <p id="unlocked-item-desc" class="text-xs text-amber-800 leading-relaxed mt-0.5 text-left"></p>
+                </div>
+            </div>
+            
+            <button onclick="window.quitterVersRoyaume()" class="w-full bg-purple-700 hover:bg-purple-800 text-white font-bold py-3.5 px-4 rounded-2xl transition shadow-md text-left flex justify-between items-center">
+                <span>Retourner aux quêtes du Royaume</span>
+                <span>🏰</span>
+            </button>
+        </div>
+
+        <div id="screen-codex" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 hidden items-center justify-center p-4">
+            <div class="bg-white rounded-3xl shadow-xl border border-slate-200 w-full max-w-2xl p-6 flex flex-col max-h-[85vh] text-left">
+                <div class="flex justify-between items-center pb-4 border-b border-slate-100">
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900 leading-relaxed text-left">Le Codex de Numéria</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed text-left">Objets, créatures et reliques magiques collectés au fil des missions.</p>
+                    </div>
+                    <button onclick="window.basculerCodex()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 w-10 h-10 rounded-full font-bold flex items-center justify-center">✕</button>
+                </div>
+                <div class="overflow-y-auto py-4 space-y-3 flex-grow" id="codex-items-list">
+                    </div>
+            </div>
+        </div>
+
     </main>
 
     <footer class="bg-slate-900 text-slate-500 py-4 text-center text-xs font-sans">
-        <p>© 2026 Classe Numérique Premium — Les Royaumes de Numéria.</p>
+        <p>© 2026 École Numérique Premium — Les Royaumes Perdus de Numéria (8H).</p>
     </footer>
 
     <script type="module">
@@ -108,7 +141,7 @@
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Configuration Firebase
+        // Configuration Firebase standardisée
         const firebaseConfig = {
             apiKey: "AIzaSyAvXQI3f34J5htG-t9kroM4ynIqCgO9xXI",
             authDomain: "ma-classe-179de.firebaseapp.com",
@@ -119,21 +152,16 @@
         };
         const appId = "classe-primaire-2026";
 
-        // Récupération des paramètres élèves
+        // Traitement de l'identité de l'élève transmis par le portail
         const params = new URLSearchParams(window.location.search);
-        const nomEleve = params.get('eleve') || "Visiteur";
+        const nomEleve = params.get('eleve') || "Aventurier Anonyme";
         document.getElementById('nom-eleve-badge').innerText = nomEleve;
         window.nomEleve = nomEleve;
 
         let loadingFini = false;
-        let niveauChoisi = 1; 
-        let questionsPartie = []; 
-        let indexQuestionCourante = 0; 
-        let score = 0; 
-        let reponseSelectionnee = false;
 
-        // Fonction de suppression de l'écran de chargement
-        function annulerChargementEtDemarrer() {
+        // Fonction d'ouverture sécurisée des écrans de jeu
+        function leverEcranChargement() {
             if (loadingFini) return;
             loadingFini = true;
             const overlay = document.getElementById('loading-overlay');
@@ -141,24 +169,23 @@
                 overlay.classList.add('opacity-0');
                 setTimeout(() => { 
                     overlay.style.display = 'none'; 
-                    document.getElementById('level-card').classList.remove('hidden');
+                    window.chargerDonneesEtCarte();
                 }, 500);
             }
         }
 
-        // Sécurité : Force l'affichage si Firebase met plus de 1.5 seconde à répondre
+        // Sécurité temps : Si la réponse réseau Firebase traîne, on force l'application à s'exécuter après 1,5s
         setTimeout(() => {
-            annulerChargementEtDemarrer();
+            leverEcranChargement();
         }, 1500);
 
-        // Initialisation Firebase & Auth
+        // Connexion Firebase & Initialisation
         try {
             const app = initializeApp(firebaseConfig);
             const auth = getAuth(app);
             const db = getFirestore(app);
 
             window.db = db;
-            window.appId = appId;
 
             const initAuth = async () => {
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
@@ -167,15 +194,13 @@
                     await signInAnonymously(auth);
                 }
             };
-            initAuth().catch(() => annulerChargementEtDemarrer());
+            initAuth().catch(() => leverEcranChargement());
 
             onAuthStateChanged(auth, (user) => {
-                if (user) {
-                    window.currentUser = user;
-                }
-                annulerChargementEtDemarrer();
+                leverEcranChargement();
             });
 
+            // Sauvegarde décentralisée des scores de l'app
             window.enregistrerScoreFirebase = async function(exercice, corrects, erreurs) {
                 try {
                     const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'scores');
@@ -186,167 +211,238 @@
                         erreurs: erreurs,
                         timestamp: Date.now()
                     });
-                    console.log("Score de numération synchronisé !");
+                    console.log("Score enregistré sur Firebase.");
                 } catch (err) {
-                    console.error("Erreur d'écriture Firebase :", err);
+                    console.error("Erreur d'écriture Firebase silencieuse :", err);
                 }
             };
-
         } catch (e) {
-            console.error("Erreur Firebase :", e);
-            annulerChargementEtDemarrer();
+            console.error("Erreur d'initialisation Firebase :", e);
+            leverEcranChargement();
         }
+    </script>
 
-        // Banque de questions classées par niveaux distincts
-        const banqueQuestions = {
-            1: [
-                { q: "Comment s'écrit en chiffres : cinq cent mille quarante ?", r: "500'040", options: ["500'040", "50'040", "500'400", "5'000'040"] },
-                { q: "Combien y a-t-il de dizaines de milliers au total dans le nombre 250'000 ?", r: "25", options: ["25", "250", "2", "5"] },
-                { q: "Dans le nombre 452'389, quel est le chiffre des dizaines de milliers ?", r: "5", options: ["5", "4", "2", "3"] },
-                { q: "Quel est le nombre juste avant 100'000 ?", r: "99'999", options: ["99'999", "99'990", "100'001", "99'000"] },
-                { q: "Que représente le chiffre 8 dans le nombre 843'105 ?", r: "Centaines de milliers", options: ["Centaines de milliers", "Dizaines de milliers", "Unités de mille", "Centaines"] },
-                { q: "Quel nombre est égal à (2 × 100'000) + (4 × 1'000) + 50 ?", r: "204'050", options: ["204'050", "240'050", "204'500", "24'050"] },
-                { q: "Dans le nombre 125'400, quel est le chiffre des centaines de milliers ?", r: "1", options: ["1", "2", "5", "4"] },
-                { q: "Comment s'écrit en chiffres : trois cent mille trois cents ?", r: "300'300", options: ["300'300", "30'300", "300'003", "3'000'300"] },
-                { q: "Quel est le nombre juste après 499'999 ?", r: "500'000", options: ["500'000", "499'000", "499'990", "600'000"] },
-                { q: "Combien d'unités de mille y a-t-il au total dans 75'000 ?", r: "75", options: ["75", "7", "5", "750"] }
-            ],
-            2: [
-                { q: "Dans le nombre 4'523'890, quel est le chiffre des dizaines de milliers ?", r: "2", options: ["2", "5", "3", "4"] },
-                { q: "Comment s'écrit en chiffres : douze millions deux cent mille trente ?", r: "12'200'030", options: ["12'200'030", "12'020'030", "1'220'030", "12'200'300"] },
-                { q: "Que représente le chiffre 7 dans le nombre 7'403'125 ?", r: "Unités de millions", options: ["Unités de millions", "Dizaines de millions", "Centaines de milliers", "Unités de milliers"] },
-                { q: "Dans le nombre 5'412'389, quel est le chiffre des centaines de milliers ?", r: "4", options: ["4", "1", "5", "2"] },
-                { q: "Comment s'écrit en chiffres : seize millions quatre-vingt mille deux cents ?", r: "16'080'200", options: ["16'080'200", "16'800'200", "1'680'200", "16'080'020"] },
-                { q: "Que représente le chiffre 8 dans le nombre 12'843'105 ?", r: "Centaines de milliers", options: ["Centaines de milliers", "Dizaines de milliers", "Unités de millions", "Dizaines de millions"] },
-                { q: "Dans le nombre 8'321'754, quel est le chiffre des unités de millions ?", r: "8", options: ["8", "3", "2", "1"] },
-                { q: "Quel nombre a un 7 à la place des unités de millions ?", r: "7'204'000", options: ["7'204'000", "17'000'200", "740'000", "70'450'000"] },
-                { q: "Comment s'écrit en chiffres : deux millions quatre cents ?", r: "2'000'400", options: ["2'000'400", "2'400'000", "200'400", "24'000'000"] },
-                { q: "Que représente le chiffre 1 dans le nombre 15'400'000 ?", r: "Dizaines de millions", options: ["Dizaines de millions", "Unités de millions", "Centaines de milliers", "Dizaines de milliers"] }
-            ],
-            3: [
-                { q: "Ajoute 100'000 au nombre 2'950'400. Quel est le résultat ?", r: "3'050'400", options: ["3'050'400", "2'960'400", "2'050'400", "3'950'400"] },
-                { q: "Quel nombre est égal à (4 × 1'000'000) + (5 × 10'000) + 3 ?", r: "4'050'003", options: ["4'050'003", "4'500'003", "4'050'300", "450'003"] },
-                { q: "Dans le nombre 23'456'789, quelle est la valeur totale représentée par le chiffre 3 ?", r: "3'000'000", options: ["3'000'000", "300'000", "30'000", "30'000'000"] },
-                { q: "Quel est le nombre juste avant 1'000'000 ?", r: "999'999", options: ["999'999", "999'990", "1'000'001", "999'000"] },
-                { q: "Retire 10'000 au nombre 1'000'000. Quel est le résultat ?", r: "990'000", options: ["990'000", "999'000", "900'000", "999'990"] },
-                { q: "Quel nombre est égal à 25 centaines de milliers ?", r: "2'500'000", options: ["2'500'000", "250'000", "25'000'000", "25'000"] },
-                { q: "Ajoute 1'000'000 au nombre 99'000'000. Quel est le résultat ?", r: "100'000'000", options: ["100'000'000", "99'100'000", "10'000'000", "99'000'001"] },
-                { q: "Quel nombre est égal à (7 × 10'000'000) + (5 × 100'000) ?", r: "70'500'000", options: ["70'500'000", "75'000'000", "7'500'000", "700'500'000"] },
-                { q: "Si on ajoute 1 dizaine de mille à 395'000, on obtient : ?", r: "405'000", options: ["405'000", "396'000", "495'000", "395'010"] },
-                { q: "Quelle est la moitié de 2'000'000 ?", r: "1'000'000", options: ["1'000'000", "500'000", "100'000", "1'500'000"] }
-            ]
+    <script>
+        // --- 1. CONFIGURATION INTERNE DES ROYAUMES, MISSIONS ET CODEX ---
+        const configJeu = {
+            royaumes: {
+                1: { id: 1, nom: "Vallée des Fondations", desc: "Maîtrise des grands nombres jusqu'aux centaines de milliers.", icone: "🌾" },
+                2: { id: 2, nom: "Forêt des Géants", desc: "Immersion dans l'immensité des millions et de leurs positions.", icone: "🌲" },
+                3: { id: 3, nom: "Marais des Comparaisons", desc: "Ordonner, intercaler et dompter la valeur des signes.", icone: "🦎" },
+                4: { id: 4, nom: "Montagnes Décimales", desc: "Fragments d'unités, dixièmes, centièmes et valeurs partagées.", icone: "🏔️" },
+                5: { id: 5, nom: "Citadelle du Zéro", desc: "Le sanctuaire ultime des pièges de positionnement et grands calculs.", icone: "🏰" }
+            },
+            missions: {
+                // Royaume 1
+                "1_1": { id: "1_1", rId: 1, num: 1, nom: "La Lecture de l'Ancien", type: "qcm" },
+                "1_2": { id: "1_2", rId: 1, num: 2, nom: "Le Décompte des Pierres", type: "qcm" },
+                "1_3": { id: "1_3", rId: 1, num: 3, nom: "L'Assemblage des Pièces", type: "input" },
+                "1_4": { id: "1_4", rId: 1, num: 4, nom: "La Voie Alignée", type: "sorting" },
+                "1_boss": { id: "1_boss", rId: 1, num: "boss", nom: "Le Gardien des Milliers", type: "mix" },
+                // Royaume 2
+                "2_1": { id: "2_1", rId: 2, num: 1, nom: "L'Appel des Cimes", type: "qcm" },
+                "2_2": { id: "2_2", rId: 2, num: 2, nom: "L'Analyse des Écorces", type: "qcm" },
+                "2_3": { id: "2_3", rId: 2, num: 3, nom: "La Forge des Millions", type: "input" },
+                "2_4": { id: "2_4", rId: 2, num: 4, nom: "Le Défilé ordonné", type: "sorting" },
+                "2_boss": { id: "2_boss", rId: 2, num: "boss", nom: "L'Élémentaire Sylvestre", type: "mix" },
+                // Royaume 3
+                "3_1": { id: "3_1", rId: 3, num: 1, nom: "Le Fléau des Balances", type: "qcm" },
+                "3_2": { id: "3_2", rId: 3, num: 2, nom: "L'Ombre d'Avant", type: "input" },
+                "3_3": { id: "3_3", rId: 3, num: 3, nom: "La Marée Croissante", type: "sorting" },
+                "3_4": { id: "3_4", rId: 3, num: 4, nom: "Le Courant Décroissant", type: "sorting" },
+                "3_boss": { id: "3_boss", rId: 3, num: "boss", nom: "L'Hydre des Inégalités", type: "mix" },
+                // Royaume 4
+                "4_1": { id: "4_1", rId: 4, num: 1, nom: "La Poussière de Cristal", type: "qcm" },
+                "4_2": { id: "4_2", rId: 4, num: 2, nom: "Le Partage des Runes", type: "qcm" },
+                "4_3": { id: "4_3", rId: 4, num: 3, nom: "L'Équilibre Fin", type: "qcm" },
+                "4_4": { id: "4_4", rId: 4, num: 4, nom: "L'Échelle des Cimes", type: "sorting" },
+                "4_boss": { id: "4_boss", rId: 4, num: "boss", nom: "Le Golem de Verre", type: "mix" },
+                // Royaume 5
+                "5_1": { id: "5_1", rId: 5, num: 1, nom: "Le Saut Quantique", type: "qcm" },
+                "5_2": { id: "5_2", rId: 5, num: 2, nom: "Le Grand Vide Intercalé", type: "input" },
+                "5_3": { id: "5_3", rId: 5, num: 3, nom: "L'Amplification Magique", type: "qcm" },
+                "5_4": { id: "5_4", rId: 5, num: 4, nom: "La Toile des Experts", type: "input" },
+                "5_boss": { id: "5_boss", rId: 5, num: "boss", nom: "L'Archimage du Néant", type: "mix" }
+            },
+            codex: {
+                "1_1": { nom: "Plume de Gryphon", desc: "Une plume capable de retranscrire instantanément la parole en écriture chiffrée.", type: "Artefact" },
+                "1_2": { nom: "Lentille de Clarté", desc: "Permet de discerner sans erreur les paquets d'unités simples des milliers.", type: "Relique" },
+                "1_3": { nom: "Fragment de Stèle", desc: "Une roche calcaire gravée détaillant l'ordre ancestral des positions.", type: "Relique" },
+                "1_4": { nom: "Boussole Alignée", desc: "Indique la position absolue de n'importe quel nombre sur une ligne imaginaire.", type: "Artefact" },
+                "1_boss": { nom: "Écu des Milliers", desc: "Emblème remis par le protecteur de la Vallée après avoir prouvé sa valeur.", type: "Créature" },
+                "2_1": { nom: "Bourgeon Éternel", desc: "Un bourgeon végétal géant qui croît d'un million de millimètres chaque cycle.", type: "Créature" },
+                "2_2": { nom: "Sève Positionnelle", desc: "Liquide magique illuminant la colonne exacte d'un chiffre inséré.", type: "Relique" },
+                "2_3": { nom: "Enclume Magmatique", desc: "Utilisée pour assembler des dizaines de blocs d'unités lourdes.", type: "Artefact" },
+                "2_4": { nom: "Diadème Sylvestre", desc: "Couronne récompensant le rangement parfait des arbres de la Forêt.", type: "Artefact" },
+                "2_boss": { nom: "Cœur de la Forêt", desc: "Cristal organique renfermant l'essence stable des grands nombres.", type: "Créature" },
+                "3_1": { nom: "Balance d'Or", desc: "Affiche instantanément le symbole d'inégalité correct entre deux poids.", type: "Artefact" },
+                "3_2": { nom: "Sablier Temporel", desc: "Permet d'entrevoir le nombre exact qui précède la faille actuelle.", type: "Relique" },
+                "3_3": { nom: "Lézard des Vases", desc: "Petite créature agile capable de se faufiler exactement entre deux valeurs.", type: "Créature" },
+                "3_4": { nom: "Ancre de Flottaison", desc: "Maintient les nombres en ordre du plus lourd au plus léger.", type: "Artefact" },
+                "3_boss": { nom: "Écaille d'Hydre", desc: "Une armure résistante aux inversions de signes arithmétiques.", type: "Créature" },
+                "4_1": { nom: "Prisme de Quartz", desc: "Divise une unité pure en dix parts égales et visibles à l'œil nu.", type: "Artefact" },
+                "4_2": { nom: "Parchemin Fractionnaire", desc: "Traduit instantanément les partages en écritures à virgule.", type: "Relique" },
+                "4_3": { nom: "Balance de Précision", desc: "Sensible au millième de gramme près.", type: "Artefact" },
+                "4_4": { nom: "Bottes de Gravité", desc: "Aide à gravir les parois glissantes des nombres décimaux.", type: "Artefact" },
+                "4_boss": { nom: "Noyau Cristallin", desc: "Source d'énergie d'une infinie finesse géométrique.", type: "Créature" },
+                "5_1": { nom: "Orbe Temporelle", desc: "Permet d'ajouter ou soustraire 100'000 unités sans altérer l'espace.", type: "Artefact" },
+                "5_2": { nom: "Sceau du Néant", desc: "Marque symbolique empêchant d'ignorer la présence du chiffre zéro.", type: "Relique" },
+                "5_3": { nom: "Sifflet d'Amplification", desc: "Multiplie la portée des troupes par dix d'un simple souffle.", type: "Artefact" },
+                "5_4": { nom: "Grimoire de l'Expert", desc: "Manuel décrivant les décompositions les plus complexes connues.", type: "Relique" },
+                "5_boss": { nom: "Couronne du Néant", desc: "L'artefact suprême certifiant la maîtrise absolue de Numéria.", type: "Créature" }
+            }
         };
 
-        function selectionnerNiveau(niv) {
-            niveauChoisi = niv;
-            document.getElementById('level-card').classList.add('hidden');
-            document.getElementById('game-card').classList.remove('hidden');
-            initJeu();
+        // --- 2. GESTION DES DONNÉES / LOCALSTORAGE ---
+        let progression = {
+            royaumesDebloques: [1],
+            missionsCompletees: {}, // Format: {"1_1": true}
+            etoilesMissions: {},   // Format: {"1_1": 3}
+            codexDebloque: []       // Format: ["1_1", "1_2"]
+        };
+
+        function chargerDonneesEtCarte() {
+            const dataSauvegardee = localStorage.getItem('numeria_rpg_progression');
+            if (dataSauvegardee) {
+                try { progression = JSON.parse(dataSauvegardee); } catch(e) { console.error("Échec parse sauvegarde local."); }
+            }
+            // S'assurer que le premier royaume est toujours actif
+            if (!progression.royaumesDebloques.includes(1)) progression.royaumesDebloques.push(1);
+            construireCarteDuMonde();
         }
 
-        function initJeu() {
-            questionsPartie = [];
-            const tempQuestions = [...banqueQuestions[niveauChoisi]];
-            
-            for (let i = 0; i < 10; i++) {
-                const indexRand = Math.floor(Math.random() * tempQuestions.length);
-                questionsPartie.push(tempQuestions.splice(indexRand, 1)[0]);
-            }
-            
-            const dotsContainer = document.getElementById('dots-container');
-            dotsContainer.innerHTML = '';
-            for (let i = 0; i < 10; i++) { 
-                dotsContainer.innerHTML += `<div id="dot-${i}" class="w-3 h-3 rounded-full bg-slate-200 transition-all duration-200"></div>`; 
-            }
-            indexQuestionCourante = 0; score = 0; chargerQuestion();
+        function enregistrerProgression() {
+            localStorage.setItem('numeria_rpg_progression', JSON.stringify(progression));
         }
 
-        function chargerQuestion() {
-            reponseSelectionnee = false;
-            document.getElementById('num-question').innerText = indexQuestionCourante + 1;
-            document.getElementById('score-live').innerText = score;
-            document.getElementById('feedback').classList.add('hidden');
-            
-            const questionData = questionsPartie[indexQuestionCourante];
-            document.getElementById('enonce-question').innerText = questionData.q;
-            
-            const containerOptions = document.getElementById('options-container');
-            containerOptions.innerHTML = '';
-            
-            const optionsMelangees = [...questionData.options].sort(() => Math.random() - 0.5);
-            
-            optionsMelangees.forEach(option => {
-                containerOptions.innerHTML += `
-                    <button onclick="window.validerReponse('${option.replace(/'/g, "\\'")}', this)" 
-                            class="bg-slate-50 hover:bg-purple-50 border-2 border-slate-100 hover:border-purple-200 font-bold text-slate-700 py-4 px-6 rounded-2xl transition-all duration-150 text-left leading-relaxed text-base w-full">
-                        ${option}
-                    </button>`;
+        // --- 3. LOGIQUE DE NAVIGATION INTERNE ---
+        function afficherEcran(idEcran) {
+            ['screen-world-map', 'screen-realm', 'screen-mission', 'screen-result'].forEach(id => {
+                const ecran = document.getElementById(id);
+                if (ecran) ecran.classList.add('hidden');
             });
+            document.getElementById(idEcran).classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function validerReponse(option, bouton) {
-            if (reponseSelectionnee) return; reponseSelectionnee = true;
-            const questionData = questionsPartie[indexQuestionCourante];
-            const feedback = document.getElementById('feedback');
-            const dot = document.getElementById(`dot-${indexQuestionCourante}`);
+        // --- 4. CONSTRUIRE ÉCRAN 1 : CARTE DU MONDE ---
+        function construireCarteDuMonde() {
+            const conteneur = document.getElementById('realms-list');
+            conteneur.innerHTML = '';
 
-            if (option === questionData.r) {
-                score++; 
-                bouton.classList.add('bg-emerald-500', 'text-white', 'border-emerald-500'); 
-                dot.classList.add('bg-emerald-500');
-                feedback.innerHTML = "✨ Super ! C'est la bonne réponse !";
-                feedback.className = "mt-6 p-4 rounded-2xl text-left font-bold bg-emerald-100 text-emerald-800 leading-relaxed";
-            } else {
-                bouton.classList.add('bg-rose-500', 'text-white', 'border-rose-500'); 
-                dot.classList.add('bg-rose-500');
-                feedback.innerHTML = `❌ Oups ! La bonne réponse était : <strong>${questionData.r}</strong>`;
-                feedback.className = "mt-6 p-4 rounded-2xl text-left font-bold bg-rose-100 text-rose-800 leading-relaxed";
-            }
-            feedback.classList.remove('hidden');
-            setTimeout(() => { 
-                indexQuestionCourante++; 
-                if (indexQuestionCourante < 10) { 
-                    chargerQuestion(); 
-                } else { 
-                    terminerPartie(); 
-                } 
-            }, 2500);
+            Object.values(configJeu.royaumes).forEach(r => {
+                const estDebloque = progression.royaumesDebloques.includes(r.id);
+                const missionsDuRoyaume = Object.values(configJeu.missions).filter(m => m.rId === r.id && m.num !== 'boss');
+                const completesCount = missionsDuRoyaume.filter(m => progression.missionsCompletees[m.id]).length;
+                const bossBattu = progression.missionsCompletees[`${r.id}_boss`];
+
+                let statutTexte = `🔒 Royaume Verrouillé`;
+                let couleurClasse = "bg-slate-100 text-slate-400 border-slate-200 opacity-60 cursor-not-allowed";
+
+                if (estDebloque) {
+                    if (bossBattu) {
+                        statutTexte = `✨ Royaume Libéré (4/4 Quêtes + Boss)`;
+                        couleurClasse = "bg-emerald-50/70 border-emerald-200 hover:border-emerald-300 text-slate-800 cursor-pointer";
+                    } else {
+                        statutTexte = `⚔️ En cours (${completesCount} / 4 quêtes réussies)`;
+                        couleurClasse = "bg-white border-purple-200 hover:border-purple-400 text-slate-800 cursor-pointer shadow-sm";
+                    }
+                }
+
+                const cardHtml = `
+                    <button onclick="${estDebloque ? `window.ouvrirRoyaume(${r.id})` : ''}" class="w-full text-left p-6 rounded-3xl border-2 transition-all duration-150 flex flex-col gap-2 ${couleurClasse}">
+                        <div class="flex items-center gap-3 text-left">
+                            <span class="text-3xl">${r.icone}</span>
+                            <div>
+                                <h3 class="font-bold text-base sm:text-lg text-slate-800 leading-relaxed text-left">${r.id}. ${r.nom}</h3>
+                                <p class="text-xs text-slate-500 leading-relaxed text-left">${r.desc}</p>
+                            </div>
+                        </div>
+                        <span class="text-xs font-bold mt-2 leading-relaxed text-left block">${statutTexte}</span>
+                    </button>
+                `;
+                conteneur.innerHTML += cardHtml;
+            });
+            afficherEcran('screen-world-map');
         }
 
-        async function terminerPartie() {
-            document.getElementById('game-card').classList.add('hidden');
-            document.getElementById('end-card').classList.remove('hidden');
-            document.getElementById('final-score').innerText = score;
+        // --- 5. CONSTRUIRE ÉCRAN 2 : VUE ROYAUME ---
+        let royaumeActuelId = 1;
+        function ouvrirRoyaume(idRoyaume) {
+            royaumeActuelId = idRoyaume;
+            const r = configJeu.royaumes[idRoyaume];
+            document.getElementById('realm-title').innerText = `${r.icone} ${r.nom}`;
+            document.getElementById('realm-desc').innerText = r.desc;
+
+            // Liste des 4 missions classiques
+            const listeMissionsConteneur = document.getElementById('missions-list');
+            listeMissionsConteneur.innerHTML = '';
             
-            let appreciation = score >= 8 
-                ? "Excellent travail dans les Royaumes ! Tu as maîtrisé la puissance de ces nombres. 🌟" 
-                : "Quête terminée. Continue à t'entraîner régulièrement pour mieux lire et écrire ces grands nombres. 💪";
-            document.getElementById('appreciation').innerText = appreciation;
+            const missionsFiltrees = Object.values(configJeu.missions).filter(m => m.rId === idRoyaume && m.num !== 'boss');
+            let toutesMissionsFaites = true;
 
-            if (typeof window.enregistrerScoreFirebase === 'function') {
-                await window.enregistrerScoreFirebase(`Numéria — Niveau ${niveauChoisi}`, score, 10 - score);
+            missionsFiltrees.forEach(m => {
+                const faite = progression.missionsCompletees[m.id];
+                const etoiles = progression.etoilesMissions[m.id] || 0;
+                if (!faite) toutesMissionsFaites = false;
+
+                let etoilesHtml = '';
+                for(let i=0; i<3; i++) etoilesHtml += i < etoiles ? '⭐' : '⚫';
+
+                const missionCard = `
+                    <button onclick="window.lancerMission('${m.id}')" class="w-full bg-white hover:bg-purple-50/50 border border-slate-200 hover:border-purple-300 p-5 rounded-2xl transition text-left flex flex-col justify-between gap-2 shadow-sm">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider font-bold text-purple-600 block text-left">Quête Numéro ${m.num}</span>
+                            <h4 class="font-bold text-base text-slate-800 leading-relaxed text-left mt-0.5">${m.nom}</h4>
+                        </div>
+                        <div class="flex justify-between items-center w-full mt-2">
+                            <span class="text-xs text-slate-400 font-bold leading-relaxed text-left">${faite ? '✔ Réussie' : '⭕ Non commencée'}</span>
+                            <span class="text-sm">${etoilesHtml}</span>
+                        </div>
+                    </button>
+                `;
+                listeMissionsConteneur.innerHTML += missionCard;
+            });
+
+            // Bloc du Boss final de zone
+            const bossConteneur = document.getElementById('boss-container');
+            const bossData = configJeu.missions[`${idRoyaume}_boss`];
+            const bossBattu = progression.missionsCompletees[bossData.id];
+
+            if (toutesMissionsFaites) {
+                bossConteneur.innerHTML = `
+                    <button onclick="window.lancerMission('${bossData.id}')" class="w-full bg-gradient-to-r from-red-50 to-amber-50 hover:from-red-100 hover:to-amber-100 border-2 border-red-200 p-6 rounded-2xl transition text-left flex justify-between items-center">
+                        <div class="text-left">
+                            <span class="bg-red-600 text-white font-bold text-[10px] px-2.5 py-0.5 rounded-full uppercase text-left tracking-wider">Épreuve du Boss</span>
+                            <h3 class="text-lg font-bold text-slate-900 leading-relaxed text-left mt-1">👹 Defier : ${bossData.nom}</h3>
+                            <p class="text-xs text-slate-600 leading-relaxed text-left">${bossBattu ? '🏆 Victoire acquise et scellée.' : '⚔️ Le combat final est accessible ! Complétez ce défi pour libérer la zone.'}</p>
+                        </div>
+                        <span class="text-3xl">${bossBattu ? '👑' : '🔥'}</span>
+                    </button>
+                `;
+            } else {
+                bossConteneur.innerHTML = `
+                    <div class="w-full bg-slate-100 border border-slate-200 p-6 rounded-2xl text-left flex justify-between items-center opacity-60 cursor-not-allowed">
+                        <div class="text-left">
+                            <span class="bg-slate-400 text-white font-bold text-[10px] px-2.5 py-0.5 rounded-full uppercase text-left tracking-wider">Boss Scellé</span>
+                            <h3 class="text-lg font-bold text-slate-500 leading-relaxed text-left mt-1">👹 ${bossData.nom}</h3>
+                            <p class="text-xs text-slate-400 leading-relaxed text-left">Terminez d'abord les 4 quêtes précédentes du royaume pour briser la barrière magique.</p>
+                        </div>
+                        <span class="text-3xl">🔒</span>
+                    </div>
+                `;
             }
+
+            afficherEcran('screen-realm');
         }
 
-        function rejouerMemeNiveau() {
-            document.getElementById('end-card').classList.add('hidden');
-            document.getElementById('game-card').classList.remove('hidden');
-            initJeu();
-        }
+        // --- 6. MOTEUR DE GÉNÉRATION DYNAMIQUE DE QUESTIONS (SANS HARDCODING) ---
+        let missionActuelle = null;
+        let pileQuestions = [];
+        let indexQuestion = 0;
+        let scoreMission = 0;
+        let questionEvaluee = false;
+        let reponseTriCourante = []; // Utile pour le type 3 (Classement)
 
-        function retourNiveaux() {
-            document.getElementById('end-card').classList.add('hidden');
-            document.getElementById('level-card').classList.remove('hidden');
-        }
-
-        function retourPortail() { window.location.href = `index.html`; }
-
-        // Liaison des fonctions à l'objet global Window pour les appels HTML onclick
-        window.selectionnerNiveau = selectionnerNiveau;
-        window.validerReponse = validerReponse;
-        window.rejouerMemeNiveau = rejouerMemeNiveau;
-        window.retourNiveaux = retourNiveaux;
-        window.retourPortail = retourPortail;
-    </script>
-</body>
-</html>
+        function lancerMission(idMission) {
+            missionActuelle = configJeu.missions[idMission];
