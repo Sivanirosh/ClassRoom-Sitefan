@@ -446,3 +446,371 @@
 
         function lancerMission(idMission) {
             missionActuelle = configJeu.missions[idMission];
+            pileQuestions = genererQuestionsPourMission(missionActuelle);
+            indexQuestion = 0;
+            scoreMission = 0;
+
+            document.getElementById('mission-title-badge').innerText = missionActuelle.nom;
+            
+            // Fabriquer les points indicateurs de progression 1 à 5
+            const dots = document.getElementById('dots-container');
+            dots.innerHTML = '';
+            for(let i=0; i<5; i++) {
+                dots.innerHTML += `<div id="dot-m-${i}" class="w-2.5 h-2.5 rounded-full bg-slate-200 transition-all"></div>`;
+            }
+
+            chargerQuestionEtape();
+            afficherEcran('screen-mission');
+        }
+
+        function genererQuestionsPourMission(m) {
+            let questions = [];
+            const estBoss = m.num === 'boss';
+
+            for (let i = 0; i < 5; i++) {
+                // Si c'est un boss, on pioche un type aléatoire, sinon on utilise le type structurel
+                let selectType = estBoss ? ['qcm', 'input', 'sorting'][Math.floor(Math.random() * 3)] : m.type;
+                let targetRealm = m.rId;
+
+                let qObj = { type: selectType };
+
+                if (targetRealm === 1) { // Vallée des Fondations (Milliers)
+                    let baseVal = Math.floor(Math.random() * 899 + 100) * 1000 + Math.floor(Math.random() * 899 + 99);
+                    if (selectType === 'qcm') {
+                        qObj.q = `Dans le nombre ${formaterEspace(baseVal)}, quel est le chiffre des dizaines de milliers ?`;
+                        let dizMille = Math.floor((baseVal % 100000) / 10000);
+                        qObj.r = dizMille.toString();
+                        qObj.options = extraireDistracteursPlausibles(dizMille, [0,1,2,3,4,5,6,7,8,9]);
+                    } else if (selectType === 'input') {
+                        let c = Math.floor(Math.random() * 899 + 100);
+                        qObj.q = `Recomposez le nombre sous forme numérique condensée : (${c} × 1'000) + 45`;
+                        qObj.r = (c * 1000 + 45).toString();
+                    } else {
+                        qObj.q = `Sélectionnez et rangez ces nombres du plus PETIT au plus GRAND (Ordre Croissant) :`;
+                        let liste = [];
+                        for(let k=0; k<4; k++) liste.push(baseVal + (k * (Math.random() > 0.5 ? 250 : -410)));
+                        qObj.items = [...liste].sort(() => Math.random() - 0.5);
+                        qObj.r = [...liste].sort((a,b) => a - b).map(x => formaterEspace(x)).join(' | ');
+                    }
+                } 
+                else if (targetRealm === 2) { // Forêt des Géants (Millions)
+                    let baseVal = Math.floor(Math.random() * 89 + 2) * 1000000 + Math.floor(Math.random() * 899 + 10) * 1000;
+                    if (selectType === 'qcm') {
+                        qObj.q = `Que représente le chiffre 7 dans le nombre ${formaterEspace(baseVal + 70000)} ?`;
+                        qObj.r = "Dizaines de milliers";
+                        qObj.options = ["Dizaines de milliers", "Unités de millions", "Centaines de milliers", "Unités simples"];
+                    } else if (selectType === 'input') {
+                        let mil = Math.floor(Math.random() * 8 + 2);
+                        qObj.q = `Écris en chiffres le mot-nombre : "${mil} millions deux cent mille" (Ne pas mettre d'espaces ou apostrophes)`;
+                        qObj.r = `${mil}200000`;
+                    } else {
+                        qObj.q = `Triez ces grands territoires du plus GRAND au plus PETIT (Ordre Décroissant) :`;
+                        let liste = [baseVal, baseVal - 500000, baseVal + 1200000, baseVal - 1000000];
+                        qObj.items = [...liste].sort(() => Math.random() - 0.5);
+                        qObj.r = [...liste].sort((a,b) => b - a).map(x => formaterEspace(x)).join(' | ');
+                    }
+                }
+                else if (targetRealm === 3) { // Marais des Comparaisons
+                    let n1 = Math.floor(Math.random() * 400000 + 100000);
+                    if (selectType === 'qcm') {
+                        let n2 = Math.random() > 0.5 ? n1 + 1000 : n1 - 1000;
+                        qObj.q = `Quel symbole valide l'affirmation suivante ? <br> ${formaterEspace(n1)}  [ ? ]  ${formaterEspace(n2)}`;
+                        qObj.r = n1 > n2 ? ">" : "<";
+                        qObj.options = ["<", ">", "="];
+                    } else if (selectType === 'input') {
+                        qObj.q = `Quel est le nombre entier juste AVANT (prédécesseur de) ${formaterEspace(n1)} ? (Écrire sans espace)`;
+                        qObj.r = (n1 - 1).toString();
+                    } else {
+                        qObj.q = `Triez ces nombres du plus PETIT au plus GRAND :`;
+                        let liste = [n1, n1 - 50, n1 + 105, n1 + 20];
+                        qObj.items = [...liste].sort(() => Math.random() - 0.5);
+                        qObj.r = [...liste].sort((a,b) => a - b).map(x => formaterEspace(x)).join(' | ');
+                    }
+                }
+                else if (targetRealm === 4) { // Montagnes Décimales
+                    let dec = (Math.floor(Math.random() * 800 + 10) / 100);
+                    if (selectType === 'qcm') {
+                        qObj.q = `Dans le nombre décimal ${dec.toString().replace('.', ',')}, quel est le chiffre des centièmes ?`;
+                        let str = dec.toFixed(2);
+                        let centieme = str[str.length - 1];
+                        qObj.r = centieme;
+                        qObj.options = extraireDistracteursPlausibles(parseInt(centieme), [0,1,2,3,4,5]);
+                    } else if (selectType === 'input') {
+                        qObj.q = `Quelle est l'écriture décimale de la fraction 45/10 ? (Utilise la virgule)`;
+                        qObj.r = "4,5";
+                    } else {
+                        qObj.q = `Rangez ces mesures du plus PETIT au plus GRAND :`;
+                        let liste = [dec, dec + 0.12, dec - 0.05, dec + 0.02];
+                        qObj.items = [...liste].sort(() => Math.random() - 0.5);
+                        qObj.r = [...liste].sort((a,b) => a - b).map(x => x.toString().replace('.', ',')).join(' | ');
+                    }
+                }
+                else { // Citadelle du Zéro
+                    let zeroNum = Math.random() > 0.5 ? 504008 : 30040;
+                    if (selectType === 'qcm') {
+                        qObj.q = `Si on ajoute 100'000 au nombre ${formaterEspace(zeroNum)}, on obtient :`;
+                        qObj.r = formaterEspace(zeroNum + 100000);
+                        qObj.options = [formaterEspace(zeroNum + 100000), formaterEspace(zeroNum + 10000), formaterEspace(zeroNum + 1000000), formaterEspace(zeroNum + 100)];
+                    } else if (selectType === 'input') {
+                        qObj.q = `Quel nombre obtient-on si on prend 25 centaines de milliers complètes ? (Sans espace)`;
+                        qObj.r = "2500000";
+                    } else {
+                        qObj.q = `Classez du plus PETIT au plus GRAND :`;
+                        let liste = [zeroNum, zeroNum - 200, zeroNum + 5000, zeroNum - 4000];
+                        qObj.items = [...liste].sort(() => Math.random() - 0.5);
+                        qObj.r = [...liste].sort((a,b) => a - b).map(x => formaterEspace(x)).join(' | ');
+                    }
+                }
+
+                questions.push(qObj);
+            }
+            return questions;
+        }
+
+        function formaterEspace(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'");
+        }
+
+        function extraireDistracteursPlausibles(bonneRep, banque) {
+            let options = new Set([bonneRep.toString()]);
+            while(options.size < Math.min(banque.length, 4)) {
+                let r = banque[Math.floor(Math.random() * banque.length)].toString();
+                options.add(r);
+            }
+            return Array.from(options).sort(() => Math.random() - 0.5);
+        }
+
+        // --- 7. REPRODUCTION DE L'ÉTAPE DE JEU & INTERACTION ---
+        function chargerQuestionEtape() {
+            questionEvaluee = false;
+            document.getElementById('num-question').innerText = indexQuestion + 1;
+            document.getElementById('feedback').classList.add('hidden');
+            document.getElementById('next-zone').classList.add('hidden');
+            document.getElementById('action-zone').classList.add('hidden');
+
+            const q = pileQuestions[indexQuestion];
+            document.getElementById('enonce-question').innerHTML = q.q;
+
+            const conteneur = document.getElementById('interaction-zone');
+            conteneur.innerHTML = '';
+
+            if (q.type === 'qcm') {
+                q.options.forEach(opt => {
+                    conteneur.innerHTML += `
+                        <button onclick="window.soumettreChoixQcm('${opt.replace(/'/g, "\\'")}', this)" class="w-full bg-slate-50 hover:bg-purple-50/70 border-2 border-slate-200 p-4 rounded-xl text-left font-bold text-slate-700 transition leading-relaxed">
+                            ${opt}
+                        </button>
+                    `;
+                });
+            } 
+            else if (q.type === 'input') {
+                conteneur.innerHTML = `
+                    <input type="text" id="input-reponse" class="w-full border-2 border-slate-300 p-4 rounded-xl font-bold text-slate-800 text-left focus:border-purple-500 outline-none leading-relaxed" placeholder="Saisissez votre réponse ici...">
+                `;
+                document.getElementById('action-zone').classList.remove('hidden');
+                setTimeout(() => document.getElementById('input-reponse').focus(), 150);
+            } 
+            else if (q.type === 'sorting') {
+                reponseTriCourante = [];
+                let itemsHtml = q.items.map((item) => {
+                    let affichage = item.toString().includes('.') ? item.toString().replace('.', ',') : formaterEspace(item);
+                    return `<button onclick="window.clicElementTri('${affichage}', this)" class="bg-purple-50 hover:bg-purple-100 border border-purple-200 px-4 py-3 rounded-xl font-bold text-purple-950 text-sm transition-all shadow-sm">${affichage}</button>`;
+                }).join('');
+
+                conteneur.innerHTML = `
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 text-left">Éléments disponibles (cliquez pour sélectionner dans l'ordre) :</p>
+                    <div id="tri-dispo" class="flex flex-wrap gap-2 mb-4 text-left">${itemsHtml}</div>
+                    <p class="text-xs font-bold text-purple-500 uppercase tracking-wider mb-2 text-left">Votre ordre de rangement :</p>
+                    <div id="tri-choisi" class="flex flex-wrap gap-2 p-3 bg-purple-950/5 min-h-[55px] rounded-xl border border-dashed border-purple-300 text-left"></div>
+                    <button onclick="window.reinitialiserTri()" class="text-xs text-red-600 hover:underline font-bold mt-1 block text-left">⟲ Effacer et recommencer le tri</button>
+                `;
+                document.getElementById('action-zone').classList.remove('hidden');
+            }
+        }
+
+        // Actions Types de questions
+        function soumettreChoixQcm(valeur, bouton) {
+            if (questionEvaluee) return;
+            questionEvaluee = true;
+            const q = pileQuestions[indexQuestion];
+            validerEtapeResultat(valeur === q.r, q.r, bouton);
+        }
+
+        function clicElementTri(valeur, bouton) {
+            if (questionEvaluee) return;
+            if (reponseTriCourante.includes(valeur)) return;
+            
+            reponseTriCourante.push(valeur);
+            bouton.classList.add('opacity-30', 'pointer-events-none');
+
+            const conteneurChoisi = document.getElementById('tri-choisi');
+            conteneurChoisi.innerHTML += `<span class="bg-purple-600 text-white px-3 py-1.5 rounded-lg font-bold text-xs shadow-sm">${valeur}</span>`;
+        }
+
+        function reinitialiserTri() {
+            if (questionEvaluee) return;
+            chargerQuestionEtape();
+        }
+
+        function verifierActionUtilisateur() {
+            if (questionEvaluee) return;
+            questionEvaluee = true;
+            const q = pileQuestions[indexQuestion];
+
+            if (q.type === 'input') {
+                const userVal = document.getElementById('input-reponse').value.trim();
+                validerEtapeResultat(userVal.toLowerCase() === q.r.toLowerCase(), q.r, null);
+            } 
+            else if (q.type === 'sorting') {
+                const reponseGeneraleTri = reponseTriCourante.join(' | ');
+                validerEtapeResultat(reponseGeneraleTri === q.r, q.r, null);
+            }
+        }
+
+        function validerEtapeResultat(estCorrect, reponseCorrecte, boutonCible) {
+            const fd = document.getElementById('feedback');
+            const dot = document.getElementById(`dot-m-${indexQuestion}`);
+
+            if (estCorrect) {
+                scoreMission++;
+                if (boutonCible) boutonCible.className = "w-full bg-emerald-600 text-white border-2 border-emerald-600 p-4 rounded-xl text-left font-bold transition leading-relaxed";
+                if (dot) dot.className = "w-2.5 h-2.5 rounded-full bg-emerald-500";
+                fd.innerHTML = "✨ Excellent ! Votre parchemin valide cette réponse.";
+                fd.className = "mt-6 p-4 rounded-2xl text-left font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 leading-relaxed";
+            } else {
+                if (boutonCible) boutonCible.className = "w-full bg-rose-600 text-white border-2 border-rose-600 p-4 rounded-xl text-left font-bold transition leading-relaxed";
+                if (dot) dot.className = "w-2.5 h-2.5 rounded-full bg-rose-500";
+                fd.innerHTML = `❌ Erreur. La vérité magique était : <strong>${reponseCorrecte}</strong>`;
+                fd.className = "mt-6 p-4 rounded-2xl text-left font-bold bg-rose-100 text-rose-800 border border-rose-200 leading-relaxed";
+            }
+
+            fd.classList.remove('hidden');
+            document.getElementById('action-zone').classList.add('hidden');
+            document.getElementById('next-zone').classList.remove('hidden');
+        }
+
+        function continuerMission() {
+            indexQuestion++;
+            if (indexQuestion < 5) {
+                chargerQuestionEtape();
+            } else {
+                analyserFinDeMission();
+            }
+        }
+
+        // --- 8. TRAITEMENT ET AFFICHAGE DES RÉSULTATS DE QUÊTE ---
+        async function analyserFinDeMission() {
+            document.getElementById('screen-mission').classList.add('hidden');
+            
+            document.getElementById('final-score').innerText = scoreMission;
+            
+            // Calcul des étoiles
+            let etoilesGagnees = 0;
+            if (scoreMission === 5) etoilesGagnees = 3;
+            else if (scoreMission === 4) etoilesGagnees = 2;
+            else if (scoreMission === 3) etoilesGagnees = 1;
+
+            const etoilesConteneur = document.getElementById('stars-reward-display');
+            etoilesConteneur.innerHTML = '';
+            for(let i=0; i<3; i++) etoilesConteneur.innerHTML += i < etoilesGagnees ? '⭐' : '⚫';
+
+            const reussi = scoreMission >= 3;
+            const alerteCodex = document.getElementById('codex-unlock-alert');
+            alerteCodex.classList.add('hidden');
+
+            if (reussi) {
+                document.getElementById('result-icon').innerText = "🏆";
+                document.getElementById('appreciation').innerText = "Félicitations ! La quête est complétée avec succès.";
+                
+                // Sauvegarde de l'état
+                progression.missionsCompletees[missionActuelle.id] = true;
+                const ancienneEtoile = progression.etoilesMissions[missionActuelle.id] || 0;
+                if (etoilesGagnees > AM) progression.etoilesMissions[missionActuelle.id] = etoilesGagnees;
+
+                // Gestion du Codex de récompenses
+                if (!progression.codexDebloque.includes(missionActuelle.id)) {
+                    progression.codexDebloque.push(missionActuelle.id);
+                    const art = configJeu.codex[missionActuelle.id];
+                    if (art) {
+                        document.getElementById('unlocked-item-desc').innerHTML = `<strong>[${art.type}] ${art.nom}</strong> : ${art.desc}`;
+                        alerteCodex.classList.remove('hidden');
+                    }
+                }
+
+                // Si le boss du royaume est battu, on débloque le royaume suivant !
+                if (missionActuelle.num === 'boss') {
+                    const prochainId = royaumeActuelId + 1;
+                    if (configJeu.royaumes[prochainId] && !progression.royaumesDebloques.includes(prochainId)) {
+                        progression.royaumesDebloques.push(prochainId);
+                    }
+                }
+                
+                enregistrerProgression();
+            } else {
+                document.getElementById('result-icon').innerText = "💀";
+                document.getElementById('appreciation').innerText = "Échec de l'étape. Vous devez obtenir au moins 3/5 réponses exactes pour valider cette quête.";
+            }
+
+            // Envoi synchrone du score vers l'infrastructure Firebase commune
+            if (typeof window.enregistrerScoreFirebase === 'function') {
+                let nomExercicePourLogs = `Numéria — ${configJeu.royaumes[royaumeActuelId].nom} — Q.${missionActuelle.num}`;
+                await window.enregistrerScoreFirebase(nomExercicePourLogs, scoreMission, 5 - scoreMission);
+            }
+
+            afficherEcran('screen-result');
+        }
+
+        function quitterVersRoyaume() {
+            ouvrirRoyaume(royaumeActuelId);
+        }
+
+        // --- 9. STRUCTURE DU GRIMOIRE DU CODEX (OVERLAY) ---
+        function basculerCodex() {
+            const overlay = document.getElementById('screen-codex');
+            if (overlay.classList.contains('hidden')) {
+                const liste = document.getElementById('codex-items-list');
+                liste.innerHTML = '';
+
+                if (progression.codexDebloque.length === 0) {
+                    liste.innerHTML = `<p class="text-sm text-slate-400 italic leading-relaxed text-left p-4">Votre grimoire est vide pour le moment. Accomplissez des missions avec succès pour y inscrire vos trouvailles.</p>`;
+                } else {
+                    progression.codexDebloque.forEach(idKey => {
+                        const art = configJeu.codex[idKey];
+                        const m = configJeu.missions[idKey];
+                        if (art) {
+                            liste.innerHTML += `
+                                <div class="bg-amber-50/50 border border-amber-200/80 p-4 rounded-xl text-left">
+                                    <div class="flex justify-between items-start">
+                                        <span class="font-bold text-sm text-amber-900 leading-relaxed text-left">🔮 ${art.nom}</span>
+                                        <span class="bg-amber-200/60 text-amber-950 font-bold text-[10px] px-2 py-0.5 rounded uppercase">${art.type}</span>
+                                    </div>
+                                    <p class="text-xs text-slate-600 leading-relaxed mt-1 text-left">${art.desc}</p>
+                                    <span class="text-[10px] text-slate-400 block mt-2 text-left">Obtenu dans : ${configJeu.royaumes[m.rId].nom} (${m.nom})</span>
+                                </div>
+                            `;
+                        }
+                    });
+                }
+                overlay.classList.remove('hidden');
+                overlay.classList.add('flex');
+            } else {
+                overlay.classList.remove('flex');
+                overlay.classList.add('hidden');
+            }
+        }
+
+        // --- 10. LIENS AVEC L'OBJET GLOBAL WINDOW POUR INTERACTION PARFAITE ---
+        window.ouvrirRoyaume = ouvrirRoyaume;
+        window.lancerMission = lancerMission;
+        window.soumettreChoixQcm = soumettreChoixQcm;
+        window.clicElementTri = clicElementTri;
+        window.reinitialiserTri = reinitialiserTri;
+        window.verifierActionUtilisateur = verifierActionUtilisateur;
+        window.continuerMission = continuerMission;
+        window.quitterVersRoyaume = quitterVersRoyaume;
+        window.basculerCodex = basculerCodex;
+        window.afficherEcran = afficherEcran;
+        window.chargerDonneesEtCarte = chargerDonneesEtCarte;
+    </script>
+</body>
+</html>
