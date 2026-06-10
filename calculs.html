@@ -2,152 +2,163 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Calcul Décimal - Module d'entraînement</title>
     
-    <!-- Style unifié -->
     <link rel="stylesheet" href="style-commun.css">
-    
-    <!-- Tailwind (optionnel, pour grilles rapides) -->
-    <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
         /* Styles spécifiques au calcul */
-        .operation-display {
-            font-size: 48px;
-            font-family: 'Courier New', monospace;
-            background: #090d16;
-            padding: 32px;
-            border-radius: 24px;
-            text-align: center;
-            margin: 24px 0;
-            border: 1px solid #24324f;
-        }
-        
-        .numeric-pad {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            max-width: 300px;
-            margin: 24px auto;
-        }
-        
-        .num-key {
-            background: #172033;
-            border: 1px solid #2e3e65;
-            border-radius: 16px;
-            padding: 20px;
-            font-size: 24px;
-            font-weight: bold;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.1s;
-        }
-        
-        .num-key:active {
-            background: #2563eb;
-            transform: scale(0.95);
-        }
-        
-        /* Niveau sélectionné */
-        .level-badge {
-            background: #1e3a8a;
-            border-radius: 999px;
-            padding: 4px 12px;
-            font-size: 12px;
+        .niveau-actuel {
+            background: var(--color-calculs);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-size: 14px;
             font-weight: bold;
             display: inline-block;
         }
+        
+        .speak-btn {
+            background: #fef3c7;
+            border: none;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-left: 12px;
+        }
+        
+        .speak-btn:hover {
+            background: #fde68a;
+            transform: scale(1.05);
+        }
+        
+        /* Ardoise tactile */
+        .tactile-board {
+            background: #fefce8;
+            border: 2px solid #fde68a;
+            border-radius: 20px;
+            padding: 16px;
+            margin: 20px 0;
+        }
+        
+        .tactile-board canvas {
+            background: #fffbeb;
+            border-radius: 12px;
+            width: 100%;
+            height: auto;
+            cursor: crosshair;
+            touch-action: none;
+        }
+        
+        .board-controls {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+            justify-content: flex-end;
+        }
+        
+        /* Question en cours */
+        .operation-large {
+            font-size: 56px;
+            font-weight: bold;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            background: #f8fafc;
+            padding: 32px;
+            border-radius: 24px;
+            margin: 20px 0;
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body>
 
-    <!-- ========== HEADER ========== -->
-    <header class="bg-[#0e1422] border-b border-slate-800 py-4">
-        <div class="max-w-4xl mx-auto px-4 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="bg-gradient-to-br from-emerald-500 to-teal-600 p-2 rounded-xl">
-                    <span class="text-xl">🧮</span>
-                </div>
+    <header class="page-header">
+        <div class="header-container">
+            <div class="header-title">
+                <div class="header-icon" style="background: linear-gradient(135deg, var(--color-calculs), #60a5fa);">🧮</div>
                 <div>
-                    <h1 class="font-bold text-white">Calcul Décimal</h1>
-                    <p id="nom-eleve" class="text-xs text-emerald-400">Agent : Chargement...</p>
+                    <h1>Calcul Décimal</h1>
+                    <p>Addition et soustraction avec des nombres à virgule</p>
                 </div>
             </div>
-            <a href="index.html" class="bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded-xl text-sm">
-                ↩ Quitter
-            </a>
+            <div style="display: flex; gap: 12px;">
+                <button id="btn-contrast" class="btn-contrast" onclick="toggleContrast()">👁️ Contraste+</button>
+                <a href="index.html" class="btn-secondary" style="text-decoration: none;">↩ Quitter</a>
+            </div>
         </div>
     </header>
 
-    <!-- ========== MAIN ========== -->
-    <main class="flex-grow max-w-4xl mx-auto px-4 py-8">
+    <main>
         
         <!-- ÉCRAN 1 : CHOIX DU NIVEAU -->
         <div id="screen-level" class="game-card">
             <div class="text-center mb-8">
-                <h2 class="text-2xl font-bold text-white mb-2">Choisis ton défi</h2>
-                <p class="text-slate-400">Sélectionne le niveau qui correspond à ton entraînement</p>
+                <h2 style="font-size: 28px;">🎯 Choisis ton défi</h2>
+                <p style="color: var(--color-text-light);">Sélectionne le niveau qui correspond à ton entraînement</p>
             </div>
             
+            <!-- Niveaux - boutons côte à côte comme demandé -->
             <div class="level-selector">
-                <!-- Niveau 1 -->
-                <div onclick="choisirNiveau(1)" id="level-1" class="level-btn">
-                    <h3>⭐ Niveau 1</h3>
-                    <p>Addition et soustraction</p>
-                    <p class="text-sm text-slate-400 mt-2">Nombres à 1 décimale</p>
+                <div onclick="choisirNiveau(1)" id="niveau-1" class="level-btn">
+                    <span class="level-title">⭐ Niveau 1</span>
+                    <span class="level-desc">+ ou - à 1 décimale</span>
                 </div>
-                
-                <!-- Niveau 2 -->
-                <div onclick="choisirNiveau(2)" id="level-2" class="level-btn">
-                    <h3>⭐⭐ Niveau 2</h3>
-                    <p>Addition et soustraction</p>
-                    <p class="text-sm text-slate-400 mt-2">Deux nombres à 1 décimale</p>
+                <div onclick="choisirNiveau(2)" id="niveau-2" class="level-btn">
+                    <span class="level-title">⭐⭐ Niveau 2</span>
+                    <span class="level-desc">Deux nombres à 1 décimale</span>
                 </div>
-                
-                <!-- Niveau 3 -->
-                <div onclick="choisirNiveau(3)" id="level-3" class="level-btn">
-                    <h3>⭐⭐⭐ Niveau 3</h3>
-                    <p>Addition et soustraction</p>
-                    <p class="text-sm text-slate-400 mt-2">Nombres à 2 décimales</p>
+                <div onclick="choisirNiveau(3)" id="niveau-3" class="level-btn">
+                    <span class="level-title">⭐⭐⭐ Niveau 3</span>
+                    <span class="level-desc">Deux nombres à 2 décimales</span>
                 </div>
-                
-                <!-- Niveau Bonus -->
-                <div onclick="choisirNiveau(4)" id="level-4" class="level-btn">
-                    <h3>🏆 Niveau Bonus</h3>
-                    <p>TOUT mélangé !</p>
-                    <p class="text-sm text-slate-400 mt-2">Tous les niveaux aléatoires</p>
+                <div onclick="choisirNiveau(4)" id="niveau-4" class="level-btn">
+                    <span class="level-title">🏆 Bonus</span>
+                    <span class="level-desc">Tout mélangé !</span>
                 </div>
             </div>
             
-            <button id="btn-start" onclick="demarrerJeu()" class="btn-primary w-full mt-8 opacity-50 cursor-not-allowed" disabled>
+            <button id="btn-start" onclick="demarrerJeu()" class="btn-primary w-full" disabled style="opacity: 0.5;">
                 🚀 Commencer l'entraînement
             </button>
         </div>
         
         <!-- ÉCRAN 2 : JEU -->
         <div id="screen-game" class="hidden game-card">
-            <div class="game-header">
+            <!-- En-tête du jeu -->
+            <div class="flex justify-between items-center mb-6 pb-4" style="border-bottom: 1px solid #e2e8f0;">
                 <div>
-                    <span class="level-badge" id="niveau-affiche">Niveau 1</span>
-                    <span class="text-slate-400 ml-3">Question <span id="num-question">1</span>/10</span>
+                    <span id="niveau-actuel" class="niveau-actuel">Niveau 1</span>
+                    <span style="margin-left: 12px;">Question <span id="num-question">1</span>/10</span>
                 </div>
                 <div>
-                    <span class="text-emerald-400 font-bold" id="score">0</span>
-                    <span class="text-slate-400"> points</span>
+                    <span style="color: var(--color-primary); font-weight: bold;">🏆 Score</span>
+                    <span id="score" style="font-size: 24px; font-weight: bold; margin-left: 8px;">0</span>
                 </div>
             </div>
             
-            <!-- Opération -->
-            <div class="operation-display">
-                <span id="operation">0 + 0</span>
-                <span id="reponse-indice" class="text-slate-500 ml-2"></span>
+            <!-- Opération avec bouton de lecture vocale -->
+            <div class="text-right mb-2">
+                <button id="btn-speak" class="speak-btn" onclick="parlerOperation()" title="Lire la consigne">🔊</button>
+            </div>
+            <div class="operation-large" id="operation">0 + 0 = ?</div>
+            
+            <!-- Ardoise tactile pour poser les calculs -->
+            <div class="tactile-board">
+                <canvas id="tactileCanvas" width="500" height="200" style="width: 100%; height: auto; max-width: 500px; display: block; margin: 0 auto;"></canvas>
+                <div class="board-controls">
+                    <button onclick="effacerArdoise()" class="btn-secondary" style="font-size: 12px;">🗑️ Effacer</button>
+                    <button onclick="changerCouleur()" class="btn-secondary" style="font-size: 12px;">🎨 Changer de couleur</button>
+                </div>
             </div>
             
             <!-- Zone de réponse -->
             <div class="text-center">
-                <label class="text-sm text-slate-400">Ta réponse :</label>
-                <input type="text" id="reponse" class="answer-input mx-auto block" placeholder="Ex: 12,5" autofocus>
+                <label style="font-size: 14px; color: var(--color-text-light);">Ta réponse :</label>
+                <input type="text" id="reponse" class="answer-input" placeholder="Ex: 12,5" autofocus>
                 
                 <!-- Pavé numérique tactile -->
                 <div class="numeric-pad">
@@ -166,133 +177,248 @@
                 </div>
             </div>
             
-            <button onclick="validerReponse()" class="btn-primary w-full mt-6">
-                ✅ Valider ma réponse
-            </button>
+            <button onclick="validerReponse()" class="btn-primary w-full mt-4">✅ Valider ma réponse</button>
             
             <div id="feedback" class="feedback hidden"></div>
         </div>
         
         <!-- ÉCRAN 3 : RÉSULTATS -->
         <div id="screen-result" class="hidden game-card text-center">
-            <h2 class="text-3xl font-bold text-emerald-400 mb-4">🏆 Mission terminée !</h2>
+            <h2 style="font-size: 32px; margin-bottom: 16px;">🏆 Mission terminée !</h2>
             
-            <div class="bg-[#090d16] rounded-2xl p-6 max-w-sm mx-auto mb-6">
-                <p class="text-slate-400">Ton score</p>
-                <p class="text-5xl font-bold text-white"><span id="score-final">0</span>/10</p>
+            <div style="background: #f8fafc; border-radius: 24px; padding: 32px; max-width: 300px; margin: 24px auto;">
+                <p style="color: var(--color-text-light);">Ton score</p>
+                <p style="font-size: 56px; font-weight: bold; color: var(--color-primary);"><span id="score-final">0</span>/10</p>
             </div>
             
-            <p id="message-final" class="text-white mb-6"></p>
+            <div id="new-badge" class="hidden" style="background: #fef3c7; border-radius: 20px; padding: 20px; margin: 20px 0;">
+                <span style="font-size: 40px;">🎉</span>
+                <p style="font-weight: bold; margin-top: 8px;">Nouveau badge débloqué !</p>
+                <p id="badge-name"></p>
+            </div>
             
-            <div class="flex gap-4 justify-center">
-                <button onclick="rejouer()" class="bg-slate-700 hover:bg-slate-600 px-6 py-3 rounded-xl">
-                    🔄 Rejouer
-                </button>
-                <button onclick="choisirNouveauNiveau()" class="btn-primary">
-                    🎯 Changer de niveau
-                </button>
+            <p id="message-final" style="margin: 24px 0;"></p>
+            
+            <div style="display: flex; gap: 16px; justify-content: center;">
+                <button onclick="rejouer()" class="btn-secondary">🔄 Rejouer</button>
+                <button onclick="changerNiveau()" class="btn-primary">🎯 Changer de niveau</button>
+                <a href="index.html" class="btn-primary" style="text-decoration: none;">🏠 Accueil</a>
             </div>
         </div>
         
     </main>
 
     <script>
-        // ============================================
-        // CONFIGURATION DU JEU
-        // ============================================
+        // ============================================================
+        // CALCULS.HTML - VERSION MODERNE AVEC ARDOISE TACTILE
+        // ============================================================
         
-        // Récupérer le nom de l'élève depuis l'URL
+        // ---------- 1. RÉCUPÉRATION DE L'ÉLÈVE ----------
         const urlParams = new URLSearchParams(window.location.search);
         const nomEleve = urlParams.get('eleve') || sessionStorage.getItem('nomEleve') || "Explorateur";
-        document.getElementById('nom-eleve').innerText = `Agent : ${nomEleve}`;
+        const eleveId = urlParams.get('eleveId');
         
-        // État du jeu
+        // ---------- 2. ÉTAT DU JEU ----------
         let niveauActuel = null;      // 1, 2, 3 ou 4
         let score = 0;
         let questionActuelle = 1;
-        let reponseCourante = "";      // Pour le pavé numérique
-        let operationEnCours = {
-            texte: "",
-            reponse: 0
-        };
+        let reponseCourante = "";
+        let operationEnCours = { texte: "", reponse: 0 };
         
-        // ============================================
-        // FONCTION : Choisir le niveau
-        // ============================================
-        function choisirNiveau(niveau) {
-            // Enlever la classe 'selected' de tous les niveaux
-            for (let i = 1; i <= 4; i++) {
-                document.getElementById(`level-${i}`).classList.remove('selected');
-            }
-            // Ajouter la classe 'selected' au niveau choisi
-            document.getElementById(`level-${niveau}`).classList.add('selected');
+        // ---------- 3. ARDOISE TACTILE ----------
+        let canvas = null;
+        let ctx = null;
+        let dessin = false;
+        let couleurArdoise = "#3b82f6";
+        
+        function initArdoise() {
+            canvas = document.getElementById('tactileCanvas');
+            if (!canvas) return;
             
-            niveauActuel = niveau;
+            // Redimensionner le canvas pour qu'il soit réactif
+            const container = canvas.parentElement;
+            const taille = Math.min(container.clientWidth - 32, 500);
+            canvas.width = taille;
+            canvas.height = taille * 0.4;
+            canvas.style.width = '100%';
+            canvas.style.height = 'auto';
             
-            // Activer le bouton "Commencer"
-            const btnStart = document.getElementById('btn-start');
-            btnStart.disabled = false;
-            btnStart.classList.remove('opacity-50', 'cursor-not-allowed');
+            ctx = canvas.getContext('2d');
+            ctx.strokeStyle = couleurArdoise;
+            ctx.lineWidth = 3;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            
+            // Événements souris
+            canvas.addEventListener('mousedown', (e) => {
+                dessin = true;
+                const pos = getSourisPosition(e);
+                ctx.beginPath();
+                ctx.moveTo(pos.x, pos.y);
+                e.preventDefault();
+            });
+            
+            canvas.addEventListener('mousemove', (e) => {
+                if (!dessin) return;
+                const pos = getSourisPosition(e);
+                ctx.lineTo(pos.x, pos.y);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(pos.x, pos.y);
+                e.preventDefault();
+            });
+            
+            canvas.addEventListener('mouseup', () => {
+                dessin = false;
+                ctx.beginPath();
+            });
+            
+            // Événements tactiles (pour tablette)
+            canvas.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                dessin = true;
+                const pos = getTouchPosition(e);
+                ctx.beginPath();
+                ctx.moveTo(pos.x, pos.y);
+            });
+            
+            canvas.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                if (!dessin) return;
+                const pos = getTouchPosition(e);
+                ctx.lineTo(pos.x, pos.y);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(pos.x, pos.y);
+            });
+            
+            canvas.addEventListener('touchend', () => {
+                dessin = false;
+                ctx.beginPath();
+            });
         }
         
-        // ============================================
-        // FONCTION : Démarrer le jeu
-        // ============================================
+        function getSourisPosition(e) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            return {
+                x: (e.clientX - rect.left) * scaleX,
+                y: (e.clientY - rect.top) * scaleY
+            };
+        }
+        
+        function getTouchPosition(e) {
+            const rect = canvas.getBoundingClientRect();
+            const touch = e.touches[0];
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            return {
+                x: (touch.clientX - rect.left) * scaleX,
+                y: (touch.clientY - rect.top) * scaleY
+            };
+        }
+        
+        function effacerArdoise() {
+            if (ctx) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+        }
+        
+        function changerCouleur() {
+            const couleurs = ["#3b82f6", "#ef4444", "#10b981", "#f59e0b", "#8b5cf6", "#ec489a"];
+            const index = couleurs.indexOf(couleurArdoise);
+            couleurArdoise = couleurs[(index + 1) % couleurs.length];
+            if (ctx) ctx.strokeStyle = couleurArdoise;
+        }
+        
+        // ---------- 4. SYNTHÈSE VOCALE ----------
+        function parlerOperation() {
+            const texte = operationEnCours.texte;
+            if (!texte) return;
+            
+            // Créer une phrase complète
+            const phrase = `Calcule ${texte} ?`;
+            
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(phrase);
+                utterance.lang = 'fr-FR';
+                utterance.rate = 0.9;
+                utterance.pitch = 1.1;
+                window.speechSynthesis.cancel(); // Arrête la lecture en cours
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+        
+        // ---------- 5. SÉLECTION DU NIVEAU ----------
+        function choisirNiveau(niveau) {
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById(`niveau-${i}`).classList.remove('selected');
+            }
+            document.getElementById(`niveau-${niveau}`).classList.add('selected');
+            niveauActuel = niveau;
+            
+            const btnStart = document.getElementById('btn-start');
+            btnStart.disabled = false;
+            btnStart.style.opacity = '1';
+            btnStart.style.cursor = 'pointer';
+        }
+        
+        // ---------- 6. DÉMARRAGE ----------
         function demarrerJeu() {
             if (!niveauActuel) return;
             
-            // Réinitialiser les scores
             score = 0;
             questionActuelle = 1;
+            reponseCourante = "";
             
-            // Mettre à jour l'affichage
+            const niveauxTexte = {
+                1: "⭐ Niveau 1",
+                2: "⭐⭐ Niveau 2",
+                3: "⭐⭐⭐ Niveau 3",
+                4: "🏆 Niveau Bonus"
+            };
+            document.getElementById('niveau-actuel').innerText = niveauxTexte[niveauActuel];
             document.getElementById('score').innerText = score;
             document.getElementById('num-question').innerText = questionActuelle;
             
-            // Afficher le niveau choisi
-            const niveauxTextes = {
-                1: "⭐ Niveau 1 - 1 décimale",
-                2: "⭐⭐ Niveau 2 - 1 décimale (2 nombres)",
-                3: "⭐⭐⭐ Niveau 3 - 2 décimales",
-                4: "🏆 Niveau Bonus - Mélangé"
-            };
-            document.getElementById('niveau-affiche').innerText = niveauxTextes[niveauActuel];
-            
-            // Changer d'écran
             document.getElementById('screen-level').classList.add('hidden');
             document.getElementById('screen-game').classList.remove('hidden');
             
-            // Générer la première question
+            // Réinitialiser l'ardoise
+            setTimeout(() => {
+                initArdoise();
+                effacerArdoise();
+            }, 100);
+            
             genererQuestion();
         }
         
-        // ============================================
-        // FONCTION : Générer une question selon niveau
-        // ============================================
+        // ---------- 7. GÉNÉRATION D'UNE QUESTION ----------
         function genererQuestion() {
             if (questionActuelle > 10) {
                 terminerJeu();
                 return;
             }
             
-            // Réinitialiser la réponse
-            reponseCourante = "";
-            document.getElementById('reponse').value = "";
-            document.getElementById('reponse-indice').innerText = "";
+            document.getElementById('num-question').innerText = questionActuelle;
+            document.getElementById('reponse').value = '';
+            reponseCourante = '';
             
-            // Cacher le feedback précédent
             const feedback = document.getElementById('feedback');
             feedback.classList.add('hidden');
             
-            // Choisir une opération (+ ou -) aléatoire
+            // Effacer l'ardoise à chaque nouvelle question
+            effacerArdoise();
+            
+            // Choisir entre addition et soustraction
             const estAddition = Math.random() > 0.5;
             const operateur = estAddition ? '+' : '-';
             
-            // Générer les nombres selon le niveau
             let num1, num2;
             
             switch(niveauActuel) {
-                case 1: // Niveau 1 : + ou - avec 1 décimale
+                case 1: // Niveau 1
                     if (estAddition) {
                         num1 = (Math.random() * 50 + 10).toFixed(1);
                         num2 = (Math.random() * 40 + 5).toFixed(1);
@@ -304,7 +430,7 @@
                     }
                     break;
                     
-                case 2: // Niveau 2 : deux nombres à 1 décimale
+                case 2: // Niveau 2
                     if (estAddition) {
                         num1 = (Math.random() * 50 + 10).toFixed(1);
                         num2 = (Math.random() * 50 + 10).toFixed(1);
@@ -316,7 +442,7 @@
                     }
                     break;
                     
-                case 3: // Niveau 3 : deux décimales
+                case 3: // Niveau 3
                     if (estAddition) {
                         num1 = (Math.random() * 50 + 10).toFixed(2);
                         num2 = (Math.random() * 40 + 5).toFixed(2);
@@ -328,9 +454,8 @@
                     }
                     break;
                     
-                case 4: // Niveau Bonus : mélange tout
+                case 4: // Bonus - mélange tout
                 default:
-                    // Choix aléatoire du type de décimale
                     const decimales = Math.random() > 0.5 ? 1 : 2;
                     if (estAddition) {
                         num1 = (Math.random() * 50 + 10).toFixed(decimales);
@@ -344,21 +469,18 @@
                     break;
             }
             
-            // Arrondir la réponse à 2 décimales max
+            // Arrondir la réponse
             operationEnCours.reponse = Math.round(operationEnCours.reponse * 100) / 100;
             
-            // Afficher l'opération (remplacer . par , pour l'affichage français)
+            // Afficher avec virgule (style français)
             const num1Aff = num1.toString().replace('.', ',');
             const num2Aff = num2.toString().replace('.', ',');
             operationEnCours.texte = `${num1Aff} ${operateur} ${num2Aff}`;
-            document.getElementById('operation').innerHTML = operationEnCours.texte;
+            document.getElementById('operation').innerHTML = `${num1Aff} ${operateur} ${num2Aff} = ?`;
         }
         
-        // ============================================
-        // PAVÉ NUMÉRIQUE (pour mobile/tactile)
-        // ============================================
+        // ---------- 8. PAVÉ NUMÉRIQUE ----------
         function ajouterChiffre(chiffre) {
-            // Limiter à 10 caractères
             if (reponseCourante.length < 10) {
                 reponseCourante += chiffre;
                 document.getElementById('reponse').value = reponseCourante;
@@ -370,59 +492,45 @@
             document.getElementById('reponse').value = reponseCourante;
         }
         
-        // Raccourci clavier Entrée
-        document.getElementById('reponse').addEventListener('keypress', (e) => {
+        // Raccourci Entrée
+        document.getElementById('reponse')?.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') validerReponse();
         });
         
-        // ============================================
-        // FONCTION : Valider la réponse
-        // ============================================
-        function validerReponse() {
+        // ---------- 9. VALIDATION ----------
+        async function validerReponse() {
             let reponseEleve = document.getElementById('reponse').value;
-            
-            // Remplacer la virgule par un point pour le calcul
             reponseEleve = reponseEleve.replace(',', '.');
-            
-            // Convertir en nombre
             const reponseNombre = parseFloat(reponseEleve);
             
-            // Vérifier si c'est un nombre valide
             if (isNaN(reponseNombre)) {
                 afficherFeedback("❌ Entre un nombre valide !", false);
                 return;
             }
             
-            // Comparer (tolérance 0.01 pour les arrondis)
             const estCorrect = Math.abs(reponseNombre - operationEnCours.reponse) < 0.01;
             
             if (estCorrect) {
                 score++;
                 afficherFeedback("✅ BRAVO ! +1 point", true);
             } else {
-                const reponseCorrecteAff = operationEnCours.reponse.toString().replace('.', ',');
-                afficherFeedback(`❌ Oups ! La bonne réponse était ${reponseCorrecteAff}`, false);
+                const bonneReponseAff = operationEnCours.reponse.toString().replace('.', ',');
+                afficherFeedback(`❌ Oups... La bonne réponse était ${bonneReponseAff}`, false);
             }
             
-            // Mettre à jour l'affichage du score
             document.getElementById('score').innerText = score;
             
-            // Désactiver les boutons le temps du feedback
+            // Désactiver temporairement
             const btnValider = document.querySelector('.btn-primary');
             btnValider.disabled = true;
             
-            // Passer à la question suivante après 2 secondes
             setTimeout(() => {
                 questionActuelle++;
-                document.getElementById('num-question').innerText = questionActuelle;
                 genererQuestion();
                 btnValider.disabled = false;
             }, 2000);
         }
         
-        // ============================================
-        // AFFICHER LE FEEDBACK
-        // ============================================
         function afficherFeedback(message, estSucces) {
             const feedback = document.getElementById('feedback');
             feedback.innerText = message;
@@ -430,80 +538,44 @@
             feedback.classList.remove('hidden');
         }
         
-        // ============================================
-        // TERMINER LE JEU
-        // ============================================
-        function terminerJeu() {
-            // Afficher l'écran des résultats
+        // ---------- 10. FIN DU JEU ----------
+        async function terminerJeu() {
             document.getElementById('screen-game').classList.add('hidden');
             document.getElementById('screen-result').classList.remove('hidden');
             
             document.getElementById('score-final').innerText = score;
             
-            // Message personnalisé selon le score
             let message = "";
             if (score === 10) {
-                message = "🏆 PARFAIT ! Tu es un maître des décimaux ! 🏆";
+                message = "🏆 PARFAIT ! Tu es un maître du calcul décimal ! 🏆";
+                await verifierEtAjouterBadge("champion");
             } else if (score >= 7) {
                 message = "🎉 Très bien ! Continue comme ça ! 🎉";
             } else if (score >= 5) {
                 message = "👍 Pas mal ! Un petit effort et tu progresses ! 👍";
             } else {
                 message = "💪 Continue de t'entraîner, tu vas y arriver ! 💪";
+                await verifierEtAjouterBadge("perseverant");
             }
-            document.getElementById('message-final').innerText = message;
+            document.getElementById('message-final').innerHTML = message;
             
-            // Sauvegarder le score (si Firebase est configuré)
+            // Sauvegarder le score
             sauvegarderScore();
         }
         
-        // ============================================
-        // SAUVEGARDER LE SCORE (optionnel)
-        // ============================================
         async function sauvegarderScore() {
-            // Cette fonction essaie d'envoyer le score à Firebase
-            // Si Firebase n'est pas configuré, ça ne fait rien
-            try {
-                // Vérifier si Firebase est disponible
-                if (typeof window.enregistrerScoreFirebase === 'function') {
-                    await window.enregistrerScoreFirebase(
-                        `Calcul Décimal - Niveau ${niveauActuel}`,
-                        score,
-                        10 - score
-                    );
-                    console.log("Score sauvegardé !");
-                }
-            } catch (erreur) {
-                console.log("Sauvegarde non disponible (mode local)");
-            }
-        }
-        
-        // ============================================
-        // FONCTIONS DE REJEU
-        // ============================================
-        function rejouer() {
-            // Rejouer avec le même niveau
-            score = 0;
-            questionActuelle = 1;
-            document.getElementById('score-final').innerText = "0";
+            const scoreData = {
+                jeu: "calculs",
+                score: score,
+                total: 10,
+                date: Date.now()
+            };
             
-            document.getElementById('screen-result').classList.add('hidden');
-            document.getElementById('screen-game').classList.remove('hidden');
+            // Sauvegarde locale
+            const scores = JSON.parse(localStorage.getItem(`scores_${nomEleve}`) || '[]');
+            scores.push(scoreData);
+            localStorage.setItem(`scores_${nomEleve}`, JSON.stringify(scores));
             
-            genererQuestion();
-        }
-        
-        function choisirNouveauNiveau() {
-            // Retour à l'écran de sélection
-            document.getElementById('screen-result').classList.add('hidden');
-            document.getElementById('screen-level').classList.remove('hidden');
-            
-            // Réinitialiser la sélection
-            niveauActuel = null;
-            const btnStart = document.getElementById('btn-start');
-            btnStart.disabled = true;
-            btnStart.classList.add('opacity-50', 'cursor-not-allowed');
-        }
-    </script>
-</body>
-</html>
+            // Si la fonction parent existe (index.html), l'appeler
+            if (window.parent && window.parent.ajouterScore) {
+                window.parent.ajouterScore(nomEle
