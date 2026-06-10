@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="style-commun.css">
     
     <style>
-        /* Styles supplémentaires spécifiques à l'index */
+        /* ========== STYLES SPÉCIFIQUES À L'INDEX ========== */
         
         /* Grille des jeux */
         .games-grid {
@@ -47,7 +47,7 @@
         .game-livrets { border-top: 4px solid var(--color-livrets); }
         .game-numeria { border-top: 4px solid var(--color-numeria); }
         
-        /* Sélecteur d'élève (photos/avantages) */
+        /* Sélecteur d'élève */
         .student-selector {
             display: flex;
             flex-wrap: wrap;
@@ -88,10 +88,10 @@
             color: var(--color-text);
         }
         
-        /* Tableau enseignant */
+        /* Statistiques */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 16px;
             margin: 24px 0;
         }
@@ -113,6 +113,57 @@
             font-size: 12px;
             color: var(--color-text-light);
         }
+        
+        /* Badges */
+        .badge-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 16px;
+        }
+        
+        .badge {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border-radius: 40px;
+            padding: 8px 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #92400e;
+        }
+        
+        .badge.locked {
+            background: #f1f5f9;
+            color: #94a3b8;
+            filter: grayscale(0.5);
+        }
+        
+        /* Tableau enseignant */
+        .scores-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        
+        .scores-table th {
+            background: #f1f5f9;
+            padding: 12px;
+            text-align: left;
+            font-weight: bold;
+        }
+        
+        .scores-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .scores-table tr:hover {
+            background: #f8fafc;
+        }
     </style>
 </head>
 <body>
@@ -128,12 +179,8 @@
                 </div>
             </div>
             <div style="display: flex; gap: 12px;">
-                <button id="btn-contrast" class="btn-contrast" onclick="toggleContrast()">
-                    👁️ Contraste+
-                </button>
-                <button onclick="ouvrirEspaceEnseignant()" class="btn-secondary">
-                    ⚙️ Enseignant
-                </button>
+                <button id="btn-contrast" class="btn-contrast" onclick="toggleContrast()">👁️ Contraste+</button>
+                <button onclick="ouvrirEspaceEnseignant()" class="btn-secondary">⚙️ Enseignant</button>
             </div>
         </div>
     </header>
@@ -141,7 +188,7 @@
     <!-- ========== MAIN ========== -->
     <main>
         
-        <!-- ÉCRAN DE CONNEXION / SÉLECTION ÉLÈVE -->
+        <!-- ÉCRAN 1 : SÉLECTION ÉLÈVE -->
         <div id="login-section" class="game-card" style="max-width: 600px; margin: 0 auto;">
             <div class="text-center">
                 <div style="font-size: 64px; margin-bottom: 16px;">👋</div>
@@ -149,33 +196,28 @@
                 <p style="color: var(--color-text-light);">Qui est prêt à apprendre aujourd'hui ?</p>
             </div>
             
-            <!-- Liste des élèves (prédéfinie - à modifier selon votre classe) -->
-            <div class="student-selector" id="student-list">
-                <!-- Les élèves seront chargés depuis localStorage ou par défaut -->
-            </div>
+            <div class="student-selector" id="student-list"></div>
             
             <div style="margin-top: 24px; text-align: center;">
                 <button onclick="ajouterEleve()" class="btn-secondary">➕ Nouvel élève</button>
             </div>
         </div>
         
-        <!-- TABLEAU DE BORD ÉLÈVE -->
+        <!-- ÉCRAN 2 : TABLEAU DE BORD ÉLÈVE -->
         <div id="student-dashboard" class="hidden">
-            <!-- Message de bienvenue avec badges -->
+            <!-- Message de bienvenue -->
             <div class="game-card" style="margin-bottom: 24px; background: linear-gradient(135deg, #eef2ff, #ffffff);">
                 <div class="flex justify-between items-center flex-wrap gap-3">
                     <div>
                         <h2 style="font-size: 24px;">🌟 Bonjour, <span id="welcome-name"></span> !</h2>
                         <p style="color: var(--color-text-light);">Continue comme ça, tu progresses !</p>
                     </div>
-                    <div id="badges-mini" style="display: flex; gap: 8px;">
-                        <!-- Badges débloqués affichés ici -->
-                    </div>
+                    <div id="badges-mini" style="display: flex; gap: 8px;"></div>
                     <button onclick="deconnecterEleve()" class="btn-secondary">❌ Changer d'élève</button>
                 </div>
             </div>
             
-            <!-- Statistiques rapides -->
+            <!-- Statistiques -->
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-number" id="stat-scores">0</div>
@@ -183,10 +225,10 @@
                 </div>
                 <div class="stat-card">
                     <div class="stat-number" id="stat-badges">0</div>
-                    <div class="stat-label">Badges débloqués</div>
+                    <div class="stat-label">Badges</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number" id="-stat-jeux">0</div>
+                    <div class="stat-number" id="stat-jeux">0</div>
                     <div class="stat-label">Jeux terminés</div>
                 </div>
             </div>
@@ -194,67 +236,43 @@
             <!-- Grille des jeux -->
             <h3 style="font-size: 20px; margin: 24px 0 16px;">🎯 Les défis disponibles</h3>
             <div class="games-grid">
-                
-                <!-- Jeu : Calcul Décimal -->
                 <div class="game-card game-calculs">
                     <div class="game-icon">🧮</div>
                     <h3 style="font-size: 20px; margin-bottom: 8px;">Calcul Décimal</h3>
-                    <p style="color: var(--color-text-light); font-size: 14px; margin-bottom: 16px;">
-                        Addition et soustraction avec des nombres à virgule.
-                    </p>
-                    <button onclick="lancerJeu('calculs.html')" class="btn-primary w-full">
-                        S'entraîner ➔
-                    </button>
+                    <p style="color: var(--color-text-light); font-size: 14px; margin-bottom: 16px;">Addition et soustraction avec des nombres à virgule.</p>
+                    <button onclick="lancerJeu('calculs.html')" class="btn-primary w-full">S'entraîner ➔</button>
                 </div>
                 
-                <!-- Jeu : Géométrie -->
                 <div class="game-card game-geometrie">
                     <div class="game-icon">📐</div>
                     <h3 style="font-size: 20px; margin-bottom: 8px;">Géométrie</h3>
-                    <p style="color: var(--color-text-light); font-size: 14px; margin-bottom: 16px;">
-                        Identifie les formes et leurs propriétés.
-                    </p>
-                    <button onclick="lancerJeu('geometrie.html')" class="btn-primary w-full">
-                        Explorer ➔
-                    </button>
+                    <p style="color: var(--color-text-light); font-size: 14px; margin-bottom: 16px;">Identifie les formes et leurs propriétés.</p>
+                    <button onclick="lancerJeu('geometrie.html')" class="btn-primary w-full">Explorer ➔</button>
                 </div>
                 
-                <!-- Jeu : Tables de multiplication -->
                 <div class="game-card game-livrets">
                     <div class="game-icon">✖️</div>
                     <h3 style="font-size: 20px; margin-bottom: 8px;">Tables de multiplication</h3>
-                    <p style="color: var(--color-text-light); font-size: 14px; margin-bottom: 16px;">
-                        Maîtrise les tables de 2 à 9.
-                    </p>
-                    <button onclick="lancerJeu('livrets.html')" class="btn-primary w-full">
-                        Apprendre ➔
-                    </button>
+                    <p style="color: var(--color-text-light); font-size: 14px; margin-bottom: 16px;">Maîtrise les tables de 2 à 9.</p>
+                    <button onclick="lancerJeu('livrets.html')" class="btn-primary w-full">Apprendre ➔</button>
                 </div>
                 
-                <!-- Jeu : Numéria -->
                 <div class="game-card game-numeria">
                     <div class="game-icon">📜</div>
                     <h3 style="font-size: 20px; margin-bottom: 8px;">Numéria</h3>
-                    <p style="color: var(--color-text-light); font-size: 14px; margin-bottom: 16px;">
-                        Aventure pour maîtriser les nombres.
-                    </p>
-                    <button onclick="lancerJeu('numeria.html')" class="btn-primary w-full">
-                        L'aventure ➔
-                    </button>
+                    <p style="color: var(--color-text-light); font-size: 14px; margin-bottom: 16px;">Aventure pour maîtriser les nombres.</p>
+                    <button onclick="lancerJeu('numeria.html')" class="btn-primary w-full">L'aventure ➔</button>
                 </div>
-                
             </div>
             
-            <!-- Section des badges -->
+            <!-- Section badges -->
             <div class="game-card" style="margin-top: 24px;">
                 <h3 style="font-size: 18px; margin-bottom: 16px;">🏆 Mes récompenses</h3>
-                <div id="badges-complets" class="badge-container">
-                    <!-- Tous les badges seront affichés ici -->
-                </div>
+                <div id="badges-complets" class="badge-container"></div>
             </div>
         </div>
         
-        <!-- ESPACE ENSEIGNANT -->
+        <!-- ÉCRAN 3 : ESPACE ENSEIGNANT -->
         <div id="teacher-dashboard" class="hidden">
             <div class="game-card">
                 <div class="flex justify-between items-center mb-6 flex-wrap gap-3">
@@ -281,20 +299,11 @@
                     </select>
                 </div>
                 
-                <!-- Tableau des scores -->
+                <!-- Tableau -->
                 <div style="overflow-x: auto;">
                     <table class="scores-table">
-                        <thead>
-                            <tr>
-                                <th>Élève</th>
-                                <th>Jeu</th>
-                                <th>Score</th>
-                                <th>Date</th>
-                            </tr>
-                        </thead>
-                        <tbody id="scores-table-body">
-                            <tr><td colspan="4" style="text-align: center; padding: 40px;">Chargement des résultats...</td</tr>
-                        </tbody>
+                        <thead><tr><th>Élève</th><th>Jeu</th><th>Score</th><th>Date</th></tr></thead>
+                        <tbody id="scores-table-body"><tr><td colspan="4" style="text-align: center; padding: 40px;">Chargement...</td></tr></tbody>
                     </table>
                 </div>
             </div>
@@ -302,11 +311,11 @@
         
     </main>
 
-    <!-- MODAL MOT DE PASSE ENSEIGNANT -->
+    <!-- MODAL MOT DE PASSE -->
     <div id="password-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 1000;">
         <div class="game-card" style="max-width: 400px;">
             <h3 style="font-size: 24px; text-align: center;">Accès Enseignant</h3>
-            <p style="text-align: center; color: var(--color-text-light); margin: 16px 0;">Mot de passe requis</p>
+            <p style="text-align: center; margin: 16px 0;">Mot de passe requis</p>
             <input type="password" id="teacher-password" placeholder="Mot de passe" 
                    style="width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 16px;">
             <div style="display: flex; gap: 12px;">
@@ -318,99 +327,188 @@
 
     <script>
         // ============================================================
-        // INDEX.HTML - PAGE D'ACCUEIL MODERNE
+        // INDEX.HTML COMPLET
         // ============================================================
         
-        // ---------- 1. CONFIGURATION ----------
-        // Liste des badges disponibles (récompenses)
+        // ---------- CONFIGURATION ----------
         const BADGES = [
             { id: "first_step", nom: "🎯 Premier pas", emoji: "🦶", condition: "1 jeu terminé" },
-            { id: "champion", nom: "🏆 Champion", emoji: "🏆", condition: "10/10 en calcul" },
-            { id: "geometre", nom: "📐 Le Géomètre", emoji: "📐", condition: "10/10 en géométrie" },
-            { id: "multiplicateur", nom: "⚡ Le Multiplicateur", emoji: "⚡", condition: "10/10 tables" },
-            { id: "aventurier", nom: "🗺️ Aventurier", emoji: "🗺️", condition: "Royaume terminé" },
+            { id: "champion", nom: "🏆 Champion", emoji: "🏆", condition: "10/10" },
             { id: "perseverant", nom: "💪 Persévérant", emoji: "💪", condition: "10 jeux terminés" }
         ];
         
-        // Liste par défaut des élèves (à modifier selon votre classe)
         const ELEVES_DEFAUT = [
-            { id: 1, nom: "Lucas", avatar: "🐯", couleur: "#3b82f6" },
-            { id: 2, nom: "Léa", avatar: "🐰", couleur: "#ec489a" },
-            { id: 3, nom: "Thomas", avatar: "🦁", couleur: "#f59e0b" },
-            { id: 4, nom: "Emma", avatar: "🦊", couleur: "#10b981" },
-            { id: 5, nom: "Nathan", avatar: "🐧", couleur: "#8b5cf6" },
-            { id: 6, nom: "Chloé", avatar: "🐨", couleur: "#ef4444" }
+            { id: 1, nom: "Lucas", avatar: "🐯", scores: [], badges: [] },
+            { id: 2, nom: "Léa", avatar: "🐰", scores: [], badges: [] },
+            { id: 3, nom: "Thomas", avatar: "🦁", scores: [], badges: [] },
+            { id: 4, nom: "Emma", avatar: "🦊", scores: [], badges: [] },
+            { id: 5, nom: "Nathan", avatar: "🐧", scores: [], badges: [] },
+            { id: 6, nom: "Chloé", avatar: "🐨", scores: [], badges: [] }
         ];
         
-        // Données des élèves (scores, badges)
+        const MOT_DE_PASSE_HASH = "e78c57b6c38c5b1e92e1f0f32ab31e832cb2af7ba3d37d5f9c1b62a5f06b3f1e";
+        
         let eleves = [];
         let eleveActuel = null;
         
-        // Mot de passe enseignant (À CHANGER !)
-        // Pour générer un nouveau hash : https://emn178.github.io/online-tools/sha256.html
-        const MOT_DE_PASSE_HASH = "e78c57b6c38c5b1e92e1f0f32ab31e832cb2af7ba3d37d5f9c1b62a5f06b3f1e";
-        
-        // ---------- 2. CHARGEMENT DES DONNÉES ----------
+        // ---------- CHARGEMENT ----------
         function chargerDonnees() {
-            const sauvegarde = localStorage.getItem('eleves_data');
-            if (sauvegarde) {
-                eleves = JSON.parse(sauvegarde);
-            } else {
-                eleves = ELEVES_DEFAUT.map(e => ({
-                    ...e,
-                    scores: [],
-                    badges: []
-                }));
-            }
-            sauvegarderDonnees();
+            const saved = localStorage.getItem('eleves_data');
+            if (saved) eleves = JSON.parse(saved);
+            else eleves = JSON.parse(JSON.stringify(ELEVES_DEFAUT));
         }
         
-        function sauvegarderDonnees() {
-            localStorage.setItem('eleves_data', JSON.stringify(eleves));
-        }
+        function sauvegarderDonnees() { localStorage.setItem('eleves_data', JSON.stringify(eleves)); }
         
-        // ---------- 3. AFFICHAGE DE LA SÉLECTION ÉLÈVE ----------
+        // ---------- AFFICHAGE ----------
         function afficherSelectionEleve() {
             const container = document.getElementById('student-list');
-            container.innerHTML = '';
-            
-            eleves.forEach(eleve => {
-                const card = document.createElement('div');
-                card.className = 'student-card';
-                card.innerHTML = `
-                    <span class="student-avatar">${eleve.avatar}</span>
-                    <span class="student-name">${eleve.nom}</span>
-                `;
-                card.onclick = () => connecterEleve(eleve.id);
-                container.appendChild(card);
-            });
+            container.innerHTML = eleves.map(e => `
+                <div class="student-card" onclick="connecterEleve(${e.id})">
+                    <span class="student-avatar">${e.avatar}</span>
+                    <span class="student-name">${e.nom}</span>
+                </div>
+            `).join('');
         }
         
         function ajouterEleve() {
             const nom = prompt("Prénom du nouvel élève ?");
             if (nom && nom.trim()) {
-                const avatar = ["🐯", "🐰", "🦁", "🦊", "🐧", "🐨", "🐼", "🦄"][Math.floor(Math.random() * 8)];
+                const avatars = ["🐯","🐰","🦁","🦊","🐧","🐨","🐼","🦄"];
                 const newId = Date.now();
-                eleves.push({
-                    id: newId,
-                    nom: nom.trim(),
-                    avatar: avatar,
-                    scores: [],
-                    badges: []
-                });
+                eleves.push({ id: newId, nom: nom.trim(), avatar: avatars[Math.floor(Math.random()*avatars.length)], scores: [], badges: [] });
                 sauvegarderDonnees();
                 afficherSelectionEleve();
             }
         }
         
-        // ---------- 4. CONNEXION ÉLÈVE ----------
-        function connecterEleve(eleveId) {
-            eleveActuel = eleves.find(e => e.id === eleveId);
+        function connecterEleve(id) {
+            eleveActuel = eleves.find(e => e.id === id);
             sessionStorage.setItem('eleveActuel', JSON.stringify(eleveActuel));
-            afficherDashboardEleve();
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('student-dashboard').classList.remove('hidden');
+            document.getElementById('welcome-name').innerHTML = `${eleveActuel.avatar} ${eleveActuel.nom}`;
+            
+            const totalScores = eleveActuel.scores.reduce((s,sc)=> s + sc.score, 0);
+            document.getElementById('stat-scores').innerText = totalScores;
+            document.getElementById('stat-badges').innerText = eleveActuel.badges.length;
+            document.getElementById('stat-jeux').innerText = eleveActuel.scores.length;
+            
+            document.getElementById('badges-mini').innerHTML = eleveActuel.badges.slice(0,3).map(b => {
+                const badge = BADGES.find(bd=>bd.id===b);
+                return badge ? `<span class="badge" style="font-size:12px;padding:4px 8px;">${badge.emoji}</span>` : '';
+            }).join('');
+            
+            document.getElementById('badges-complets').innerHTML = BADGES.map(b => `
+                <div class="badge ${!eleveActuel.badges.includes(b.id) ? 'locked' : ''}">
+                    ${b.emoji} ${b.nom} ${!eleveActuel.badges.includes(b.id) ? '🔒' : '✅'}
+                </div>
+            `).join('');
         }
         
         function deconnecterEleve() {
             eleveActuel = null;
             sessionStorage.removeItem('eleveActuel');
-            document.getElementById('student
+            document.getElementById('student-dashboard').classList.add('hidden');
+            document.getElementById('login-section').classList.remove('hidden');
+        }
+        
+        function lancerJeu(page) {
+            if (!eleveActuel) { alert("Choisis d'abord ton nom !"); return; }
+            window.location.href = `${page}?eleve=${encodeURIComponent(eleveActuel.nom)}&eleveId=${eleveActuel.id}`;
+        }
+        
+        window.ajouterScore = function(nom, jeu, score, total) {
+            const eleve = eleves.find(e => e.nom === nom);
+            if (eleve) {
+                eleve.scores.push({ jeu, score, total, date: Date.now() });
+                if (eleve.scores.length >= 10 && !eleve.badges.includes('perseverant')) {
+                    eleve.badges.push('perseverant');
+                    alert(`🎉 Félicitations ${eleve.nom} ! Badge "Persévérant" débloqué !`);
+                }
+                if (score === total && total === 10 && !eleve.badges.includes('champion')) {
+                    eleve.badges.push('champion');
+                    alert(`🏆 INCROYABLE ${eleve.nom} ! Badge "Champion" débloqué !`);
+                }
+                if (eleve.scores.length === 1 && !eleve.badges.includes('first_step')) {
+                    eleve.badges.push('first_step');
+                    alert(`🎉 Bravo ${eleve.nom} ! Premier badge débloqué !`);
+                }
+                sauvegarderDonnees();
+                if (eleveActuel && eleveActuel.id === eleve.id) connecterEleve(eleve.id);
+            }
+        };
+        
+        // ---------- ENSEIGNANT ----------
+        function ouvrirEspaceEnseignant() { document.getElementById('password-modal').style.display = 'flex'; }
+        function fermerModalPassword() { document.getElementById('password-modal').style.display = 'none'; document.getElementById('teacher-password').value = ''; }
+        
+        async function validerMotDePasse() {
+            const mdp = document.getElementById('teacher-password').value;
+            const encoder = new TextEncoder();
+            const hashBuffer = await crypto.subtle.digest('SHA-256', encoder.encode(mdp));
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2,'0')).join('');
+            
+            if (hashHex === MOT_DE_PASSE_HASH) {
+                fermerModalPassword();
+                document.getElementById('login-section').classList.add('hidden');
+                document.getElementById('student-dashboard').classList.add('hidden');
+                document.getElementById('teacher-dashboard').classList.remove('hidden');
+                chargerScoresEnseignant();
+            } else { alert("Mot de passe incorrect !"); document.getElementById('teacher-password').value = ''; }
+        }
+        
+        function fermerEspaceEnseignant() {
+            document.getElementById('teacher-dashboard').classList.add('hidden');
+            if (eleveActuel) connecterEleve(eleveActuel.id);
+            else document.getElementById('login-section').classList.remove('hidden');
+        }
+        
+        function chargerScoresEnseignant() {
+            const search = document.getElementById('search-filter')?.value.toLowerCase() || '';
+            const gameFilter = document.getElementById('game-filter')?.value || 'all';
+            let tousScores = [];
+            eleves.forEach(e => e.scores.forEach(s => tousScores.push({ nom: e.nom, avatar: e.avatar, ...s })));
+            tousScores.sort((a,b) => b.date - a.date);
+            const filtres = tousScores.filter(s => (search==='' || s.nom.toLowerCase().includes(search)) && (gameFilter==='all' || s.jeu===gameFilter));
+            const tbody = document.getElementById('scores-table-body');
+            if (filtres.length===0) { tbody.innerHTML='<tr><td colspan="4" style="text-align:center;padding:40px;">📭 Aucun score</td></tr>'; return; }
+            tbody.innerHTML = filtres.map(s => `
+                <tr><td><span style="font-size:20px;margin-right:8px;">${s.avatar}</span> ${s.nom}</td>
+                <td>${s.jeu}</td><td style="font-weight:bold;color:var(--color-primary);">${s.score}/${s.total}</td>
+                <td>${new Date(s.date).toLocaleDateString('fr-FR')}</td></tr>
+            `).join('');
+        }
+        
+        function exporterCSV() {
+            let csv = "Élève;Jeu;Score;Total;Date\n";
+            eleves.forEach(e => e.scores.forEach(s => csv += `${e.nom};${s.jeu};${s.score};${s.total};${new Date(s.date).toLocaleString('fr-FR')}\n`));
+            const blob = new Blob([csv], {type:'text/csv'});
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'scores_classe.csv';
+            link.click();
+            URL.revokeObjectURL(link.href);
+        }
+        
+        // ---------- CONTRASTE ----------
+        function toggleContrast() {
+            document.body.classList.toggle('high-contrast');
+            localStorage.setItem('highContrast', document.body.classList.contains('high-contrast'));
+        }
+        
+        // ---------- INIT ----------
+        function init() {
+            chargerDonnees();
+            afficherSelectionEleve();
+            const saved = sessionStorage.getItem('eleveActuel');
+            if (saved) { try { const se = JSON.parse(saved); const e = eleves.find(el=>el.id===se.id); if(e) connecterEleve(e.id); } catch(e) {} }
+            if (localStorage.getItem('highContrast') === 'true') document.body.classList.add('high-contrast');
+            document.getElementById('search-filter')?.addEventListener('input', ()=>chargerScoresEnseignant());
+            document.getElementById('game-filter')?.addEventListener('change', ()=>chargerScoresEnseignant());
+        }
+        init();
+    </script>
+</body>
+</html>
