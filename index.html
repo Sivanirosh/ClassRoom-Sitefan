@@ -2,60 +2,117 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Portail d'apprentissage - Classe Primaire</title>
     
-    <!-- ======================================== -->
-    <!-- STYLE UNIFIÉ (commun à toutes les pages) -->
-    <!-- ======================================== -->
+    <!-- ============================================ -->
+    <!-- STYLE UNIFIÉ (commun à toutes les pages)      -->
+    <!-- ============================================ -->
     <link rel="stylesheet" href="style-commun.css">
-    
-    <!-- Tailwind pour les utilitaires rapides (optionnel) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Configuration de Tailwind pour ne pas écraser nos styles -->
-    <script>
-        tailwind.config = {
-            corePlugins: {
-                preflight: false  // Désactive les styles par défaut de Tailwind
-            }
-        }
-    </script>
     
     <style>
         /* Styles supplémentaires spécifiques à l'index */
-        .game-card-link {
-            transition: transform 0.2s, box-shadow 0.2s;
-            text-decoration: none;
-            display: block;
-            height: 100%;
-        }
-        
-        .game-card-link:hover {
-            transform: translateY(-5px);
-        }
         
         /* Grille des jeux */
         .games-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 24px;
-            margin-top: 24px;
+            margin: 24px 0;
         }
         
-        /* Icônes de matière */
-        .subject-icon {
+        /* Carte de jeu */
+        .game-card-link {
+            text-decoration: none;
+            display: block;
+            height: 100%;
+            transition: transform 0.2s;
+        }
+        
+        .game-card-link:hover {
+            transform: translateY(-5px);
+        }
+        
+        /* Icône de jeu */
+        .game-icon {
             font-size: 48px;
             display: block;
             text-align: center;
             margin-bottom: 16px;
         }
         
-        /* Couleurs spécifiques par matière */
-        .game-math { border-top: 4px solid #3b82f6; }
-        .game-geometry { border-top: 4px solid #8b5cf6; }
-        .game-multiplication { border-top: 4px solid #f59e0b; }
-        .game-numeria { border-top: 4px solid #10b981; }
+        /* Bordures colorées par matière */
+        .game-calculs { border-top: 4px solid var(--color-calculs); }
+        .game-geometrie { border-top: 4px solid var(--color-geometrie); }
+        .game-livrets { border-top: 4px solid var(--color-livrets); }
+        .game-numeria { border-top: 4px solid var(--color-numeria); }
+        
+        /* Sélecteur d'élève (photos/avantages) */
+        .student-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: center;
+            margin: 24px 0;
+        }
+        
+        .student-card {
+            background: white;
+            border: 3px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 100px;
+        }
+        
+        .student-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--color-primary);
+        }
+        
+        .student-card.selected {
+            border-color: var(--color-primary);
+            background: #eef2ff;
+        }
+        
+        .student-avatar {
+            font-size: 48px;
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        .student-name {
+            font-weight: bold;
+            color: var(--color-text);
+        }
+        
+        /* Tableau enseignant */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+        }
+        
+        .stat-card {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--color-primary);
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: var(--color-text-light);
+        }
     </style>
 </head>
 <body>
@@ -64,160 +121,179 @@
     <header class="page-header">
         <div class="header-container">
             <div class="header-title">
-                <div class="header-icon">
-                    <span>🎒</span>
-                </div>
+                <div class="header-icon">🎒</div>
                 <div>
                     <h1>Portail d'apprentissage</h1>
                     <p>Espace numérique pour progresser à son rythme</p>
                 </div>
             </div>
-            <button onclick="ouvrirEspaceEnseignant()" class="btn-secondary">
-                ⚙️ Espace Enseignant
-            </button>
+            <div style="display: flex; gap: 12px;">
+                <button id="btn-contrast" class="btn-contrast" onclick="toggleContrast()">
+                    👁️ Contraste+
+                </button>
+                <button onclick="ouvrirEspaceEnseignant()" class="btn-secondary">
+                    ⚙️ Enseignant
+                </button>
+            </div>
         </div>
     </header>
 
     <!-- ========== MAIN ========== -->
     <main>
         
-        <!-- ÉCRAN DE CONNEXION ÉLÈVE -->
-        <div id="login-section" class="game-card max-w-md mx-auto" style="max-width: 500px;">
-            <div class="text-center mb-6">
+        <!-- ÉCRAN DE CONNEXION / SÉLECTION ÉLÈVE -->
+        <div id="login-section" class="game-card" style="max-width: 600px; margin: 0 auto;">
+            <div class="text-center">
                 <div style="font-size: 64px; margin-bottom: 16px;">👋</div>
-                <h2 class="text-center" style="font-size: 28px; font-weight: bold;">Bonjour !</h2>
-                <p style="color: #94a3b8; margin-top: 8px;">Entre ton prénom pour commencer à jouer</p>
+                <h2 style="font-size: 28px; margin-bottom: 8px;">Bonjour !</h2>
+                <p style="color: var(--color-text-light);">Qui est prêt à apprendre aujourd'hui ?</p>
             </div>
             
-            <form onsubmit="connecterEleve(event)" style="display: flex; flex-direction: column; gap: 16px;">
-                <div>
-                    <label style="display: block; font-size: 14px; font-weight: bold; margin-bottom: 8px;">Mon prénom</label>
-                    <input type="text" id="student-name" required placeholder="Ex: Lucas, Léa, Thomas..."
-                           style="width: 100%; padding: 16px; background: #172033; border: 2px solid #2e3e65; border-radius: 16px; color: white; font-size: 18px;">
-                </div>
-                <button type="submit" class="btn-primary">
-                    🚀 Entrer dans la classe
-                </button>
-            </form>
+            <!-- Liste des élèves (prédéfinie - à modifier selon votre classe) -->
+            <div class="student-selector" id="student-list">
+                <!-- Les élèves seront chargés depuis localStorage ou par défaut -->
+            </div>
+            
+            <div style="margin-top: 24px; text-align: center;">
+                <button onclick="ajouterEleve()" class="btn-secondary">➕ Nouvel élève</button>
+            </div>
         </div>
         
-        <!-- TABLEAU DE BORD ÉLÈVE (après connexion) -->
+        <!-- TABLEAU DE BORD ÉLÈVE -->
         <div id="student-dashboard" class="hidden">
-            <!-- Message de bienvenue -->
-            <div class="game-card" style="margin-bottom: 32px; background: linear-gradient(145deg, #1e1b4b, #0f172a);">
-                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+            <!-- Message de bienvenue avec badges -->
+            <div class="game-card" style="margin-bottom: 24px; background: linear-gradient(135deg, #eef2ff, #ffffff);">
+                <div class="flex justify-between items-center flex-wrap gap-3">
                     <div>
-                        <h2 style="font-size: 24px;">Heureux de te revoir, <span id="welcome-name" style="color: #a78bfa;"></span> ! 🚀</h2>
-                        <p style="color: #94a3b8; margin-top: 8px;">Choisis un jeu ci-dessous pour t'entraîner</p>
+                        <h2 style="font-size: 24px;">🌟 Bonjour, <span id="welcome-name"></span> !</h2>
+                        <p style="color: var(--color-text-light);">Continue comme ça, tu progresses !</p>
                     </div>
-                    <button onclick="deconnecterEleve()" class="btn-secondary" style="padding: 10px 20px;">
-                        ❌ Changer d'élève
-                    </button>
+                    <div id="badges-mini" style="display: flex; gap: 8px;">
+                        <!-- Badges débloqués affichés ici -->
+                    </div>
+                    <button onclick="deconnecterEleve()" class="btn-secondary">❌ Changer d'élève</button>
+                </div>
+            </div>
+            
+            <!-- Statistiques rapides -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="stat-scores">0</div>
+                    <div class="stat-label">Points gagnés</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="stat-badges">0</div>
+                    <div class="stat-label">Badges débloqués</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="-stat-jeux">0</div>
+                    <div class="stat-label">Jeux terminés</div>
                 </div>
             </div>
             
             <!-- Grille des jeux -->
-            <h3 style="font-size: 20px; font-weight: bold; margin-bottom: 16px;">🎯 Les défis disponibles</h3>
+            <h3 style="font-size: 20px; margin: 24px 0 16px;">🎯 Les défis disponibles</h3>
             <div class="games-grid">
                 
-                <!-- Jeu 1 : Calcul Décimal -->
-                <div class="game-card game-math" style="padding: 24px;">
-                    <div class="subject-icon">🧮</div>
-                    <h3 style="font-size: 20px; font-weight: bold; margin-bottom: 8px;">Calcul Décimal</h3>
-                    <p style="color: #94a3b8; font-size: 14px; margin-bottom: 16px;">
+                <!-- Jeu : Calcul Décimal -->
+                <div class="game-card game-calculs">
+                    <div class="game-icon">🧮</div>
+                    <h3 style="font-size: 20px; margin-bottom: 8px;">Calcul Décimal</h3>
+                    <p style="color: var(--color-text-light); font-size: 14px; margin-bottom: 16px;">
                         Addition et soustraction avec des nombres à virgule.
-                        Plusieurs niveaux de difficulté.
                     </p>
-                    <button onclick="lancerJeu('calculs.html')" class="btn-primary" style="width: 100%;">
+                    <button onclick="lancerJeu('calculs.html')" class="btn-primary w-full">
                         S'entraîner ➔
                     </button>
                 </div>
                 
-                <!-- Jeu 2 : Géométrie -->
-                <div class="game-card game-geometry" style="padding: 24px;">
-                    <div class="subject-icon">📐</div>
-                    <h3 style="font-size: 20px; font-weight: bold; margin-bottom: 8px;">Géométrie</h3>
-                    <p style="color: #94a3b8; font-size: 14px; margin-bottom: 16px;">
-                        Identifie les formes, leurs propriétés et leurs angles.
-                        Plusieurs modes de jeu.
+                <!-- Jeu : Géométrie -->
+                <div class="game-card game-geometrie">
+                    <div class="game-icon">📐</div>
+                    <h3 style="font-size: 20px; margin-bottom: 8px;">Géométrie</h3>
+                    <p style="color: var(--color-text-light); font-size: 14px; margin-bottom: 16px;">
+                        Identifie les formes et leurs propriétés.
                     </p>
-                    <button onclick="lancerJeu('geometrie.html')" class="btn-primary" style="width: 100%;">
+                    <button onclick="lancerJeu('geometrie.html')" class="btn-primary w-full">
                         Explorer ➔
                     </button>
                 </div>
                 
-                <!-- Jeu 3 : Tables de multiplication -->
-                <div class="game-card game-multiplication" style="padding: 24px;">
-                    <div class="subject-icon">✖️</div>
-                    <h3 style="font-size: 20px; font-weight: bold; margin-bottom: 8px;">Tables de multiplication</h3>
-                    <p style="color: #94a3b8; font-size: 14px; margin-bottom: 16px;">
-                        Maîtrise les tables de 2 à 9 avec un défi de 10 questions.
+                <!-- Jeu : Tables de multiplication -->
+                <div class="game-card game-livrets">
+                    <div class="game-icon">✖️</div>
+                    <h3 style="font-size: 20px; margin-bottom: 8px;">Tables de multiplication</h3>
+                    <p style="color: var(--color-text-light); font-size: 14px; margin-bottom: 16px;">
+                        Maîtrise les tables de 2 à 9.
                     </p>
-                    <button onclick="lancerJeu('livrets.html')" class="btn-primary" style="width: 100%;">
+                    <button onclick="lancerJeu('livrets.html')" class="btn-primary w-full">
                         Apprendre ➔
                     </button>
                 </div>
                 
-                <!-- Jeu 4 : Numéria -->
-                <div class="game-card game-numeria" style="padding: 24px;">
-                    <div class="subject-icon">📜</div>
-                    <h3 style="font-size: 20px; font-weight: bold; margin-bottom: 8px;">Numéria</h3>
-                    <p style="color: #94a3b8; font-size: 14px; margin-bottom: 16px;">
-                        Jeu d'aventure pour maîtriser la valeur des chiffres et les grands nombres.
+                <!-- Jeu : Numéria -->
+                <div class="game-card game-numeria">
+                    <div class="game-icon">📜</div>
+                    <h3 style="font-size: 20px; margin-bottom: 8px;">Numéria</h3>
+                    <p style="color: var(--color-text-light); font-size: 14px; margin-bottom: 16px;">
+                        Aventure pour maîtriser les nombres.
                     </p>
-                    <button onclick="lancerJeu('numeria.html')" class="btn-primary" style="width: 100%;">
+                    <button onclick="lancerJeu('numeria.html')" class="btn-primary w-full">
                         L'aventure ➔
                     </button>
                 </div>
                 
             </div>
+            
+            <!-- Section des badges -->
+            <div class="game-card" style="margin-top: 24px;">
+                <h3 style="font-size: 18px; margin-bottom: 16px;">🏆 Mes récompenses</h3>
+                <div id="badges-complets" class="badge-container">
+                    <!-- Tous les badges seront affichés ici -->
+                </div>
+            </div>
         </div>
         
-        <!-- ESPACE ENSEIGNANT (mot de passe protégé) -->
+        <!-- ESPACE ENSEIGNANT -->
         <div id="teacher-dashboard" class="hidden">
             <div class="game-card">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+                <div class="flex justify-between items-center mb-6 flex-wrap gap-3">
                     <div>
                         <h2 style="font-size: 24px;">📊 Suivi des résultats</h2>
-                        <p style="color: #94a3b8;">Tous les scores des élèves en temps réel</p>
+                        <p style="color: var(--color-text-light);">Tous les scores en un coup d'œil</p>
                     </div>
-                    <button onclick="fermerEspaceEnseignant()" class="btn-secondary">
-                        📴 Quitter
-                    </button>
+                    <div style="display: flex; gap: 12px;">
+                        <button onclick="exporterCSV()" class="btn-secondary">📥 Exporter CSV</button>
+                        <button onclick="fermerEspaceEnseignant()" class="btn-secondary">📴 Quitter</button>
+                    </div>
                 </div>
                 
                 <!-- Filtres -->
-                <div style="display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap;">
+                <div class="flex gap-3 mb-6 flex-wrap">
                     <input type="text" id="search-filter" placeholder="Rechercher un élève..." 
-                           style="flex: 1; padding: 12px; background: #172033; border: 1px solid #2e3e65; border-radius: 12px; color: white;">
-                    <select id="game-filter" style="padding: 12px; background: #172033; border: 1px solid #2e3e65; border-radius: 12px; color: white;">
+                           style="padding: 10px; border: 1px solid #e2e8f0; border-radius: 12px; flex: 1;">
+                    <select id="game-filter" style="padding: 10px; border: 1px solid #e2e8f0; border-radius: 12px;">
                         <option value="all">Tous les jeux</option>
-                        <option value="Calcul Décimal">Calcul Décimal</option>
-                        <option value="Géométrie">Géométrie</option>
-                        <option value="Tables de multiplication">Tables de multiplication</option>
-                        <option value="Numéria">Numéria</option>
+                        <option value="calculs">Calcul Décimal</option>
+                        <option value="geometrie">Géométrie</option>
+                        <option value="livrets">Tables de multiplication</option>
+                        <option value="numeria">Numéria</option>
                     </select>
-                    <button onclick="exporterScores()" class="btn-secondary">📥 Exporter CSV</button>
                 </div>
                 
                 <!-- Tableau des scores -->
                 <div style="overflow-x: auto;">
-                    <table style="width: 100%; border-collapse: collapse;">
+                    <table class="scores-table">
                         <thead>
-                            <tr style="border-bottom: 1px solid #2e3e65;">
-                                <th style="text-align: left; padding: 12px;">Élève</th>
-                                <th style="text-align: left; padding: 12px;">Exercice</th>
-                                <th style="text-align: center; padding: 12px;">Score</th>
-                                <th style="text-align: center; padding: 12px;">Réussite</th>
-                                <th style="text-align: left; padding: 12px;">Date</th>
+                            <tr>
+                                <th>Élève</th>
+                                <th>Jeu</th>
+                                <th>Score</th>
+                                <th>Date</th>
                             </tr>
                         </thead>
                         <tbody id="scores-table-body">
-                            <tr>
-                                <td colspan="5" style="text-align: center; padding: 40px; color: #64748b;">
-                                    ⏳ En attente des résultats...
-                                </td>
-                            </tr>
+                            <tr><td colspan="4" style="text-align: center; padding: 40px;">Chargement des résultats...</td</tr>
                         </tbody>
                     </table>
                 </div>
@@ -226,18 +302,13 @@
         
     </main>
 
-    <!-- ========== FOOTER ========== -->
-    <footer style="background: #0e1422; border-top: 1px solid #1e293b; padding: 20px; text-align: center; font-size: 12px; color: #64748b;">
-        <p>© 2026 - Apprendre à son rythme</p>
-    </footer>
-
     <!-- MODAL MOT DE PASSE ENSEIGNANT -->
-    <div id="password-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); align-items: center; justify-content: center; z-index: 1000;">
-        <div class="game-card" style="max-width: 400px; margin: 20px;">
-            <h3 style="font-size: 24px; margin-bottom: 16px; text-align: center;">Accès Enseignant</h3>
-            <p style="color: #94a3b8; margin-bottom: 24px; text-align: center;">Saisis le mot de passe pour accéder aux résultats</p>
+    <div id="password-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 1000;">
+        <div class="game-card" style="max-width: 400px;">
+            <h3 style="font-size: 24px; text-align: center;">Accès Enseignant</h3>
+            <p style="text-align: center; color: var(--color-text-light); margin: 16px 0;">Mot de passe requis</p>
             <input type="password" id="teacher-password" placeholder="Mot de passe" 
-                   style="width: 100%; padding: 16px; background: #172033; border: 2px solid #2e3e65; border-radius: 16px; color: white; font-size: 18px; text-align: center; margin-bottom: 24px;">
+                   style="width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 16px;">
             <div style="display: flex; gap: 12px;">
                 <button onclick="fermerModalPassword()" class="btn-secondary" style="flex: 1;">Annuler</button>
                 <button onclick="validerMotDePasse()" class="btn-primary" style="flex: 1;">Valider</button>
@@ -247,279 +318,99 @@
 
     <script>
         // ============================================================
-        // INDEX.HTML - PAGE D'ACCUEIL
-        // ============================================================
-        // Ce fichier gère :
-        // - La connexion des élèves (stockage du prénom)
-        // - L'affichage des jeux disponibles
-        // - L'accès enseignant (mot de passe)
-        // - L'affichage des scores depuis Firebase
+        // INDEX.HTML - PAGE D'ACCUEIL MODERNE
         // ============================================================
         
         // ---------- 1. CONFIGURATION ----------
+        // Liste des badges disponibles (récompenses)
+        const BADGES = [
+            { id: "first_step", nom: "🎯 Premier pas", emoji: "🦶", condition: "1 jeu terminé" },
+            { id: "champion", nom: "🏆 Champion", emoji: "🏆", condition: "10/10 en calcul" },
+            { id: "geometre", nom: "📐 Le Géomètre", emoji: "📐", condition: "10/10 en géométrie" },
+            { id: "multiplicateur", nom: "⚡ Le Multiplicateur", emoji: "⚡", condition: "10/10 tables" },
+            { id: "aventurier", nom: "🗺️ Aventurier", emoji: "🗺️", condition: "Royaume terminé" },
+            { id: "perseverant", nom: "💪 Persévérant", emoji: "💪", condition: "10 jeux terminés" }
+        ];
+        
+        // Liste par défaut des élèves (à modifier selon votre classe)
+        const ELEVES_DEFAUT = [
+            { id: 1, nom: "Lucas", avatar: "🐯", couleur: "#3b82f6" },
+            { id: 2, nom: "Léa", avatar: "🐰", couleur: "#ec489a" },
+            { id: 3, nom: "Thomas", avatar: "🦁", couleur: "#f59e0b" },
+            { id: 4, nom: "Emma", avatar: "🦊", couleur: "#10b981" },
+            { id: 5, nom: "Nathan", avatar: "🐧", couleur: "#8b5cf6" },
+            { id: 6, nom: "Chloé", avatar: "🐨", couleur: "#ef4444" }
+        ];
+        
+        // Données des élèves (scores, badges)
+        let eleves = [];
+        let eleveActuel = null;
+        
         // Mot de passe enseignant (À CHANGER !)
-        // Pour générer un nouveau mot de passe, allez sur :
-        // https://emn178.github.io/online-tools/sha256.html
-        // Tapez votre mot de passe, copiez le résultat ici
+        // Pour générer un nouveau hash : https://emn178.github.io/online-tools/sha256.html
         const MOT_DE_PASSE_HASH = "e78c57b6c38c5b1e92e1f0f32ab31e832cb2af7ba3d37d5f9c1b62a5f06b3f1e";
-        // ⚠️ REMPLACEZ LA LIGNE CI-DESSUS PAR VOTRE HASH ⚠️
         
-        // Stockage des scores (si pas de Firebase)
-        let scoresLocaux = [];
-        
-        // ---------- 2. GESTION DE LA CONNEXION ÉLÈVE ----------
-        
-        // Récupère le nom de l'élève depuis la mémoire du navigateur
-        let nomEleve = sessionStorage.getItem('nomEleve');
-        
-        // Au chargement de la page, on vérifie si un élève est déjà connecté
-        window.addEventListener('load', () => {
-            if (nomEleve) {
-                // Un élève est déjà connecté, on affiche son tableau de bord
-                afficherDashboardEleve(nomEleve);
+        // ---------- 2. CHARGEMENT DES DONNÉES ----------
+        function chargerDonnees() {
+            const sauvegarde = localStorage.getItem('eleves_data');
+            if (sauvegarde) {
+                eleves = JSON.parse(sauvegarde);
             } else {
-                // Personne n'est connecté, on affiche l'écran de connexion
-                afficherFormulaireLogin();
+                eleves = ELEVES_DEFAUT.map(e => ({
+                    ...e,
+                    scores: [],
+                    badges: []
+                }));
             }
-        });
-        
-        // Fonction appelée quand l'élève clique sur "Entrer"
-        function connecterEleve(event) {
-            event.preventDefault(); // Empêche le rechargement de la page
-            
-            const prenom = document.getElementById('student-name').value.trim();
-            
-            // Vérification que le prénom n'est pas vide
-            if (prenom.length < 2) {
-                alert("Veuillez entrer un prénom valide !");
-                return;
-            }
-            
-            // Sauvegarde du prénom dans la mémoire du navigateur
-            sessionStorage.setItem('nomEleve', prenom);
-            nomEleve = prenom;
-            
-            // Affiche le tableau de bord
-            afficherDashboardEleve(prenom);
+            sauvegarderDonnees();
         }
         
-        // Déconnexion de l'élève
-        function deconnecterEleve() {
-            sessionStorage.removeItem('nomEleve');
-            nomEleve = null;
-            afficherFormulaireLogin();
+        function sauvegarderDonnees() {
+            localStorage.setItem('eleves_data', JSON.stringify(eleves));
         }
         
-        // Affiche l'écran de connexion
-        function afficherFormulaireLogin() {
-            document.getElementById('login-section').classList.remove('hidden');
-            document.getElementById('student-dashboard').classList.add('hidden');
-            document.getElementById('teacher-dashboard').classList.add('hidden');
-        }
-        
-        // Affiche le tableau de bord de l'élève
-        function afficherDashboardEleve(prenom) {
-            document.getElementById('welcome-name').innerText = prenom;
-            document.getElementById('login-section').classList.add('hidden');
-            document.getElementById('student-dashboard').classList.remove('hidden');
-            document.getElementById('teacher-dashboard').classList.add('hidden');
-        }
-        
-        // ---------- 3. LANCEMENT DES JEUX ----------
-        
-        function lancerJeu(pageHtml) {
-            // Vérifie qu'un élève est connecté
-            if (!nomEleve) {
-                alert("Merci de te connecter avec ton prénom !");
-                afficherFormulaireLogin();
-                return;
-            }
+        // ---------- 3. AFFICHAGE DE LA SÉLECTION ÉLÈVE ----------
+        function afficherSelectionEleve() {
+            const container = document.getElementById('student-list');
+            container.innerHTML = '';
             
-            // Ajoute le nom de l'élève dans l'URL pour que le jeu sache qui joue
-            const queryParams = `?eleve=${encodeURIComponent(nomEleve)}`;
-            
-            // Redirige vers le jeu choisi
-            window.location.href = pageHtml + queryParams;
-        }
-        
-        // ---------- 4. ESPACE ENSEIGNANT ----------
-        
-        // Ouvre le modal de mot de passe
-        function ouvrirEspaceEnseignant() {
-            document.getElementById('password-modal').style.display = 'flex';
-            document.getElementById('teacher-password').focus();
-        }
-        
-        // Ferme le modal
-        function fermerModalPassword() {
-            document.getElementById('password-modal').style.display = 'none';
-            document.getElementById('teacher-password').value = "";
-        }
-        
-        // Vérifie le mot de passe et ouvre l'espace enseignant
-        async function validerMotDePasse() {
-            const motDePasse = document.getElementById('teacher-password').value;
-            
-            // Hachage SHA-256 du mot de passe entré
-            const hash = await sha256(motDePasse);
-            
-            if (hash === MOT_DE_PASSE_HASH) {
-                // Mot de passe correct
-                fermerModalPassword();
-                
-                // Cache les écrans élève
-                document.getElementById('login-section').classList.add('hidden');
-                document.getElementById('student-dashboard').classList.add('hidden');
-                
-                // Affiche l'espace enseignant
-                document.getElementById('teacher-dashboard').classList.remove('hidden');
-                
-                // Charge les scores
-                chargerScores();
-            } else {
-                alert("Mot de passe incorrect !");
-                document.getElementById('teacher-password').value = "";
-            }
-        }
-        
-        // Fonction de hachage SHA-256 (pour vérifier le mot de passe)
-        async function sha256(message) {
-            const encoder = new TextEncoder();
-            const data = encoder.encode(message);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-            return hashHex;
-        }
-        
-        // Ferme l'espace enseignant
-        function fermerEspaceEnseignant() {
-            document.getElementById('teacher-dashboard').classList.add('hidden');
-            
-            // Revient à l'écran de l'élève si connecté
-            if (nomEleve) {
-                afficherDashboardEleve(nomEleve);
-            } else {
-                afficherFormulaireLogin();
-            }
-        }
-        
-        // ---------- 5. GESTION DES SCORES ----------
-        
-        // Charge les scores (Firebase ou local)
-        async function chargerScores() {
-            // Essaie de charger depuis Firebase d'abord
-            try {
-                const scores = await chargerScoresFirebase();
-                if (scores && scores.length > 0) {
-                    afficherScores(scores);
-                    return;
-                }
-            } catch (e) {
-                console.log("Firebase non disponible, utilisation des scores locaux");
-            }
-            
-            // Fallback : scores locaux (stockés dans la mémoire du navigateur)
-            const scoresLocaux = JSON.parse(localStorage.getItem('scores_eleves') || '[]');
-            afficherScores(scoresLocaux);
-        }
-        
-        // Simulation de chargement Firebase (à remplacer par votre vraie connexion)
-        async function chargerScoresFirebase() {
-            // ⚠️ À CONFIGURER AVEC VOS IDENTIFIANTS FIREBASE ⚠️
-            // Pour l'instant, on retourne des données de test
-            return [
-                { nomEleve: "Lucas", exercice: "Calcul Décimal", corrects: 8, total: 10, timestamp: Date.now() },
-                { nomEleve: "Léa", exercice: "Géométrie", corrects: 9, total: 10, timestamp: Date.now() - 3600000 },
-                { nomEleve: "Thomas", exercice: "Tables de multiplication", corrects: 7, total: 10, timestamp: Date.now() - 7200000 }
-            ];
-        }
-        
-        // Affiche les scores dans le tableau
-        function afficherScores(scores) {
-            const tbody = document.getElementById('scores-table-body');
-            
-            if (!scores || scores.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 40px; color: #64748b;">📭 Aucun score pour le moment</td></tr>`;
-                return;
-            }
-            
-            // Trier par date (les plus récents d'abord)
-            scores.sort((a, b) => b.timestamp - a.timestamp);
-            
-            // Filtrer selon la recherche
-            const searchText = document.getElementById('search-filter')?.value.toLowerCase() || '';
-            const gameFilter = document.getElementById('game-filter')?.value || 'all';
-            
-            const scoresFiltres = scores.filter(score => {
-                const matchNom = searchText === '' || score.nomEleve.toLowerCase().includes(searchText);
-                const matchJeu = gameFilter === 'all' || score.exercice === gameFilter;
-                return matchNom && matchJeu;
-            });
-            
-            // Générer le HTML du tableau
-            tbody.innerHTML = scoresFiltres.map(score => {
-                const pourcentage = Math.round((score.corrects / score.total) * 100);
-                const date = new Date(score.timestamp);
-                const dateStr = date.toLocaleDateString('fr-FR') + ' à ' + date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-                
-                // Couleur selon le pourcentage
-                let couleur = "";
-                if (pourcentage >= 80) couleur = "#10b981";
-                else if (pourcentage >= 50) couleur = "#f59e0b";
-                else couleur = "#ef4444";
-                
-                return `
-                    <tr style="border-bottom: 1px solid #1e293b;">
-                        <td style="padding: 12px; font-weight: bold;">${score.nomEleve}</td>
-                        <td style="padding: 12px;">${score.exercice}</td>
-                        <td style="padding: 12px; text-align: center;">${score.corrects}/${score.total}</td>
-                        <td style="padding: 12px; text-align: center;">
-                            <span style="background: ${couleur}; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold;">
-                                ${pourcentage}%
-                            </span>
-                        </td>
-                        <td style="padding: 12px;">${dateStr}</td>
-                    </tr>
+            eleves.forEach(eleve => {
+                const card = document.createElement('div');
+                card.className = 'student-card';
+                card.innerHTML = `
+                    <span class="student-avatar">${eleve.avatar}</span>
+                    <span class="student-name">${eleve.nom}</span>
                 `;
-            }).join('');
-        }
-        
-        // Exporte les scores en CSV (pour Excel)
-        function exporterScores() {
-            const scores = JSON.parse(localStorage.getItem('scores_eleves') || '[]');
-            
-            if (scores.length === 0) {
-                alert("Aucun score à exporter");
-                return;
-            }
-            
-            // En-têtes CSV
-            let csv = "Élève;Exercice;Score;Total;Date\n";
-            
-            // Lignes de données
-            scores.forEach(score => {
-                const date = new Date(score.timestamp);
-                csv += `${score.nomEleve};${score.exercice};${score.corrects};${score.total};${date.toLocaleString('fr-FR')}\n`;
+                card.onclick = () => connecterEleve(eleve.id);
+                container.appendChild(card);
             });
-            
-            // Téléchargement du fichier
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            const url = URL.createObjectURL(blob);
-            link.href = url;
-            link.setAttribute('download', 'scores_classe.csv');
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
         }
         
-        // Ajoute des filtres interactifs
-        if (document.getElementById('search-filter')) {
-            document.getElementById('search-filter').addEventListener('input', () => chargerScores());
-            document.getElementById('game-filter').addEventListener('change', () => chargerScores());
+        function ajouterEleve() {
+            const nom = prompt("Prénom du nouvel élève ?");
+            if (nom && nom.trim()) {
+                const avatar = ["🐯", "🐰", "🦁", "🦊", "🐧", "🐨", "🐼", "🦄"][Math.floor(Math.random() * 8)];
+                const newId = Date.now();
+                eleves.push({
+                    id: newId,
+                    nom: nom.trim(),
+                    avatar: avatar,
+                    scores: [],
+                    badges: []
+                });
+                sauvegarderDonnees();
+                afficherSelectionEleve();
+            }
         }
-    </script>
-</body>
-</html>
+        
+        // ---------- 4. CONNEXION ÉLÈVE ----------
+        function connecterEleve(eleveId) {
+            eleveActuel = eleves.find(e => e.id === eleveId);
+            sessionStorage.setItem('eleveActuel', JSON.stringify(eleveActuel));
+            afficherDashboardEleve();
+        }
+        
+        function deconnecterEleve() {
+            eleveActuel = null;
+            sessionStorage.removeItem('eleveActuel');
+            document.getElementById('student
