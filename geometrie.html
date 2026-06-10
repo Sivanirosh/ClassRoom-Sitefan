@@ -5,60 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Secteur : Géométrie — Hub de Mission</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body {
-            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            line-height: 1.65;
-            letter-spacing: 0.04em;
-            background-color: #0b0f19;
-            color: #f1f5f9;
-        }
-        .game-card {
-            background: linear-gradient(145deg, #161d30, #0f1524);
-            border: 1px solid #24324f;
-        }
-        .btn-game-active {
-            transform: translateY(0);
-            box-shadow: 0 4px 0px 0px #05070f;
-            transition: all 0.1s ease;
-        }
-        .btn-game-active:active {
-            transform: translateY(4px);
-            box-shadow: 0 0px 0px 0px #05070f;
-        }
-        .option-btn {
-            background-color: #172033;
-            border: 1px solid #2e3e65;
-            transition: all 0.2s;
-        }
-        .option-btn:hover:not(:disabled) {
-            border-color: #10b981;
-            background-color: #112926;
-        }
-        .box-drop {
-            border: 2px dashed #2e3e65;
-            transition: all 0.2s;
-        }
-        .box-drop:hover {
-            border-color: #10b981;
-            background-color: #112926;
-        }
-        
-        /* Effet de confettis / validation */
-        @keyframes successPulse {
-            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
-            70% { box-shadow: 0 0 0 20px rgba(16, 185, 129, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
-        }
-        .success-anim {
-            animation: successPulse 1s ease-out;
-            border-color: #10b981 !important;
-        }
-        .error-anim {
-            border-color: #f43f5e !important;
-            background-color: #4c0519 !important;
-        }
-    </style>
+
+<link rel="stylesheet" href="style.css">
+    
     
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
