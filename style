@@ -1,41 +1,40 @@
-/* Définition des variables : c'est ici qu'on gère l'identité visuelle */
+/* --- VARIABLES --- */
+/* On stocke ici les valeurs réutilisables (couleurs, espacements). 
+   Si vous voulez changer de thème, vous ne modifiez qu'ici. */
 :root {
     --bg-dark: #0b0f19;
     --card-gradient: linear-gradient(145deg, #161d30, #0f1524);
     --text-main: #f1f5f9;
     --border-main: #24324f;
     --accent: #38bdf8;
-    /* Paramètres Dys */
-    --font-size-base: 1.1rem;
     --line-height-dys: 1.75;
-    --letter-spacing-dys: 0.05em;
 }
 
+/* --- STRUCTURE GLOBALE --- */
 body {
-    background-color: var(--bg-dark);
-    color: var(--text-main);
+    background-color: var(--bg-dark); /* Couleur de fond */
+    color: var(--text-main);           /* Couleur du texte */
     font-family: 'Inter', sans-serif;
-    line-height: var(--line-height-dys);
-    letter-spacing: var(--letter-spacing-dys);
+    line-height: var(--line-height-dys); /* Confort de lecture dys */
+    letter-spacing: 0.04em;              /* Espacement pour éviter l'effet de bloc */
 }
 
-/* Harmonisation des cartes */
+/* --- COMPOSANTS --- */
+/* .game-card est une "classe" que vous appliquerez à vos conteneurs */
 .game-card {
     background: var(--card-gradient);
     border: 1px solid var(--border-main);
     border-radius: 0.75rem;
 }
 
-/* Harmonisation des boutons */
+/* Effet de relief pour les boutons (pédagogie : on incite au clic) */
 .btn-game-active {
-    background-color: #172033; /* Uniformisé */
-    border: 1px solid var(--border-main);
-    transition: all 0.2s ease;
+    transition: all 0.1s ease; /* Rend le clic fluide */
     transform: translateY(0);
-    box-shadow: 0 4px 0px 0px #05070f;
+    box-shadow: 0 4px 0px 0px #05070f; /* Création de l'ombre portée */
 }
 
 .btn-game-active:active {
-    transform: translateY(4px);
+    transform: translateY(4px); /* Le bouton descend au clic */
     box-shadow: 0 0px 0px 0px #05070f;
 }
