@@ -4,933 +4,128 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Géométrie - Les formes et leurs secrets</title>
-    
-    <!-- ======================================== -->
-    <!-- STYLE UNIFIÉ (commun à toutes les pages) -->
-    <!-- ======================================== -->
     <link rel="stylesheet" href="style-commun.css">
-    
-    <!-- Tailwind (uniquement pour les grilles, pas pour le style de base) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = { corePlugins: { preflight: false } }
-    </script>
-    
+    <style><!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Géométrie - Les formes et leurs secrets</title>
+    <link rel="stylesheet" href="style-commun.css">
     <style>
-        /* ========== STYLES SPÉCIFIQUES À LA GÉOMÉTRIE ========== */
-        
-        /* Carte des figures géométriques */
-        .shape-card {
-            background: #172033;
-            border: 2px solid #2e3e65;
-            border-radius: 20px;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .shape-card:hover {
-            transform: scale(1.05);
-            border-color: #8b5cf6;
-        }
-        
-        .shape-card.selected {
-            background: linear-gradient(145deg, #4c1d95, #5b21b6);
-            border-color: #a78bfa;
-        }
-        
-        /* Zone de glisser-déposer pour le mode intrusion */
-        .drop-zone {
-            background: #090d16;
-            border: 2px dashed #2e3e65;
-            border-radius: 16px;
-            padding: 20px;
-            min-height: 150px;
-            transition: all 0.2s;
-        }
-        
-        .drop-zone.drag-over {
-            border-color: #8b5cf6;
-            background: #1e1b4b;
-        }
-        
-        /* Image SVG des formes */
-        .shape-svg {
-            width: 100px;
-            height: 100px;
-            margin: 0 auto;
-            display: block;
-        }
-        
-        /* Indice (aide progressive) */
-        .indice-box {
-            background: #1e1b4b;
-            border-left: 4px solid #f59e0b;
-            padding: 16px;
-            border-radius: 12px;
-            margin: 16px 0;
-        }
-        
-        /* Mode intrusion (trouver l'intrus) */
-        .intruder-card {
-            background: #172033;
-            border: 2px solid #2e3e65;
-            border-radius: 16px;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .intruder-card:hover {
-            transform: scale(1.02);
-            border-color: #ef4444;
-        }
-        
-        .intruder-card.intruder {
-            border-color: #ef4444;
-            background: #7f1d1d;
-        }
-        
-        /* Animation de réussite */
-        @keyframes winPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); background: #10b981; }
-        }
-        
-        .win-animation {
-            animation: winPulse 0.5s ease;
-        }
+        .level-badge { background: var(--color-geometrie); color: white; padding: 4px 12px; border-radius: 40px; font-size: 12px; }
+        .shape-card { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 20px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.2s; }
+        .shape-card:hover { transform: scale(1.02); border-color: var(--color-geometrie); }
+        .shape-card.selected { background: var(--color-geometrie); color: white; border-color: var(--color-geometrie); }
+        .shape-svg { width: 80px; height: 80px; margin: 0 auto; display: block; }
+        .indice-box { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 16px; border-radius: 12px; margin: 16px 0; }
+        .drop-zone { background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 16px; padding: 16px; min-height: 150px; transition: all 0.2s; }
+        .drop-zone.drag-over { border-color: var(--color-geometrie); background: #eef2ff; }
+        .speak-btn { background: #fef3c7; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 20px; cursor: pointer; }
     </style>
 </head>
 <body>
-
-    <!-- ========== EN-TÊTE ========== -->
-    <header class="page-header">
-        <div class="header-container">
-            <div class="header-title">
-                <div class="header-icon" style="background: linear-gradient(145deg, #8b5cf6, #6d28d9);">
-                    <span>📐</span>
-                </div>
-                <div>
-                    <h1>Géométrie</h1>
-                    <p>Explore les formes, leurs propriétés et leurs secrets</p>
-                </div>
-            </div>
-            <a href="index.html" class="btn-secondary" style="text-decoration: none;">
-                ↩ Quitter
-            </a>
-        </div>
-    </header>
-
-    <!-- ========== MAIN ========== -->
+    <header class="page-header"><div class="header-container">
+        <div class="header-title"><div class="header-icon" style="background:linear-gradient(135deg,var(--color-geometrie),#a78bfa);">📐</div>
+        <div><h1>Géométrie</h1><p>Explore les formes et leurs propriétés</p></div></div>
+        <div style="display:flex;gap:12px;"><button id="btn-contrast" class="btn-contrast" onclick="toggleContrast()">👁️ Contraste+</button>
+        <a href="index.html" class="btn-secondary" style="text-decoration:none;">↩ Quitter</a></div>
+    </div></header>
     <main>
-        
-        <!-- ÉCRAN 1 : CHOIX DU MODE ET DU NIVEAU -->
-        <div id="screen-config" class="game-card">
-            <div class="text-center mb-8">
-                <h2 style="font-size: 28px; font-weight: bold; margin-bottom: 8px;">🎮 Configuration de la mission</h2>
-                <p style="color: #94a3b8;">Choisis ton niveau et ton mode de jeu</p>
+        <div id="screen-config" class="game-card"><div class="text-center mb-8"><h2 style="font-size:28px;">🎮 Configuration</h2><p>Choisis ton niveau et ton mode</p></div>
+            <div class="level-selector">
+                <div onclick="choisirNiveau(1)" id="niveau-1" class="level-btn"><span class="level-title">⭐ Débutant</span><span class="level-desc">Figures simples</span></div>
+                <div onclick="choisirNiveau(2)" id="niveau-2" class="level-btn"><span class="level-title">⭐⭐ Intermédiaire</span><span class="level-desc">+ solides</span></div>
+                <div onclick="choisirNiveau(3)" id="niveau-3" class="level-btn"><span class="level-title">⭐⭐⭐ Expert</span><span class="level-desc">Toutes les formes</span></div>
             </div>
-            
-            <!-- Sélection du niveau -->
-            <div style="margin-bottom: 32px;">
-                <h3 style="font-size: 18px; font-weight: bold; margin-bottom: 16px;">📊 Niveau</h3>
-                <div class="level-selector">
-                    <div onclick="selectionnerNiveau(1)" id="niveau-1" class="level-card">
-                        <h3>⭐ Débutant</h3>
-                        <p>Figures planes simples</p>
-                        <p style="font-size: 12px; color: #64748b;">Carré, rectangle, triangle, cercle</p>
-                    </div>
-                    <div onclick="selectionnerNiveau(2)" id="niveau-2" class="level-card">
-                        <h3>⭐⭐ Intermédiaire</h3>
-                        <p>Figures + solides</p>
-                        <p style="font-size: 12px; color: #64748b;">+ losange, trapèze, cube, pyramide</p>
-                    </div>
-                    <div onclick="selectionnerNiveau(3)" id="niveau-3" class="level-card">
-                        <h3>⭐⭐⭐ Expert</h3>
-                        <p>Toutes les formes</p>
-                        <p style="font-size: 12px; color: #64748b;">+ triangles particuliers, solides complexes</p>
-                    </div>
-                </div>
+            <div class="level-selector">
+                <div onclick="choisirMode('quiz')" id="mode-quiz" class="level-btn"><span class="level-title">❓ Quiz</span><span class="level-desc">Devine la forme</span></div>
+                <div onclick="choisirMode('intrus')" id="mode-intrus" class="level-btn"><span class="level-title">🔍 L'intrus</span><span class="level-desc">Trouve l'anomalie</span></div>
+                <div onclick="choisirMode('classe')" id="mode-classe" class="level-btn"><span class="level-title">📦 Classification</span><span class="level-desc">Range les formes</span></div>
             </div>
-            
-            <!-- Sélection du mode -->
-            <div style="margin-bottom: 32px;">
-                <h3 style="font-size: 18px; font-weight: bold; margin-bottom: 16px;">🎯 Mode de jeu</h3>
-                <div class="level-selector">
-                    <div onclick="selectionnerMode('quiz')" id="mode-quiz" class="level-card">
-                        <h3>❓ Quiz</h3>
-                        <p>Devine la forme d'après ses indices</p>
-                    </div>
-                    <div onclick="selectionnerMode('intrus')" id="mode-intrus" class="level-card">
-                        <h3>🔍 L'intrus</h3>
-                        <p>Trouve la forme qui ne correspond pas</p>
-                    </div>
-                    <div onclick="selectionnerMode('classe')" id="mode-classe" class="level-card">
-                        <h3>📦 Classification</h3>
-                        <p>Range les formes dans la bonne catégorie</p>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Bouton démarrer -->
-            <button id="btn-start" onclick="demarrerJeu()" class="btn-primary w-full" disabled style="opacity: 0.5; cursor: not-allowed;">
-                🚀 Commencer la mission
-            </button>
+            <button id="btn-start" onclick="demarrerJeu()" class="btn-primary w-full" disabled style="opacity:0.5;">🚀 Commencer</button>
         </div>
-        
-        <!-- ÉCRAN 2 : JEU -->
-        <div id="screen-game" class="hidden game-card">
-            <!-- En-tête du jeu -->
-            <div class="flex justify-between items-center mb-6 pb-4" style="border-bottom: 1px solid #2e3e65;">
-                <div>
-                    <span class="level-badge" id="mode-actuel" style="background: #8b5cf6; padding: 4px 12px; border-radius: 20px; font-size: 12px;">Mode Quiz</span>
-                    <span style="margin-left: 12px; color: #94a3b8;">Question <span id="num-question">1</span>/10</span>
-                </div>
-                <div>
-                    <span style="color: #fbbf24;">🏆 Score</span>
-                    <span id="score" style="font-size: 24px; font-weight: bold; color: #fbbf24; margin-left: 8px;">0</span>
-                </div>
-            </div>
-            
-            <!-- Zone de contenu du jeu (sera remplie dynamiquement) -->
-            <div id="game-content">
-                <!-- Le contenu change selon le mode -->
-            </div>
-            
-            <!-- Zone de feedback -->
-            <div id="feedback" class="feedback hidden"></div>
+        <div id="screen-game" class="hidden game-card"><div class="flex justify-between items-center mb-6 pb-4" style="border-bottom:1px solid #e2e8f0;">
+            <div><span id="mode-actuel" class="level-badge">Mode Quiz</span><span style="margin-left:12px;">Question <span id="num-question">1</span>/10</span></div>
+            <div><span style="color:var(--color-primary);">🏆 Score</span><span id="score" style="font-size:24px;font-weight:bold;margin-left:8px;">0</span></div>
         </div>
-        
-        <!-- ÉCRAN 3 : RÉSULTATS -->
-        <div id="screen-result" class="hidden game-card text-center">
-            <h2 style="font-size: 32px; margin-bottom: 16px;">🏆 Mission accomplie !</h2>
-            
-            <div style="background: #090d16; border-radius: 24px; padding: 32px; max-width: 300px; margin: 24px auto;">
-                <p style="color: #94a3b8; margin-bottom: 8px;">Ton score</p>
-                <p style="font-size: 56px; font-weight: bold; color: #fbbf24;"><span id="score-final">0</span>/10</p>
-            </div>
-            
-            <p id="message-final" style="font-size: 18px; margin-bottom: 32px;"></p>
-            
-            <div style="display: flex; gap: 16px; justify-content: center;">
-                <button onclick="rejouer()" class="btn-secondary">🔄 Rejouer</button>
-                <button onclick="changerConfiguration()" class="btn-primary">⚙️ Changer de niveau</button>
-            </div>
+        <div class="text-right mb-2"><button id="btn-speak" class="speak-btn" onclick="parlerConsigne()">🔊</button></div>
+        <div id="game-content"></div>
+        <div id="feedback" class="feedback hidden"></div></div>
+        <div id="screen-result" class="hidden game-card text-center"><h2 style="font-size:32px;">🏆 Mission terminée !</h2>
+            <div style="background:#f8fafc;border-radius:24px;padding:32px;max-width:300px;margin:24px auto;"><p>Ton score</p><p style="font-size:56px;font-weight:bold;color:var(--color-primary);"><span id="score-final">0</span>/10</p></div>
+            <p id="message-final" style="margin:24px 0;"></p>
+            <div style="display:flex;gap:16px;justify-content:center;"><button onclick="rejouer()" class="btn-secondary">🔄 Rejouer</button><button onclick="changerConfig()" class="btn-primary">⚙️ Changer</button><a href="index.html" class="btn-primary" style="text-decoration:none;">🏠 Accueil</a></div>
         </div>
-        
     </main>
-
-    <!-- MODAL POUR AFFICHER UN INDICE VISUEL -->
-    <div id="modal-visuel" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; z-index: 1000;">
-        <div class="game-card" style="max-width: 400px; text-align: center;">
-            <h3 style="font-size: 24px; margin-bottom: 16px;">👁️ Aide visuelle</h3>
-            <div id="visuel-svg" style="margin: 24px 0;"></div>
-            <button onclick="fermerModalVisuel()" class="btn-primary w-full">Fermer</button>
-        </div>
-    </div>
-
     <script>
-        // ============================================================
-        // GEOMETRIE.HTML - JEU SUR LES FORMES GÉOMÉTRIQUES
-        // ============================================================
-        // BUT : Apprendre à reconnaître et classer les figures géométriques
-        //       (carrés, rectangles, triangles, cercles, solides...)
-        // ============================================================
-        
-        // ---------- 1. RÉCUPÉRATION DU NOM DE L'ÉLÈVE ----------
         const urlParams = new URLSearchParams(window.location.search);
-        const nomEleve = urlParams.get('eleve') || sessionStorage.getItem('nomEleve') || "Explorateur";
-        
-        // ---------- 2. BASE DE DONNÉES DES FORMES ----------
-        // Toutes les formes géométriques avec leurs propriétés
-        
-        const formesGeometrie = {
-            // FIGURES PLANES (2D)
-            "Carré": {
-                niveau: 1,
-                proprietes: {
-                    cotes: "4 côtés égaux",
-                    angles: "4 angles droits (90°)",
-                    diagonales: "se coupent à angle droit",
-                    axesSymetrie: 4
-                },
-                indices: [
-                    "Je suis un quadrilatère très régulier.",
-                    "Mes 4 côtés ont exactement la même longueur.",
-                    "J'ai 4 angles droits et mes diagonales sont perpendiculaires."
-                ],
-                svg: `<svg viewBox="0 0 100 100" width="80" height="80"><rect x="20" y="20" width="60" height="60" fill="none" stroke="#8b5cf6" stroke-width="3"/></svg>`
-            },
-            "Rectangle": {
-                niveau: 1,
-                proprietes: {
-                    cotes: "côtés opposés égaux",
-                    angles: "4 angles droits",
-                    diagonales: "égales mais pas perpendiculaires",
-                    axesSymetrie: 2
-                },
-                indices: [
-                    "Je suis un quadrilatère avec des angles droits.",
-                    "Mes côtés opposés sont parallèles et de même longueur.",
-                    "Mes côtés adjacents n'ont pas la même longueur (sauf cas particulier)."
-                ],
-                svg: `<svg viewBox="0 0 100 100" width="80" height="80"><rect x="15" y="25" width="70" height="50" fill="none" stroke="#8b5cf6" stroke-width="3"/></svg>`
-            },
-            "Triangle": {
-                niveau: 1,
-                proprietes: {
-                    cotes: "3 côtés",
-                    angles: "3 angles",
-                    sommeAngles: "180°"
-                },
-                indices: [
-                    "Je suis la plus simple des figures fermées.",
-                    "J'ai exactement 3 sommets.",
-                    "Le mot 'tri' dans mon nom indique le nombre de mes côtés."
-                ],
-                svg: `<svg viewBox="0 0 100 100" width="80" height="80"><polygon points="50,15 15,85 85,85" fill="none" stroke="#8b5cf6" stroke-width="3"/></svg>`
-            },
-            "Cercle": {
-                niveau: 1,
-                proprietes: {
-                    cotes: "aucun côté droit",
-                    particulier: "tous les points à égale distance du centre",
-                    axesSymetrie: "infini"
-                },
-                indices: [
-                    "Je suis une figure parfaitement ronde.",
-                    "Je n'ai ni coin ni angle.",
-                    "On me trace avec un compas."
-                ],
-                svg: `<svg viewBox="0 0 100 100" width="80" height="80"><circle cx="50" cy="50" r="35" fill="none" stroke="#8b5cf6" stroke-width="3"/></svg>`
-            },
-            "Losange": {
-                niveau: 2,
-                proprietes: {
-                    cotes: "4 côtés égaux",
-                    angles: "angles opposés égaux (pas droits)",
-                    diagonales: "perpendiculaires"
-                },
-                indices: [
-                    "Je ressemble à un carré penché.",
-                    "Mes 4 côtés sont égaux mais je n'ai pas d'angles droits.",
-                    "Mes diagonales sont perpendiculaires."
-                ],
-                svg: `<svg viewBox="0 0 100 100" width="80" height="80"><polygon points="50,15 85,50 50,85 15,50" fill="none" stroke="#8b5cf6" stroke-width="3"/></svg>`
-            },
-            "Trapèze": {
-                niveau: 2,
-                proprietes: {
-                    cotes: "2 côtés parallèles (les bases)",
-                    angles: "variables"
-                },
-                indices: [
-                    "Je suis un quadrilatère avec une paire de côtés parallèles.",
-                    "Mes deux bases sont parallèles.",
-                    "Les acrobates de cirque aiment mon nom !"
-                ],
-                svg: `<svg viewBox="0 0 100 100" width="80" height="80"><polygon points="25,30 75,30 90,70 10,70" fill="none" stroke="#8b5cf6" stroke-width="3"/></svg>`
-            },
-            
-            // SOLIDES (3D)
-            "Cube": {
-                niveau: 2,
-                proprietes: {
-                    faces: "6 faces carrées identiques",
-                    aretes: "12 arêtes",
-                    sommets: "8 sommets"
-                },
-                indices: [
-                    "Je suis un solide qui ressemble à un dé à jouer.",
-                    "Toutes mes faces sont des carrés identiques.",
-                    "J'ai 8 sommets et 12 arêtes."
-                ],
-                svg: `<svg viewBox="0 0 100 100" width="80" height="80"><rect x="30" y="30" width="40" height="40" fill="none" stroke="#8b5cf6" stroke-width="3"/><polyline points="30,30 45,15 85,15 85,55 70,70" fill="none" stroke="#8b5cf6" stroke-width="3"/><line x1="85" y1="15" x2="70" y2="30" stroke="#8b5cf6" stroke-width="3"/></svg>`
-            },
-            "Pyramide": {
-                niveau: 2,
-                proprietes: {
-                    faces: "4 triangles + 1 carré (base)",
-                    aretes: "8 arêtes",
-                    sommets: "5 sommets"
-                },
-                indices: [
-                    "Je suis célèbre en Égypte.",
-                    "Ma base est un carré et mes côtés sont des triangles.",
-                    "J'ai 5 sommets."
-                ],
-                svg: `<svg viewBox="0 0 100 100" width="80" height="80"><polygon points="50,15 20,70 80,70" fill="none" stroke="#8b5cf6" stroke-width="3"/><line x1="50" y1="15" x2="35" y2="60" stroke="#8b5cf6" stroke-width="3"/><line x1="80" y1="70" x2="35" y2="60" stroke="#8b5cf6" stroke-width="3"/></svg>`
-            },
-            
-            // NIVEAU EXPERT
-            "Triangle rectangle": {
-                niveau: 3,
-                proprietes: {
-                    angle: "1 angle droit (90°)",
-                    cotes: "hypoténuse + 2 côtés perpendiculaires"
-                },
-                indices: [
-                    "Je suis un triangle avec un angle droit.",
-                    "Pour me vérifier, il te faut une équerre.",
-                    "Mon côté le plus long s'appelle l'hypoténuse."
-                ],
-                svg: `<svg viewBox="0 0 100 100" width="80" height="80"><polygon points="20,20 20,80 80,80" fill="none" stroke="#8b5cf6" stroke-width="3"/><polyline points="20,70 30,70 30,80" fill="none" stroke="#8b5cf6" stroke-width="2"/></svg>`
-            },
-            "Triangle équilatéral": {
-                niveau: 3,
-                proprietes: {
-                    cotes: "3 côtés égaux",
-                    angles: "3 angles de 60°",
-                    axesSymetrie: 3
-                },
-                indices: [
-                    "Mes trois côtés ont exactement la même longueur.",
-                    "Mes trois angles mesurent 60 degrés.",
-                    "Je suis le triangle le plus parfait."
-                ],
-                svg: `<svg viewBox="0 0 100 100" width="80" height="80"><polygon points="50,15 15,85 85,85" fill="none" stroke="#8b5cf6" stroke-width="3"/><circle cx="50" cy="50" r="3" fill="#8b5cf6"/></svg>`
-            }
-        };
-        
-        // ---------- 3. ÉTAT DU JEU ----------
-        let niveauSelectionne = null;     // 1, 2 ou 3
-        let modeSelectionne = null;       // 'quiz', 'intrus', 'classe'
-        let score = 0;
-        let questionActuelle = 1;
-        let partieEnCours = false;
-        
-        // Liste des formes disponibles selon le niveau
-        let formesDisponibles = [];
-        
-        // Question en cours
-        let questionCourante = null;
-        
-        // ---------- 4. FONCTIONS DE SÉLECTION ----------
-        
-        function selectionnerNiveau(niveau) {
-            // Enlever la classe 'selected' de tous les niveaux
-            for (let i = 1; i <= 3; i++) {
-                document.getElementById(`niveau-${i}`).classList.remove('selected');
-            }
-            // Ajouter la classe 'selected' au niveau choisi
-            document.getElementById(`niveau-${niveau}`).classList.add('selected');
-            niveauSelectionne = niveau;
-            verifierDemarrage();
-        }
-        
-        function selectionnerMode(mode) {
-            // Enlever la classe 'selected' de tous les modes
-            const modes = ['quiz', 'intrus', 'classe'];
-            for (let m of modes) {
-                document.getElementById(`mode-${m}`).classList.remove('selected');
-            }
-            // Ajouter la classe 'selected' au mode choisi
-            document.getElementById(`mode-${mode}`).classList.add('selected');
-            modeSelectionne = mode;
-            verifierDemarrage();
-        }
-        
-        function verifierDemarrage() {
-            const btnStart = document.getElementById('btn-start');
-            if (niveauSelectionne && modeSelectionne) {
-                btnStart.disabled = false;
-                btnStart.style.opacity = '1';
-                btnStart.style.cursor = 'pointer';
-            } else {
-                btnStart.disabled = true;
-                btnStart.style.opacity = '0.5';
-                btnStart.style.cursor = 'not-allowed';
-            }
-        }
-        
-        // ---------- 5. DÉMARRAGE DU JEU ----------
-        
-        function demarrerJeu() {
-            // Filtrer les formes selon le niveau
-            formesDisponibles = [];
-            for (let [nom, infos] of Object.entries(formesGeometrie)) {
-                if (infos.niveau <= niveauSelectionne) {
-                    formesDisponibles.push({ nom: nom, ...infos });
-                }
-            }
-            
-            // Réinitialiser les scores
-            score = 0;
-            questionActuelle = 1;
-            partieEnCours = true;
-            
-            // Mettre à jour l'affichage
-            document.getElementById('score').innerText = score;
-            document.getElementById('num-question').innerText = questionActuelle;
-            
-            // Afficher le mode choisi
-            const modesTexte = {
-                'quiz': '❓ Mode Quiz - Devine la forme',
-                'intrus': '🔍 Mode Intrus - Trouve l\'anomalie',
-                'classe': '📦 Mode Classification - Range les formes'
-            };
-            document.getElementById('mode-actuel').innerText = modesTexte[modeSelectionne];
-            
-            // Changer d'écran
-            document.getElementById('screen-config').classList.add('hidden');
-            document.getElementById('screen-game').classList.remove('hidden');
-            
-            // Générer la première question
-            genererQuestion();
-        }
-        
-        // ---------- 6. GÉNÉRATION DES QUESTIONS SELON LE MODE ----------
-        
-        function genererQuestion() {
-            if (questionActuelle > 10) {
-                terminerJeu();
-                return;
-            }
-            
-            // Mettre à jour le numéro de question
-            document.getElementById('num-question').innerText = questionActuelle;
-            
-            // Cacher le feedback précédent
-            const feedback = document.getElementById('feedback');
-            feedback.classList.add('hidden');
-            
-            // Générer la question selon le mode
-            if (modeSelectionne === 'quiz') {
-                genererQuestionQuiz();
-            } else if (modeSelectionne === 'intrus') {
-                genererQuestionIntrus();
-            } else if (modeSelectionne === 'classe') {
-                genererQuestionClasse();
-            }
-        }
-        
-        // MODE QUIZ : Deviner la forme à partir d'indices
-        function genererQuestionQuiz() {
-            // Choisir une forme au hasard
-            const forme = formesDisponibles[Math.floor(Math.random() * formesDisponibles.length)];
-            questionCourante = {
-                type: 'quiz',
-                forme: forme.nom,
-                bonneReponse: forme.nom,
-                indices: [...forme.indices],
-                indiceCourant: 0,
-                svg: forme.svg
-            };
-            
-            // Créer les options (la bonne + 3 mauvaises)
-            const autresFormes = formesDisponibles.filter(f => f.nom !== forme.nom);
-            const mauvaises = [];
-            while (mauvaises.length < 3 && autresFormes.length > 0) {
-                const randomIndex = Math.floor(Math.random() * autresFormes.length);
-                const autre = autresFormes[randomIndex];
-                if (!mauvaises.includes(autre.nom)) {
-                    mauvaises.push(autre.nom);
-                }
-            }
-            const options = [forme.nom, ...mauvaises];
-            // Mélanger les options
-            for (let i = options.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [options[i], options[j]] = [options[j], options[i]];
-            }
-            
-            // Afficher l'interface
-            const container = document.getElementById('game-content');
-            container.innerHTML = `
-                <div class="indice-box">
-                    <p style="font-size: 14px; color: #f59e0b; margin-bottom: 8px;">💡 INDICE</p>
-                    <p id="indice-texte" style="font-size: 18px;">« ${forme.indices[0]} »</p>
-                </div>
-                
-                <div style="display: flex; justify-content: center; gap: 20px; margin: 24px 0;">
-                    <button id="btn-indice" class="btn-secondary" onclick="demanderIndice()">
-                        💬 Autre indice (-2 points)
-                    </button>
-                    <button id="btn-visuel" class="btn-secondary" onclick="afficherVisuel()">
-                        👁️ Voir la forme (-3 points)
-                    </button>
-                </div>
-                
-                <div class="level-selector" style="grid-template-columns: repeat(2, 1fr);">
-                    ${options.map(opt => `
-                        <button onclick="repondreQuiz('${opt}')" class="level-card" style="padding: 16px;">
-                            ${opt}
-                        </button>
-                    `).join('')}
-                </div>
-            `;
-            
-            // Sauvegarder les options pour la vérification
-            questionCourante.options = options;
-        }
-        
-        // Demander un indice supplémentaire (coûte des points)
-        function demanderIndice() {
-            if (questionCourante.indiceCourant + 1 < questionCourante.indices.length) {
-                questionCourante.indiceCourant++;
-                document.getElementById('indice-texte').innerHTML = `« ${questionCourante.indices[questionCourante.indiceCourant]} »`;
-                
-                // Pénalité de 2 points (ne peut pas descendre en dessous de 0)
-                score = Math.max(0, score - 2);
-                document.getElementById('score').innerText = score;
-                
-                // Désactiver le bouton s'il n'y a plus d'indices
-                if (questionCourante.indiceCourant + 1 >= questionCourante.indices.length) {
-                    document.getElementById('btn-indice').disabled = true;
-                    document.getElementById('btn-indice').style.opacity = '0.5';
-                }
-            } else {
-                alert("Plus d'indices disponibles !");
-            }
-        }
-        
-        // Afficher la forme (aide visuelle) - coûte des points
-        function afficherVisuel() {
-            const modal = document.getElementById('modal-visuel');
-            const svgContainer = document.getElementById('visuel-svg');
-            svgContainer.innerHTML = questionCourante.svg;
-            modal.style.display = 'flex';
-            
-            // Pénalité de 3 points
-            score = Math.max(0, score - 3);
-            document.getElementById('score').innerText = score;
-            
-            // Désactiver le bouton
-            document.getElementById('btn-visuel').disabled = true;
-            document.getElementById('btn-visuel').style.opacity = '0.5';
-        }
-        
-        function fermerModalVisuel() {
-            document.getElementById('modal-visuel').style.display = 'none';
-        }
-        
-        // Réponse au mode Quiz
-        function repondreQuiz(reponse) {
-            const estCorrect = (reponse === questionCourante.bonneReponse);
-            
-            if (estCorrect) {
-                score += 10;
-                afficherFeedback(`✅ BRAVO ! C'était bien un(e) ${questionCourante.bonneReponse} ! +10 points`, true);
-            } else {
-                afficherFeedback(`❌ Oups... La bonne réponse était ${questionCourante.bonneReponse}.`, false);
-            }
-            
-            finDeQuestion();
-        }
-        
-        // MODE INTRUS : Trouver la forme qui ne correspond pas
-        function genererQuestionIntrus() {
-            // Choisir 4 formes, dont 1 qui est l'intrus
-            // L'intrus peut être : un solide parmi des plans, ou une forme différente
-            
-            const formesMelangees = [...formesDisponibles];
-            for (let i = formesMelangees.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [formesMelangees[i], formesMelangees[j]] = [formesMelangees[j], formesMelangees[i]];
-            }
-            
-            const formesChoisies = formesMelangees.slice(0, 4);
-            
-            // Déterminer l'intrus (celui qui est différent)
-            // Pour simplifier, on prend le dernier comme intrus
-            const intrus = formesChoisies[formesChoisies.length - 1];
-            const bonnes = formesChoisies.slice(0, 3);
-            
-            questionCourante = {
-                type: 'intrus',
-                bonnes: bonnes.map(f => f.nom),
-                intrus: intrus.nom,
-                bonneReponse: intrus.nom
-            };
-            
-            // Mélanger l'affichage
-            const tous = [...bonnes, intrus];
-            for (let i = tous.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [tous[i], tous[j]] = [tous[j], tous[i]];
-            }
-            
-            // Afficher
-            const container = document.getElementById('game-content');
-            container.innerHTML = `
-                <p style="text-align: center; margin-bottom: 24px; font-size: 18px;">
-                    🔍 Parmi ces formes, une est différente. Laquelle ?
-                </p>
-                <div class="level-selector" style="grid-template-columns: repeat(2, 1fr);">
-                    ${tous.map(forme => `
-                        <button onclick="repondreIntrus('${forme.nom}')" class="intruder-card">
-                            <div class="shape-svg">${forme.svg}</div>
-                            <p style="margin-top: 12px; font-weight: bold;">${forme.nom}</p>
-                        </button>
-                    `).join('')}
-                </div>
-            `;
-        }
-        
-        function repondreIntrus(reponse) {
-            const estCorrect = (reponse === questionCourante.bonneReponse);
-            
-            if (estCorrect) {
-                score += 10;
-                afficherFeedback(`✅ Exact ! ${reponse} était l'intrus. +10 points`, true);
-            } else {
-                afficherFeedback(`❌ Non ! L'intrus était ${questionCourante.bonneReponse}.`, false);
-            }
-            
-            finDeQuestion();
-        }
-        
-        // MODE CLASSIFICATION : Ranger les formes dans la bonne catégorie
-        function genererQuestionClasse() {
-            // Choisir 4 formes aléatoires
-            const formesMelangees = [...formesDisponibles];
-            for (let i = formesMelangees.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [formesMelangees[i], formesMelangees[j]] = [formesMelangees[j], formesMelangees[i]];
-            }
-            
-            const formesAclasser = formesMelangees.slice(0, 4);
-            
-            // Définir deux catégories
-            const categorie1 = "Formes avec des angles droits";
-            const categorie2 = "Formes sans angle droit";
-            
-            // Classer chaque forme
-            const classement = {
-                categorie1: [],
-                categorie2: []
-            };
-            
-            // Pour simplifier, on utilise une règle simple
-            formesAclasser.forEach(forme => {
-                if (forme.nom === "Carré" || forme.nom === "Rectangle" || forme.nom === "Triangle rectangle") {
-                    classement.categorie1.push(forme);
-                } else {
-                    classement.categorie2.push(forme);
-                }
-            });
-            
-            questionCourante = {
-                type: 'classe',
-                formes: formesAclasser,
-                categorie1: categorie1,
-                categorie2: categorie2,
-                classement: classement
-            };
-            
-            // Afficher l'interface
-            const container = document.getElementById('game-content');
-            container.innerHTML = `
-                <p style="text-align: center; margin-bottom: 24px;">
-                    📦 Classe chaque forme dans la bonne catégorie
-                </p>
-                
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
-                    <div class="drop-zone" id="zone-categorie1" data-categorie="1">
-                        <h4 style="text-align: center; margin-bottom: 16px;">${categorie1}</h4>
-                        <div id="categorie1-contenu"></div>
-                    </div>
-                    <div class="drop-zone" id="zone-categorie2" data-categorie="2">
-                        <h4 style="text-align: center; margin-bottom: 16px;">${categorie2}</h4>
-                        <div id="categorie2-contenu"></div>
-                    </div>
-                </div>
-                
-                <div class="level-selector" style="grid-template-columns: repeat(4, 1fr); margin-top: 24px;" id="formes-a-classer">
-                    ${formesAclasser.map(forme => `
-                        <div class="shape-card" draggable="true" data-forme="${forme.nom}" data-svg="${forme.svg.replace(/"/g, '&quot;')}">
-                            <div class="shape-svg">${forme.svg}</div>
-                            <p>${forme.nom}</p>
-                        </div>
-                    `).join('')}
-                </div>
-                
-                <button onclick="validerClassification()" class="btn-primary w-full mt-6">✅ Valider ma classification</button>
-            `;
-            
-            // Ajouter les événements de drag & drop
-            initialiserDragDrop();
-        }
-        
-        function initialiserDragDrop() {
-            const draggables = document.querySelectorAll('[draggable="true"]');
-            const zones = document.querySelectorAll('.drop-zone');
-            
-            draggables.forEach(el => {
-                el.addEventListener('dragstart', (e) => {
-                    e.dataTransfer.setData('text/plain', el.getAttribute('data-forme'));
-                    e.dataTransfer.setData('text/html', el.outerHTML);
-                    e.dataTransfer.effectAllowed = 'move';
-                });
-            });
-            
-            zones.forEach(zone => {
-                zone.addEventListener('dragover', (e) => {
-                    e.preventDefault();
-                    e.dataTransfer.dropEffect = 'move';
-                    zone.classList.add('drag-over');
-                });
-                
-                zone.addEventListener('dragleave', () => {
-                    zone.classList.remove('drag-over');
-                });
-                
-                zone.addEventListener('drop', (e) => {
-                    e.preventDefault();
-                    zone.classList.remove('drag-over');
-                    
-                    const formeNom = e.dataTransfer.getData('text/plain');
-                    const elementDrag = document.querySelector(`[data-forme="${formeNom}"]`);
-                    
-                    if (elementDrag && elementDrag.parentElement !== zone) {
-                        const zoneContenu = zone.querySelector('div:not(h4)');
-                        if (zoneContenu) {
-                            zoneContenu.appendChild(elementDrag.cloneNode(true));
-                            elementDrag.remove();
-                        }
-                    }
-                });
-            });
-        }
-        
-        function validerClassification() {
-            // Vérifier que toutes les formes ont été classées
-            const formesRestantes = document.querySelectorAll('#formes-a-classer .shape-card');
-            if (formesRestantes.length > 0) {
-                afficherFeedback("❌ Il reste des formes à classer !", false);
-                return;
-            }
-            
-            // Compter les bonnes réponses
-            let bonnes = 0;
-            const zone1Formes = document.querySelectorAll('#zone-categorie1 .shape-card');
-            const zone2Formes = document.querySelectorAll('#zone-categorie2 .shape-card');
-            
-            zone1Formes.forEach(el => {
-                const formeNom = el.getAttribute('data-forme');
-                const forme = formesDisponibles.find(f => f.nom === formeNom);
-                if (forme && (forme.nom === "Carré" || forme.nom === "Rectangle" || forme.nom === "Triangle rectangle")) {
-                    bonnes++;
-                }
-            });
-            
-            zone2Formes.forEach(el => {
-                const formeNom = el.getAttribute('data-forme');
-                const forme = formesDisponibles.find(f => f.nom === formeNom);
-                if (forme && !(forme.nom === "Carré" || forme.nom === "Rectangle" || forme.nom === "Triangle rectangle")) {
-                    bonnes++;
-                }
-            });
-            
-            const pointsGagnes = bonnes * 2.5; // 10 points max pour 4 formes
-            score += Math.floor(pointsGagnes);
-            
-            afficherFeedback(`✅ Classification terminée ! ${bonnes}/4 correctes. +${Math.floor(pointsGagnes)} points`, true);
-            finDeQuestion();
-        }
-        
-        // ---------- 7. FONCTIONS COMMUNES ----------
-        
-        function afficherFeedback(message, estSucces) {
-            const feedback = document.getElementById('feedback');
-            feedback.innerText = message;
-            feedback.className = `feedback ${estSucces ? 'success' : 'error'}`;
-            feedback.classList.remove('hidden');
-            
-            // Mettre à jour le score affiché
-            document.getElementById('score').innerText = score;
-            
-            // Désactiver les boutons le temps du feedback
-            const boutons = document.querySelectorAll('#game-content button, #game-content .shape-card');
-            boutons.forEach(btn => {
-                if (btn.style) btn.style.pointerEvents = 'none';
-            });
-            
-            // Passer à la question suivante après 2 secondes
-            setTimeout(() => {
-                questionActuelle++;
-                genererQuestion();
-                boutons.forEach(btn => {
-                    if (btn.style) btn.style.pointerEvents = 'auto';
-                });
-            }, 2000);
-        }
-        
-        function finDeQuestion() {
-            // La fonction afficherFeedback s'occupe déjà du passage à la question suivante
-        }
-        
-        // ---------- 8. FIN DU JEU ----------
-        
-        function terminerJeu() {
-            partieEnCours = false;
-            
-            document.getElementById('screen-game').classList.add('hidden');
-            document.getElementById('screen-result').classList.remove('hidden');
-            
-            document.getElementById('score-final').innerText = score;
-            
-            // Message personnalisé
-            let message = "";
-            if (score >= 80) {
-                message = "🏆 EXCELLENT ! Tu es un véritable expert en géométrie ! 🏆";
-            } else if (score >= 60) {
-                message = "🎉 Très bien ! Continue comme ça, tu progresses ! 🎉";
-            } else if (score >= 40) {
-                message = "👍 Pas mal ! Encore un peu d'entraînement et tu seras incollable ! 👍";
-            } else {
-                message = "💪 Continue de t'entraîner, la géométrie n'aura bientôt plus de secrets pour toi ! 💪";
-            }
-            document.getElementById('message-final').innerHTML = message;
-            
-            // Sauvegarder le score
-            sauvegarderScore();
-        }
-        
-        function sauvegarderScore() {
-            // Sauvegarde dans localStorage (et Firebase si configuré)
-            const scores = JSON.parse(localStorage.getItem('scores_eleves') || '[]');
-            scores.push({
-                nomEleve: nomEleve,
-                exercice: `Géométrie - Niv.${niveauSelectionne} (${modeSelectionne})`,
-                corrects: Math.floor(score / 10),
-                total: 10,
-                timestamp: Date.now()
-            });
-            localStorage.setItem('scores_eleves', JSON.stringify(scores));
-            
-            console.log(`✅ Score sauvegardé : ${score}/100 pour ${nomEleve}`);
-        }
-        
-        function rejouer() {
-            // Rejouer avec les mêmes paramètres
-            score = 0;
-            questionActuelle = 1;
-            document.getElementById('screen-result').classList.add('hidden');
-            document.getElementById('screen-game').classList.remove('hidden');
-            genererQuestion();
-        }
-        
-        function changerConfiguration() {
-            document.getElementById('screen-result').classList.add('hidden');
-            document.getElementById('screen-config').classList.remove('hidden');
-            
-            // Réinitialiser la sélection
-            niveauSelectionne = null;
-            modeSelectionne = null;
-            verifierDemarrage();
-        }
-        
-        // ---------- 9. RACCOURCI CLAVIER ----------
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && document.getElementById('modal-visuel').style.display === 'flex') {
-                fermerModalVisuel();
-            }
-        });
-        
-    </script>
-</body>
-</html>
+        const nomEleve = urlParams.get('eleve') || "Explorateur";
+        const FORME = { "Carré":{niveau:1,indices:["4 côtés égaux","4 angles droits","carré"],svg:'<svg viewBox="0 0 100 100"><rect x="20" y="20" width="60" height="60" fill="none" stroke="currentColor" stroke-width="3"/></svg>'},
+        "Rectangle":{niveau:1,indices:["côtés opposés égaux","4 angles droits","rectangle"],svg:'<svg viewBox="0 0 100 100"><rect x="15" y="25" width="70" height="50" fill="none" stroke="currentColor" stroke-width="3"/></svg>'},
+        "Triangle":{niveau:1,indices:["3 côtés","3 sommets","triangle"],svg:'<svg viewBox="0 0 100 100"><polygon points="50,15 15,85 85,85" fill="none" stroke="currentColor" stroke-width="3"/></svg>'},
+        "Cercle":{niveau:1,indices:["rond","pas de coin","cercle"],svg:'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="35" fill="none" stroke="currentColor" stroke-width="3"/></svg>'},
+        "Cube":{niveau:2,indices:["6 faces carrées","dé à jouer","cube"],svg:'<svg viewBox="0 0 100 100"><rect x="30" y="30" width="40" height="40" fill="none" stroke="currentColor" stroke-width="3"/><polyline points="30,30 45,15 85,15 85,55 70,70" fill="none" stroke="currentColor" stroke-width="3"/><line x1="85" y1="15" x2="70" y2="30" stroke="currentColor" stroke-width="3"/></svg>'}};
+        let niveau=null,mode=null,score=0,q=1,formes=[],qc=null;
+        function choisirNiveau(n){[1,2,3].forEach(i=>document.getElementById(`niveau-${i}`)?.classList.remove('selected')); document.getElementById(`niveau-${n}`).classList.add('selected'); niveau=n; verifier();}
+        function choisirMode(m){['quiz','intrus','classe'].forEach(i=>document.getElementById(`mode-${i}`)?.classList.remove('selected')); document.getElementById(`mode-${m}`).classList.add('selected'); mode=m; verifier();}
+        function verifier(){const btn=document.getElementById('btn-start'); if(niveau&&mode){btn.disabled=false;btn.style.opacity='1';btn.style.cursor='pointer';}else{btn.disabled=true;btn.style.opacity='0.5';}}
+        function demarrerJeu(){formes=Object.entries(FORME).filter(([_,f])=>f.niveau<=niveau).map(([n,f])=>({nom:n,...f})); score=0;q=1;document.getElementById('score').innerText=score;document.getElementById('num-question').innerText=q;document.getElementById('mode-actuel').innerText=mode==='quiz'?'❓ Quiz':mode==='intrus'?'🔍 Intrus':'📦 Classification';document.getElementById('screen-config').class
+        .level-badge { background: var(--color-geometrie); color: white; padding: 4px 12px; border-radius: 40px; font-size: 12px; }
+        .shape-card { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 20px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.2s; }
+        .shape-card:hover { transform: scale(1.02); border-color: var(--color-geometrie); }
+        .shape-card.selected { background: var(--color-geometrie); color: white; border-color: var(--color-geometrie); }
+        .shape-svg { width: 80px; height: 80px; margin: 0 auto; display: block; }
+        .indice-box { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 16px; border-radius: 12px; margin: 16px 0; }
+        .drop-zone { background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 16px; padding: 16px; min-height: 150px; transition: all 0.2s; }
+        .drop-zone.drag-over { border-color: var(--color-geometrie); background: #eef2ff; }
+        .speak-btn { background: #fef3c7; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 20px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <header class="page-header"><div class="header-container">
+        <div class="header-title"><div class="header-icon" style="background:linear-gradient(135deg,var(--color-geometrie),#a78bfa);">📐</div>
+        <div><h1>Géométrie</h1><p>Explore les formes et leurs propriétés</p></div></div>
+        <div style="display:flex;gap:12px;"><button id="btn-contrast" class="btn-contrast" onclick="toggleContrast()">👁️ Contraste+</button>
+        <a href="index.html" class="btn-secondary" style="text-decoration:none;">↩ Quitter</a></div>
+    </div></header>
+    <main>
+        <div id="screen-config" class="game-card"><div class="text-center mb-8"><h2 style="font-size:28px;">🎮 Configuration</h2><p>Choisis ton niveau et ton mode</p></div>
+            <div class="level-selector">
+                <div onclick="choisirNiveau(1)" id="niveau-1" class="level-btn"><span class="level-title">⭐ Débutant</span><span class="level-desc">Figures simples</span></div>
+                <div onclick="choisirNiveau(2)" id="niveau-2" class="level-btn"><span class="level-title">⭐⭐ Intermédiaire</span><span class="level-desc">+ solides</span></div>
+                <div onclick="choisirNiveau(3)" id="niveau-3" class="level-btn"><span class="level-title">⭐⭐⭐ Expert</span><span class="level-desc">Toutes les formes</span></div>
+            </div>
+            <div class="level-selector">
+                <div onclick="choisirMode('quiz')" id="mode-quiz" class="level-btn"><span class="level-title">❓ Quiz</span><span class="level-desc">Devine la forme</span></div>
+                <div onclick="choisirMode('intrus')" id="mode-intrus" class="level-btn"><span class="level-title">🔍 L'intrus</span><span class="level-desc">Trouve l'anomalie</span></div>
+                <div onclick="choisirMode('classe')" id="mode-classe" class="level-btn"><span class="level-title">📦 Classification</span><span class="level-desc">Range les formes</span></div>
+            </div>
+            <button id="btn-start" onclick="demarrerJeu()" class="btn-primary w-full" disabled style="opacity:0.5;">🚀 Commencer</button>
+        </div>
+        <div id="screen-game" class="hidden game-card"><div class="flex justify-between items-center mb-6 pb-4" style="border-bottom:1px solid #e2e8f0;">
+            <div><span id="mode-actuel" class="level-badge">Mode Quiz</span><span style="margin-left:12px;">Question <span id="num-question">1</span>/10</span></div>
+            <div><span style="color:var(--color-primary);">🏆 Score</span><span id="score" style="font-size:24px;font-weight:bold;margin-left:8px;">0</span></div>
+        </div>
+        <div class="text-right mb-2"><button id="btn-speak" class="speak-btn" onclick="parlerConsigne()">🔊</button></div>
+        <div id="game-content"></div>
+        <div id="feedback" class="feedback hidden"></div></div>
+        <div id="screen-result" class="hidden game-card text-center"><h2 style="font-size:32px;">🏆 Mission terminée !</h2>
+            <div style="background:#f8fafc;border-radius:24px;padding:32px;max-width:300px;margin:24px auto;"><p>Ton score</p><p style="font-size:56px;font-weight:bold;color:var(--color-primary);"><span id="score-final">0</span>/10</p></div>
+            <p id="message-final" style="margin:24px 0;"></p>
+            <div style="display:flex;gap:16px;justify-content:center;"><button onclick="rejouer()" class="btn-secondary">🔄 Rejouer</button><button onclick="changerConfig()" class="btn-primary">⚙️ Changer</button><a href="index.html" class="btn-primary" style="text-decoration:none;">🏠 Accueil</a></div>
+        </div>
+    </main>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const nomEleve = urlParams.get('eleve') || "Explorateur";
+        const FORME = { "Carré":{niveau:1,indices:["4 côtés égaux","4 angles droits","carré"],svg:'<svg viewBox="0 0 100 100"><rect x="20" y="20" width="60" height="60" fill="none" stroke="currentColor" stroke-width="3"/></svg>'},
+        "Rectangle":{niveau:1,indices:["côtés opposés égaux","4 angles droits","rectangle"],svg:'<svg viewBox="0 0 100 100"><rect x="15" y="25" width="70" height="50" fill="none" stroke="currentColor" stroke-width="3"/></svg>'},
+        "Triangle":{niveau:1,indices:["3 côtés","3 sommets","triangle"],svg:'<svg viewBox="0 0 100 100"><polygon points="50,15 15,85 85,85" fill="none" stroke="currentColor" stroke-width="3"/></svg>'},
+        "Cercle":{niveau:1,indices:["rond","pas de coin","cercle"],svg:'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="35" fill="none" stroke="currentColor" stroke-width="3"/></svg>'},
+        "Cube":{niveau:2,indices:["6 faces carrées","dé à jouer","cube"],svg:'<svg viewBox="0 0 100 100"><rect x="30" y="30" width="40" height="40" fill="none" stroke="currentColor" stroke-width="3"/><polyline points="30,30 45,15 85,15 85,55 70,70" fill="none" stroke="currentColor" stroke-width="3"/><line x1="85" y1="15" x2="70" y2="30" stroke="currentColor" stroke-width="3"/></svg>'}};
+        let niveau=null,mode=null,score=0,q=1,formes=[],qc=null;
+        function choisirNiveau(n){[1,2,3].forEach(i=>document.getElementById(`niveau-${i}`)?.classList.remove('selected')); document.getElementById(`niveau-${n}`).classList.add('selected'); niveau=n; verifier();}
+        function choisirMode(m){['quiz','intrus','classe'].forEach(i=>document.getElementById(`mode-${i}`)?.classList.remove('selected')); document.getElementById(`mode-${m}`).classList.add('selected'); mode=m; verifier();}
+        function verifier(){const btn=document.getElementById('btn-start'); if(niveau&&mode){btn.disabled=false;btn.style.opacity='1';btn.style.cursor='pointer';}else{btn.disabled=true;btn.style.opacity='0.5';}}
+        function demarrerJeu(){formes=Object.entries(FORME).filter(([_,f])=>f.niveau<=niveau).map(([n,f])=>({nom:n,...f})); score=0;q=1;document.getElementById('score').innerText=score;document.getElementById('num-question').innerText=q;document.getElementById('mode-actuel').innerText=mode==='quiz'?'❓ Quiz':mode==='intrus'?'🔍 Intrus':'📦 Classification';document.getElementById('screen-config').class
