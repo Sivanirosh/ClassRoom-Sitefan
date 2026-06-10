@@ -2,493 +2,619 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Les Royaumes Perdus de Numéria</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Numéria - Les Royaumes Perdus</title>
+    
+    <!-- ======================================== -->
+    <!-- STYLE UNIFIÉ (commun à toutes les pages) -->
+    <!-- ======================================== -->
+    <link rel="stylesheet" href="style-commun.css">
+    
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { corePlugins: { preflight: false } }
+    </script>
+    
     <style>
-        /* Thème Fantasy / Parchemin */
-        :root {
-            --parchment: #f4ebd8;
-            --ink: #2c1e16;
-            --accent-blue: #3b82f6;
-            --accent-gold: #d97706;
-            --accent-purple: #8b5cf6;
+        /* ========== STYLES SPÉCIFIQUES À NUMÉRIA ========== */
+        
+        /* Carte des royaumes */
+        .realm-card {
+            background: linear-gradient(145deg, #1e1b4b, #0f172a);
+            border: 2px solid #2e3e65;
+            border-radius: 20px;
+            padding: 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
         }
-        body {
-            background-color: var(--parchment);
-            color: var(--ink);
-            font-family: 'Georgia', serif;
-            background-image: radial-gradient(#e5d9c5 1px, transparent 1px);
-            background-size: 20px 20px;
-            user-select: none;
+        
+        .realm-card:hover:not(.locked) {
+            transform: translateY(-5px);
+            border-color: #8b5cf6;
         }
-        .parchment-box {
-            background: #fffdf5;
-            border: 2px solid #d4c4a8;
-            box-shadow: 4px 4px 0px rgba(212, 196, 168, 0.5);
-            border-radius: 8px;
-        }
-        .btn-fantasy {
-            background: linear-gradient(to bottom, #ffffff, #fef3c7);
-            border: 2px solid #b45309;
-            color: #78350f;
-            font-weight: bold;
-            transition: all 0.1s;
-        }
-        .btn-fantasy:hover:not(:disabled) {
-            background: #fef3c7;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 0px #b45309;
-        }
-        .btn-fantasy:active:not(:disabled) {
-            transform: translateY(2px);
-            box-shadow: 0 0px 0px #b45309;
-        }
-        .btn-fantasy:disabled {
-            filter: grayscale(100%);
-            opacity: 0.6;
+        
+        .realm-card.locked {
+            opacity: 0.5;
             cursor: not-allowed;
-            border-color: #9ca3af;
-            color: #4b5563;
+            filter: grayscale(0.3);
         }
-        .title-font {
-            font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
-            text-shadow: 1px 1px 0px #fff;
+        
+        .realm-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
         }
-        .sortable-item { cursor: grab; }
-        .sortable-item:active { cursor: grabbing; }
+        
+        /* Missions */
+        .mission-card {
+            background: #172033;
+            border: 2px solid #2e3e65;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .mission-card:hover:not(.locked) {
+            border-color: #f59e0b;
+            transform: translateX(5px);
+        }
+        
+        .mission-card.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .stars {
+            color: #fbbf24;
+            letter-spacing: 2px;
+        }
+        
+        /* Codex (collection des artefacts) */
+        .codex-item {
+            background: #172033;
+            border: 1px solid #2e3e65;
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+        
+        .codex-item.locked {
+            opacity: 0.5;
+            filter: grayscale(0.5);
+        }
+        
+        /* Animation de déblocage */
+        @keyframes unlock {
+            0% { transform: scale(1); filter: grayscale(1); }
+            50% { transform: scale(1.1); filter: grayscale(0); }
+            100% { transform: scale(1); filter: grayscale(0); }
+        }
+        
+        .unlock-animation {
+            animation: unlock 0.5s ease;
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center py-6 px-4">
+<body>
 
-    <header class="w-full max-w-4xl flex justify-between items-center mb-8">
-        <div>
-            <h1 class="text-3xl font-bold title-font text-amber-900">Numéria</h1>
-            <p class="text-sm italic text-amber-700">Chroniques des nombres</p>
-        </div>
-        <div class="flex gap-4">
-            <button onclick="showScreen('screen-codex')" class="btn-fantasy px-4 py-2 rounded-md">📖 Codex</button>
-            <button onclick="showScreen('screen-map')" class="btn-fantasy px-4 py-2 rounded-md">🗺️ Carte</button>
+    <header class="page-header">
+        <div class="header-container">
+            <div class="header-title">
+                <div class="header-icon" style="background: linear-gradient(145deg, #10b981, #059669);">
+                    <span>📜</span>
+                </div>
+                <div>
+                    <h1>Numéria</h1>
+                    <p>Chroniques des nombres - Deviens un maître de la numération</p>
+                </div>
+            </div>
+            <a href="index.html" class="btn-secondary" style="text-decoration: none;">
+                ↩ Quitter
+            </a>
         </div>
     </header>
 
-    <main class="w-full max-w-4xl flex-grow flex flex-col relative">
-
-        <section id="screen-map" class="parchment-box p-8 flex-grow flex flex-col animate-in fade-in">
-            <h2 class="text-2xl font-bold text-center mb-8 title-font">La Carte des Royaumes</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="realms-container"></div>
-        </section>
-
-        <section id="screen-realm" class="hidden parchment-box p-8 flex-grow flex flex-col animate-in fade-in">
-            <button onclick="showScreen('screen-map')" class="self-start text-amber-700 hover:text-amber-900 font-bold mb-4">← Retour à la carte</button>
-            <h2 class="text-2xl font-bold text-center mb-2 title-font" id="realm-title">Nom du Royaume</h2>
-            <p class="text-center text-amber-800 italic mb-8" id="realm-desc">Description</p>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto w-full" id="missions-container"></div>
-        </section>
-
-        <section id="screen-mission" class="hidden parchment-box p-8 flex-grow flex flex-col items-center justify-center animate-in zoom-in-95">
-            <div class="w-full flex justify-between mb-8 text-amber-800 font-bold">
-                <span id="mission-progress">Question 1 / 5</span>
-                <span id="mission-score">Étoiles : 0</span>
+    <main>
+        
+        <!-- ÉCRAN 1 : CARTE DES ROYAUMES -->
+        <div id="screen-map" class="game-card">
+            <h2 style="font-size: 28px; text-align: center; margin-bottom: 24px;">🗺️ La Carte des Royaumes</h2>
+            <div id="realms-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                <!-- Les royaumes seront générés ici -->
             </div>
-
-            <div class="w-full max-w-xl text-center space-y-8">
-                <h3 class="text-2xl font-bold" id="question-text">Énoncé de la question</h3>
-                <div id="answer-zone" class="w-full flex flex-col gap-4 items-center"></div>
-                <div id="feedback-zone" class="hidden w-full p-4 rounded-md font-bold text-lg"></div>
-                <button id="btn-validate" onclick="checkAnswer()" class="btn-fantasy px-8 py-3 rounded-xl text-lg w-full max-w-xs mx-auto">Valider</button>
-                <button id="btn-next" onclick="nextQuestion()" class="hidden btn-fantasy px-8 py-3 rounded-xl text-lg w-full max-w-xs mx-auto">Continuer ➔</button>
+        </div>
+        
+        <!-- ÉCRAN 2 : MISSIONS D'UN ROYAUME -->
+        <div id="screen-realm" class="hidden game-card">
+            <button onclick="showScreen('screen-map')" class="btn-secondary" style="margin-bottom: 24px;">
+                ← Retour à la carte
+            </button>
+            <h2 id="realm-title" style="font-size: 28px; text-align: center; margin-bottom: 8px;">Royaume</h2>
+            <p id="realm-desc" style="text-align: center; color: #94a3b8; margin-bottom: 32px;">Description</p>
+            <div id="missions-container" style="display: flex; flex-direction: column; gap: 12px;">
+                <!-- Les missions seront générées ici -->
             </div>
-        </section>
-
-        <section id="screen-result" class="hidden parchment-box p-8 flex-grow flex flex-col items-center justify-center text-center animate-in slide-in-from-bottom-8">
-            <h2 class="text-3xl font-bold text-amber-900 mb-4 title-font">Mission Achevée !</h2>
-            <div class="flex gap-2 text-4xl mb-6" id="result-stars">⭐⭐⭐</div>
-            <p class="text-xl mb-8">Score : <span id="result-score" class="font-bold"></span> / 5</p>
+        </div>
+        
+        <!-- ÉCRAN 3 : QUESTION D'UNE MISSION -->
+        <div id="screen-mission" class="hidden game-card">
+            <div class="flex justify-between items-center mb-6">
+                <span class="level-badge" id="mission-progress">Question 1/5</span>
+                <span id="mission-score" style="color: #fbbf24;">⭐ 0</span>
+            </div>
             
-            <div id="reward-zone" class="hidden bg-amber-50 border border-amber-200 p-6 rounded-lg mb-8 max-w-md">
-                <p class="text-sm text-amber-600 font-bold uppercase mb-2">Nouvel artefact débloqué</p>
-                <h4 class="text-xl font-bold text-amber-900 mb-2" id="reward-name">Nom</h4>
-                <p class="italic text-amber-800" id="reward-desc">Desc</p>
+            <div id="question-container">
+                <!-- La question sera générée ici -->
             </div>
-
-            <button onclick="showScreen('screen-realm')" class="btn-fantasy px-8 py-3 rounded-xl text-lg">Retour au Royaume</button>
-        </section>
-
-        <section id="screen-codex" class="hidden parchment-box p-8 flex-grow flex flex-col animate-in fade-in">
-            <button onclick="showScreen('screen-map')" class="self-start text-amber-700 hover:text-amber-900 font-bold mb-4">← Retour</button>
-            <h2 class="text-2xl font-bold text-center mb-8 title-font">Le Codex de Numéria</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="codex-container"></div>
-        </section>
-
+            
+            <div id="answer-zone" style="margin: 24px 0;">
+                <!-- Zone de réponse (QCM, texte, ordre) -->
+            </div>
+            
+            <div id="feedback" class="feedback hidden"></div>
+            
+            <div style="display: flex; gap: 16px; justify-content: center;">
+                <button id="btn-validate" onclick="checkAnswer()" class="btn-primary">✅ Valider</button>
+                <button id="btn-next" onclick="nextQuestion()" class="btn-primary hidden">➡️ Question suivante</button>
+            </div>
+        </div>
+        
+        <!-- ÉCRAN 4 : RÉSULTATS D'UNE MISSION -->
+        <div id="screen-result" class="hidden game-card text-center">
+            <h2 style="font-size: 32px; margin-bottom: 16px;">🏆 Mission accomplie !</h2>
+            
+            <div style="background: #090d16; border-radius: 24px; padding: 32px; max-width: 300px; margin: 24px auto;">
+                <p style="color: #94a3b8;">Étoiles obtenues</p>
+                <p id="result-stars" style="font-size: 48px; letter-spacing: 8px;">⭐⭐⭐</p>
+            </div>
+            
+            <div id="reward-zone" class="hidden" style="background: #1e1b4b; border-radius: 16px; padding: 20px; margin: 24px 0;">
+                <p style="color: #f59e0b; font-weight: bold;">✨ Nouvel artefact débloqué ! ✨</p>
+                <p id="reward-name" style="font-size: 20px; font-weight: bold; margin: 8px 0;">Nom de l'artefact</p>
+                <p id="reward-desc" style="color: #94a3b8;">Description</p>
+            </div>
+            
+            <button onclick="showScreen('screen-realm')" class="btn-primary">
+                📜 Retour au royaume
+            </button>
+        </div>
+        
+        <!-- ÉCRAN 5 : CODEX (COLLECTION) -->
+        <div id="screen-codex" class="hidden game-card">
+            <button onclick="showScreen('screen-map')" class="btn-secondary" style="margin-bottom: 24px;">
+                ← Retour à la carte
+            </button>
+            <h2 style="font-size: 28px; text-align: center; margin-bottom: 24px;">📖 Le Codex de Numéria</h2>
+            <p style="text-align: center; color: #94a3b8; margin-bottom: 32px;">Collectionne tous les artefacts en réussissant les missions</p>
+            <div id="codex-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px;">
+                <!-- Les artefacts seront générés ici -->
+            </div>
+        </div>
+        
     </main>
 
     <script>
-        // ==========================================
-        // 1. DONNÉES ET CONFIGURATION
-        // ==========================================
-        const REALMS = [
-            { id: 0, name: "Vallée des Fondations", desc: "Maîtrisez la valeur de chaque chiffre.", theme: "position" },
-            { id: 1, name: "Forêt des Géants", desc: "Affrontez les très grands nombres.", theme: "grands_nombres" },
-            { id: 2, name: "Marais des Comparaisons", desc: "Séparez le grand du petit.", theme: "comparaison" },
-            { id: 3, name: "Montagnes Décimales", desc: "Explorez les fragments de l'unité.", theme: "decimaux" },
-            { id: 4, name: "Citadelle du Zéro", desc: "L'épreuve finale de Numéria.", theme: "boss" }
+        // ============================================================
+        // NUMERIA.HTML - JEU D'AVENTURE SUR LA NUMÉRATION
+        // ============================================================
+        // BUT : Apprendre la valeur des chiffres, les grands nombres,
+        //       les comparaisons et les décimaux à travers un jeu d'aventure
+        // ============================================================
+        
+        // ---------- 1. DONNÉES ----------
+        const nomEleve = new URLSearchParams(window.location.search).get('eleve') || sessionStorage.getItem('nomEleve') || "Explorateur";
+        
+        // Les 5 royaumes
+        const ROYAUMES = [
+            { id: 0, nom: "Vallée des Fondations", description: "Maîtrise la valeur de chaque chiffre.", theme: "position", icone: "🏔️" },
+            { id: 1, nom: "Forêt des Géants", description: "Affronte les très grands nombres.", theme: "grands_nombres", icone: "🌲" },
+            { id: 2, nom: "Marais des Comparaisons", description: "Sépare le grand du petit.", theme: "comparaison", icone: "🐊" },
+            { id: 3, nom: "Montagnes Décimales", description: "Explore les fragments de l'unité.", theme: "decimaux", icone: "⛰️" },
+            { id: 4, nom: "Citadelle du Zéro", description: "L'épreuve finale de Numéria.", theme: "boss", icone: "🏰" }
         ];
-
-        const CODEX_ITEMS = [
-            { id: "c1", name: "L'Amulette des Unités", desc: "Brille d'une lueur simple mais essentielle." },
-            { id: "c2", name: "Le Bâton des Dizaines", desc: "Multiplie la force de son porteur par 10." },
-            { id: "c3", name: "Le Heaume des Centaines", desc: "Offre une vision claire des grands ensembles." },
-            { id: "c4", name: "L'Épée du Millier", desc: "Tranche les nombres avec une précision légendaire." },
-            { id: "c5", name: "Le Grimoire du Million", desc: "Contient des secrets que peu d'érudits comprennent." },
-            { id: "c6", name: "La Balance de Justice", desc: "Indique toujours quel nombre pèse le plus lourd." },
-            { id: "c7", name: "La Gemme des Dixièmes", desc: "Un fragment parfait, coupé en dix parts égales." },
-            { id: "c8", name: "Le Sablier du Centième", desc: "Écoule le temps avec une infime précision." }
+        
+        // Les artefacts (à collectionner dans le codex)
+        const ARTEFACTS = [
+            { id: "amulette", nom: "Amulette des Unités", description: "Brille d'une lueur simple mais essentielle." },
+            { id: "batons", nom: "Bâton des Dizaines", description: "Multiplie la force de son porteur par 10." },
+            { id: "heaume", nom: "Heaume des Centaines", description: "Offre une vision claire des grands ensembles." },
+            { id: "epee", nom: "Épée du Millier", description: "Tranche les nombres avec précision." },
+            { id: "grimoire", nom: "Grimoire du Million", description: "Contient des secrets que peu d'érudits comprennent." },
+            { id: "balance", nom: "Balance de Justice", description: "Indique toujours quel nombre pèse le plus lourd." },
+            { id: "gemme", nom: "Gemme des Dixièmes", description: "Un fragment parfait, coupé en dix parts égales." },
+            { id: "sablier", nom: "Sablier des Centièmes", description: "Écoule le temps avec une infime précision." }
         ];
-
-        // ==========================================
-        // 2. ÉTAT DU JEU ET LOCALSTORAGE (SÉCURISÉ)
-        // ==========================================
+        
+        // ---------- 2. ÉTAT DU JEU ----------
         let gameState = {
-            unlockedRealms: [0, 1, 2, 3, 4], // Tout ouvert par défaut pour vos tests
-            missionsCompleted: {},
-            unlockedCodex: []
+            royaumesDeverrouilles: [0],        // Au début, seulement le royaume 0
+            missionsReussies: {},               // { "0_0": 3, "0_1": 2, ... }
+            artefactsPossedes: []               // ["amulette", ...]
         };
-
-        function saveGame() { 
-            try {
-                localStorage.setItem('numeria_save', JSON.stringify(gameState)); 
-            } catch(e) { console.warn("Sauvegarde locale bloquée par le navigateur."); }
+        
+        // État de la mission en cours
+        let missionCourante = {
+            royaumeId: null,
+            missionId: null,
+            questions: [],
+            indexQuestion: 0,
+            score: 0
+        };
+        
+        // ---------- 3. CHARGEMENT/SAUVEGARDE ----------
+        function chargerSauvegarde() {
+            const sauvegarde = localStorage.getItem('numeria_save');
+            if (sauvegarde) {
+                try {
+                    const chargee = JSON.parse(sauvegarde);
+                    gameState = { ...gameState, ...chargee };
+                    console.log("📀 Sauvegarde chargée !");
+                } catch(e) { console.error("Erreur de chargement"); }
+            }
         }
         
-        function loadGame() {
-            try {
-                const saved = localStorage.getItem('numeria_save');
-                if (saved) gameState = JSON.parse(saved);
-            } catch(e) { console.warn("Lecture locale bloquée par le navigateur."); }
+        function sauvegarder() {
+            localStorage.setItem('numeria_save', JSON.stringify(gameState));
         }
-
-        // ==========================================
-        // 3. MOTEUR DE GÉNÉRATION DE QUESTIONS COMPORTANT DU MÉLANGE
-        // ==========================================
-        function rnd(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
-        function shuffle(array) { return array.sort(() => Math.random() - 0.5); }
-
-        function generateQuestion(theme) {
-            if (theme === "boss") theme = ["position", "grands_nombres", "comparaison", "decimaux"][rnd(0,3)];
+        
+        // ---------- 4. GÉNÉRATION DES QUESTIONS ----------
+        function genererQuestion(theme) {
+            // Pour le boss, choisir un thème aléatoire
+            if (theme === "boss") {
+                const themes = ["position", "grands_nombres", "comparaison", "decimaux"];
+                theme = themes[Math.floor(Math.random() * themes.length)];
+            }
             
-            let q = { text: "", type: "", options: [], answer: null };
-            const typeVariante = rnd(1, 2); // Alterne les structures d'exercices
-
+            let question = { texte: "", type: "", options: [], reponse: null };
+            
             if (theme === "position") {
-                const num = rnd(1000, 99999);
-                const strNum = num.toString();
-                const digits = ["unités", "dizaines", "centaines", "unités de mille", "dizaines de mille"];
+                // Valeur des chiffres
+                const nombre = Math.floor(Math.random() * 90000) + 1000; // 1000 à 99999
+                const positions = ["unités", "dizaines", "centaines", "milliers", "dizaines de milliers"];
+                const chiffres = nombre.toString().split('');
+                const index = Math.floor(Math.random() * chiffres.length);
+                const position = positions[chiffres.length - 1 - index];
                 
-                if (typeVariante === 1) {
-                    const pos = rnd(0, strNum.length - 1);
-                    const targetDigit = digits[strNum.length - 1 - pos];
-                    q.text = `Quel est le chiffre des ${targetDigit} dans le nombre ${num} ?`;
-                    q.type = "qcm";
-                    q.answer = strNum[pos];
-                    let opts = new Set([q.answer]);
-                    while(opts.size < 4) opts.add(rnd(0, 9).toString());
-                    q.options = shuffle(Array.from(opts));
-                } else {
-                    // Variante composition
-                    const c = rnd(1, 9);
-                    const d = rnd(1, 9);
-                    const u = rnd(1, 9);
-                    q.text = `Quel nombre possède exactement ${c} centaines, ${d} dizaines et ${u} unités ?`;
-                    q.type = "qcm";
-                    q.answer = (c*100 + d*10 + u).toString();
-                    let opts = new Set([q.answer, `${c}${u}${d}`, `${d}${c}${u}`, `${c}${d}0`]);
-                    q.options = shuffle(Array.from(opts));
+                question.texte = `Quel est le chiffre des ${position} dans ${nombre} ?`;
+                question.type = "qcm";
+                question.reponse = chiffres[index];
+                
+                // Générer des options
+                let options = new Set([question.reponse]);
+                while(options.size < 4) {
+                    options.add(Math.floor(Math.random() * 10).toString());
                 }
-            } 
-            else if (theme === "grands_nombres") {
-                const num = rnd(100000, 999000);
-                if (typeVariante === 1) {
-                    q.text = `Écris en chiffres le nombre : \n ${num.toLocaleString('fr-CH')}`;
-                    q.type = "free";
-                    q.answer = num.toString();
-                } else {
-                    // Variante décomposition textuelle
-                    const mille = Math.floor(num / 1000);
-                    q.text = `Écris en chiffres le nombre correspondant à : ${mille} milliers.`;
-                    q.type = "free";
-                    q.answer = (mille * 1000).toString();
-                }
+                question.options = melanger(Array.from(options));
+                
+            } else if (theme === "grands_nombres") {
+                // Grands nombres (lecture)
+                const nombres = [1234, 5678, 12345, 67890, 123456, 789012];
+                const nombre = nombres[Math.floor(Math.random() * nombres.length)];
+                
+                question.texte = `Comment écrit-on ${nombre.toLocaleString('fr-CH')} en chiffres ? (sans espace ni apostrophe)`;
+                question.type = "free";
+                question.reponse = nombre.toString();
+                
+            } else if (theme === "comparaison") {
+                // Comparer deux nombres
+                const nb1 = Math.floor(Math.random() * 9000) + 1000;
+                const nb2 = nb1 + (Math.random() > 0.5 ? Math.floor(Math.random() * 500) + 1 : -Math.floor(Math.random() * 500) - 1);
+                
+                question.texte = `Quel est le plus grand nombre ?`;
+                question.type = "qcm";
+                question.reponse = nb1 > nb2 ? nb1.toString() : nb2.toString();
+                question.options = melanger([nb1.toString(), nb2.toString()]);
+                
+            } else if (theme === "decimaux") {
+                // Nombres décimaux
+                const entier = Math.floor(Math.random() * 20) + 1;
+                const decimal = Math.floor(Math.random() * 99) + 1;
+                const nombre = `${entier},${decimal.toString().padStart(2, '0')}`;
+                
+                question.texte = `Que vaut ${nombre} ?`;
+                question.type = "free";
+                question.reponse = (entier + decimal/100).toString().replace('.', ',');
             }
-            else if (theme === "comparaison") {
-                const base = rnd(1000, 9000);
-                const nums = [base, base + rnd(10, 40), base - rnd(10, 40), base + rnd(50, 90)];
-                if (typeVariante === 1) {
-                    q.text = "Classe ces nombres du plus PETIT au plus GRAND :";
-                    q.type = "order";
-                    q.options = shuffle([...nums]);
-                    q.answer = [...nums].sort((a,b) => a - b).join(',');
-                } else {
-                    // Variante ordre décroissant
-                    q.text = "Classe ces nombres du plus GRAND au plus PETIT :";
-                    q.type = "order";
-                    q.options = shuffle([...nums]);
-                    q.answer = [...nums].sort((a,b) => b - a).join(',');
-                }
-            }
-            else if (theme === "decimaux") {
-                if (typeVariante === 1) {
-                    const num = (rnd(100, 999) / 100).toFixed(2);
-                    q.text = `Dans le nombre ${num.replace('.', ',')}, quel est le chiffre des dixièmes ?`;
-                    q.type = "qcm";
-                    q.answer = num.split('.')[1][0];
-                    let opts = new Set([q.answer, num.split('.')[1][1], num.split('.')[0], rnd(0,9).toString()]);
-                    q.options = shuffle(Array.from(opts));
-                } else {
-                    // Variante fractions simples
-                    const ent = rnd(1, 9);
-                    const dix = rnd(1, 9);
-                    q.text = `Trouve l'écriture décimale de : ${ent} unités + ${dix}/10`;
-                    q.type = "qcm";
-                    q.answer = `${ent},${dix}`;
-                    let opts = new Set([`${ent},${dix}`, `${dix},${ent}`, `${ent},0${dix}`, `${ent}${dix},0`]);
-                    q.options = shuffle(Array.from(opts));
-                }
-            }
-            return q;
+            
+            return question;
         }
-
-        // ==========================================
-        // 4. LOGIQUE DE JEU (MISSION)
-        // ==========================================
-        let currentMission = { realmId: null, mId: null, questions: [], currentQ: 0, score: 0 };
-        let draggedItem = null;
-
-        function startMission(realmId, mId) {
-            const theme = REALMS[realmId].theme;
-            currentMission = { realmId, mId, questions: [], currentQ: 0, score: 0 };
+        
+        function melanger(tableau) {
+            for (let i = tableau.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [tableau[i], tableau[j]] = [tableau[j], tableau[i]];
+            }
+            return tableau;
+        }
+        
+        // ---------- 5. AFFICHAGE DES ÉCRANS ----------
+        function showScreen(screenId) {
+            const ecrans = ['screen-map', 'screen-realm', 'screen-mission', 'screen-result', 'screen-codex'];
+            ecrans.forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
+            document.getElementById(screenId).classList.remove('hidden');
             
-            for(let i=0; i<5; i++) {
-                currentMission.questions.push(generateQuestion(theme));
+            if (screenId === 'screen-map') afficherCarte();
+            if (screenId === 'screen-codex') afficherCodex();
+        }
+        
+        function afficherCarte() {
+            const container = document.getElementById('realms-container');
+            container.innerHTML = '';
+            
+            ROYAUMES.forEach(royaume => {
+                const estDevoile = gameState.royaumesDeverrouilles.includes(royaume.id);
+                const meilleurScore = getMeilleurScoreDuRoyaume(royaume.id);
+                
+                const carteDiv = document.createElement('div');
+                carteDiv.className = `realm-card ${!estDevoile ? 'locked' : ''}`;
+                carteDiv.innerHTML = `
+                    <div class="realm-icon">${royaume.icone}</div>
+                    <h3 style="font-size: 20px; font-weight: bold; margin-bottom: 8px;">${royaume.nom}</h3>
+                    <p style="font-size: 12px; color: #94a3b8; margin-bottom: 12px;">${royaume.description}</p>
+                    ${meilleurScore > 0 ? `<div class="stars">${'⭐'.repeat(meilleurScore)}</div>` : ''}
+                `;
+                
+                if (estDevoile) {
+                    carteDiv.onclick = () => afficherRoyaume(royaume.id);
+                }
+                
+                container.appendChild(carteDiv);
+            });
+        }
+        
+        function getMeilleurScoreDuRoyaume(royaumeId) {
+            let meilleur = 0;
+            for (let i = 0; i < 5; i++) {
+                const key = `${royaumeId}_${i}`;
+                if (gameState.missionsReussies[key] && gameState.missionsReussies[key] > meilleur) {
+                    meilleur = gameState.missionsReussies[key];
+                }
+            }
+            return meilleur;
+        }
+        
+        function afficherRoyaume(royaumeId) {
+            const royaume = ROYAUMES[royaumeId];
+            document.getElementById('realm-title').innerHTML = `${royaume.icone} ${royaume.nom}`;
+            document.getElementById('realm-desc').innerHTML = royaume.description;
+            
+            const container = document.getElementById('missions-container');
+            container.innerHTML = '';
+            
+            // Vérifier si les missions précédentes sont réussies pour débloquer la suivante
+            let missionsDevoilees = 1; // La première est toujours débloquée
+            
+            for (let i = 0; i < 5; i++) {
+                const estDevoilee = i < missionsDevoilees;
+                const key = `${royaumeId}_${i}`;
+                const score = gameState.missionsReussies[key] || 0;
+                const estBoss = (i === 4);
+                
+                const missionDiv = document.createElement('div');
+                missionDiv.className = `mission-card ${!estDevoilee ? 'locked' : ''}`;
+                missionDiv.innerHTML = `
+                    <div>
+                        <strong style="font-size: 16px;">${estBoss ? '🐉 Mission du Gardien' : `Mission ${i+1}`}</strong>
+                        ${estBoss ? '<p style="font-size: 10px; color: #ef4444;">Dernier défi !</p>' : ''}
+                    </div>
+                    <div class="stars">${score > 0 ? '⭐'.repeat(score) : '◯ ◯ ◯'}</div>
+                `;
+                
+                if (estDevoilee) {
+                    missionDiv.onclick = () => demarrerMission(royaumeId, i);
+                }
+                
+                container.appendChild(missionDiv);
+                
+                // Si cette mission a 3 étoiles, débloquer la suivante
+                if (score === 3) {
+                    missionsDevoilees = Math.max(missionsDevoilees, i + 2);
+                }
             }
             
+            showScreen('screen-realm');
+        }
+        
+        // ---------- 6. DÉMARRER UNE MISSION ----------
+        function demarrerMission(royaumeId, missionId) {
+            const royaume = ROYAUMES[royaumeId];
+            const theme = royaume.theme;
+            
+            // Générer 5 questions
+            const questions = [];
+            for (let i = 0; i < 5; i++) {
+                questions.push(genererQuestion(theme));
+            }
+            
+            missionCourante = {
+                royaumeId: royaumeId,
+                missionId: missionId,
+                questions: questions,
+                indexQuestion: 0,
+                score: 0
+            };
+            
+            document.getElementById('mission-progress').innerHTML = `Question 1 / 5`;
+            document.getElementById('mission-score').innerHTML = `⭐ ${missionCourante.score}`;
+            
+            afficherQuestion();
             showScreen('screen-mission');
-            renderQuestion();
         }
-
-        function renderQuestion() {
-            const q = currentMission.questions[currentMission.currentQ];
-            document.getElementById('mission-progress').innerText = `Question ${currentMission.currentQ + 1} / 5`;
-            document.getElementById('mission-score').innerText = `Score : ${currentMission.score}`;
-            document.getElementById('question-text').innerText = q.text;
+        
+        function afficherQuestion() {
+            const q = missionCourante.questions[missionCourante.indexQuestion];
+            const container = document.getElementById('question-container');
+            const zoneReponse = document.getElementById('answer-zone');
             
-            const zone = document.getElementById('answer-zone');
-            zone.innerHTML = "";
-            document.getElementById('feedback-zone').classList.add('hidden');
+            container.innerHTML = `<h3 style="font-size: 24px; text-align: center;">${q.texte}</h3>`;
+            zoneReponse.innerHTML = '';
+            
             document.getElementById('btn-validate').classList.remove('hidden');
             document.getElementById('btn-next').classList.add('hidden');
-
-            if (q.type === "qcm") {
+            document.getElementById('feedback').classList.add('hidden');
+            
+            if (q.type === 'qcm') {
+                // Affichage des options en grille
                 const grid = document.createElement('div');
-                grid.className = "grid grid-cols-2 gap-4 w-full";
+                grid.style.display = 'grid';
+                grid.style.gridTemplateColumns = 'repeat(2, 1fr)';
+                grid.style.gap = '12px';
+                
                 q.options.forEach(opt => {
                     const btn = document.createElement('button');
-                    btn.className = "btn-fantasy py-4 rounded-xl text-xl";
-                    btn.innerText = opt.toString().replace('.', ',');
+                    btn.className = 'level-card';
+                    btn.innerHTML = opt;
                     btn.onclick = () => {
-                        document.querySelectorAll('#answer-zone button').forEach(b => b.classList.remove('ring-4', 'ring-blue-500'));
-                        btn.classList.add('ring-4', 'ring-blue-500');
-                        zone.dataset.selected = opt;
+                        document.querySelectorAll('#answer-zone button').forEach(b => b.classList.remove('selected'));
+                        btn.classList.add('selected');
+                        zoneReponse.dataset.reponse = opt;
                     };
                     grid.appendChild(btn);
                 });
-                zone.appendChild(grid);
-                zone.dataset.selected = "";
-            } 
-            else if (q.type === "free") {
-                const input = document.createElement('input');
-                input.type = "text"; /* Changé de number à text pour autoriser l'apostrophe suisse */
-                input.className = "w-full max-w-xs text-center border-2 border-amber-300 rounded-xl py-3 text-2xl focus:outline-none focus:ring-4 focus:ring-amber-500";
-                input.placeholder = "Ex: 434'434 ou 434434";
+                zoneReponse.appendChild(grid);
+                zoneReponse.dataset.reponse = '';
                 
-                // Nettoie les espaces, apostrophes et remplace virgule par point en arrière plan
-                input.oninput = (e) => zone.dataset.selected = e.target.value.replace(/[\s']/g, '').replace(',', '.');
-                zone.appendChild(input);
-                zone.dataset.selected = "";
-            }
-            else if (q.type === "order") {
-                const list = document.createElement('div');
-                list.className = "flex flex-col gap-2 w-full max-w-xs";
-                q.options.forEach(opt => {
-                    const item = document.createElement('div');
-                    item.className = "sortable-item bg-white border-2 border-amber-300 py-3 rounded-xl text-xl font-bold touch-none text-center";
-                    item.innerText = opt;
-                    item.draggable = true;
-                    item.ondragstart = (e) => { draggedItem = item; e.dataTransfer.effectAllowed = 'move'; };
-                    item.ondragover = (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; };
-                    item.ondrop = (e) => {
-                        e.preventDefault();
-                        if (draggedItem !== item) {
-                            let all = [...list.children];
-                            let draggedIdx = all.indexOf(draggedItem);
-                            let targetIdx = all.indexOf(item);
-                            if (draggedIdx < targetIdx) item.after(draggedItem);
-                            else item.before(draggedItem);
-                        }
-                    };
-                    list.appendChild(item);
-                });
-                zone.appendChild(list);
+            } else if (q.type === 'free') {
+                // Saisie libre
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.placeholder = 'Ta réponse...';
+                input.className = 'answer-input';
+                input.style.margin = '0 auto';
+                input.oninput = (e) => {
+                    zoneReponse.dataset.reponse = e.target.value;
+                };
+                zoneReponse.appendChild(input);
+                zoneReponse.dataset.reponse = '';
             }
         }
-
+        
+        // ---------- 7. VALIDATION DES RÉPONSES ----------
         function checkAnswer() {
-            const q = currentMission.questions[currentMission.currentQ];
+            const q = missionCourante.questions[missionCourante.indexQuestion];
             const zone = document.getElementById('answer-zone');
-            let userAnswer = "";
-
-            if (q.type === "order") {
-                userAnswer = [...zone.firstChild.children].map(el => el.innerText).join(',');
-            } else {
-                userAnswer = zone.dataset.selected.trim();
+            let reponseUtilisateur = zone.dataset.reponse;
+            
+            if (!reponseUtilisateur && q.type !== 'order') {
+                alert("Choisis une réponse !");
+                return;
             }
-
-            if (!userAnswer && q.type !== "order") return;
-
+            
+            // Normaliser la réponse (comparer sans les espaces, virgules, etc.)
+            const reponseNormalisee = reponseUtilisateur.toString().replace(/\s/g, '').replace(',', '.');
+            const attendueNormalisee = q.reponse.toString().replace(/\s/g, '').replace(',', '.');
+            
+            const estCorrect = (reponseNormalisee === attendueNormalisee);
+            
+            const feedback = document.getElementById('feedback');
+            if (estCorrect) {
+                missionCourante.score++;
+                feedback.className = 'feedback success';
+                feedback.innerHTML = '✅ Exact ! +1 point';
+            } else {
+                feedback.className = 'feedback error';
+                feedback.innerHTML = `❌ Oups ! La bonne réponse était ${q.reponse}`;
+            }
+            feedback.classList.remove('hidden');
+            
+            // Mettre à jour l'affichage du score
+            document.getElementById('mission-score').innerHTML = `⭐ ${missionCourante.score}`;
+            
+            // Désactiver le bouton valider
             document.getElementById('btn-validate').classList.add('hidden');
             document.getElementById('btn-next').classList.remove('hidden');
-            const fb = document.getElementById('feedback-zone');
-            fb.classList.remove('hidden');
-
-            // Formater pour l'affichage de la correction
-            let cleanAnswer = q.answer.toString().replace('.', ',');
-
-            if (userAnswer === q.answer) {
-                currentMission.score++;
-                fb.className = "w-full p-4 rounded-md font-bold text-lg bg-green-100 text-green-800 border-2 border-green-400";
-                fb.innerText = "✨ Excellent ! Bonne réponse.";
-            } else {
-                fb.className = "w-full p-4 rounded-md font-bold text-lg bg-red-100 text-red-800 border-2 border-red-400";
-                if(q.type === "order") cleanAnswer = q.answer.replace(/,/g, ' ➔ ');
-                fb.innerText = `⚔️ Raté... La bonne réponse était : ${cleanAnswer}`;
-            }
         }
-
+        
         function nextQuestion() {
-            currentMission.currentQ++;
-            if (currentMission.currentQ < 5) renderQuestion();
-            else endMission();
-        }
-
-        function endMission() {
-            const stars = currentMission.score >= 4 ? 3 : (currentMission.score >= 3 ? 2 : (currentMission.score >= 1 ? 1 : 0));
-            const missionKey = `${currentMission.realmId}_${currentMission.mId}`;
+            missionCourante.indexQuestion++;
             
-            if (!gameState.missionsCompleted[missionKey] || gameState.missionsCompleted[missionKey] < stars) {
-                gameState.missionsCompleted[missionKey] = stars;
+            if (missionCourante.indexQuestion < 5) {
+                document.getElementById('mission-progress').innerHTML = `Question ${missionCourante.indexQuestion + 1} / 5`;
+                afficherQuestion();
+            } else {
+                terminerMission();
             }
-
-            if (currentMission.mId === 4 && stars > 0) {
-                if (!gameState.unlockedRealms.includes(currentMission.realmId + 1) && currentMission.realmId < 4) {
-                    gameState.unlockedRealms.push(currentMission.realmId + 1);
+        }
+        
+        // ---------- 8. FIN DE LA MISSION ----------
+        function terminerMission() {
+            // Calcul des étoiles
+            let etoiles = 0;
+            if (missionCourante.score === 5) etoiles = 3;
+            else if (missionCourante.score >= 3) etoiles = 2;
+            else if (missionCourante.score >= 1) etoiles = 1;
+            
+            // Sauvegarder le score
+            const key = `${missionCourante.royaumeId}_${missionCourante.missionId}`;
+            if (!gameState.missionsReussies[key] || gameState.missionsReussies[key] < etoiles) {
+                gameState.missionsReussies[key] = etoiles;
+            }
+            
+            // Débloquer un artefact si 3 étoiles
+            let artefactDevoile = null;
+            if (etoiles === 3) {
+                const artefactsNonPossedes = ARTEFACTS.filter(a => !gameState.artefactsPossedes.includes(a.id));
+                if (artefactsNonPossedes.length > 0) {
+                    artefactDevoile = artefactsNonPossedes[Math.floor(Math.random() * artefactsNonPossedes.length)];
+                    gameState.artefactsPossedes.push(artefactDevoile.id);
                 }
             }
-
-            document.getElementById('reward-zone').classList.add('hidden');
-            if (stars > 0) {
-                const availableItems = CODEX_ITEMS.filter(c => !gameState.unlockedCodex.includes(c.id));
-                if (availableItems.length > 0) {
-                    const reward = availableItems[rnd(0, availableItems.length - 1)];
-                    gameState.unlockedCodex.push(reward.id);
-                    document.getElementById('reward-zone').classList.remove('hidden');
-                    document.getElementById('reward-name').innerText = reward.name;
-                    document.getElementById('reward-desc').innerText = reward.desc;
+            
+            // Débloquer le royaume suivant si c'était le boss (mission 4 du royaume)
+            if (missionCourante.missionId === 4 && etoiles >= 1) {
+                const prochainRoyaume = missionCourante.royaumeId + 1;
+                if (prochainRoyaume < ROYAUMES.length && !gameState.royaumesDeverrouilles.includes(prochainRoyaume)) {
+                    gameState.royaumesDeverrouilles.push(prochainRoyaume);
                 }
             }
-
-            saveGame();
-
+            
+            // Sauvegarder
+            sauvegarder();
+            
+            // Afficher les résultats
+            document.getElementById('result-stars').innerHTML = '⭐'.repeat(etoiles) + '◯'.repeat(3 - etoiles);
+            
+            const rewardZone = document.getElementById('reward-zone');
+            if (artefactDevoile) {
+                rewardZone.classList.remove('hidden');
+                document.getElementById('reward-name').innerHTML = artefactDevoile.nom;
+                document.getElementById('reward-desc').innerHTML = artefactDevoile.description;
+            } else {
+                rewardZone.classList.add('hidden');
+            }
+            
             showScreen('screen-result');
-            document.getElementById('result-score').innerText = currentMission.score;
-            document.getElementById('result-stars').innerText = '⭐'.repeat(stars) + '🕸️'.repeat(3 - stars);
         }
-
-        function showScreen(id) {
-            ['screen-map', 'screen-realm', 'screen-mission', 'screen-result', 'screen-codex'].forEach(s => {
-                document.getElementById(s).classList.add('hidden');
-            });
-            document.getElementById(id).classList.remove('hidden');
-
-            if (id === 'screen-map') renderMap();
-            if (id === 'screen-codex') renderCodex();
-        }
-
-        function renderMap() {
-            const container = document.getElementById('realms-container');
-            container.innerHTML = "";
-            REALMS.forEach(r => {
-                const isUnlocked = gameState.unlockedRealms.includes(r.id);
-                const btn = document.createElement('button');
-                btn.className = `p-6 rounded-xl border-4 flex flex-col items-center gap-2 text-center transition-all ${isUnlocked ? 'bg-white border-amber-600 hover:scale-105 shadow-md cursor-pointer' : 'bg-gray-200 border-gray-400 opacity-70 cursor-not-allowed filter grayscale'}`;
-                btn.innerHTML = `
-                    <div class="text-4xl mb-2">${isUnlocked ? '🏰' : '🔒'}</div>
-                    <h3 class="font-bold text-lg text-amber-900">${r.name}</h3>
-                `;
-                if (isUnlocked) btn.onclick = () => renderRealm(r.id);
-                container.appendChild(btn);
-            });
-        }
-
-        function renderRealm(realmId) {
-            const realm = REALMS[realmId];
-            document.getElementById('realm-title').innerText = realm.name;
-            document.getElementById('realm-desc').innerText = realm.desc;
-            
-            const container = document.getElementById('missions-container');
-            container.innerHTML = "";
-            
-            let allMissionsPassed = true;
-            for(let i=0; i<5; i++) {
-                const isBoss = (i === 4);
-                const mKey = `${realmId}_${i}`;
-                const stars = gameState.missionsCompleted[mKey] || 0;
-                if(i < 4 && stars === 0) allMissionsPassed = false;
-
-                const isLocked = isBoss && !allMissionsPassed;
-
-                const btn = document.createElement('button');
-                btn.className = "btn-fantasy p-4 rounded-xl flex justify-between items-center";
-                btn.disabled = isLocked;
-                btn.innerHTML = `
-                    <span class="font-bold text-lg">${isBoss ? '🐉 Repaire du Gardien' : 'Mission ' + (i+1)}</span>
-                    <span class="tracking-widest">${isLocked ? '🔒' : (stars > 0 ? '⭐'.repeat(stars) : '○ ○ ○')}</span>
-                `;
-                if(!isLocked) btn.onclick = () => startMission(realmId, i);
-                container.appendChild(btn);
-            }
-            showScreen('screen-realm');
-        }
-
-        function renderCodex() {
+        
+        // ---------- 9. CODEX ----------
+        function afficherCodex() {
             const container = document.getElementById('codex-container');
-            container.innerHTML = "";
+            container.innerHTML = '';
             
-            CODEX_ITEMS.forEach(item => {
-                const isUnlocked = gameState.unlockedCodex.includes(item.id);
+            ARTEFACTS.forEach(artefact => {
+                const possede = gameState.artefactsPossedes.includes(artefact.id);
                 const div = document.createElement('div');
-                div.className = `p-4 rounded-lg border-2 ${isUnlocked ? 'bg-white border-amber-300' : 'bg-gray-100 border-gray-300 opacity-60'}`;
+                div.className = `codex-item ${!possede ? 'locked' : ''}`;
                 div.innerHTML = `
-                    <h4 class="font-bold text-amber-900 mb-1">${isUnlocked ? '✨ ' + item.name : '???'}</h4>
-                    <p class="text-sm italic text-gray-600">${isUnlocked ? item.desc : 'Artefact verrouillé. Réussissez des missions.'}</p>
+                    <div style="font-size: 32px; margin-bottom: 8px;">${possede ? '✨' : '❓'}</div>
+                    <h3 style="font-weight: bold; margin-bottom: 4px;">${possede ? artefact.nom : '???'}</h3>
+                    <p style="font-size: 12px; color: #94a3b8;">${possede ? artefact.description : 'Artefact à découvrir'}</p>
                 `;
                 container.appendChild(div);
             });
         }
-
-        window.onload = () => {
-            loadGame();
-            showScreen('screen-map');
-        };
+        
+        // ---------- 10. INITIALISATION ----------
+        chargerSauvegarde();
+        showScreen('screen-map');
+        
     </script>
 </body>
 </html>
