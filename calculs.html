@@ -5,34 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Secteur : Calcul Décimal — Hub de Mission</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body {
-            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            line-height: 1.65;
-            letter-spacing: 0.04em;
-            background-color: #0b0f19;
-            color: #f1f5f9;
-        }
-        p, span, label, input, button {
-            letter-spacing: 0.04em;
-        }
-        .game-card {
-            background: linear-gradient(145deg, #161d30, #0f1524);
-            border: 1px solid #24324f;
-        }
-        .btn-game-active {
-            transform: translateY(0);
-            box-shadow: 0 4px 0px 0px #05070f;
-            transition: all 0.1s ease;
-        }
-        .btn-game-active:active {
-            transform: translateY(4px);
-            box-shadow: 0 0px 0px 0px #05070f;
-        }
-        canvas {
-            touch-action: none;
-        }
-    </style>
+    
+    <link rel="stylesheet" href="style.css">
+    
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
