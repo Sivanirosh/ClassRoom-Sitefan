@@ -2,65 +2,493 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Numéria - Les Royaumes Perdus</title>
-    <link rel="stylesheet" href="style-commun.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Les Royaumes Perdus de Numéria</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        .realm-card { background: linear-gradient(135deg, #f8fafc, #ffffff); border: 2px solid #e2e8f0; border-radius: 20px; padding: 24px; text-align: center; cursor: pointer; transition: all 0.2s; }
-        .realm-card:hover:not(.locked) { transform: translateY(-5px); border-color: var(--color-numeria); }
-        .realm-card.locked { opacity: 0.5; filter: grayscale(0.3); cursor: not-allowed; }
-        .realm-icon { font-size: 48px; margin-bottom: 16px; }
-        .mission-card { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 16px; padding: 16px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: all 0.2s; }
-        .mission-card:hover:not(.locked) { transform: translateX(5px); border-color: var(--color-numeria); }
-        .mission-card.locked { opacity: 0.5; cursor: not-allowed; }
-        .stars { color: #fbbf24; letter-spacing: 2px; }
-        .codex-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 16px; text-align: center; }
-        .codex-item.locked { opacity: 0.5; filter: grayscale(0.5); }
-        .speak-btn { background: #fef3c7; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 20px; cursor: pointer; }
-        .operation-large { font-size: 28px; font-weight: bold; text-align: center; font-family: monospace; background: #f8fafc; padding: 24px; border-radius: 20px; margin: 20px 0; }
+        /* Thème Fantasy / Parchemin */
+        :root {
+            --parchment: #f4ebd8;
+            --ink: #2c1e16;
+            --accent-blue: #3b82f6;
+            --accent-gold: #d97706;
+            --accent-purple: #8b5cf6;
+        }
+        body {
+            background-color: var(--parchment);
+            color: var(--ink);
+            font-family: 'Georgia', serif;
+            background-image: radial-gradient(#e5d9c5 1px, transparent 1px);
+            background-size: 20px 20px;
+            user-select: none;
+        }
+        .parchment-box {
+            background: #fffdf5;
+            border: 2px solid #d4c4a8;
+            box-shadow: 4px 4px 0px rgba(212, 196, 168, 0.5);
+            border-radius: 8px;
+        }
+        .btn-fantasy {
+            background: linear-gradient(to bottom, #ffffff, #fef3c7);
+            border: 2px solid #b45309;
+            color: #78350f;
+            font-weight: bold;
+            transition: all 0.1s;
+        }
+        .btn-fantasy:hover:not(:disabled) {
+            background: #fef3c7;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 0px #b45309;
+        }
+        .btn-fantasy:active:not(:disabled) {
+            transform: translateY(2px);
+            box-shadow: 0 0px 0px #b45309;
+        }
+        .btn-fantasy:disabled {
+            filter: grayscale(100%);
+            opacity: 0.6;
+            cursor: not-allowed;
+            border-color: #9ca3af;
+            color: #4b5563;
+        }
+        .title-font {
+            font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+            text-shadow: 1px 1px 0px #fff;
+        }
+        .sortable-item { cursor: grab; }
+        .sortable-item:active { cursor: grabbing; }
     </style>
 </head>
-<body>
-    <header class="page-header"><div class="header-container">
-        <div class="header-title"><div class="header-icon" style="background:linear-gradient(135deg,var(--color-numeria),#34d399);">📜</div>
-        <div><h1>Numéria</h1><p>Chroniques des nombres</p></div></div>
-        <div style="display:flex;gap:12px;"><button id="btn-contrast" class="btn-contrast" onclick="toggleContrast()">👁️ Contraste+</button>
-        <a href="index.html" class="btn-secondary" style="text-decoration:none;">↩ Quitter</a></div>
-    </div></header>
-    <main>
-        <div id="screen-map" class="game-card"><h2 class="text-center" style="font-size:28px;">🗺️ La Carte des Royaumes</h2><div id="realms-container" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin-top:24px;"></div></div>
-        <div id="screen-realm" class="hidden game-card"><button onclick="showScreen('screen-map')" class="btn-secondary mb-4">← Retour</button><h2 id="realm-title" style="font-size:28px;text-align:center;"></h2><p id="realm-desc" class="text-center" style="color:var(--color-text-light);margin:8px 0 24px;"></p><div id="missions-container"></div></div>
-        <div id="screen-mission" class="hidden game-card"><div class="flex justify-between mb-6"><span id="mission-progress">Question 1/5</span><span id="mission-score" style="color:var(--color-numeria);font-weight:bold;">⭐ 0</span></div><div class="text-right mb-2"><button class="speak-btn" onclick="parlerQuestion()">🔊</button></div><div id="question-container" class="operation-large"></div><div id="answer-zone" style="margin:20px 0;"></div><div id="feedback" class="feedback hidden"></div><div class="flex gap-3 justify-center"><button id="btn-validate" onclick="checkAnswer()" class="btn-primary">✅ Valider</button><button id="btn-next" onclick="nextQuestion()" class="btn-primary hidden">➡️ Suivant</button></div></div>
-        <div id="screen-result" class="hidden game-card text-center"><h2 style="font-size:32px;">🏆 Mission accomplie !</h2><div style="background:#f8fafc;border-radius:24px;padding:32px;max-width:300px;margin:24px auto;"><p>Étoiles</p><p id="result-stars" style="font-size:48px;letter-spacing:8px;">⭐⭐⭐</p></div><div id="reward-zone" class="hidden" style="background:#fef3c7;border-radius:20px;padding:20px;margin:20px 0;"><p style="color:#d97706;">✨ Nouvel artefact ! ✨</p><p id="reward-name" style="font-weight:bold;"></p><p id="reward-desc"></p></div><button onclick="showScreen('screen-realm')" class="btn-primary">📜 Retour</button><a href="index.html" class="btn-primary" style="text-decoration:none;display:inline-block;margin-top:12px;">🏠 Accueil</a></div>
-        <div id="screen-codex" class="hidden game-card"><button onclick="showScreen('screen-map')" class="btn-secondary mb-4">← Retour</button><h2 class="text-center" style="font-size:28px;">📖 Le Codex</h2><div id="codex-container" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin-top:24px;"></div></div>
+<body class="min-h-screen flex flex-col items-center py-6 px-4">
+
+    <header class="w-full max-w-4xl flex justify-between items-center mb-8">
+        <div>
+            <h1 class="text-3xl font-bold title-font text-amber-900">Numéria</h1>
+            <p class="text-sm italic text-amber-700">Chroniques des nombres</p>
+        </div>
+        <div class="flex gap-4">
+            <button onclick="showScreen('screen-codex')" class="btn-fantasy px-4 py-2 rounded-md">📖 Codex</button>
+            <button onclick="showScreen('screen-map')" class="btn-fantasy px-4 py-2 rounded-md">🗺️ Carte</button>
+        </div>
+    </header>
+
+    <main class="w-full max-w-4xl flex-grow flex flex-col relative">
+
+        <section id="screen-map" class="parchment-box p-8 flex-grow flex flex-col animate-in fade-in">
+            <h2 class="text-2xl font-bold text-center mb-8 title-font">La Carte des Royaumes</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="realms-container"></div>
+        </section>
+
+        <section id="screen-realm" class="hidden parchment-box p-8 flex-grow flex flex-col animate-in fade-in">
+            <button onclick="showScreen('screen-map')" class="self-start text-amber-700 hover:text-amber-900 font-bold mb-4">← Retour à la carte</button>
+            <h2 class="text-2xl font-bold text-center mb-2 title-font" id="realm-title">Nom du Royaume</h2>
+            <p class="text-center text-amber-800 italic mb-8" id="realm-desc">Description</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto w-full" id="missions-container"></div>
+        </section>
+
+        <section id="screen-mission" class="hidden parchment-box p-8 flex-grow flex flex-col items-center justify-center animate-in zoom-in-95">
+            <div class="w-full flex justify-between mb-8 text-amber-800 font-bold">
+                <span id="mission-progress">Question 1 / 5</span>
+                <span id="mission-score">Étoiles : 0</span>
+            </div>
+
+            <div class="w-full max-w-xl text-center space-y-8">
+                <h3 class="text-2xl font-bold" id="question-text">Énoncé de la question</h3>
+                <div id="answer-zone" class="w-full flex flex-col gap-4 items-center"></div>
+                <div id="feedback-zone" class="hidden w-full p-4 rounded-md font-bold text-lg"></div>
+                <button id="btn-validate" onclick="checkAnswer()" class="btn-fantasy px-8 py-3 rounded-xl text-lg w-full max-w-xs mx-auto">Valider</button>
+                <button id="btn-next" onclick="nextQuestion()" class="hidden btn-fantasy px-8 py-3 rounded-xl text-lg w-full max-w-xs mx-auto">Continuer ➔</button>
+            </div>
+        </section>
+
+        <section id="screen-result" class="hidden parchment-box p-8 flex-grow flex flex-col items-center justify-center text-center animate-in slide-in-from-bottom-8">
+            <h2 class="text-3xl font-bold text-amber-900 mb-4 title-font">Mission Achevée !</h2>
+            <div class="flex gap-2 text-4xl mb-6" id="result-stars">⭐⭐⭐</div>
+            <p class="text-xl mb-8">Score : <span id="result-score" class="font-bold"></span> / 5</p>
+            
+            <div id="reward-zone" class="hidden bg-amber-50 border border-amber-200 p-6 rounded-lg mb-8 max-w-md">
+                <p class="text-sm text-amber-600 font-bold uppercase mb-2">Nouvel artefact débloqué</p>
+                <h4 class="text-xl font-bold text-amber-900 mb-2" id="reward-name">Nom</h4>
+                <p class="italic text-amber-800" id="reward-desc">Desc</p>
+            </div>
+
+            <button onclick="showScreen('screen-realm')" class="btn-fantasy px-8 py-3 rounded-xl text-lg">Retour au Royaume</button>
+        </section>
+
+        <section id="screen-codex" class="hidden parchment-box p-8 flex-grow flex flex-col animate-in fade-in">
+            <button onclick="showScreen('screen-map')" class="self-start text-amber-700 hover:text-amber-900 font-bold mb-4">← Retour</button>
+            <h2 class="text-2xl font-bold text-center mb-8 title-font">Le Codex de Numéria</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="codex-container"></div>
+        </section>
+
     </main>
+
     <script>
-        const nomEleve = new URLSearchParams(window.location.search).get('eleve') || "Explorateur";
-        const ROYAUMES=[{id:0,nom:"🏔️ Vallée des Fondations",desc:"Maîtrise la valeur des chiffres",theme:"position",icone:"🏔️"},{id:1,nom:"🌲 Forêt des Géants",desc:"Affronte les grands nombres",theme:"grands_nombres",icone:"🌲"},{id:2,nom:"🐊 Marais des Comparaisons",desc:"Compare les nombres",theme:"comparaison",icone:"🐊"},{id:3,nom:"⛰️ Montagnes Décimales",desc:"Explore les décimaux",theme:"decimaux",icone:"⛰️"},{id:4,nom:"🏰 Citadelle du Zéro",desc:"L'épreuve finale",theme:"boss",icone:"🏰"}];
-        const ARTEFACTS=[{id:"amulette",nom:"Amulette des Unités",desc:"Brille d'une lueur essentielle"},{id:"batons",nom:"Bâton des Dizaines",desc:"Multiplie par 10"},{id:"grimoire",nom:"Grimoire du Million",desc:"Secrets des grands nombres"},{id:"balance",nom:"Balance de Justice",desc:"Compare les poids"}];
-        let gameState={royaumesDeverrouilles:[0],missionsReussies:{},artefactsPossedes:[]};
-        let mission={royaumeId:null,missionId:null,questions:[],index:0,score:0};
-        function charger(){const s=localStorage.getItem('numeria_save');if(s)gameState=JSON.parse(s);}
-        function sauver(){localStorage.setItem('numeria_save',JSON.stringify(gameState));}
-        function showScreen(id){['screen-map','screen-realm','screen-mission','screen-result','screen-codex'].forEach(s=>document.getElementById(s).classList.add('hidden'));document.getElementById(id).classList.remove('hidden');if(id==='screen-map')afficherCarte();if(id==='screen-codex')afficherCodex();}
-        function afficherCarte(){const cont=document.getElementById('realms-container');cont.innerHTML=ROYAUMES.map(r=>{const ok=gameState.royaumesDeverrouilles.includes(r.id);const stars=Object.keys(gameState.missionsReussies).filter(k=>k.startsWith(r.id+'_')).reduce((m,k)=>Math.max(m,gameState.missionsReussies[k]),0);return `<div class="realm-card ${!ok?'locked':''}" onclick="${ok?`afficherRoyaume(${r.id})`:''}"><div class="realm-icon">${r.icone}</div><h3>${r.nom}</h3><p style="font-size:12px;color:var(--color-text-light);">${r.desc}</p>${stars>0?`<div class="stars">${'⭐'.repeat(stars)}</div>`:''}</div>`;}).join('');}
-        function afficherRoyaume(id){const r=ROYAUMES[id];document.getElementById('realm-title').innerHTML=`${r.icone} ${r.nom}`;document.getElementById('realm-desc').innerHTML=r.desc;let debloque=1;const cont=document.getElementById('missions-container');cont.innerHTML='';for(let i=0;i<5;i++){const key=`${id}_${i}`;const score=gameState.missionsReussies[key]||0;const ok=i<debloque;cont.innerHTML+=`<div class="mission-card ${!ok?'locked':''}" onclick="${ok?`demarrerMission(${id},${i})`:''}"><div><strong>${i===4?'🐉 Gardien':`Mission ${i+1}`}</strong></div><div class="stars">${score>0?'⭐'.repeat(score):'◯ ◯ ◯'}</div></div>`;if(score===3)debloque=Math.max(debloque,i+2);}showScreen('screen-realm');}
-        function genererQuestion(theme){if(theme==='boss')theme=['position','grands_nombres','comparaison','decimaux'][Math.floor(Math.random()*4)];let q={texte:"",type:"",options:[],reponse:null};if(theme==='position'){const n=Math.floor(Math.random()*90000)+1000;const ch=n.toString();const pos=['unités','dizaines','centaines','milliers','dizaines de milliers'];const idx=Math.floor(Math.random()*ch.length);q.texte=`Quel est le chiffre des ${pos[ch.length-1-idx]} dans ${n.toLocaleString('fr-CH')} ?`;q.type='qcm';q.reponse=ch[idx];let opts=new Set([q.reponse]);while(opts.size<4)opts.add(Math.floor(Math.random()*10).toString());q.options=Array.from(opts).sort(()=>Math.random()-0.5);}
-        else if(theme==='grands_nombres'){const n=[1234,5678,12345,67890,123456][Math.floor(Math.random()*5)];q.texte=`Écris en chiffres : ${n.toLocaleString('fr-CH')}`;q.type='free';q.reponse=n.toString();}
-        else if(theme==='comparaison'){const a=Math.floor(Math.random()*9000)+1000;const b=a+(Math.random()>0.5?Math.floor(Math.random()*500)+1:-Math.floor(Math.random()*500)-1);q.texte=`Quel est le plus grand nombre ?`;q.type='qcm';q.reponse=Math.max(a,b).toString();q.options=[a.toString(),b.toString()].sort(()=>Math.random()-0.5);}
-        else if(theme==='decimaux'){const e=Math.floor(Math.random()*20)+1;const d=Math.floor(Math.random()*99)+1;q.texte=`Que vaut ${e},${d.toString().padStart(2,'0')} ?`;q.type='free';q.reponse=(e+d/100).toString().replace('.',',');}
-        return q;}
-        function demarrerMission(rid,mid){const r=ROYAUMES[rid];const questions=[];for(let i=0;i<5;i++)questions.push(genererQuestion(r.theme));mission={royaumeId:rid,missionId:mid,questions,index:0,score:0};document.getElementById('mission-progress').innerHTML='Question 1/5';document.getElementById('mission-score').innerHTML=`⭐ 0`;afficherQuestion();showScreen('screen-mission');}
-        function afficherQuestion(){const q=mission.questions[mission.index];document.getElementById('question-container').innerHTML=q.texte;const zone=document.getElementById('answer-zone');zone.innerHTML='';document.getElementById('btn-validate').classList.remove('hidden');document.getElementById('btn-next').classList.add('hidden');document.getElementById('feedback').classList.add('hidden');if(q.type==='qcm'){const grid=document.createElement('div');grid.style.display='grid';grid.style.gridTemplateColumns='repeat(2,1fr)';grid.style.gap='12px';q.options.forEach(opt=>{const btn=document.createElement('button');btn.className='shape-card';btn.innerText=opt;btn.onclick=()=>{document.querySelectorAll('#answer-zone button').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');zone.dataset.reponse=opt;};grid.appendChild(btn);});zone.appendChild(grid);zone.dataset.reponse='';}
-        else{const input=document.createElement('input');input.type='text';input.placeholder='Ta réponse...';input.className='answer-input';input.oninput=e=>zone.dataset.reponse=e.target.value;zone.appendChild(input);zone.dataset.reponse='';}}
-        function checkAnswer(){const q=mission.questions[mission.index];const rep=document.getElementById('answer-zone').dataset.reponse;if(!rep){alert("Choisis une réponse !");return;}const correct=rep.toString().replace(',','.')===q.reponse.toString().replace(',','.');const fb=document.getElementById('feedback');if(correct){mission.score++;fb.className='feedback success';fb.innerHTML='✅ Exact ! +1 point';}else{fb.className='feedback error';fb.innerHTML=`❌ Oups ! La bonne réponse était ${q.reponse}`;}fb.classList.remove('hidden');document.getElementById('mission-score').innerHTML=`⭐ ${mission.score}`;document.getElementById('btn-validate').classList.add('hidden');document.getElementById('btn-next').classList.remove('hidden');}
-        function nextQuestion(){mission.index++;if(mission.index<5){document.getElementById('mission-progress').innerHTML=`Question ${mission.index+1}/5`;afficherQuestion();}else terminerMission();}
-        function terminerMission(){let etoiles=mission.score===5?3:mission.score>=3?2:mission.score>=1?1:0;const key=`${mission.royaumeId}_${mission.missionId}`;if(!gameState.missionsReussies[key]||gameState.missionsReussies[key]<etoiles)gameState.missionsReussies[key]=etoiles;let artefact=null;if(etoiles===3){const dispo=ARTEFACTS.filter(a=>!gameState.artefactsPossedes.includes(a.id));if(dispo.length){artefact=dispo[Math.floor(Math.random()*dispo.length)];gameState.artefactsPossedes.push(artefact.id);}}if(mission.missionId===4&&etoiles>=1){const next=mission.royaumeId+1;if(next<ROYAUMES.length&&!gameState.royaumesDeverrouilles.includes(next))gameState.royaumesDeverrouilles.push(next);}sauver();document.getElementById('result-stars').innerHTML='⭐'.repeat(etoiles)+'◯'.repeat(3-etoiles);const rz=document.getElementById('reward-zone');if(artefact){rz.classList.remove('hidden');document.getElementById('reward-name').innerHTML=artefact.nom;document.getElementById('reward-desc').innerHTML=artefact.desc;}else rz.classList.add('hidden');showScreen('screen-result');sauvegarderScore();}
-        function sauvegarderScore(){const scores=JSON.parse(localStorage.getItem(`scores_${nomEleve}`)||'[]');scores.push({jeu:"numeria",score:mission.score,total:5,date:Date.now()});localStorage.setItem(`scores_${nomEleve}`,JSON.stringify(scores));if(window.parent&&window.parent.ajouterScore)window.parent.ajouterScore(nomEleve,"numeria",mission.score,5);}
-        function afficherCodex(){const cont=document.getElementById('codex-container');cont.innerHTML=ARTEFACTS.map(a=>{const ok=gameState.artefactsPossedes.includes(a.id);return `<div class="codex-item ${!ok?'locked':''}"><div style="font-size:32px;">${ok?'✨':'❓'}</div><h3>${ok?a.nom:'???'}</h3><p style="font-size:12px;">${ok?a.desc:'À découvrir'}</p></div>`;}).join('');}
-        function parlerQuestion(){const t=document.getElementById('question-container')?.innerText;if(t&&'speechSynthesis' in window){window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='fr-FR';u.rate=0.9;window.speechSynthesis.speak(u);}}
-        function toggleContrast(){document.body.classList.toggle('high-contrast');localStorage.setItem('highContrast',document.body.classList.contains('high-contrast'));}
-        charger();if(localStorage.getItem('highContrast')==='true')document.body.classList.add('high-contrast');showScreen('screen-map');
+        // ==========================================
+        // 1. DONNÉES ET CONFIGURATION
+        // ==========================================
+        const REALMS = [
+            { id: 0, name: "Vallée des Fondations", desc: "Maîtrisez la valeur de chaque chiffre.", theme: "position" },
+            { id: 1, name: "Forêt des Géants", desc: "Affrontez les très grands nombres.", theme: "grands_nombres" },
+            { id: 2, name: "Marais des Comparaisons", desc: "Séparez le grand du petit.", theme: "comparaison" },
+            { id: 3, name: "Montagnes Décimales", desc: "Explorez les fragments de l'unité.", theme: "decimaux" },
+            { id: 4, name: "Citadelle du Zéro", desc: "L'épreuve finale de Numéria.", theme: "boss" }
+        ];
+
+        const CODEX_ITEMS = [
+            { id: "c1", name: "L'Amulette des Unités", desc: "Brille d'une lueur simple mais essentielle." },
+            { id: "c2", name: "Le Bâton des Dizaines", desc: "Multiplie la force de son porteur par 10." },
+            { id: "c3", name: "Le Heaume des Centaines", desc: "Offre une vision claire des grands ensembles." },
+            { id: "c4", name: "L'Épée du Millier", desc: "Tranche les nombres avec une précision légendaire." },
+            { id: "c5", name: "Le Grimoire du Million", desc: "Contient des secrets que peu d'érudits comprennent." },
+            { id: "c6", name: "La Balance de Justice", desc: "Indique toujours quel nombre pèse le plus lourd." },
+            { id: "c7", name: "La Gemme des Dixièmes", desc: "Un fragment parfait, coupé en dix parts égales." },
+            { id: "c8", name: "Le Sablier du Centième", desc: "Écoule le temps avec une infime précision." }
+        ];
+
+        // ==========================================
+        // 2. ÉTAT DU JEU ET LOCALSTORAGE (SÉCURISÉ)
+        // ==========================================
+        let gameState = {
+            unlockedRealms: [0, 1, 2, 3, 4], // Tout ouvert par défaut pour vos tests
+            missionsCompleted: {},
+            unlockedCodex: []
+        };
+
+        function saveGame() { 
+            try {
+                localStorage.setItem('numeria_save', JSON.stringify(gameState)); 
+            } catch(e) { console.warn("Sauvegarde locale bloquée par le navigateur."); }
+        }
+        
+        function loadGame() {
+            try {
+                const saved = localStorage.getItem('numeria_save');
+                if (saved) gameState = JSON.parse(saved);
+            } catch(e) { console.warn("Lecture locale bloquée par le navigateur."); }
+        }
+
+        // ==========================================
+        // 3. MOTEUR DE GÉNÉRATION DE QUESTIONS COMPORTANT DU MÉLANGE
+        // ==========================================
+        function rnd(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+        function shuffle(array) { return array.sort(() => Math.random() - 0.5); }
+
+        function generateQuestion(theme) {
+            if (theme === "boss") theme = ["position", "grands_nombres", "comparaison", "decimaux"][rnd(0,3)];
+            
+            let q = { text: "", type: "", options: [], answer: null };
+            const typeVariante = rnd(1, 2); // Alterne les structures d'exercices
+
+            if (theme === "position") {
+                const num = rnd(1000, 99999);
+                const strNum = num.toString();
+                const digits = ["unités", "dizaines", "centaines", "unités de mille", "dizaines de mille"];
+                
+                if (typeVariante === 1) {
+                    const pos = rnd(0, strNum.length - 1);
+                    const targetDigit = digits[strNum.length - 1 - pos];
+                    q.text = `Quel est le chiffre des ${targetDigit} dans le nombre ${num} ?`;
+                    q.type = "qcm";
+                    q.answer = strNum[pos];
+                    let opts = new Set([q.answer]);
+                    while(opts.size < 4) opts.add(rnd(0, 9).toString());
+                    q.options = shuffle(Array.from(opts));
+                } else {
+                    // Variante composition
+                    const c = rnd(1, 9);
+                    const d = rnd(1, 9);
+                    const u = rnd(1, 9);
+                    q.text = `Quel nombre possède exactement ${c} centaines, ${d} dizaines et ${u} unités ?`;
+                    q.type = "qcm";
+                    q.answer = (c*100 + d*10 + u).toString();
+                    let opts = new Set([q.answer, `${c}${u}${d}`, `${d}${c}${u}`, `${c}${d}0`]);
+                    q.options = shuffle(Array.from(opts));
+                }
+            } 
+            else if (theme === "grands_nombres") {
+                const num = rnd(100000, 999000);
+                if (typeVariante === 1) {
+                    q.text = `Écris en chiffres le nombre : \n ${num.toLocaleString('fr-CH')}`;
+                    q.type = "free";
+                    q.answer = num.toString();
+                } else {
+                    // Variante décomposition textuelle
+                    const mille = Math.floor(num / 1000);
+                    q.text = `Écris en chiffres le nombre correspondant à : ${mille} milliers.`;
+                    q.type = "free";
+                    q.answer = (mille * 1000).toString();
+                }
+            }
+            else if (theme === "comparaison") {
+                const base = rnd(1000, 9000);
+                const nums = [base, base + rnd(10, 40), base - rnd(10, 40), base + rnd(50, 90)];
+                if (typeVariante === 1) {
+                    q.text = "Classe ces nombres du plus PETIT au plus GRAND :";
+                    q.type = "order";
+                    q.options = shuffle([...nums]);
+                    q.answer = [...nums].sort((a,b) => a - b).join(',');
+                } else {
+                    // Variante ordre décroissant
+                    q.text = "Classe ces nombres du plus GRAND au plus PETIT :";
+                    q.type = "order";
+                    q.options = shuffle([...nums]);
+                    q.answer = [...nums].sort((a,b) => b - a).join(',');
+                }
+            }
+            else if (theme === "decimaux") {
+                if (typeVariante === 1) {
+                    const num = (rnd(100, 999) / 100).toFixed(2);
+                    q.text = `Dans le nombre ${num.replace('.', ',')}, quel est le chiffre des dixièmes ?`;
+                    q.type = "qcm";
+                    q.answer = num.split('.')[1][0];
+                    let opts = new Set([q.answer, num.split('.')[1][1], num.split('.')[0], rnd(0,9).toString()]);
+                    q.options = shuffle(Array.from(opts));
+                } else {
+                    // Variante fractions simples
+                    const ent = rnd(1, 9);
+                    const dix = rnd(1, 9);
+                    q.text = `Trouve l'écriture décimale de : ${ent} unités + ${dix}/10`;
+                    q.type = "qcm";
+                    q.answer = `${ent},${dix}`;
+                    let opts = new Set([`${ent},${dix}`, `${dix},${ent}`, `${ent},0${dix}`, `${ent}${dix},0`]);
+                    q.options = shuffle(Array.from(opts));
+                }
+            }
+            return q;
+        }
+
+        // ==========================================
+        // 4. LOGIQUE DE JEU (MISSION)
+        // ==========================================
+        let currentMission = { realmId: null, mId: null, questions: [], currentQ: 0, score: 0 };
+        let draggedItem = null;
+
+        function startMission(realmId, mId) {
+            const theme = REALMS[realmId].theme;
+            currentMission = { realmId, mId, questions: [], currentQ: 0, score: 0 };
+            
+            for(let i=0; i<5; i++) {
+                currentMission.questions.push(generateQuestion(theme));
+            }
+            
+            showScreen('screen-mission');
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const q = currentMission.questions[currentMission.currentQ];
+            document.getElementById('mission-progress').innerText = `Question ${currentMission.currentQ + 1} / 5`;
+            document.getElementById('mission-score').innerText = `Score : ${currentMission.score}`;
+            document.getElementById('question-text').innerText = q.text;
+            
+            const zone = document.getElementById('answer-zone');
+            zone.innerHTML = "";
+            document.getElementById('feedback-zone').classList.add('hidden');
+            document.getElementById('btn-validate').classList.remove('hidden');
+            document.getElementById('btn-next').classList.add('hidden');
+
+            if (q.type === "qcm") {
+                const grid = document.createElement('div');
+                grid.className = "grid grid-cols-2 gap-4 w-full";
+                q.options.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.className = "btn-fantasy py-4 rounded-xl text-xl";
+                    btn.innerText = opt.toString().replace('.', ',');
+                    btn.onclick = () => {
+                        document.querySelectorAll('#answer-zone button').forEach(b => b.classList.remove('ring-4', 'ring-blue-500'));
+                        btn.classList.add('ring-4', 'ring-blue-500');
+                        zone.dataset.selected = opt;
+                    };
+                    grid.appendChild(btn);
+                });
+                zone.appendChild(grid);
+                zone.dataset.selected = "";
+            } 
+            else if (q.type === "free") {
+                const input = document.createElement('input');
+                input.type = "text"; /* Changé de number à text pour autoriser l'apostrophe suisse */
+                input.className = "w-full max-w-xs text-center border-2 border-amber-300 rounded-xl py-3 text-2xl focus:outline-none focus:ring-4 focus:ring-amber-500";
+                input.placeholder = "Ex: 434'434 ou 434434";
+                
+                // Nettoie les espaces, apostrophes et remplace virgule par point en arrière plan
+                input.oninput = (e) => zone.dataset.selected = e.target.value.replace(/[\s']/g, '').replace(',', '.');
+                zone.appendChild(input);
+                zone.dataset.selected = "";
+            }
+            else if (q.type === "order") {
+                const list = document.createElement('div');
+                list.className = "flex flex-col gap-2 w-full max-w-xs";
+                q.options.forEach(opt => {
+                    const item = document.createElement('div');
+                    item.className = "sortable-item bg-white border-2 border-amber-300 py-3 rounded-xl text-xl font-bold touch-none text-center";
+                    item.innerText = opt;
+                    item.draggable = true;
+                    item.ondragstart = (e) => { draggedItem = item; e.dataTransfer.effectAllowed = 'move'; };
+                    item.ondragover = (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; };
+                    item.ondrop = (e) => {
+                        e.preventDefault();
+                        if (draggedItem !== item) {
+                            let all = [...list.children];
+                            let draggedIdx = all.indexOf(draggedItem);
+                            let targetIdx = all.indexOf(item);
+                            if (draggedIdx < targetIdx) item.after(draggedItem);
+                            else item.before(draggedItem);
+                        }
+                    };
+                    list.appendChild(item);
+                });
+                zone.appendChild(list);
+            }
+        }
+
+        function checkAnswer() {
+            const q = currentMission.questions[currentMission.currentQ];
+            const zone = document.getElementById('answer-zone');
+            let userAnswer = "";
+
+            if (q.type === "order") {
+                userAnswer = [...zone.firstChild.children].map(el => el.innerText).join(',');
+            } else {
+                userAnswer = zone.dataset.selected.trim();
+            }
+
+            if (!userAnswer && q.type !== "order") return;
+
+            document.getElementById('btn-validate').classList.add('hidden');
+            document.getElementById('btn-next').classList.remove('hidden');
+            const fb = document.getElementById('feedback-zone');
+            fb.classList.remove('hidden');
+
+            // Formater pour l'affichage de la correction
+            let cleanAnswer = q.answer.toString().replace('.', ',');
+
+            if (userAnswer === q.answer) {
+                currentMission.score++;
+                fb.className = "w-full p-4 rounded-md font-bold text-lg bg-green-100 text-green-800 border-2 border-green-400";
+                fb.innerText = "✨ Excellent ! Bonne réponse.";
+            } else {
+                fb.className = "w-full p-4 rounded-md font-bold text-lg bg-red-100 text-red-800 border-2 border-red-400";
+                if(q.type === "order") cleanAnswer = q.answer.replace(/,/g, ' ➔ ');
+                fb.innerText = `⚔️ Raté... La bonne réponse était : ${cleanAnswer}`;
+            }
+        }
+
+        function nextQuestion() {
+            currentMission.currentQ++;
+            if (currentMission.currentQ < 5) renderQuestion();
+            else endMission();
+        }
+
+        function endMission() {
+            const stars = currentMission.score >= 4 ? 3 : (currentMission.score >= 3 ? 2 : (currentMission.score >= 1 ? 1 : 0));
+            const missionKey = `${currentMission.realmId}_${currentMission.mId}`;
+            
+            if (!gameState.missionsCompleted[missionKey] || gameState.missionsCompleted[missionKey] < stars) {
+                gameState.missionsCompleted[missionKey] = stars;
+            }
+
+            if (currentMission.mId === 4 && stars > 0) {
+                if (!gameState.unlockedRealms.includes(currentMission.realmId + 1) && currentMission.realmId < 4) {
+                    gameState.unlockedRealms.push(currentMission.realmId + 1);
+                }
+            }
+
+            document.getElementById('reward-zone').classList.add('hidden');
+            if (stars > 0) {
+                const availableItems = CODEX_ITEMS.filter(c => !gameState.unlockedCodex.includes(c.id));
+                if (availableItems.length > 0) {
+                    const reward = availableItems[rnd(0, availableItems.length - 1)];
+                    gameState.unlockedCodex.push(reward.id);
+                    document.getElementById('reward-zone').classList.remove('hidden');
+                    document.getElementById('reward-name').innerText = reward.name;
+                    document.getElementById('reward-desc').innerText = reward.desc;
+                }
+            }
+
+            saveGame();
+
+            showScreen('screen-result');
+            document.getElementById('result-score').innerText = currentMission.score;
+            document.getElementById('result-stars').innerText = '⭐'.repeat(stars) + '🕸️'.repeat(3 - stars);
+        }
+
+        function showScreen(id) {
+            ['screen-map', 'screen-realm', 'screen-mission', 'screen-result', 'screen-codex'].forEach(s => {
+                document.getElementById(s).classList.add('hidden');
+            });
+            document.getElementById(id).classList.remove('hidden');
+
+            if (id === 'screen-map') renderMap();
+            if (id === 'screen-codex') renderCodex();
+        }
+
+        function renderMap() {
+            const container = document.getElementById('realms-container');
+            container.innerHTML = "";
+            REALMS.forEach(r => {
+                const isUnlocked = gameState.unlockedRealms.includes(r.id);
+                const btn = document.createElement('button');
+                btn.className = `p-6 rounded-xl border-4 flex flex-col items-center gap-2 text-center transition-all ${isUnlocked ? 'bg-white border-amber-600 hover:scale-105 shadow-md cursor-pointer' : 'bg-gray-200 border-gray-400 opacity-70 cursor-not-allowed filter grayscale'}`;
+                btn.innerHTML = `
+                    <div class="text-4xl mb-2">${isUnlocked ? '🏰' : '🔒'}</div>
+                    <h3 class="font-bold text-lg text-amber-900">${r.name}</h3>
+                `;
+                if (isUnlocked) btn.onclick = () => renderRealm(r.id);
+                container.appendChild(btn);
+            });
+        }
+
+        function renderRealm(realmId) {
+            const realm = REALMS[realmId];
+            document.getElementById('realm-title').innerText = realm.name;
+            document.getElementById('realm-desc').innerText = realm.desc;
+            
+            const container = document.getElementById('missions-container');
+            container.innerHTML = "";
+            
+            let allMissionsPassed = true;
+            for(let i=0; i<5; i++) {
+                const isBoss = (i === 4);
+                const mKey = `${realmId}_${i}`;
+                const stars = gameState.missionsCompleted[mKey] || 0;
+                if(i < 4 && stars === 0) allMissionsPassed = false;
+
+                const isLocked = isBoss && !allMissionsPassed;
+
+                const btn = document.createElement('button');
+                btn.className = "btn-fantasy p-4 rounded-xl flex justify-between items-center";
+                btn.disabled = isLocked;
+                btn.innerHTML = `
+                    <span class="font-bold text-lg">${isBoss ? '🐉 Repaire du Gardien' : 'Mission ' + (i+1)}</span>
+                    <span class="tracking-widest">${isLocked ? '🔒' : (stars > 0 ? '⭐'.repeat(stars) : '○ ○ ○')}</span>
+                `;
+                if(!isLocked) btn.onclick = () => startMission(realmId, i);
+                container.appendChild(btn);
+            }
+            showScreen('screen-realm');
+        }
+
+        function renderCodex() {
+            const container = document.getElementById('codex-container');
+            container.innerHTML = "";
+            
+            CODEX_ITEMS.forEach(item => {
+                const isUnlocked = gameState.unlockedCodex.includes(item.id);
+                const div = document.createElement('div');
+                div.className = `p-4 rounded-lg border-2 ${isUnlocked ? 'bg-white border-amber-300' : 'bg-gray-100 border-gray-300 opacity-60'}`;
+                div.innerHTML = `
+                    <h4 class="font-bold text-amber-900 mb-1">${isUnlocked ? '✨ ' + item.name : '???'}</h4>
+                    <p class="text-sm italic text-gray-600">${isUnlocked ? item.desc : 'Artefact verrouillé. Réussissez des missions.'}</p>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        window.onload = () => {
+            loadGame();
+            showScreen('screen-map');
+        };
     </script>
 </body>
 </html>
