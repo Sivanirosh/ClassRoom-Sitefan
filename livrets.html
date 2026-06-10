@@ -2,62 +2,210 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Tables de multiplication</title>
-    <link rel="stylesheet" href="style-commun.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secteur : Les Livrets — Hub de Mission</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        .table-selector { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin: 24px 0; }
-        .table-btn { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 60px; padding: 12px 24px; font-size: 20px; font-weight: bold; cursor: pointer; transition: all 0.2s; min-width: 70px; text-align: center; }
-        .table-btn:hover { transform: scale(1.05); border-color: var(--color-livrets); }
-        .table-btn.selected { background: var(--color-livrets); color: white; border-color: var(--color-livrets); }
-        .operation-large { font-size: 64px; font-weight: bold; text-align: center; font-family: monospace; background: #f8fafc; padding: 32px; border-radius: 24px; margin: 20px 0; }
-        .timer-bar { height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; margin: 16px 0; }
-        .timer-fill { height: 100%; background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444); width: 100%; transition: width 0.1s linear; }
-        .speak-btn { background: #fef3c7; border: none; border-radius: 50%; width: 48px; height: 48px; font-size: 24px; cursor: pointer; }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            line-height: 1.65;
+            letter-spacing: 0.04em;
+            background-color: #0b0f19;
+            color: #f1f5f9;
+        }
+        p, span, label, button { letter-spacing: 0.04em; }
+        .game-card {
+            background: linear-gradient(145deg, #161d30, #0f1524);
+            border: 1px solid #24324f;
+        }
+        .btn-game-active {
+            transform: translateY(0);
+            box-shadow: 0 4px 0px 0px #05070f;
+            transition: all 0.1s ease;
+        }
+        .btn-game-active:active {
+            transform: translateY(4px);
+            box-shadow: 0 0px 0px 0px #05070f;
+        }
+        .key-btn {
+            background-color: #172033;
+            border: 1px solid #2e3e65;
+            font-weight: 900;
+            transition: all 0.1s;
+        }
+        .key-btn:active {
+            background-color: #0e1422;
+            transform: scale(0.95);
+        }
     </style>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAvXQI3f34J5htG-t9kroM4ynIqCgO9xXI",
+            authDomain: "ma-classe-179de.firebaseapp.com",
+            projectId: "ma-classe-179de",
+            storageBucket: "ma-classe-179de.firebasestorage.app",
+            messagingSenderId: "413792574665",
+            appId: "1:413792574665:web:87c29e054af287018e0118"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const appId = "classe-primaire-2026";
+
+        async function enregistrerScoreFirebase(exercice, corrects, fautes) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const nomEleve = urlParams.get('eleve') || sessionStorage.getItem('nomEleve') || "Anonyme";
+            
+            try {
+                await addDoc(collection(db, `artifacts/${appId}/public/data/scores`), {
+                    nomEleve: nomEleve,
+                    exercice: exercice,
+                    corrects: corrects,
+                    fautes: fautes,
+                    timestamp: Date.now()
+                });
+            } catch (e) { console.error(e); }
+        }
+        window.enregistrerScoreFirebase = enregistrerScoreFirebase;
+    </script>
 </head>
-<body>
-    <header class="page-header"><div class="header-container">
-        <div class="header-title"><div class="header-icon" style="background:linear-gradient(135deg,var(--color-livrets),#fbbf24);">✖️</div>
-        <div><h1>Tables de multiplication</h1><p>Deviens incollable !</p></div></div>
-        <div style="display:flex;gap:12px;"><button id="btn-contrast" class="btn-contrast" onclick="toggleContrast()">👁️ Contraste+</button>
-        <a href="index.html" class="btn-secondary" style="text-decoration:none;">↩ Quitter</a></div>
-    </div></header>
-    <main>
-        <div id="screen-config" class="game-card"><div class="text-center"><h2 style="font-size:28px;">📚 Choisis ta table</h2><p>Entraîne-toi sur une ou plusieurs tables</p></div>
-            <div class="table-selector" id="tables-container"></div>
-            <div style="margin:20px 0;"><label style="display:flex;align-items:center;gap:10px;"><input type="checkbox" id="option-timer"> ⏱️ Mode chronométré (10 secondes)</label></div>
-            <button id="btn-start" onclick="demarrerJeu()" class="btn-primary w-full" disabled style="opacity:0.5;">🚀 Commencer</button>
+<body class="min-h-screen flex flex-col antialiased">
+
+    <header class="bg-[#0e1422] border-b border-slate-800 py-4 shadow-lg">
+        <div class="max-w-md mx-auto px-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="bg-gradient-to-br from-cyan-500 to-blue-600 text-white p-2 rounded-xl border border-cyan-400/30">
+                    <span class="text-xl">💻</span>
+                </div>
+                <div>
+                    <h1 class="text-md font-black text-white tracking-wide uppercase">Code : Les Livrets</h1>
+                    <p id="affichage-nom" class="text-xs font-bold text-cyan-400 tracking-wider">Agent : Chargement...</p>
+                </div>
+            </div>
+            <a href="index.html" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-2 rounded-xl text-xs font-bold tracking-wider uppercase border border-slate-700 transition-all">↩ QG</a>
         </div>
-        <div id="screen-game" class="hidden game-card"><div class="flex justify-between items-center mb-6"><div><span id="table-actuelle" class="level-badge" style="background:var(--color-livrets);">Table</span><span style="margin-left:12px;">Question <span id="num-question">1</span>/10</span></div><div><span style="color:var(--color-primary);">🏆 Score</span><span id="score" style="font-size:24px;font-weight:bold;margin-left:8px;">0</span></div></div>
-            <div id="timer-container" class="timer-bar hidden"><div id="timer-fill" class="timer-fill"></div></div>
-            <div class="text-right mb-2"><button class="speak-btn" onclick="parlerOperation()">🔊</button></div>
-            <div class="operation-large" id="operation">8 × 7 = ?</div>
-            <div class="numeric-pad"><div class="num-key" onclick="ajouter('1')">1</div><div class="num-key" onclick="ajouter('2')">2</div><div class="num-key" onclick="ajouter('3')">3</div><div class="num-key" onclick="ajouter('4')">4</div><div class="num-key" onclick="ajouter('5')">5</div><div class="num-key" onclick="ajouter('6')">6</div><div class="num-key" onclick="ajouter('7')">7</div><div class="num-key" onclick="ajouter('8')">8</div><div class="num-key" onclick="ajouter('9')">9</div><div class="num-key" onclick="ajouter('0')">0</div><div class="num-key" onclick="effacer()">⌫</div><div class="num-key" onclick="valider()" style="background:var(--color-livrets);">✅ OK</div></div>
-            <div id="feedback" class="feedback hidden"></div>
+    </header>
+
+    <main class="flex-grow max-w-md w-full mx-auto px-4 py-6 flex flex-col justify-center">
+        
+        <div id="game-card" class="game-card rounded-2xl p-6 border shadow-xl space-y-6">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <span class="text-xs font-bold text-slate-500 uppercase tracking-widest">Calcul <span id="num-question" class="text-cyan-400 font-black">1</span> / 10</span>
+                <span class="text-xs font-bold text-slate-500 uppercase tracking-widest">Score : <span id="score-actuel" class="text-emerald-400 font-black">0</span></span>
+            </div>
+
+            <div class="text-center">
+                <div id="enonce" class="text-4xl font-black text-white tracking-wider font-mono bg-[#090d16] inline-block px-8 py-4 rounded-2xl border border-slate-800 shadow-inner mb-4">
+                    -- × --
+                </div>
+                <div class="h-12 flex justify-center items-center">
+                    <span id="reponse-visuelle" class="text-3xl font-black text-cyan-400 tracking-widest font-mono"></span>
+                </div>
+            </div>
+
+            <!-- Pavé Tactique Intégré -->
+            <div class="grid grid-cols-3 gap-2">
+                <button onclick="pressKey(1)" class="key-btn text-white py-4 rounded-xl text-xl">1</button>
+                <button onclick="pressKey(2)" class="key-btn text-white py-4 rounded-xl text-xl">2</button>
+                <button onclick="pressKey(3)" class="key-btn text-white py-4 rounded-xl text-xl">3</button>
+                <button onclick="pressKey(4)" class="key-btn text-white py-4 rounded-xl text-xl">4</button>
+                <button onclick="pressKey(5)" class="key-btn text-white py-4 rounded-xl text-xl">5</button>
+                <button onclick="pressKey(6)" class="key-btn text-white py-4 rounded-xl text-xl">6</button>
+                <button onclick="pressKey(7)" class="key-btn text-white py-4 rounded-xl text-xl">7</button>
+                <button onclick="pressKey(8)" class="key-btn text-white py-4 rounded-xl text-xl">8</button>
+                <button onclick="pressKey(9)" class="key-btn text-white py-4 rounded-xl text-xl">9</button>
+                <button onclick="pressKey('C')" class="key-btn text-rose-400 py-4 rounded-xl text-base uppercase">Effacer</button>
+                <button onclick="pressKey(0)" class="key-btn text-white py-4 rounded-xl text-xl">0</button>
+                <button onclick="validerReponse()" class="key-btn bg-cyan-950 text-cyan-400 border-cyan-800/80 py-4 rounded-xl text-base uppercase">OK</button>
+            </div>
+
+            <div id="feedback" class="text-center font-bold text-sm h-6"></div>
         </div>
-        <div id="screen-result" class="hidden game-card text-center"><h2 style="font-size:32px;">🏆 Défi terminé !</h2><div style="background:#f8fafc;border-radius:24px;padding:32px;max-width:300px;margin:24px auto;"><p>Ton score</p><p style="font-size:56px;font-weight:bold;color:var(--color-primary);"><span id="score-final">0</span>/10</p></div><p id="message-final"></p><div style="display:flex;gap:16px;justify-content:center;"><button onclick="rejouer()" class="btn-secondary">🔄 Rejouer</button><button onclick="changerTable()" class="btn-primary">📚 Changer</button><a href="index.html" class="btn-primary" style="text-decoration:none;">🏠 Accueil</a></div></div>
+
+        <div id="end-card" class="game-card rounded-2xl p-8 border shadow-xl text-center hidden space-y-6">
+            <h2 class="text-2xl font-black text-white uppercase tracking-wide">💻 Matrice décodée avec succès !</h2>
+            <div class="bg-[#090d16] p-6 rounded-2xl border border-slate-800 max-w-xs mx-auto">
+                <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Score Final</p>
+                <p class="text-4xl font-black text-cyan-400"><span id="final-score">0</span> / 10</p>
+            </div>
+            <p id="appreciation" class="font-bold text-white text-lg"></p>
+            <a href="index.html" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-black px-6 py-3.5 rounded-xl text-xs uppercase tracking-widest border border-indigo-400/30 shadow-lg btn-game-active">Retourner au Hub de Mission</a>
+        </div>
+
     </main>
+
     <script>
-        const nomEleve = new URLSearchParams(window.location.search).get('eleve') || "Explorateur";
-        let tableChoisie=null,avecTimer=false,score=0,q=1,reponseCourante="",op={texte:"",reponse:0},timer=null,tempsRestant=10;
-        function afficherTables(){const tables=[2,3,4,5,6,7,8,9];const container=document.getElementById('tables-container');container.innerHTML=tables.map(t=>`<div onclick="choisirTable(${t})" id="table-${t}" class="table-btn">${t}</div>`).join('')+`<div onclick="choisirTable('mixte')" id="table-mixte" class="table-btn">🎲 TOUT</div>`;}
-        function choisirTable(t){[2,3,4,5,6,7,8,9,'mixte'].forEach(i=>{const el=document.getElementById(`table-${i}`);if(el)el.classList.remove('selected');});document.getElementById(`table-${t}`).classList.add('selected');tableChoisie=t;const btn=document.getElementById('btn-start');btn.disabled=false;btn.style.opacity='1';}
-        function demarrerJeu(){avecTimer=document.getElementById('option-timer').checked;score=0;q=1;document.getElementById('score').innerText=score;document.getElementById('num-question').innerText=q;const txt=tableChoisie==='mixte'?'🎲 TOUTES':'Table ×'+tableChoisie;document.getElementById('table-actuelle').innerText=txt;if(avecTimer)document.getElementById('timer-container').classList.remove('hidden');else document.getElementById('timer-container').classList.add('hidden');document.getElementById('screen-config').classList.add('hidden');document.getElementById('screen-game').classList.remove('hidden');genererQuestion();}
-        function genererQuestion(){if(q>10){terminer();return;}document.getElementById('num-question').innerText=q;document.getElementById('feedback').classList.add('hidden');reponseCourante="";document.getElementById('reponse-indice')&&(document.getElementById('reponse-indice').innerText="");let a,b;if(tableChoisie==='mixte'){a=Math.floor(Math.random()*8)+2;b=Math.floor(Math.random()*10)+1;}else{a=tableChoisie;b=Math.floor(Math.random()*10)+1;}op={texte:`${a} × ${b}`,reponse:a*b};document.getElementById('operation').innerHTML=`${a} × ${b} = ?`;if(avecTimer)demarrerTimer();}
-        function demarrerTimer(){if(timer)clearInterval(timer);tempsRestant=10;const fill=document.getElementById('timer-fill');fill.style.width='100%';timer=setInterval(()=>{tempsRestant-=0.1;fill.style.width=`${Math.max(0,(tempsRestant/10)*100)}%`;if(tempsRestant<=0){clearInterval(timer);timer=null;afficherFeedback(`⏰ Temps écoulé ! La réponse était ${op.reponse}`,false);setTimeout(()=>{q++;genererQuestion();},2000);}},100);}
-        function arreterTimer(){if(timer){clearInterval(timer);timer=null;}}
-        function ajouter(c){if(reponseCourante.length<3)reponseCourante+=c;document.getElementById('operation').innerHTML=op.texte+' = '+reponseCourante;}
-        function effacer(){reponseCourante=reponseCourante.slice(0,-1);document.getElementById('operation').innerHTML=op.texte+' = '+reponseCourante;}
-        function valider(){arreterTimer();const rep=parseInt(reponseCourante);if(isNaN(rep)){afficherFeedback("❌ Entre un nombre !",false);if(avecTimer)demarrerTimer();return;}const correct=(rep===op.reponse);if(correct){score++;afficherFeedback(`✅ BRAVO ! ${op.reponse} est correct ! +1 point`,true);}else{afficherFeedback(`❌ Oups ! La bonne réponse était ${op.reponse}`,false);}document.getElementById('score').innerText=score;document.querySelectorAll('.num-key').forEach(b=>b.style.pointerEvents='none');setTimeout(()=>{q++;genererQuestion();document.querySelectorAll('.num-key').forEach(b=>b.style.pointerEvents='auto');},2000);}
-        function afficherFeedback(m,s){const fb=document.getElementById('feedback');fb.innerText=m;fb.className=`feedback ${s?'success':'error'}`;fb.classList.remove('hidden');}
-        function terminer(){document.getElementById('screen-game').classList.add('hidden');document.getElementById('screen-result').classList.remove('hidden');document.getElementById('score-final').innerText=score;let msg=score===10?"🏆 PARFAIT !":score>=7?"🎉 Très bien !":score>=5?"👍 Pas mal !":"💪 Continue !";document.getElementById('message-final').innerHTML=msg;sauvegarderScore();}
-        function sauvegarderScore(){const scores=JSON.parse(localStorage.getItem(`scores_${nomEleve}`)||'[]');scores.push({jeu:"livrets",score:score,total:10,date:Date.now()});localStorage.setItem(`scores_${nomEleve}`,JSON.stringify(scores));if(window.parent&&window.parent.ajouterScore)window.parent.ajouterScore(nomEleve,"livrets",score,10);}
-        function rejouer(){score=0;q=1;document.getElementById('screen-result').classList.add('hidden');document.getElementById('screen-game').classList.remove('hidden');genererQuestion();}
-        function changerTable(){document.getElementById('screen-result').classList.add('hidden');document.getElementById('screen-config').classList.remove('hidden');tableChoisie=null;document.getElementById('btn-start').disabled=true;document.getElementById('btn-start').style.opacity='0.5';}
-        function parlerOperation(){if('speechSynthesis' in window){const u=new SpeechSynthesisUtterance(`Combien fait ${op.texte} ?`);u.lang='fr-FR';u.rate=0.9;window.speechSynthesis.cancel();window.speechSynthesis.speak(u);}}
-        function toggleContrast(){document.body.classList.toggle('high-contrast');localStorage.setItem('highContrast',document.body.classList.contains('high-contrast'));}
-        afficherTables();if(localStorage.getItem('highContrast')==='true')document.body.classList.add('high-contrast');
+        let score = 0;
+        let questionActuelle = 1;
+        let facteur1, facteur2, reponseCorrecte;
+        let saisieActuelle = "";
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const nomEleve = urlParams.get('eleve') || sessionStorage.getItem('nomEleve') || "Explorateur";
+        document.getElementById('affichage-nom').innerText = `Agent : ${nomEleve}`;
+
+        function genererCalcul() {
+            if (questionActuelle > 10) {
+                terminerPartie();
+                return;
+            }
+            document.getElementById('num-question').innerText = questionActuelle;
+            document.getElementById('feedback').innerText = '';
+            saisieActuelle = "";
+            document.getElementById('reponse-visuelle').innerText = "";
+
+            facteur1 = Math.floor(Math.random() * 8) + 2; 
+            facteur2 = Math.floor(Math.random() * 9) + 1; 
+            reponseCorrecte = facteur1 * facteur2;
+
+            document.getElementById('enonce').innerText = `${facteur1} × ${facteur2}`;
+        }
+
+        function pressKey(touche) {
+            if (touche === 'C') {
+                saisieActuelle = "";
+            } else {
+                if (saisieActuelle.length < 3) saisieActuelle += touche.toString();
+            }
+            document.getElementById('reponse-visuelle').innerText = saisieActuelle;
+        }
+
+        function validerReponse() {
+            if (saisieActuelle === "") return;
+            const reponseEleve = parseInt(saisieActuelle);
+            const fb = document.getElementById('feedback');
+
+            if (reponseEleve === reponseCorrecte) {
+                score++;
+                fb.className = "text-center font-bold text-sm text-emerald-400";
+                fb.innerText = "⚡ Flux Intègre ! +1 Donnée.";
+            } else {
+                fb.className = "text-center font-bold text-sm text-rose-400";
+                fb.innerText = `❌ Corruption. La clé était ${reponseCorrecte}`;
+            }
+
+            document.getElementById('score-actuel').innerText = score;
+            questionActuelle++;
+            setTimeout(genererCalcul, 2000);
+        }
+
+        async function terminerPartie() {
+            document.getElementById('game-card').classList.add('hidden');
+            document.getElementById('end-card').classList.remove('hidden');
+            document.getElementById('final-score').innerText = score;
+            
+            let appreciation = score >= 8 ? "🏆 Maître de la Matrice ! Performance exceptionnelle." : "⚔️ Flux instable. Revois tes protocoles de calcul.";
+            document.getElementById('appreciation').innerText = appreciation;
+
+            if (typeof window.enregistrerScoreFirebase === 'function') {
+                await window.enregistrerScoreFirebase("Atelier Livrets", score, 10 - score);
+            }
+        }
+
+        genererCalcul();
     </script>
 </body>
 </html>
