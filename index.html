@@ -2,6 +2,465 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portail Numérique — Classe Primaire</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, query, onSnapshot, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAvXQI3f34J5htG-t9kroM4ynIqCgO9xXI",
+            authDomain: "ma-classe-179de.firebaseapp.com",
+            projectId: "ma-classe-179de",
+            storageBucket: "ma-classe-179de.firebasestorage.app",
+            messagingSenderId: "413792574665",
+            appId: "1:413792574665:web:87c29e054af287018e0118"
+        };
+
+        const appId = "classe-primaire-2026";
+
+        try {
+            const app = initializeApp(firebaseConfig);
+            const auth = getAuth(app);
+            const db = getFirestore(app);
+
+            window.db = db;
+            window.appId = appId;
+
+            const initAuth = async () => {
+                try {
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+                } catch (err) {
+                    console.error("Erreur de connexion Firebase Auth :", err);
+                }
+            };
+            initAuth();
+
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    window.currentUser = user;
+                    console.log("Connecté anonymement :", user.uid);
+                }
+            });
+        } catch (e) {
+            console.error("Erreur d'initialisation Firebase :", e);
+        }
+
+        let stopEcouteurScores = null;
+
+        window.initScoresListener = function() {
+            if (stopEcouteurScores) return;
+            if (!window.db || !window.appId) return;
+
+            try {
+                const colRef = collection(window.db, 'artifacts', window.appId, 'public', 'data', 'scores');
+
+                stopEcouteurScores = onSnapshot(colRef, (snapshot) => {
+                    console.log("Mise à jour Firebase reçue. Documents :", snapshot.size);
+                    const list = [];
+                    snapshot.forEach((doc) => { list.push({ id: doc.id, ...doc.data() }); });
+                    list.sort((a, b) => b.timestamp - a.timestamp);
+                    window.allScores = list;
+                    if (typeof window.filtrerScores === 'function') { window.filtrerScores(); }
+                }, (error) => {
+                    console.error("Erreur Firestore :", error);
+                    const tbody = document.getElementById('scores-table-body');
+                    if (tbody) {
+                        tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-red-500 font-bold bg-red-50">⚠️ Erreur de connexion : ${error.message}</td></tr>`;
+                    }
+                });
+            } catch (e) {
+                console.error("Impossible de lancer l'écouteur :", e);
+            }
+        };
+
+        window.arreterEcouteurScores = function() {
+            if (stopEcouteurScores) {
+                stopEcouteurScores();
+                stopEcouteurScores = null;
+                console.log("Écouteur Firebase arrêté.");
+            }
+        };
+
+        const MOT_DE_PASSE_HASH = "e78c57b6c38c5b1e92e1f0f32ab31e832cb2af7ba3d37d5f9c1b62a5f06b3f1e";
+
+        window.validerEspaceEnseignant = async function() {
+            const mdp = document.getElementById('teacher-password').value;
+
+            const encoder = new TextEncoder();
+            const data = encoder.encode(mdp);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+            if (hashHex === MOT_DE_PASSE_HASH) {
+                document.getElementById('password-modal').classList.add('hidden');
+                document.getElementById('teacher-password').value = "";
+                document.getElementById('login-section').classList.add('hidden');
+                document.getElementById('student-dashboard').classList.add('hidden');
+                document.getElementById('teacher-dashboard').classList.remove('hidden');
+
+                window.initScoresListener();
+                filtrerScores();
+            } else {
+                afficherMessageNotification("Mot de passe incorrect !");
+                document.getElementById('teacher-password').value = "";
+            }
+        };
+
+        window.effacerScoreUnique = async function(id) {
+            if (!confirm("Voulez-vous vraiment supprimer ce résultat ?")) return;
+            if (!window.db) return;
+            try {
+                const docRef = doc(window.db, 'artifacts', window.appId, 'public', 'data', 'scores', id);
+                await deleteDoc(docRef);
+                afficherMessageNotification("Score supprimé !");
+            } catch (e) {
+                console.error("Erreur de suppression :", e);
+            }
+        };
+
+        window.effacerTousLesScores = async function() {
+            if (!confirm("⚠️ ATTENTION : Voulez-vous vraiment supprimer TOUS les scores ? Cette opération est irréversible.")) return;
+            if (!window.db) return;
+            try {
+                const scoresList = window.allScores || [];
+                for (const score of scoresList) {
+                    const docRef = doc(window.db, 'artifacts', window.appId, 'public', 'data', 'scores', score.id);
+                    await deleteDoc(docRef);
+                }
+                afficherMessageNotification("Tous les scores ont été effacés !");
+            } catch (e) {
+                console.error("Erreur de réinitialisation :", e);
+            }
+        };
+    </script>
+</head>
+<body class="bg-slate-50 min-h-screen font-sans flex flex-col justify-between">
+
+    <header class="bg-indigo-900 text-white shadow-md">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <span class="text-3xl">🎒</span>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight">Le Portail de la Classe</h1>
+                    <p class="text-xs text-indigo-200">Espace numérique d'apprentissage autonome</p>
+                </div>
+            </div>
+            <button onclick="ouvrirEspaceEnseignant()" class="bg-indigo-800 hover:bg-indigo-700 text-xs font-semibold px-4 py-2 rounded-xl transition-all flex items-center gap-1">
+                ⚙️ Espace Enseignant
+            </button>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-8 flex-grow w-full">
+        
+        <div id="login-section" class="max-w-md mx-auto bg-white p-8 rounded-3xl shadow-sm border border-slate-100 my-12">
+            <div class="text-center mb-6">
+                <span class="text-5xl mb-2 block">👋</span>
+                <h2 class="text-2xl font-bold text-slate-800">Bonjour !</h2>
+                <p class="text-slate-400 text-sm">Inscris ton prénom pour accéder aux défis de la classe.</p>
+            </div>
+            <form onsubmit="connecterEleve(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-400 mb-1">Mon Prénom</label>
+                    <input type="text" id="student-name" required placeholder="Ex: Lucas, Léa..." 
+                           class="w-full px-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:outline-none focus:border-indigo-500 font-semibold text-slate-700">
+                </div>
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-2xl transition shadow-md">
+                    Entrer dans la classe ➔
+                </button>
+            </form>
+        </div>
+
+        <div id="student-dashboard" class="hidden space-y-8">
+            <div class="bg-gradient-to-r from-indigo-900 to-indigo-800 text-white p-6 rounded-3xl shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold">Heureux de te revoir, <span id="welcome-name" class="text-amber-300"></span> ! 🚀</h2>
+                    <p class="text-indigo-200 text-xs mt-1">Choisis un jeu ci-dessous pour t'entraîner et améliorer tes scores.</p>
+                </div>
+                <button onclick="deconnecterEleve()" class="bg-white/10 hover:bg-white/20 text-xs font-semibold px-4 py-2 rounded-xl transition">
+                    ❌ Changer de compte
+                </button>
+            </div>
+
+            <div>
+                <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">🎯 Les Défis Disponibles</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition-all flex flex-col justify-between group">
+                        <div>
+                            <span class="text-4xl mb-4 block group-hover:scale-110 transition-transform duration-200">✖️</span>
+                            <h4 class="font-bold text-lg text-slate-800">L'Atelier des Livrets</h4>
+                            <p class="text-slate-500 text-xs mt-1 leading-relaxed">Entraîne-toi sur les tables de multiplication de ton choix grâce à un défi de 10 questions avec aide visuelle.</p>
+                        </div>
+                        <button onclick="lancerActivite('livrets.html')" class="mt-6 bg-indigo-50 hover:bg-indigo-600 text-indigo-700 hover:text-white font-bold text-sm py-3 rounded-xl transition-all">
+                            S'entraîner ➔
+                        </button>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition-all flex flex-col justify-between group">
+                        <div>
+                            <span class="text-4xl mb-4 block group-hover:scale-110 transition-transform duration-200">📐</span>
+                            <h4 class="font-bold text-lg text-slate-800">Le Défi des Formes</h4>
+                            <p class="text-slate-500 text-xs mt-1 leading-relaxed">Apprends à identifier les formes géométriques complexes, leurs angles et leurs propriétés.</p>
+                        </div>
+                        <button onclick="lancerActivite('geometrie.html')" class="mt-6 bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white font-bold text-sm py-3 rounded-xl transition-all">
+                            Lancer le défi ➔
+                        </button>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition-all flex flex-col justify-between group">
+                        <div>
+                            <span class="text-4xl mb-4 block group-hover:scale-110 transition-transform duration-200">🔢</span>
+                            <h4 class="font-bold text-lg text-slate-800">Le Calcul Décimal</h4>
+                            <p class="text-slate-500 text-xs mt-1 leading-relaxed">Maîtrise les additions, soustractions et multiplications complexes avec les nombres à virgule.</p>
+                        </div>
+                        <button onclick="lancerActivite('calculs.html')" class="mt-6 bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white font-bold text-sm py-3 rounded-xl transition-all">
+                            Relever le défi ➔
+                        </button>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition-all flex flex-col justify-between group">
+                        <div>
+                            <span class="text-4xl mb-4 block group-hover:scale-110 transition-transform duration-200">📜</span>
+                            <h4 class="font-bold text-lg text-slate-800">Les Royaumes de Numéria</h4>
+                            <p class="text-slate-500 text-xs mt-1 leading-relaxed">Explore les royaumes antiques. Survis aux épreuves de numération pour débloquer les puissants artefacts du Codex.</p>
+                        </div>
+                        <button onclick="lancerActivite('numeria.html')" class="mt-6 bg-purple-50 hover:bg-purple-600 text-purple-700 hover:text-white font-bold text-sm py-3 rounded-xl transition-all">
+                            Lancer le RPG ➔
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div id="teacher-dashboard" class="hidden space-y-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-800">📋 Suivi des Résultats (Enseignant)</h2>
+                    <p class="text-slate-500 text-xs">Suivi en temps réel des exercices faits en classe.</p>
+                </div>
+                <button onclick="fermerEspaceEnseignant()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs px-4 py-2 rounded-xl transition">
+                    📴 Quitter le suivi
+                </button>
+            </div>
+
+            <div class="bg-white p-4 rounded-2xl border border-slate-100 flex flex-wrap gap-4 items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <input type="text" id="teacher-search" oninput="filtrerScores()" placeholder="Rechercher un élève..." 
+                           class="px-4 py-2 border rounded-xl text-sm focus:outline-none focus:border-indigo-500">
+                    <select id="teacher-filter-game" onchange="filtrerScores()" class="px-4 py-2 border rounded-xl text-sm focus:outline-none focus:border-indigo-500 bg-white">
+                        <option value="all">Tous les exercices</option>
+                        <option value="Livrets de multiplication">Livrets de multiplication</option>
+                        <option value="Défi Géométrie">Défi Géométrie</option>
+                        <option value="Le Calcul Décimal">Le Calcul Décimal</option>
+                        <option value="Les Royaumes de Numéria">Les Royaumes de Numéria</option>
+                    </select>
+                </div>
+                <button onclick="effacerTousLesScores()" class="text-xs font-bold text-red-600 hover:underline">⚠️ Réinitialiser tous les scores</button>
+            </div>
+
+            <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden shadow-sm">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-100 text-slate-400 text-xs font-bold uppercase">
+                                <th class="p-4">Élève</th>
+                                <th class="p-4">Exercice</th>
+                                <th class="p-4 text-center">Score</th>
+                                <th class="p-4 text-center">Taux de réussite</th>
+                                <th class="p-4">Date / Heure</th>
+                                <th class="p-4 text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="scores-table-body" class="divide-y divide-slate-100 text-sm text-slate-700">
+                            <tr>
+                                <td colspan="6" class="p-8 text-center text-slate-400">Aucun score enregistré pour le moment. En attente de données...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <div id="password-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded-3xl shadow-xl w-full max-w-sm border border-slate-100">
+            <h3 class="font-bold text-slate-800 text-lg mb-2">Accès Enseignant</h3>
+            <p class="text-xs text-slate-500 mb-4">Saisissez le mot de passe pour consulter les résultats.</p>
+            <div class="space-y-4">
+                <input type="password" id="teacher-password" placeholder="Mot de passe" 
+                       class="w-full px-4 py-3 bg-slate-50 border rounded-xl text-center font-bold tracking-widest focus:outline-none focus:border-indigo-500">
+                <div class="flex gap-2">
+                    <button onclick="annulerEspaceEnseignant()" class="w-1/2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl transition">
+                        Annuler
+                    </button>
+                    <button onclick="validerEspaceEnseignant()" class="w-1/2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl transition">
+                        Valider
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="preview-modal" class="fixed inset-0 bg-slate-950/80 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white p-6 rounded-3xl shadow-2xl max-w-md w-full text-center border border-slate-100">
+            <span class="text-6xl mb-4 block">🚀</span>
+            <h3 class="text-2xl font-bold text-slate-800 mb-2">Navigation dans l'aperçu</h3>
+            <p class="text-slate-500 mb-6 text-sm">
+                Vous tentez d'ouvrir l'activité <strong id="preview-modal-target" class="text-indigo-600">...</strong>.
+                <br><br>
+                Cette redirection fonctionnera une fois vos fichiers publiés ensemble sur <strong>GitHub Pages</strong> !
+            </p>
+            <button onclick="document.getElementById('preview-modal').classList.add('hidden')" 
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-2xl text-lg transition-all">
+                D'accord, j'ai compris !
+            </button>
+        </div>
+    </div>
+
+    <div id="custom-alert" class="fixed bottom-4 right-4 bg-slate-900 text-white px-6 py-4 rounded-2xl shadow-xl transform translate-y-20 opacity-0 transition-all duration-300 z-50 max-w-sm">
+        <p id="custom-alert-text" class="text-sm font-semibold"></p>
+    </div>
+
+    <footer class="bg-slate-900 text-slate-500 py-6 text-center text-xs">
+        <p>© 2026 Classe Numérique Premium — Apprentissage Personnalisé.</p>
+    </footer>
+
+    <script>
+        let nomEleve = sessionStorage.getItem('nomEleve');
+        window.allScores = [];
+
+        window.addEventListener('load', () => {
+            if (nomEleve) { afficherDashboardEleve(nomEleve); }
+            else { afficherFormulaireLogin(); }
+        });
+
+        function afficherMessageNotification(texte) {
+            const alertBox = document.getElementById('custom-alert');
+            document.getElementById('custom-alert-text').innerText = texte;
+            alertBox.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => { alertBox.classList.add('translate-y-20', 'opacity-0'); }, 3000);
+        }
+
+        window.connecterEleve = function(event) {
+            event.preventDefault();
+            const prenom = document.getElementById('student-name').value.trim();
+            if (prenom.length < 2) { afficherMessageNotification("Veuillez saisir un prénom valide !"); return; }
+            sessionStorage.setItem('nomEleve', prenom);
+            nomEleve = prenom;
+            afficherDashboardEleve(prenom);
+        };
+
+        window.deconnecterEleve = function() {
+            sessionStorage.removeItem('nomEleve');
+            nomEleve = null;
+            afficherFormulaireLogin();
+        };
+
+        function afficherFormulaireLogin() {
+            document.getElementById('login-section').classList.remove('hidden');
+            document.getElementById('student-dashboard').classList.add('hidden');
+            document.getElementById('teacher-dashboard').classList.add('hidden');
+        }
+
+        function afficherDashboardEleve(prenom) {
+            document.getElementById('welcome-name').innerText = prenom;
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('student-dashboard').classList.remove('hidden');
+            document.getElementById('teacher-dashboard').classList.add('hidden');
+        }
+
+        window.lancerActivite = function(pageHtml) {
+            if (!nomEleve) { afficherMessageNotification("Erreur de session, merci de ressaisir votre prénom."); afficherFormulaireLogin(); return; }
+            const queryParams = `?eleve=${encodeURIComponent(nomEleve)}`;
+            if (window.location.protocol === 'blob:') {
+                document.getElementById('preview-modal-target').innerText = pageHtml;
+                document.getElementById('preview-modal').classList.remove('hidden');
+                return;
+            }
+            let baseDir = window.location.pathname;
+            const lastSegment = baseDir.split('/').pop();
+            if (lastSegment && !lastSegment.includes('.')) {
+                if (!baseDir.endsWith('/')) baseDir += '/';
+            } else {
+                baseDir = baseDir.substring(0, baseDir.lastIndexOf('/') + 1);
+            }
+            window.location.href = window.location.origin + baseDir + pageHtml + queryParams;
+        };
+
+        window.ouvrirEspaceEnseignant = function() {
+            document.getElementById('password-modal').classList.remove('hidden');
+            document.getElementById('teacher-password').focus();
+        };
+
+        window.annulerEspaceEnseignant = function() {
+            document.getElementById('password-modal').classList.add('hidden');
+            document.getElementById('teacher-password').value = "";
+        };
+
+        window.fermerEspaceEnseignant = function() {
+            window.arreterEcouteurScores();
+            if (nomEleve) { afficherDashboardEleve(nomEleve); }
+            else { afficherFormulaireLogin(); }
+        };
+
+        window.filtrerScores = function() {
+            const tableBody = document.getElementById('scores-table-body');
+            if (!tableBody) return;
+            const searchVal = (document.getElementById('teacher-search')?.value || "").toLowerCase().trim();
+            const selectedGame = document.getElementById('teacher-filter-game')?.value || "all";
+            const scoresList = window.allScores || [];
+
+            const filtered = scoresList.filter(score => {
+                const matchName = score.nomEleve ? score.nomEleve.toLowerCase().includes(searchVal) : false;
+                const matchGame = selectedGame === 'all' || score.exercice === selectedGame;
+                return matchName && matchGame;
+            });
+
+            if (filtered.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-400">Aucun résultat ne correspond à ces filtres.</td></tr>`;
+                return;
+            }
+
+            tableBody.innerHTML = filtered.map(score => {
+                const totalQuestions = (score.corrects || 0) + (score.erreurs || 0);
+                const affichageScore = totalQuestions > 0 ? `${score.corrects} / ${totalQuestions}` : `${score.corrects || 0} / 10`;
+                const pourcentage = totalQuestions > 0 ? Math.round((score.corrects / totalQuestions) * 100) : 0;
+                const date = score.timestamp ? new Date(score.timestamp) : new Date();
+                const affichageDate = date.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' }) + ' à ' + date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+                let couleurReussite = "bg-rose-100 text-rose-700";
+                if (pourcentage >= 80) couleurReussite = "bg-emerald-100 text-emerald-700";
+                else if (pourcentage >= 50) couleurReussite = "bg-amber-100 text-amber-700";
+                return `
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="p-4 font-bold text-slate-800">${score.nomEleve}</td>
+                        <td class="p-4 text-slate-500 text-xs">${score.exercice || 'Inconnu'}</td>
+                        <td class="p-4 text-center font-bold text-indigo-900">${affichageScore}</td>
+                        <td class="p-4 text-center"><span class="px-2.5 py-1 rounded-full text-xs font-bold ${couleurReussite}">${pourcentage}%</span></td>
+                        <td class="p-4 text-slate-500 text-xs">${affichageDate}</td>
+                        <td class="p-4 text-center"><button onclick="effacerScoreUnique('${score.id}')" class="text-xs text-red-500 hover:text-red-700 hover:underline">Supprimer</button></td>
+                    </tr>
+                `;
+            }).join('');
+        };
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Portail d'apprentissage - Classe Primaire</title>
     
