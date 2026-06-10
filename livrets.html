@@ -3,480 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Tables de multiplication - Maîtrise les livrets</title>
-    
-    <!-- ======================================== -->
-    <!-- STYLE UNIFIÉ (commun à toutes les pages) -->
-    <!-- ======================================== -->
+    <title>Tables de multiplication</title>
     <link rel="stylesheet" href="style-commun.css">
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = { corePlugins: { preflight: false } }
-    </script>
-    
     <style>
-        /* Styles spécifiques aux tables de multiplication */
-        
-        .table-selector {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-            gap: 12px;
-            margin: 24px 0;
-        }
-        
-        .table-btn {
-            background: #172033;
-            border: 2px solid #2e3e65;
-            border-radius: 16px;
-            padding: 16px;
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .table-btn:hover {
-            transform: scale(1.05);
-            border-color: #f59e0b;
-        }
-        
-        .table-btn.selected {
-            background: linear-gradient(145deg, #f59e0b, #d97706);
-            border-color: #fbbf24;
-        }
-        
-        .operation-card {
-            background: #090d16;
-            border-radius: 32px;
-            padding: 48px;
-            text-align: center;
-            margin: 24px 0;
-        }
-        
-        .operation {
-            font-size: 64px;
-            font-family: monospace;
-            font-weight: bold;
-        }
-        
-        .reponse-indice {
-            font-size: 48px;
-            font-family: monospace;
-            letter-spacing: 8px;
-            color: #fbbf24;
-        }
-        
-        .timer-bar {
-            height: 4px;
-            background: #2e3e65;
-            border-radius: 2px;
-            overflow: hidden;
-            margin: 16px 0;
-        }
-        
-        .timer-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444);
-            width: 100%;
-            transition: width 0.1s linear;
-        }
+        .table-selector { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin: 24px 0; }
+        .table-btn { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 60px; padding: 12px 24px; font-size: 20px; font-weight: bold; cursor: pointer; transition: all 0.2s; min-width: 70px; text-align: center; }
+        .table-btn:hover { transform: scale(1.05); border-color: var(--color-livrets); }
+        .table-btn.selected { background: var(--color-livrets); color: white; border-color: var(--color-livrets); }
+        .operation-large { font-size: 64px; font-weight: bold; text-align: center; font-family: monospace; background: #f8fafc; padding: 32px; border-radius: 24px; margin: 20px 0; }
+        .timer-bar { height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; margin: 16px 0; }
+        .timer-fill { height: 100%; background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444); width: 100%; transition: width 0.1s linear; }
+        .speak-btn { background: #fef3c7; border: none; border-radius: 50%; width: 48px; height: 48px; font-size: 24px; cursor: pointer; }
     </style>
 </head>
 <body>
-
-    <header class="page-header">
-        <div class="header-container">
-            <div class="header-title">
-                <div class="header-icon" style="background: linear-gradient(145deg, #f59e0b, #d97706);">
-                    <span>✖️</span>
-                </div>
-                <div>
-                    <h1>Tables de multiplication</h1>
-                    <p>Deviens incollable sur les livrets</p>
-                </div>
-            </div>
-            <a href="index.html" class="btn-secondary" style="text-decoration: none;">
-                ↩ Quitter
-            </a>
-        </div>
-    </header>
-
+    <header class="page-header"><div class="header-container">
+        <div class="header-title"><div class="header-icon" style="background:linear-gradient(135deg,var(--color-livrets),#fbbf24);">✖️</div>
+        <div><h1>Tables de multiplication</h1><p>Deviens incollable !</p></div></div>
+        <div style="display:flex;gap:12px;"><button id="btn-contrast" class="btn-contrast" onclick="toggleContrast()">👁️ Contraste+</button>
+        <a href="index.html" class="btn-secondary" style="text-decoration:none;">↩ Quitter</a></div>
+    </div></header>
     <main>
-        
-        <!-- ÉCRAN 1 : CHOIX DE LA TABLE -->
-        <div id="screen-config" class="game-card">
-            <div class="text-center mb-8">
-                <h2 style="font-size: 28px; font-weight: bold;">📚 Choisis ta table</h2>
-                <p style="color: #94a3b8;">Entraîne-toi sur une table ou plusieurs tables mélangées</p>
-            </div>
-            
-            <div class="table-selector">
-                <div onclick="selectionnerTable(2)" id="table-2" class="table-btn">2</div>
-                <div onclick="selectionnerTable(3)" id="table-3" class="table-btn">3</div>
-                <div onclick="selectionnerTable(4)" id="table-4" class="table-btn">4</div>
-                <div onclick="selectionnerTable(5)" id="table-5" class="table-btn">5</div>
-                <div onclick="selectionnerTable(6)" id="table-6" class="table-btn">6</div>
-                <div onclick="selectionnerTable(7)" id="table-7" class="table-btn">7</div>
-                <div onclick="selectionnerTable(8)" id="table-8" class="table-btn">8</div>
-                <div onclick="selectionnerTable(9)" id="table-9" class="table-btn">9</div>
-                <div onclick="selectionnerTable('mixte')" id="table-mixte" class="table-btn" style="grid-column: span 2;">🎲 TOUT MÉLANGÉ</div>
-            </div>
-            
-            <div style="margin: 24px 0;">
-                <label style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
-                    <input type="checkbox" id="option-minuteur" style="width: 20px; height: 20px;">
-                    <span>⏱️ Activer le minuteur (défi chronométré)</span>
-                </label>
-            </div>
-            
-            <button id="btn-start" onclick="demarrerJeu()" class="btn-primary w-full" disabled style="opacity: 0.5;">
-                🚀 Commencer le défi
-            </button>
+        <div id="screen-config" class="game-card"><div class="text-center"><h2 style="font-size:28px;">📚 Choisis ta table</h2><p>Entraîne-toi sur une ou plusieurs tables</p></div>
+            <div class="table-selector" id="tables-container"></div>
+            <div style="margin:20px 0;"><label style="display:flex;align-items:center;gap:10px;"><input type="checkbox" id="option-timer"> ⏱️ Mode chronométré (10 secondes)</label></div>
+            <button id="btn-start" onclick="demarrerJeu()" class="btn-primary w-full" disabled style="opacity:0.5;">🚀 Commencer</button>
         </div>
-        
-        <!-- ÉCRAN 2 : JEU -->
-        <div id="screen-game" class="hidden game-card">
-            <div class="flex justify-between items-center mb-6 pb-4" style="border-bottom: 1px solid #2e3e65;">
-                <div>
-                    <span id="table-actuelle" class="level-badge" style="background: #f59e0b;">Table x</span>
-                    <span style="margin-left: 12px; color: #94a3b8;">Question <span id="num-question">1</span>/10</span>
-                </div>
-                <div>
-                    <span style="color: #fbbf24;">🏆 Score</span>
-                    <span id="score" style="font-size: 24px; font-weight: bold; color: #fbbf24; margin-left: 8px;">0</span>
-                </div>
-            </div>
-            
-            <div id="timer-container" class="timer-bar hidden">
-                <div id="timer-fill" class="timer-fill"></div>
-            </div>
-            
-            <div class="operation-card">
-                <div class="operation" id="operation">8 × 7 = ?</div>
-                <div id="reponse-indice" class="reponse-indice"></div>
-            </div>
-            
-            <div class="numeric-pad">
-                <div class="num-key" onclick="ajouterChiffre('1')">1</div>
-                <div class="num-key" onclick="ajouterChiffre('2')">2</div>
-                <div class="num-key" onclick="ajouterChiffre('3')">3</div>
-                <div class="num-key" onclick="ajouterChiffre('4')">4</div>
-                <div class="num-key" onclick="ajouterChiffre('5')">5</div>
-                <div class="num-key" onclick="ajouterChiffre('6')">6</div>
-                <div class="num-key" onclick="ajouterChiffre('7')">7</div>
-                <div class="num-key" onclick="ajouterChiffre('8')">8</div>
-                <div class="num-key" onclick="ajouterChiffre('9')">9</div>
-                <div class="num-key" onclick="ajouterChiffre('0')">0</div>
-                <div class="num-key" onclick="effacerChiffre()">⌫</div>
-                <div class="num-key" onclick="validerReponse()" style="background: #f59e0b;">✅ OK</div>
-            </div>
-            
+        <div id="screen-game" class="hidden game-card"><div class="flex justify-between items-center mb-6"><div><span id="table-actuelle" class="level-badge" style="background:var(--color-livrets);">Table</span><span style="margin-left:12px;">Question <span id="num-question">1</span>/10</span></div><div><span style="color:var(--color-primary);">🏆 Score</span><span id="score" style="font-size:24px;font-weight:bold;margin-left:8px;">0</span></div></div>
+            <div id="timer-container" class="timer-bar hidden"><div id="timer-fill" class="timer-fill"></div></div>
+            <div class="text-right mb-2"><button class="speak-btn" onclick="parlerOperation()">🔊</button></div>
+            <div class="operation-large" id="operation">8 × 7 = ?</div>
+            <div class="numeric-pad"><div class="num-key" onclick="ajouter('1')">1</div><div class="num-key" onclick="ajouter('2')">2</div><div class="num-key" onclick="ajouter('3')">3</div><div class="num-key" onclick="ajouter('4')">4</div><div class="num-key" onclick="ajouter('5')">5</div><div class="num-key" onclick="ajouter('6')">6</div><div class="num-key" onclick="ajouter('7')">7</div><div class="num-key" onclick="ajouter('8')">8</div><div class="num-key" onclick="ajouter('9')">9</div><div class="num-key" onclick="ajouter('0')">0</div><div class="num-key" onclick="effacer()">⌫</div><div class="num-key" onclick="valider()" style="background:var(--color-livrets);">✅ OK</div></div>
             <div id="feedback" class="feedback hidden"></div>
         </div>
-        
-        <!-- ÉCRAN 3 : RÉSULTATS -->
-        <div id="screen-result" class="hidden game-card text-center">
-            <h2 style="font-size: 32px; margin-bottom: 16px;">🏆 Défi terminé !</h2>
-            
-            <div style="background: #090d16; border-radius: 24px; padding: 32px; max-width: 300px; margin: 24px auto;">
-                <p style="color: #94a3b8; margin-bottom: 8px;">Ton score</p>
-                <p style="font-size: 56px; font-weight: bold; color: #fbbf24;"><span id="score-final">0</span>/10</p>
-                <p id="temps-final" style="font-size: 14px; color: #64748b; margin-top: 12px;"></p>
-            </div>
-            
-            <p id="message-final" style="font-size: 18px; margin-bottom: 32px;"></p>
-            
-            <div style="display: flex; gap: 16px; justify-content: center;">
-                <button onclick="rejouer()" class="btn-secondary">🔄 Rejouer</button>
-                <button onclick="changerTable()" class="btn-primary">📚 Changer de table</button>
-            </div>
-        </div>
-        
+        <div id="screen-result" class="hidden game-card text-center"><h2 style="font-size:32px;">🏆 Défi terminé !</h2><div style="background:#f8fafc;border-radius:24px;padding:32px;max-width:300px;margin:24px auto;"><p>Ton score</p><p style="font-size:56px;font-weight:bold;color:var(--color-primary);"><span id="score-final">0</span>/10</p></div><p id="message-final"></p><div style="display:flex;gap:16px;justify-content:center;"><button onclick="rejouer()" class="btn-secondary">🔄 Rejouer</button><button onclick="changerTable()" class="btn-primary">📚 Changer</button><a href="index.html" class="btn-primary" style="text-decoration:none;">🏠 Accueil</a></div></div>
     </main>
-
     <script>
-        // ============================================================
-        // LIVRETS.HTML - TABLES DE MULTIPLICATION
-        // ============================================================
-        // BUT : S'entraîner sur les tables de multiplication
-        //       (2 à 9, ou toutes mélangées)
-        // ============================================================
-        
-        // ---------- 1. CONFIGURATION ----------
-        const nomEleve = new URLSearchParams(window.location.search).get('eleve') || sessionStorage.getItem('nomEleve') || "Explorateur";
-        
-        let tableChoisie = null;        // 2,3,4,... ou 'mixte'
-        let avecMinuteur = false;
-        let score = 0;
-        let questionActuelle = 1;
-        let reponseCourante = "";
-        let operationCourante = {};
-        
-        // Variables pour le minuteur
-        let timerInterval = null;
-        let tempsRestant = 10;  // 10 secondes par question
-        let tempsTotal = 0;
-        
-        // ---------- 2. SÉLECTION DE LA TABLE ----------
-        function selectionnerTable(table) {
-            // Enlever la classe 'selected' de toutes les tables
-            const tables = [2,3,4,5,6,7,8,9,'mixte'];
-            for (let t of tables) {
-                const el = document.getElementById(`table-${t}`);
-                if (el) el.classList.remove('selected');
-            }
-            // Ajouter la classe 'selected' à la table choisie
-            document.getElementById(`table-${table}`).classList.add('selected');
-            tableChoisie = table;
-            
-            // Activer le bouton démarrer
-            const btnStart = document.getElementById('btn-start');
-            btnStart.disabled = false;
-            btnStart.style.opacity = '1';
-            btnStart.style.cursor = 'pointer';
-        }
-        
-        // ---------- 3. DÉMARRAGE ----------
-        function demarrerJeu() {
-            avecMinuteur = document.getElementById('option-minuteur').checked;
-            
-            // Réinitialiser
-            score = 0;
-            questionActuelle = 1;
-            reponseCourante = "";
-            tempsTotal = 0;
-            
-            // Afficher la table choisie
-            const texteTable = tableChoisie === 'mixte' ? '🎲 TOUTES LES TABLES' : `Table ×${tableChoisie}`;
-            document.getElementById('table-actuelle').innerText = texteTable;
-            document.getElementById('score').innerText = score;
-            document.getElementById('num-question').innerText = questionActuelle;
-            
-            // Afficher ou cacher le minuteur
-            const timerContainer = document.getElementById('timer-container');
-            if (avecMinuteur) {
-                timerContainer.classList.remove('hidden');
-            } else {
-                timerContainer.classList.add('hidden');
-            }
-            
-            // Changer d'écran
-            document.getElementById('screen-config').classList.add('hidden');
-            document.getElementById('screen-game').classList.remove('hidden');
-            
-            // Générer la première question
-            genererQuestion();
-        }
-        
-        // ---------- 4. GÉNÉRATION D'UNE QUESTION ----------
-        function genererQuestion() {
-            if (questionActuelle > 10) {
-                terminerJeu();
-                return;
-            }
-            
-            // Réinitialiser la réponse
-            reponseCourante = "";
-            document.getElementById('reponse-indice').innerText = "";
-            
-            // Cacher le feedback
-            const feedback = document.getElementById('feedback');
-            feedback.classList.add('hidden');
-            
-            // Générer les nombres selon la table choisie
-            let multiplicateur;
-            let multiplicande;
-            
-            if (tableChoisie === 'mixte') {
-                // Table aléatoire entre 2 et 9
-                multiplicateur = Math.floor(Math.random() * 8) + 2; // 2 à 9
-                multiplicande = Math.floor(Math.random() * 10) + 1; // 1 à 10
-            } else {
-                multiplicateur = tableChoisie;
-                multiplicande = Math.floor(Math.random() * 10) + 1;
-            }
-            
-            const reponse = multiplicateur * multiplicande;
-            
-            operationCourante = {
-                texte: `${multiplicateur} × ${multiplicande}`,
-                reponse: reponse
-            };
-            
-            document.getElementById('operation').innerHTML = `${multiplicateur} × ${multiplicande} = ?`;
-            
-            // Démarrer le minuteur si activé
-            if (avecMinuteur) {
-                demarrerMinuteur();
-            }
-        }
-        
-        // ---------- 5. MINUTEUR ----------
-        function demarrerMinuteur() {
-            if (timerInterval) clearInterval(timerInterval);
-            
-            tempsRestant = 10;
-            const timerFill = document.getElementById('timer-fill');
-            timerFill.style.width = '100%';
-            
-            timerInterval = setInterval(() => {
-                tempsRestant -= 0.1;
-                const pourcentage = (tempsRestant / 10) * 100;
-                timerFill.style.width = `${Math.max(0, pourcentage)}%`;
-                
-                if (tempsRestant <= 0) {
-                    // Temps écoulé
-                    clearInterval(timerInterval);
-                    timerInterval = null;
-                    
-                    // Réponse incorrecte
-                    afficherFeedback(`⏰ Temps écoulé ! La réponse était ${operationCourante.reponse}.`, false);
-                    
-                    // Passer à la question suivante
-                    setTimeout(() => {
-                        questionActuelle++;
-                        document.getElementById('num-question').innerText = questionActuelle;
-                        genererQuestion();
-                    }, 2000);
-                }
-            }, 100);
-        }
-        
-        function arreterMinuteur() {
-            if (timerInterval) {
-                clearInterval(timerInterval);
-                timerInterval = null;
-            }
-        }
-        
-        // ---------- 6. PAVÉ NUMÉRIQUE ----------
-        function ajouterChiffre(chiffre) {
-            if (reponseCourante.length < 3) {  // Max 3 chiffres (9×9=81)
-                reponseCourante += chiffre;
-                document.getElementById('reponse-indice').innerText = reponseCourante;
-            }
-        }
-        
-        function effacerChiffre() {
-            reponseCourante = reponseCourante.slice(0, -1);
-            document.getElementById('reponse-indice').innerText = reponseCourante;
-        }
-        
-        // Raccourci clavier Entrée
-        document.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && document.getElementById('screen-game').classList.contains('hidden') === false) {
-                validerReponse();
-            }
-        });
-        
-        // ---------- 7. VALIDATION ----------
-        function validerReponse() {
-            // Arrêter le minuteur
-            arreterMinuteur();
-            
-            const reponseEleve = parseInt(reponseCourante);
-            
-            if (isNaN(reponseEleve)) {
-                afficherFeedback("❌ Tape une réponse avec les boutons !", false);
-                // Redémarrer le minuteur
-                if (avecMinuteur) demarrerMinuteur();
-                return;
-            }
-            
-            const estCorrect = (reponseEleve === operationCourante.reponse);
-            
-            if (estCorrect) {
-                score++;
-                const pointsGagnes = avecMinuteur ? Math.ceil(tempsRestant) : 10;
-                afficherFeedback(`✅ BRAVO ! ${operationCourante.reponse} est correct ! +${pointsGagnes} points`, true);
-            } else {
-                afficherFeedback(`❌ Oups ! ${operationCourante.reponse} était la bonne réponse.`, false);
-            }
-            
-            // Mettre à jour l'affichage
-            document.getElementById('score').innerText = score;
-            
-            // Désactiver les boutons le temps du feedback
-            const boutons = document.querySelectorAll('.num-key');
-            boutons.forEach(btn => btn.style.pointerEvents = 'none');
-            
-            // Passer à la question suivante
-            setTimeout(() => {
-                questionActuelle++;
-                document.getElementById('num-question').innerText = questionActuelle;
-                genererQuestion();
-                boutons.forEach(btn => btn.style.pointerEvents = 'auto');
-            }, 2000);
-        }
-        
-        function afficherFeedback(message, estSucces) {
-            const feedback = document.getElementById('feedback');
-            feedback.innerText = message;
-            feedback.className = `feedback ${estSucces ? 'success' : 'error'}`;
-            feedback.classList.remove('hidden');
-        }
-        
-        // ---------- 8. FIN DU JEU ----------
-        function terminerJeu() {
-            arreterMinuteur();
-            
-            document.getElementById('screen-game').classList.add('hidden');
-            document.getElementById('screen-result').classList.remove('hidden');
-            
-            document.getElementById('score-final').innerText = score;
-            
-            // Message personnalisé
-            let message = "";
-            if (score === 10) {
-                message = "🏆 PARFAIT ! Tu connais toutes tes tables sur le bout des doigts ! 🏆";
-            } else if (score >= 7) {
-                message = "🎉 Très bien ! Continue à t'entraîner, tu deviendras incollable ! 🎉";
-            } else if (score >= 5) {
-                message = "👍 Pas mal ! Revois les tables où tu as eu faux et réessaie ! 👍";
-            } else {
-                message = "💪 Ce n'est que le début ! Entraîne-toi régulièrement, tu vas progresser ! 💪";
-            }
-            document.getElementById('message-final').innerHTML = message;
-            
-            // Sauvegarder le score
-            sauvegarderScore();
-        }
-        
-        function sauvegarderScore() {
-            const scores = JSON.parse(localStorage.getItem('scores_eleves') || '[]');
-            scores.push({
-                nomEleve: nomEleve,
-                exercice: `Tables de multiplication - ${tableChoisie === 'mixte' ? 'Toutes' : `Table ×${tableChoisie}`}`,
-                corrects: score,
-                total: 10,
-                timestamp: Date.now()
-            });
-            localStorage.setItem('scores_eleves', JSON.stringify(scores));
-            
-            console.log(`✅ Score sauvegardé : ${score}/10 pour ${nomEleve}`);
-        }
-        
-        function rejouer() {
-            score = 0;
-            questionActuelle = 1;
-            document.getElementById('screen-result').classList.add('hidden');
-            document.getElementById('screen-game').classList.remove('hidden');
-            genererQuestion();
-        }
-        
-        function changerTable() {
-            document.getElementById('screen-result').classList.add('hidden');
-            document.getElementById('screen-config').classList.remove('hidden');
-            
-            // Réinitialiser la sélection
-            tableChoisie = null;
-            const btnStart = document.getElementById('btn-start');
-            btnStart.disabled = true;
-            btnStart.style.opacity = '0.5';
-        }
-        
+        const nomEleve = new URLSearchParams(window.location.search).get('eleve') || "Explorateur";
+        let tableChoisie=null,avecTimer=false,score=0,q=1,reponseCourante="",op={texte:"",reponse:0},timer=null,tempsRestant=10;
+        function afficherTables(){const tables=[2,3,4,5,6,7,8,9];const container=document.getElementById('tables-container');container.innerHTML=tables.map(t=>`<div onclick="choisirTable(${t})" id="table-${t}" class="table-btn">${t}</div>`).join('')+`<div onclick="choisirTable('mixte')" id="table-mixte" class="table-btn">🎲 TOUT</div>`;}
+        function choisirTable(t){[2,3,4,5,6,7,8,9,'mixte'].forEach(i=>{const el=document.getElementById(`table-${i}`);if(el)el.classList.remove('selected');});document.getElementById(`table-${t}`).classList.add('selected');tableChoisie=t;const btn=document.getElementById('btn-start');btn.disabled=false;btn.style.opacity='1';}
+        function demarrerJeu(){avecTimer=document.getElementById('option-timer').checked;score=0;q=1;document.getElementById('score').innerText=score;document.getElementById('num-question').innerText=q;const txt=tableChoisie==='mixte'?'🎲 TOUTES':'Table ×'+tableChoisie;document.getElementById('table-actuelle').innerText=txt;if(avecTimer)document.getElementById('timer-container').classList.remove('hidden');else document.getElementById('timer-container').classList.add('hidden');document.getElementById('screen-config').classList.add('hidden');document.getElementById('screen-game').classList.remove('hidden');genererQuestion();}
+        function genererQuestion(){if(q>10){terminer();return;}document.getElementById('num-question').innerText=q;document.getElementById('feedback').classList.add('hidden');reponseCourante="";document.getElementById('reponse-indice')&&(document.getElementById('reponse-indice').innerText="");let a,b;if(tableChoisie==='mixte'){a=Math.floor(Math.random()*8)+2;b=Math.floor(Math.random()*10)+1;}else{a=tableChoisie;b=Math.floor(Math.random()*10)+1;}op={texte:`${a} × ${b}`,reponse:a*b};document.getElementById('operation').innerHTML=`${a} × ${b} = ?`;if(avecTimer)demarrerTimer();}
+        function demarrerTimer(){if(timer)clearInterval(timer);tempsRestant=10;const fill=document.getElementById('timer-fill');fill.style.width='100%';timer=setInterval(()=>{tempsRestant-=0.1;fill.style.width=`${Math.max(0,(tempsRestant/10)*100)}%`;if(tempsRestant<=0){clearInterval(timer);timer=null;afficherFeedback(`⏰ Temps écoulé ! La réponse était ${op.reponse}`,false);setTimeout(()=>{q++;genererQuestion();},2000);}},100);}
+        function arreterTimer(){if(timer){clearInterval(timer);timer=null;}}
+        function ajouter(c){if(reponseCourante.length<3)reponseCourante+=c;document.getElementById('operation').innerHTML=op.texte+' = '+reponseCourante;}
+        function effacer(){reponseCourante=reponseCourante.slice(0,-1);document.getElementById('operation').innerHTML=op.texte+' = '+reponseCourante;}
+        function valider(){arreterTimer();const rep=parseInt(reponseCourante);if(isNaN(rep)){afficherFeedback("❌ Entre un nombre !",false);if(avecTimer)demarrerTimer();return;}const correct=(rep===op.reponse);if(correct){score++;afficherFeedback(`✅ BRAVO ! ${op.reponse} est correct ! +1 point`,true);}else{afficherFeedback(`❌ Oups ! La bonne réponse était ${op.reponse}`,false);}document.getElementById('score').innerText=score;document.querySelectorAll('.num-key').forEach(b=>b.style.pointerEvents='none');setTimeout(()=>{q++;genererQuestion();document.querySelectorAll('.num-key').forEach(b=>b.style.pointerEvents='auto');},2000);}
+        function afficherFeedback(m,s){const fb=document.getElementById('feedback');fb.innerText=m;fb.className=`feedback ${s?'success':'error'}`;fb.classList.remove('hidden');}
+        function terminer(){document.getElementById('screen-game').classList.add('hidden');document.getElementById('screen-result').classList.remove('hidden');document.getElementById('score-final').innerText=score;let msg=score===10?"🏆 PARFAIT !":score>=7?"🎉 Très bien !":score>=5?"👍 Pas mal !":"💪 Continue !";document.getElementById('message-final').innerHTML=msg;sauvegarderScore();}
+        function sauvegarderScore(){const scores=JSON.parse(localStorage.getItem(`scores_${nomEleve}`)||'[]');scores.push({jeu:"livrets",score:score,total:10,date:Date.now()});localStorage.setItem(`scores_${nomEleve}`,JSON.stringify(scores));if(window.parent&&window.parent.ajouterScore)window.parent.ajouterScore(nomEleve,"livrets",score,10);}
+        function rejouer(){score=0;q=1;document.getElementById('screen-result').classList.add('hidden');document.getElementById('screen-game').classList.remove('hidden');genererQuestion();}
+        function changerTable(){document.getElementById('screen-result').classList.add('hidden');document.getElementById('screen-config').classList.remove('hidden');tableChoisie=null;document.getElementById('btn-start').disabled=true;document.getElementById('btn-start').style.opacity='0.5';}
+        function parlerOperation(){if('speechSynthesis' in window){const u=new SpeechSynthesisUtterance(`Combien fait ${op.texte} ?`);u.lang='fr-FR';u.rate=0.9;window.speechSynthesis.cancel();window.speechSynthesis.speak(u);}}
+        function toggleContrast(){document.body.classList.toggle('high-contrast');localStorage.setItem('highContrast',document.body.classList.contains('high-contrast'));}
+        afficherTables();if(localStorage.getItem('highContrast')==='true')document.body.classList.add('high-contrast');
     </script>
 </body>
 </html>
