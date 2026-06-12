@@ -32,8 +32,7 @@
             border: 1px solid #2e3e65;
             font-weight: 900;
             transition: all 0.1s;
-            /* touch-action: manipulation empêche le double-tap-to-zoom parasite sur iPad */
-            touch-action: manipulation; 
+            touch-action: manipulation; /* Évite le zoom parasite sur iPad */
         }
         .key-btn:active {
             background-color: #0e1422;
@@ -41,7 +40,7 @@
         }
     </style>
     <script type="module">
-        // --- CONNEXION ET CONFIGURATION DE LA BASE DE DONNÉES FIREBASE ---
+        // --- CONFIGURATION ET INITIALISATION DE FIREBASE ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
@@ -58,7 +57,7 @@
         const db = getFirestore(app);
         const appId = "classe-primaire-2026";
 
-        // Fonction globale permettant d'envoyer le score de l'élève à l'enseignant
+        // Fonction pour envoyer les résultats de l'élève sur votre base Firestore
         async function enregistrerScoreFirebase(exercice, corrects, fautes) {
             const urlParams = new URLSearchParams(window.location.search);
             const nomEleve = urlParams.get('eleve') || sessionStorage.getItem('nomEleve') || "Anonyme";
@@ -93,36 +92,66 @@
         </div>
     </header>
 
-    <main class="flex-grow max-w-md w-full mx-auto px-4 py-6 flex flex-col justify-center">
+    <main class="flex-grow max-w-md w-full mx-auto px-4 py-6 flex flex-col justify-center space-y-4">
         
-        <div id="game-card" class="game-card rounded-2xl p-6 border shadow-xl space-y-6">
+        <div id="setup-card" class="game-card rounded-2xl p-6 border shadow-xl space-y-4">
+            <h2 class="text-xl font-black text-white uppercase tracking-wide text-center">Sélection des livrets</h2>
+            <p class="text-xs text-slate-400 text-center">Cochez les tables que vous voulez travailler :</p>
+            
+            <div id="grid-selection" class="grid grid-cols-3 gap-2 py-2"></div>
+
+            <button onclick="demarrerMission()" class="btn-game-active w-full bg-cyan-600 hover:bg-cyan-500 text-white font-black py-4 rounded-xl text-xs uppercase tracking-widest border border-cyan-400/30 shadow-lg">
+                Lancer la Mission 🧭
+            </button>
+        </div>
+
+        <div id="game-card" class="game-card rounded-2xl p-6 border shadow-xl space-y-4 hidden">
             <div class="flex justify-between items-center border-b border-slate-800 pb-3">
                 <span class="text-xs font-bold text-slate-500 uppercase tracking-widest">Calcul <span id="num-question" class="text-cyan-400 font-black">1</span> / 10</span>
                 <span class="text-xs font-bold text-slate-500 uppercase tracking-widest">Score : <span id="score-actuel" class="text-emerald-400 font-black">0</span></span>
             </div>
 
             <div class="text-center">
-                <div id="enonce" class="text-4xl font-black text-white tracking-wider font-mono bg-[#090d16] inline-block px-8 py-4 rounded-2xl border border-slate-800 shadow-inner mb-4">
-                    -- × --
+                <div id="enonce" class="text-4xl font-black text-white tracking-wider font-mono bg-[#090d16] inline-block px-8 py-4 rounded-2xl border border-slate-800 shadow-inner mb-2">
+                    -- · --
                 </div>
-                <div class="h-12 flex justify-center items-center">
+                <div class="h-10 flex justify-center items-center">
                     <span id="reponse-visuelle" class="text-3xl font-black text-cyan-400 tracking-widest font-mono"></span>
                 </div>
             </div>
 
-            <div class="grid grid-cols-3 gap-2">
-                <button onclick="pressKey(1)" class="key-btn text-white py-4 rounded-xl text-xl">1</button>
-                <button onclick="pressKey(2)" class="key-btn text-white py-4 rounded-xl text-xl">2</button>
-                <button onclick="pressKey(3)" class="key-btn text-white py-4 rounded-xl text-xl">3</button>
-                <button onclick="pressKey(4)" class="key-btn text-white py-4 rounded-xl text-xl">4</button>
-                <button onclick="pressKey(5)" class="key-btn text-white py-4 rounded-xl text-xl">5</button>
-                <button onclick="pressKey(6)" class="key-btn text-white py-4 rounded-xl text-xl">6</button>
-                <button onclick="pressKey(7)" class="key-btn text-white py-4 rounded-xl text-xl">7</button>
-                <button onclick="pressKey(8)" class="key-btn text-white py-4 rounded-xl text-xl">8</button>
-                <button onclick="pressKey(9)" class="key-btn text-white py-4 rounded-xl text-xl">9</button>
-                <button onclick="pressKey('C')" class="key-btn text-rose-400 py-4 rounded-xl text-base uppercase">Effacer</button>
-                <button onclick="pressKey(0)" class="key-btn text-white py-4 rounded-xl text-xl">0</button>
-                <button onclick="validerReponse()" class="key-btn bg-cyan-950 text-cyan-400 border-cyan-800/80 py-4 rounded-xl text-base uppercase">OK</button>
+            <div class="grid grid-cols-2 gap-2">
+                <button onclick="toggleAideVisuelle()" class="bg-slate-900 border border-slate-800 text-amber-400 font-bold py-2 px-3 rounded-xl text-xs hover:bg-slate-800 transition-all">
+                    💡 Aide Visuelle (Points)
+                </button>
+                <button onclick="toggleTableAide()" class="bg-slate-900 border border-slate-800 text-sky-400 font-bold py-2 px-3 rounded-xl text-xs hover:bg-slate-800 transition-all">
+                    📋 Afficher la Table
+                </button>
+            </div>
+
+            <div id="aide-visuelle-container" class="bg-[#090d16] p-4 rounded-xl border border-slate-800 hidden">
+                <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-3 text-center">Représentation (Colonnes × Lignes)</p>
+                <div id="dot-matrix" class="grid gap-1.5 p-2 bg-slate-950 rounded-lg border border-slate-900 justify-center"></div>
+            </div>
+
+            <div id="table-aide-container" class="bg-[#090d16] p-4 rounded-xl border border-slate-800 text-center hidden">
+                <h4 id="table-aide-titre" class="text-xs font-bold text-sky-400 mb-2 uppercase tracking-wide"></h4>
+                <div id="table-aide-contenu" class="text-xs text-slate-300 grid grid-cols-2 gap-1 text-left max-w-[200px] mx-auto font-mono"></div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 pt-2">
+                <button onclick="pressKey(1)" class="key-btn text-white py-3.5 rounded-xl text-xl">1</button>
+                <button onclick="pressKey(2)" class="key-btn text-white py-3.5 rounded-xl text-xl">2</button>
+                <button onclick="pressKey(3)" class="key-btn text-white py-3.5 rounded-xl text-xl">3</button>
+                <button onclick="pressKey(4)" class="key-btn text-white py-3.5 rounded-xl text-xl">4</button>
+                <button onclick="pressKey(5)" class="key-btn text-white py-3.5 rounded-xl text-xl">5</button>
+                <button onclick="pressKey(6)" class="key-btn text-white py-3.5 rounded-xl text-xl">6</button>
+                <button onclick="pressKey(7)" class="key-btn text-white py-3.5 rounded-xl text-xl">7</button>
+                <button onclick="pressKey(8)" class="key-btn text-white py-3.5 rounded-xl text-xl">8</button>
+                <button onclick="pressKey(9)" class="key-btn text-white py-3.5 rounded-xl text-xl">9</button>
+                <button onclick="pressKey('C')" class="key-btn text-rose-400 py-3.5 rounded-xl text-xs uppercase tracking-wider">Effacer</button>
+                <button onclick="pressKey(0)" class="key-btn text-white py-3.5 rounded-xl text-xl">0</button>
+                <button onclick="validerReponse()" class="key-btn bg-cyan-950 text-cyan-400 border-cyan-800/80 py-3.5 rounded-xl text-sm uppercase tracking-wider">OK</button>
             </div>
 
             <div id="feedback" class="text-center font-bold text-sm h-6"></div>
@@ -145,50 +174,92 @@
         let questionActuelle = 1;
         let facteur1, facteur2, reponseCorrecte;
         let saisieActuelle = "";
-        let blocageSaisie = false; // Permet d'éviter le double-clic pendant le retour de correction
+        let blocageSaisie = false; // Bloque le clavier durant les 2s d'affichage de la correction
+        let tablesSelectionnees = []; // Tableau qui va contenir les tables choisies par l'élève
 
-        // Récupération automatique du nom de l'élève connecté
+        // Récupération et affichage du nom de l'élève depuis l'URL ou la session
         const urlParams = new URLSearchParams(window.location.search);
         const nomEleve = urlParams.get('eleve') || sessionStorage.getItem('nomEleve') || "Explorateur";
         document.getElementById('affichage-nom').innerText = `Agent : ${nomEleve}`;
 
-        // Construction du calcul de multiplication aléatoire
+        // --- FONCTION : CRÉATION DU FORMULAIRE DE SÉLECTION AU CHARGEMENT ---
+        function preparerEcranSelection() {
+            const container = document.getElementById('grid-selection');
+            container.innerHTML = "";
+            // On génère des cases à cocher pour les livrets de 2 à 12
+            for (let i = 2; i <= 12; i++) {
+                const label = document.createElement('label');
+                label.className = "flex items-center justify-center gap-2 p-3 bg-[#172033] border border-slate-700 rounded-xl cursor-pointer hover:border-cyan-500 transition-all text-xs font-bold text-slate-300";
+                label.innerHTML = `
+                    <input type="checkbox" value="${i}" class="w-4 h-4 accent-cyan-500">
+                    <span>L. ${i}</span>
+                `;
+                container.appendChild(label);
+            }
+        }
+
+        // --- FONCTION : TRANSITION DE L'ÉCRAN DE SÉLECTION VERS LE JEU ---
+        function demarrerMission() {
+            const casesCochees = document.querySelectorAll('#grid-selection input:checked');
+            tablesSelectionnees = Array.from(casesCochees).map(box => parseInt(box.value));
+
+            // Si l'élève n'a rien coché, on lui met un avertissement et on bloque
+            if (tablesSelectionnees.length === 0) {
+                alert("Choisis au moins un livret pour commencer l'exercice !");
+                return;
+            }
+
+            // Changement d'affichage des boîtes (Masquer la configuration, afficher le jeu)
+            document.getElementById('setup-card').classList.add('hidden');
+            document.getElementById('game-card').classList.remove('hidden');
+
+            genererCalcul();
+        }
+
+        // --- FONCTION : CRÉATION D'UNE QUESTION ALÉATOIRE ---
         function genererCalcul() {
             if (questionActuelle > 10) {
                 terminerPartie();
                 return;
             }
-            blocageSaisie = false; // On débloque la saisie pour la nouvelle question
+            // Réinitialisation de l'état graphique pour le nouveau calcul
+            blocageSaisie = false;
             document.getElementById('num-question').innerText = questionActuelle;
             document.getElementById('feedback').innerText = '';
             saisieActuelle = "";
             document.getElementById('reponse-visuelle').innerText = "";
+            
+            // On replie automatiquement les volets d'aides ouverts au calcul précédent
+            document.getElementById('aide-visuelle-container').classList.add('hidden');
+            document.getElementById('table-aide-container').classList.add('hidden');
 
-            facteur1 = Math.floor(Math.random() * 8) + 2; 
-            facteur2 = Math.floor(Math.random() * 9) + 1; 
+            // On pioche une table au hasard parmi la sélection faite par l'élève
+            facteur1 = tablesSelectionnees[Math.floor(Math.random() * tablesSelectionnees.length)];
+            // On génère le multiplicateur (de 1 à 10)
+            facteur2 = Math.floor(Math.random() * 10) + 1; 
             reponseCorrecte = facteur1 * facteur2;
 
-            document.getElementById('enonce').innerText = `${facteur1} × ${facteur2}`;
+            // Affichage avec le POINT MÉDIAN (·) à la place de la croix
+            document.getElementById('enonce').innerText = `${facteur1} · ${facteur2}`;
         }
 
-        // Fonction qui reçoit les entrées numériques (pavé virtuel OU clavier physique)
+        // --- FONCTION : RECEPTION DES ENTRÉES DU PAVÉ NUMÉRIQUE OU CLAVIER ---
         function pressKey(touche) {
-            if (blocageSaisie) return; // Si on attend la question suivante, on ignore l'action
+            if (blocageSaisie) return;
 
             if (touche === 'C' || touche === 'Backspace') {
                 saisieActuelle = "";
             } else {
-                // Limite la saisie à 3 chiffres maximum (ex: 12 × 9 = 108)
                 if (saisieActuelle.length < 3) saisieActuelle += touche.toString();
             }
             document.getElementById('reponse-visuelle').innerText = saisieActuelle;
         }
 
-        // Validation du résultat fourni
+        // --- FONCTION : ANALYSE ET CORRECTION DE LA RÉPONSE ---
         function validerReponse() {
             if (saisieActuelle === "" || blocageSaisie) return;
             
-            blocageSaisie = true; // On bloque temporairement pour éviter le spam sur iPad/Clavier
+            blocageSaisie = true; // Verrouille les inputs pour éviter le double-clic parasite
             const reponseEleve = parseInt(saisieActuelle);
             const fb = document.getElementById('feedback');
 
@@ -198,38 +269,81 @@
                 fb.innerText = "⚡ Flux Intègre ! +1 Donnée.";
             } else {
                 fb.className = "text-center font-bold text-sm text-rose-400";
-                fb.innerText = `❌ Corruption. La clé était ${reponseCorrecte}`;
+                // Remplacement du mot cassant "Corruption" par une phrase d'analyse bienveillante
+                fb.innerText = `🔍 Oups, analyse incomplète. La bonne clé était ${reponseCorrecte}`;
             }
 
             document.getElementById('score-actuel').innerText = score;
             questionActuelle++;
-            
-            // Délai de transition de 2 secondes avant la question suivante
             setTimeout(genererCalcul, 2000);
         }
 
-        // =======================================================
-        // NOUVEAU BLOC : ÉCOUTEUR DU CLAVIER PHYSIQUE POUR PC/MAC
-        // =======================================================
-        window.addEventListener('keydown', function(event) {
-            // Si l'écran de fin est affiché, on n'écoute plus le clavier
-            if (questionActuelle > 10) return;
+        // --- FONCTION : CONSTRUIRE ET PASSER L'AFFICHAGE DE LA MATRICE DE POINTS ---
+        function toggleAideVisuelle() {
+            const box = document.getElementById('aide-visuelle-container');
+            if (!box.classList.contains('hidden')) {
+                box.classList.add('hidden');
+                return;
+            }
 
-            // Détecte si la touche pressée est un chiffre entre 0 et 9
+            const matrix = document.getElementById('dot-matrix');
+            matrix.innerHTML = "";
+            
+            // Établissement des colonnes CSS fondé sur la valeur du premier facteur (Ex: 4 colonnes)
+            matrix.style.gridTemplateColumns = `repeat(${facteur1}, minmax(0, 1fr))`;
+
+            // On génère le nombre total de points requis (Ex: 4 x 6 = 24 points dessinés)
+            const totalPoints = facteur1 * facteur2;
+            for (let i = 0; i < totalPoints; i++) {
+                const dot = document.createElement('div');
+                dot.className = "w-2.5 h-2.5 rounded-full bg-cyan-400 mx-0.5";
+                matrix.appendChild(dot);
+            }
+
+            box.classList.remove('hidden');
+        }
+
+        // --- FONCTION : CONSTRUIRE ET PASSER L'AFFICHAGE DE LA TABLE D'AIDE ---
+        function toggleTableAide() {
+            const box = document.getElementById('table-aide-container');
+            if (!box.classList.contains('hidden')) {
+                box.classList.add('hidden');
+                return;
+            }
+
+            document.getElementById('table-aide-titre').innerText = `Livret de ${facteur1}`;
+            const contenu = document.getElementById('table-aide-contenu');
+            contenu.innerHTML = "";
+
+            // Écriture des 10 lignes du livret en cours de calcul
+            for (let i = 1; i <= 10; i++) {
+                const ligne = document.createElement('div');
+                // Si la ligne correspond exactement au multiplicateur recherché, on la met en surbrillance ambre
+                if (i === facteur2) {
+                    ligne.className = "text-amber-400 font-bold bg-slate-900/60 px-1 rounded";
+                }
+                ligne.innerText = `${facteur1} · ${i} = ${facteur1 * i}`;
+                contenu.appendChild(ligne);
+            }
+
+            box.classList.remove('hidden');
+        }
+
+        // --- GESTIONNAIRE D'ÉVÉNEMENT CLAVIER (iPad + Ordinateur) ---
+        window.addEventListener('keydown', function(event) {
+            // Désactive les écoutes si l'élève est sur l'écran de fin ou l'écran de sélection
+            if (document.getElementById('game-card').classList.contains('hidden')) return;
+
             if (event.key >= '0' && event.key <= '9') {
                 pressKey(parseInt(event.key));
-            } 
-            // Détecte si l'élève utilise la touche d'effacement
-            else if (event.key === 'Backspace' || event.key === 'Delete') {
+            } else if (event.key === 'Backspace' || event.key === 'Delete') {
                 pressKey('C');
-            } 
-            // Détecte si l'élève valide avec la touche Entrée
-            else if (event.key === 'Enter') {
+            } else if (event.key === 'Enter') {
                 validerReponse();
             }
         });
 
-        // Fin de l'exercice et affichage du bilan
+        // Bilan de fin de session d'exercice
         async function terminerPartie() {
             document.getElementById('game-card').classList.add('hidden');
             document.getElementById('end-card').classList.remove('hidden');
@@ -243,8 +357,8 @@
             }
         }
 
-        // Démarrage initial du jeu au chargement de la page
-        genererCalcul();
+        // Commande d'initialisation automatique au lancement de la page
+        preparerEcranSelection();
     </script>
 </body>
 </html>
