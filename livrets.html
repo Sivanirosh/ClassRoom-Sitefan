@@ -5,10 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Secteur : Les Livrets — Hub de Mission</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <link rel="stylesheet" href="style.css">
-    
+    <style>
+        body {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            line-height: 1.65;
+            letter-spacing: 0.04em;
+            background-color: #0b0f19;
+            color: #f1f5f9;
+        }
+        p, span, label, button { letter-spacing: 0.04em; }
+        .game-card {
+            background: linear-gradient(145deg, #161d30, #0f1524);
+            border: 1px solid #24324f;
+        }
+        .btn-game-active {
+            transform: translateY(0);
+            box-shadow: 0 4px 0px 0px #05070f;
+            transition: all 0.1s ease;
+        }
+        .btn-game-active:active {
+            transform: translateY(4px);
+            box-shadow: 0 0px 0px 0px #05070f;
+        }
+        .key-btn {
+            background-color: #172033;
+            border: 1px solid #2e3e65;
+            font-weight: 900;
+            transition: all 0.1s;
+            /* touch-action: manipulation empêche le double-tap-to-zoom parasite sur iPad */
+            touch-action: manipulation; 
+        }
+        .key-btn:active {
+            background-color: #0e1422;
+            transform: scale(0.95);
+        }
+    </style>
     <script type="module">
+        // --- CONNEXION ET CONFIGURATION DE LA BASE DE DONNÉES FIREBASE ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
@@ -25,6 +58,7 @@
         const db = getFirestore(app);
         const appId = "classe-primaire-2026";
 
+        // Fonction globale permettant d'envoyer le score de l'élève à l'enseignant
         async function enregistrerScoreFirebase(exercice, corrects, fautes) {
             const urlParams = new URLSearchParams(window.location.search);
             const nomEleve = urlParams.get('eleve') || sessionStorage.getItem('nomEleve') || "Anonyme";
@@ -76,7 +110,6 @@
                 </div>
             </div>
 
-            <!-- Pavé Tactique Intégré -->
             <div class="grid grid-cols-3 gap-2">
                 <button onclick="pressKey(1)" class="key-btn text-white py-4 rounded-xl text-xl">1</button>
                 <button onclick="pressKey(2)" class="key-btn text-white py-4 rounded-xl text-xl">2</button>
@@ -112,16 +145,20 @@
         let questionActuelle = 1;
         let facteur1, facteur2, reponseCorrecte;
         let saisieActuelle = "";
+        let blocageSaisie = false; // Permet d'éviter le double-clic pendant le retour de correction
 
+        // Récupération automatique du nom de l'élève connecté
         const urlParams = new URLSearchParams(window.location.search);
         const nomEleve = urlParams.get('eleve') || sessionStorage.getItem('nomEleve') || "Explorateur";
         document.getElementById('affichage-nom').innerText = `Agent : ${nomEleve}`;
 
+        // Construction du calcul de multiplication aléatoire
         function genererCalcul() {
             if (questionActuelle > 10) {
                 terminerPartie();
                 return;
             }
+            blocageSaisie = false; // On débloque la saisie pour la nouvelle question
             document.getElementById('num-question').innerText = questionActuelle;
             document.getElementById('feedback').innerText = '';
             saisieActuelle = "";
@@ -134,17 +171,24 @@
             document.getElementById('enonce').innerText = `${facteur1} × ${facteur2}`;
         }
 
+        // Fonction qui reçoit les entrées numériques (pavé virtuel OU clavier physique)
         function pressKey(touche) {
-            if (touche === 'C') {
+            if (blocageSaisie) return; // Si on attend la question suivante, on ignore l'action
+
+            if (touche === 'C' || touche === 'Backspace') {
                 saisieActuelle = "";
             } else {
+                // Limite la saisie à 3 chiffres maximum (ex: 12 × 9 = 108)
                 if (saisieActuelle.length < 3) saisieActuelle += touche.toString();
             }
             document.getElementById('reponse-visuelle').innerText = saisieActuelle;
         }
 
+        // Validation du résultat fourni
         function validerReponse() {
-            if (saisieActuelle === "") return;
+            if (saisieActuelle === "" || blocageSaisie) return;
+            
+            blocageSaisie = true; // On bloque temporairement pour éviter le spam sur iPad/Clavier
             const reponseEleve = parseInt(saisieActuelle);
             const fb = document.getElementById('feedback');
 
@@ -159,9 +203,33 @@
 
             document.getElementById('score-actuel').innerText = score;
             questionActuelle++;
+            
+            // Délai de transition de 2 secondes avant la question suivante
             setTimeout(genererCalcul, 2000);
         }
 
+        // =======================================================
+        // NOUVEAU BLOC : ÉCOUTEUR DU CLAVIER PHYSIQUE POUR PC/MAC
+        // =======================================================
+        window.addEventListener('keydown', function(event) {
+            // Si l'écran de fin est affiché, on n'écoute plus le clavier
+            if (questionActuelle > 10) return;
+
+            // Détecte si la touche pressée est un chiffre entre 0 et 9
+            if (event.key >= '0' && event.key <= '9') {
+                pressKey(parseInt(event.key));
+            } 
+            // Détecte si l'élève utilise la touche d'effacement
+            else if (event.key === 'Backspace' || event.key === 'Delete') {
+                pressKey('C');
+            } 
+            // Détecte si l'élève valide avec la touche Entrée
+            else if (event.key === 'Enter') {
+                validerReponse();
+            }
+        });
+
+        // Fin de l'exercice et affichage du bilan
         async function terminerPartie() {
             document.getElementById('game-card').classList.add('hidden');
             document.getElementById('end-card').classList.remove('hidden');
@@ -175,6 +243,7 @@
             }
         }
 
+        // Démarrage initial du jeu au chargement de la page
         genererCalcul();
     </script>
 </body>
