@@ -12,6 +12,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
+        // Configuration d'accès à la base de données Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyAvXQI3f34J5htG-t9kroM4ynIqCgO9xXI",
             authDomain: "ma-classe-179de.firebaseapp.com",
@@ -21,11 +22,13 @@
             appId: "1:413792574665:web:87c29e054af287018e0118"
         };
 
+        // Initialisation des modules Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const appId = "classe-primaire-2026";
 
-        async function enregistrerScoreFirebase(exercice, corrects, fautes) {
+        // Fonction pour envoyer les résultats de l'élève vers Firebase Firestore
+        async function enregistrerScoreFirebase(exercice, corrects, fautes, niveauxChoisis) {
             const urlParams = new URLSearchParams(window.location.search);
             const nomEleve = urlParams.get('eleve') || sessionStorage.getItem('nomEleve') || "Anonyme";
             
@@ -35,6 +38,7 @@
                     exercice: exercice,
                     corrects: corrects,
                     fautes: fautes,
+                    niveaux: niveauxChoisis, // Enregistre aussi les niveaux testés
                     timestamp: Date.now()
                 });
                 console.log("Rapport transmis au QG.");
@@ -42,12 +46,11 @@
                 console.error("Erreur d'émission du rapport:", e);
             }
         }
+        // Rendre la fonction disponible globalement pour le script classique
         window.enregistrerScoreFirebase = enregistrerScoreFirebase;
     </script>
 </head>
-<body class="min-h-screen flex flex-col antialiased">
-
-    <header class="bg-[#0e1422] border-b border-slate-800 py-4 shadow-lg">
+<body class="min-h-screen flex flex-col antialiased bg-[#090d16]"> <header class="bg-[#0e1422] border-b border-slate-800 py-4 shadow-lg">
         <div class="max-w-6xl mx-auto px-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <div class="bg-gradient-to-br from-amber-500 to-orange-600 text-white p-2 rounded-xl border border-amber-400/30">
@@ -66,9 +69,50 @@
 
     <main class="flex-grow max-w-6xl w-full mx-auto px-4 py-6 flex flex-col lg:flex-row gap-6">
         
-        <!-- Zone de Jeu Principale -->
         <section class="flex-grow lg:w-2/3 flex flex-col gap-6">
-            <div id="game-card" class="game-card rounded-2xl p-6 border shadow-xl flex-grow flex flex-col justify-between">
+
+            <div id="level-card" class="bg-[#111726] border border-slate-800 rounded-2xl p-6 shadow-xl flex-grow flex flex-col justify-between">
+                <div>
+                    <div class="border-b border-slate-800 pb-3 mb-6">
+                        <h2 class="text-xl font-black text-white uppercase tracking-wide">🛰️ Configuration des paramètres de vol</h2>
+                        <p class="text-xs font-bold text-slate-400 tracking-wider mt-1">Sélectionne un ou plusieurs niveaux de difficulté pour débuter la mission.</p>
+                    </div>
+
+                    <div class="space-y-4 my-6">
+                        <label class="flex items-start gap-4 p-4 bg-[#090d16] border border-slate-800 rounded-xl cursor-pointer hover:border-amber-500/50 transition-all block">
+                            <input type="checkbox" id="lvl-1" checked class="w-5 h-5 mt-0.5 accent-amber-500 rounded border-slate-700 bg-slate-800">
+                            <div>
+                                <span class="block text-sm font-black text-white uppercase tracking-wide">Niveau 1</span>
+                                <span class="block text-xs text-slate-400 mt-0.5">Addition ou Soustraction : <span class="text-amber-400 font-semibold">un seul</span> nombre à virgule (1 décimale). ex: 12 + 4.5</span>
+                            </div>
+                        </label>
+
+                        <label class="flex items-start gap-4 p-4 bg-[#090d16] border border-slate-800 rounded-xl cursor-pointer hover:border-amber-500/50 transition-all block">
+                            <input type="checkbox" id="lvl-2" class="w-5 h-5 mt-0.5 accent-amber-500 rounded border-slate-700 bg-slate-800">
+                            <div>
+                                <span class="block text-sm font-black text-white uppercase tracking-wide">Niveau 2</span>
+                                <span class="block text-xs text-slate-400 mt-0.5">Addition ou Soustraction : <span class="text-amber-400 font-semibold">deux</span> nombres à virgule (1 décimale). ex: 14.2 - 6.7</span>
+                            </div>
+                        </label>
+
+                        <label class="flex items-start gap-4 p-4 bg-[#090d16] border border-slate-800 rounded-xl cursor-pointer hover:border-amber-500/50 transition-all block">
+                            <input type="checkbox" id="lvl-3" class="w-5 h-5 mt-0.5 accent-amber-500 rounded border-slate-700 bg-slate-800">
+                            <div>
+                                <span class="block text-sm font-black text-white uppercase tracking-wide">Niveau 3</span>
+                                <span class="block text-xs text-slate-400 mt-0.5">Addition ou Soustraction : <span class="text-amber-400 font-semibold">deux</span> nombres à virgule (2 décimales). ex: 24.15 + 7.82</span>
+                            </div>
+                        </label>
+                    </div>
+                    
+                    <div id="error-level" class="text-center font-bold text-xs text-rose-400 h-5 mb-2"></div>
+                </div>
+
+                <button onclick="lancerMission()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-black px-4 py-4 rounded-xl text-xs uppercase tracking-widest border border-indigo-400/30 shadow-lg transition-all">
+                    Enclencher la propulsion 🚀
+                </button>
+            </div>
+        
+            <div id="game-card" class="bg-[#111726] border border-slate-800 rounded-2xl p-6 shadow-xl flex-grow flex flex-col justify-between hidden">
                 <div>
                     <div class="flex justify-between items-center mb-6 border-b border-slate-800 pb-3">
                         <span class="text-xs font-bold text-slate-500 uppercase tracking-widest">Question <span id="num-question" class="text-amber-400 font-black">1</span> / 10</span>
@@ -86,10 +130,10 @@
                 <div class="space-y-4">
                     <div>
                         <label for="reponse" class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 text-center">Saisis ta réponse de précision :</label>
-                        <input type="number" step="0.01" id="reponse" autofocus class="w-full text-center bg-[#172033] border-2 border-slate-700 text-white rounded-2xl px-4 py-4 font-black text-2xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 focus:outline-none transition-all placeholder-slate-600" placeholder="0.00">
+                        <input type="number" step="0.01" id="reponse" class="w-full text-center bg-[#172033] border-2 border-slate-700 text-white rounded-2xl px-4 py-4 font-black text-2xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 focus:outline-none transition-all placeholder-slate-600" placeholder="0.00">
                     </div>
                     
-                    <button onclick="validerReponse()" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-black px-4 py-4 rounded-xl text-xs uppercase tracking-widest border border-amber-400/30 shadow-lg btn-game-active">
+                    <button id="btn-soumettre" onclick="validerReponse()" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-black px-4 py-4 rounded-xl text-xs uppercase tracking-widest border border-amber-400/30 shadow-lg btn-game-active transition-all disabled:opacity-50 disabled:cursor-not-allowed">
                         Soumettre le calcul ⚔️
                     </button>
                     
@@ -97,8 +141,7 @@
                 </div>
             </div>
 
-            <!-- Écran Fin de Mission -->
-            <div id="end-card" class="game-card rounded-2xl p-8 border shadow-xl text-center hidden space-y-6">
+            <div id="end-card" class="bg-[#111726] border border-slate-800 rounded-2xl p-8 shadow-xl text-center hidden space-y-6">
                 <h2 class="text-2xl font-black text-white uppercase tracking-wide">🏁 Mission Terminée !</h2>
                 <p class="text-slate-400 text-sm">Votre rapport d'exactitude a été transmis en direct sur la console maître.</p>
                 <div class="bg-[#090d16] p-6 rounded-2xl border border-slate-800 max-w-xs mx-auto">
@@ -112,7 +155,6 @@
             </div>
         </section>
 
-        <!-- Ardoise Tactique Latérale -->
         <aside class="lg:w-1/3 flex flex-col gap-3">
             <div class="flex justify-between items-center">
                 <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest">📝 Ardoise Tactique de brouillon</h3>
@@ -127,47 +169,120 @@
     </main>
 
     <script>
+        // Déclaration des variables globales de contrôle du jeu
         let score = 0;
         let questionActuelle = 1;
         let reponseCorrecte = 0;
+        let lockValidation = false; // Verrou anti-double clic
+        let niveauxActifs = [];    // Tableau stockant les niveaux choisis par l'élève
 
+        // Récupération de l'identité de l'élève (Correction syntaxe .getItem)
         const urlParams = new URLSearchParams(window.location.search);
-        const nomEleve = urlParams.get('eleve') || sessionStorage.getNomEleve || "Explorateur";
+        const nomEleve = urlParams.get('eleve') || sessionStorage.getItem('nomEleve') || "Explorateur";
         document.getElementById('affichage-nom').innerText = `Agent : ${nomEleve}`;
 
+        // FONCTION : Validation de l'écran des niveaux et lancement de l'exercice
+        function lancerMission() {
+            niveauxActifs = [];
+            if(document.getElementById('lvl-1').checked) niveauxActifs.push(1);
+            if(document.getElementById('lvl-2').checked) niveauxActifs.push(2);
+            if(document.getElementById('lvl-3').checked) niveauxActifs.push(3);
+
+            // Sécurité : Vérifie qu'au moins une case est cochée
+            if(niveauxActifs.length === 0) {
+                document.getElementById('error-level').innerText = "❌ Activation impossible : Choisis au moins un niveau.";
+                return;
+            }
+
+            // Transition visuelle des blocs d'interface
+            document.getElementById('level-card').classList.add('hidden');
+            document.getElementById('game-card').classList.remove('hidden');
+            
+            // Initialisation de la première question
+            genererQuestion();
+        }
+
+        // FONCTION : Génération aléatoire d'une opération basée sur les niveaux cochés
         function genererQuestion() {
             if (questionActuelle > 10) {
                 terminerPartie();
                 return;
             }
+            
+            // Réinitialisation et déverrouillage des inputs/boutons
+            lockValidation = false;
+            document.getElementById('btn-soumettre').disabled = false;
+            document.getElementById('reponse').disabled = false;
+            
             document.getElementById('num-question').innerText = questionActuelle;
             document.getElementById('reponse').value = '';
             document.getElementById('feedback').innerText = '';
 
+            // Sélection aléatoire d'un niveau parmi ceux cochés par l'élève
+            let indexAleatoire = Math.floor(Math.random() * niveauxActifs.length);
+            let niveauChoisiPourCetteQuestion = niveauxActifs[indexAleatoire];
+
             let num1, num2, operation;
-            if (Math.random() > 0.5) {
+            // Détermination du type d'opération (+ ou -)
+            operation = Math.random() > 0.5 ? '+' : '-';
+
+            // ALGORITHME DE CRÉATION DES NOMBRES SELON LE NIVEAU SELECTIONNÉ
+            if (niveauChoisiPourCetteQuestion === 1) {
+                // Niveau 1 : Un entier et un décimal à 1 chiffre après la virgule
+                if (Math.random() > 0.5) {
+                    num1 = (Math.random() * 50 + 10).toFixed(1); // Décimal
+                    num2 = Math.floor(Math.random() * 40 + 5).toString(); // Entier
+                } else {
+                    num1 = Math.floor(Math.random() * 80 + 20).toString(); // Entier
+                    num2 = (Math.random() * 19 + 1).toFixed(1); // Décimal
+                }
+            } 
+            else if (niveauChoisiPourCetteQuestion === 2) {
+                // Niveau 2 : Deux décimaux à 1 chiffre après la virgule
                 num1 = (Math.random() * 50 + 10).toFixed(1);
                 num2 = (Math.random() * 40 + 5).toFixed(1);
-                operation = '+';
-                reponseCorrecte = (parseFloat(num1) + parseFloat(num2)).toFixed(1);
-            } else {
-                num1 = (Math.random() * 80 + 20).toFixed(1);
-                num2 = (Math.random() * 19 + 1).toFixed(1);
-                operation = '-';
-                reponseCorrecte = (parseFloat(num1) - parseFloat(num2)).toFixed(1);
+            } 
+            else if (niveauChoisiPourCetteQuestion === 3) {
+                // Niveau 3 : Deux décimaux à 2 chiffres après la virgule
+                num1 = (Math.random() * 50 + 10).toFixed(2);
+                num2 = (Math.random() * 40 + 5).toFixed(2);
             }
 
+            // Calcul de la réponse attendue en évitant les résidus binaires JS (.toFixed)
+            if (operation === '+') {
+                reponseCorrecte = (parseFloat(num1) + parseFloat(num2)).toFixed(niveauChoisiPourCetteQuestion === 3 ? 2 : 1);
+            } else {
+                // Pour la soustraction, on s'assure d'un résultat positif pour le confort des élèves
+                if (parseFloat(num1) < parseFloat(num2)) {
+                    let temp = num1; num1 = num2; num2 = temp;
+                }
+                reponseCorrecte = (parseFloat(num1) - parseFloat(num2)).toFixed(niveauChoisiPourCetteQuestion === 3 ? 2 : 1);
+            }
+
+            // Injection textuelle dans l'interface & focus automatique
             document.getElementById('enonce').innerText = `${num1} ${operation} ${num2}`;
-            clearCanvas();
+            clearCanvas(); // Nettoie le brouillon pour la nouvelle question
+            document.getElementById('reponse').focus();
         }
 
+        // FONCTION : Vérification de la réponse soumise par l'élève
         function validerReponse() {
-            const reponseEleve = parseFloat(document.getElementById('reponse').value);
+            if (lockValidation) return; // Empêche le spam-click (sécurité)
+
+            const inputReponse = document.getElementById('reponse');
+            const reponseEleve = parseFloat(inputReponse.value);
             const fb = document.getElementById('feedback');
+            const btn = document.getElementById('btn-soumettre');
 
             if (isNaN(reponseEleve)) return;
 
-            if (Math.abs(reponseEleve - parseFloat(reponseCorrecte)) < 0.01) {
+            // Enclenchement du verrou temporel
+            lockValidation = true;
+            btn.disabled = true;
+            inputReponse.disabled = true;
+
+            // Analyse de précision de la réponse
+            if (Math.abs(reponseEleve - parseFloat(reponseCorrecte)) < 0.001) {
                 score++;
                 fb.className = "text-center font-bold text-sm text-emerald-400";
                 fb.innerText = "⚡ Analyse Correcte ! +1 Alignement";
@@ -176,11 +291,20 @@
                 fb.innerText = `❌ Anomalie détectée. La cible était ${reponseCorrecte}`;
             }
 
+            // Actualisation du score en direct, incrémentation et planification de la suite
             document.getElementById('score-actuel').innerText = score;
             questionActuelle++;
-            setTimeout(genererQuestion, 2000);
+            setTimeout(genererQuestion, 2000); // 2 secondes de battement pour lire le feedback
         }
 
+        // ÉCOUTEUR CLAVIER : Validation automatique à l'appui sur "Entrée"
+        document.getElementById('reponse').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                validerReponse();
+            }
+        });
+
+        // FONCTION : Clôture de la partie et envoi Firebase
         async function terminerPartie() {
             document.getElementById('game-card').classList.add('hidden');
             document.getElementById('end-card').classList.remove('hidden');
@@ -189,24 +313,40 @@
             let appreciation = score >= 8 ? "🏆 Victoire éclatante ! Excellents calculs." : "⚔️ Objectif incomplet. Poursuis l'entraînement.";
             document.getElementById('appreciation').innerText = appreciation;
 
+            // Transmission des scores agrémentée des niveaux cochés au format chaîne (ex: "Niveau 1, Niveau 2")
             if (typeof window.enregistrerScoreFirebase === 'function') {
-                await window.enregistrerScoreFirebase("Calcul Décimal", score, 10 - score);
+                let txtNiveaux = niveauxActifs.map(n => "Niveau " + n).join(", ");
+                await window.enregistrerScoreFirebase(`Calcul Décimal (${txtNiveaux})`, score, 10 - score, niveauxActifs);
             }
         }
 
-        // Script Ardoise Tactique
+        // ==========================================
+        // GESTION DE L'ARDOISE MAGIQUE (CANVAS HTML5)
+        // ==========================================
         const canvas = document.getElementById('brouillonCanvas');
         const ctx = canvas.getContext('2d');
         let drawing = false;
 
+        // Ajuste la taille du tableau de dessin sans effacer le croquis actuel
         function resizeCanvas() {
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = canvas.width;
+            tempCanvas.height = canvas.height;
+            const tempCtx = tempCanvas.getContext('2d');
+            tempCtx.drawImage(canvas, 0, 0);
+
             canvas.width = canvas.parentElement.clientWidth - 16;
             canvas.height = canvas.parentElement.clientHeight - 16;
+            
+            // Redéfinition stylistique de la brosse de dessin
             ctx.strokeStyle = '#38bdf8';
             ctx.lineWidth = 3;
             ctx.lineCap = 'round';
+
+            ctx.drawImage(tempCanvas, 0, 0);
         }
 
+        // Capture les coordonnées précises (Souris ou Doigt sur Écran Tactile)
         function getPos(e) {
             const rect = canvas.getBoundingClientRect();
             const clientX = e.touches ? e.touches[0].clientX : e.clientX;
@@ -214,8 +354,11 @@
             return { x: clientX - rect.left, y: clientY - rect.top };
         }
 
+        // Débute le tracé sur le canvas
         function startDraw(e) { drawing = true; draw(e); }
+        // Arrête le tracé
         function stopDraw() { drawing = false; ctx.beginPath(); }
+        // Dessine la ligne point par point
         function draw(e) {
             if (!drawing) return;
             e.preventDefault();
@@ -226,8 +369,10 @@
             ctx.moveTo(pos.x, pos.y);
         }
 
+        // Efface complètement la zone de brouillon
         function clearCanvas() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
 
+        // Écouteurs d'événements pour Souris et Écrans Tactiles (Tablettes)
         canvas.addEventListener('mousedown', startDraw);
         canvas.addEventListener('mouseup', stopDraw);
         canvas.addEventListener('mousemove', draw);
@@ -235,9 +380,9 @@
         canvas.addEventListener('touchend', stopDraw);
         canvas.addEventListener('touchmove', draw);
 
+        // Suivi du redimensionnement de la fenêtre
         window.addEventListener('resize', resizeCanvas);
         setTimeout(resizeCanvas, 300);
-        genererQuestion();
     </script>
 </body>
 </html>
