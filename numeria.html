@@ -201,7 +201,7 @@
                 try {
                     gameState = JSON.parse(saved);
                 } catch(e) {
-                    console.error(\"Erreur de chargement\", e);
+                    console.error("Erreur de chargement", e);
                 }
             }
             if(!gameState.playerName) {
@@ -460,9 +460,8 @@
         }
 
         window.onload = () => {
-            loadGame();
-            showScreen('screen-hub');
-        }
+    loadGame(); // Laisse l'application décider seule de l'écran de départ
+}
     </script>
 </body>
 </html>
