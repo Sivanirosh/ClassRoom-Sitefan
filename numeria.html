@@ -5,13 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Les Royaumes Perdus de Numéria</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans">
 
     <div id="screen-welcome" class="container mx-auto px-4 py-8 max-w-xl text-center hidden">
-        <div class="game-card mb-6">
+        <div class="game-card mb-6 bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
             <h1 class="text-3xl font-black text-sky-400 mb-2 tracking-wide">⚔️ NUMÉRIA ⚔️</h1>
             <p class="text-sm uppercase tracking-widest text-slate-400 mb-6">Les Royaumes Perdus du Calcul</p>
             
@@ -27,7 +26,7 @@
                 <input type="text" id="player-name" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-center text-xl font-bold text-white focus:outline-none focus:border-sky-500 transition" placeholder="Votre Prénom...">
             </div>
 
-            <button onclick="startGame()" class="btn-game-active w-full bg-sky-600 hover:bg-sky-500 text-white font-bold py-4 rounded-xl text-lg shadow-lg">
+            <button onclick="startGame()" class="w-full bg-sky-600 hover:bg-sky-500 text-white font-bold py-4 rounded-xl text-lg shadow-lg transition transform hover:-translate-y-0.5">
                 Établir la Connexion ⚡
             </button>
         </div>
@@ -40,7 +39,7 @@
                 <span id="display-player-name" class="font-bold text-lg text-white">---</span>
             </div>
             <div class="flex gap-2">
-                <button onclick="showScreen('screen-codex')" class="btn-game-active bg-slate-800 border border-slate-700 text-amber-400 font-bold px-4 py-2 rounded-lg text-sm">
+                <button onclick="renderCodex(); showScreen('screen-codex');" class="bg-slate-800 border border-slate-700 text-amber-400 font-bold px-4 py-2 rounded-lg text-sm hover:bg-slate-700 transition">
                     📜 Codex
                 </button>
                 <button onclick="resetGame()" class="bg-rose-950/30 border border-rose-900/50 text-rose-400 text-xs px-3 py-2 rounded-lg hover:bg-rose-900/20 transition">
@@ -58,7 +57,7 @@
             ⬅️ Retour au Hub des Royaumes
         </button>
         
-        <div class="game-card text-center mb-6">
+        <div class="game-card bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl text-center mb-6">
             <h2 id="realm-title" class="text-2xl font-black text-sky-400 mb-2">---</h2>
             <p id="realm-desc" class="text-sm text-slate-400 mb-6">---</p>
             
@@ -67,7 +66,7 @@
     </div>
 
     <div id="screen-game" class="container mx-auto px-4 py-6 max-w-md hidden">
-        <div class="game-card text-center">
+        <div class="game-card bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl text-center">
             <div class="flex justify-between items-center text-xs text-slate-400 mb-4">
                 <span id="game-mission-title" class="font-bold uppercase tracking-wider text-sky-400">Mission</span>
                 <span>Question <span id="current-q">1</span> / 10</span>
@@ -82,18 +81,18 @@
             </div>
 
             <div class="grid grid-cols-3 gap-2 mb-4">
-                <button onclick="pressKey('1')" class="btn-game-active bg-slate-800 border border-slate-700 font-bold py-3 text-xl rounded-lg text-white">1</button>
-                <button onclick="pressKey('2')" class="btn-game-active bg-slate-800 border border-slate-700 font-bold py-3 text-xl rounded-lg text-white">2</button>
-                <button onclick="pressKey('3')" class="btn-game-active bg-slate-800 border border-slate-700 font-bold py-3 text-xl rounded-lg text-white">3</button>
-                <button onclick="pressKey('4')" class="btn-game-active bg-slate-800 border border-slate-700 font-bold py-3 text-xl rounded-lg text-white">4</button>
-                <button onclick="pressKey('5')" class="btn-game-active bg-slate-800 border border-slate-700 font-bold py-3 text-xl rounded-lg text-white">5</button>
-                <button onclick="pressKey('6')" class="btn-game-active bg-slate-800 border border-slate-700 font-bold py-3 text-xl rounded-lg text-white">6</button>
-                <button onclick="pressKey('7')" class="btn-game-active bg-slate-800 border border-slate-700 font-bold py-3 text-xl rounded-lg text-white">7</button>
-                <button onclick="pressKey('8')" class="btn-game-active bg-slate-800 border border-slate-700 font-bold py-3 text-xl rounded-lg text-white">8</button>
-                <button onclick="pressKey('9')" class="btn-game-active bg-slate-800 border border-slate-700 font-bold py-3 text-xl rounded-lg text-white">9</button>
-                <button onclick="pressKey('CLR')" class="btn-game-active bg-rose-950/50 border border-rose-900/50 text-rose-400 font-bold py-3 rounded-lg">Effacer</button>
-                <button onclick="pressKey('0')" class="btn-game-active bg-slate-800 border border-slate-700 font-bold py-3 text-xl rounded-lg text-white">0</button>
-                <button onclick="pressKey('OK')" class="btn-game-active bg-emerald-600 border border-emerald-500 text-white font-bold py-3 rounded-lg text-lg">Valider</button>
+                <button onclick="pressKey('1')" class="bg-slate-800 border border-slate-700 font-bold py-3 text-xl rounded-lg text-white hover:bg-slate-700 transition">1</button>
+                <button onclick="pressKey('2')" class="bg-slate-800 border border-slate-700 font-bold py-3 text-xl rounded-lg text-white hover:bg-slate-700 transition">2</button>
+                <button onclick="pressKey('3')" class="bg-slate-800 border border-slate-700 font-bold py-3 text-xl rounded-lg text-white hover:bg-slate-700 transition">3</button>
+                <button onclick="pressKey('4')" class="bg-slate-800 border border-slate-700 font-bold py-3 text-xl rounded-lg text-white hover:bg-slate-700 transition">4</button>
+                <button onclick="pressKey('5')" class="bg-slate-800 border border-slate-700 font-bold py-3 text-xl rounded-lg text-white hover:bg-slate-700 transition">5</button>
+                <button onclick="pressKey('6')" class="bg-slate-800 border border-slate-700 font-bold py-3 text-xl rounded-lg text-white hover:bg-slate-700 transition">6</button>
+                <button onclick="pressKey('7')" class="bg-slate-800 border border-slate-700 font-bold py-3 text-xl rounded-lg text-white hover:bg-slate-700 transition">7</button>
+                <button onclick="pressKey('8')" class="bg-slate-800 border border-slate-700 font-bold py-3 text-xl rounded-lg text-white hover:bg-slate-700 transition">8</button>
+                <button onclick="pressKey('9')" class="bg-slate-800 border border-slate-700 font-bold py-3 text-xl rounded-lg text-white hover:bg-slate-700 transition">9</button>
+                <button onclick="pressKey('CLR')" class="bg-rose-950/50 border border-rose-900/50 text-rose-400 font-bold py-3 rounded-lg hover:bg-rose-900/40 transition">Effacer</button>
+                <button onclick="pressKey('0')" class="bg-slate-800 border border-slate-700 font-bold py-3 text-xl rounded-lg text-white hover:bg-slate-700 transition">0</button>
+                <button onclick="pressKey('OK')" class="bg-emerald-600 border border-emerald-500 text-white font-bold py-3 rounded-lg text-lg hover:bg-emerald-500 transition">Valider</button>
             </div>
 
             <div id="game-feedback" class="text-center font-bold text-sm h-6"></div>
@@ -101,7 +100,7 @@
     </div>
 
     <div id="screen-result" class="container mx-auto px-4 py-6 max-w-md hidden">
-        <div class="game-card text-center">
+        <div class="game-card bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl text-center">
             <h2 class="text-2xl font-black text-white mb-2">Rapport de Mission</h2>
             <p id="result-status-text" class="text-sm text-slate-400 mb-6">Épreuve terminée</p>
 
@@ -111,7 +110,7 @@
                 <div class="text-sm text-slate-300">Score final : <span id="result-score" class="font-bold text-sky-400">0</span> / 10</div>
             </div>
 
-            <button onclick="finishMissionSummary()" class="btn-game-active w-full bg-sky-600 hover:bg-sky-500 text-white font-bold py-3 rounded-xl">
+            <button onclick="finishMissionSummary()" class="w-full bg-sky-600 hover:bg-sky-500 text-white font-bold py-3 rounded-xl transition">
                 Continuer l'Aventure 🧭
             </button>
         </div>
@@ -122,7 +121,7 @@
             ⬅️ Retour au Hub
         </button>
         
-        <div class="game-card">
+        <div class="game-card bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
             <h2 class="text-2xl font-black text-amber-400 mb-2 text-center">📜 Le Codex des Anciens</h2>
             <p class="text-xs text-center text-slate-400 mb-6">Objets sacrés récupérés lors de vos victoires de Boss</p>
             
@@ -218,16 +217,16 @@
         }
 
         function resetGame() {
-            if(confirm(\"Voulez-vous vraiment effacer votre progression dans Numéria ?\")) {
+            if(confirm("Voulez-vous vraiment effacer votre progression dans Numéria ?")) {
                 localStorage.removeItem('numeria_save_v1');
-                gameState = { playerName: \"\", progress: {}, unlockedCodex: [] };
+                gameState = { playerName: "", progress: {}, unlockedCodex: [] };
                 showScreen('screen-welcome');
             }
         }
 
         function startGame() {
             const input = document.getElementById('player-name').value.trim();
-            if(!input) return alert(\"Inscris ton nom pour commencer ton voyage !\");
+            if(!input) return alert("Inscris ton nom pour commencer ton voyage !");
             gameState.playerName = input;
             document.getElementById('display-player-name').innerText = input;
             saveGame();
@@ -237,11 +236,11 @@
 
         function renderHub() {
             const container = document.getElementById('realms-list');
-            container.innerHTML = \"\";
+            container.innerHTML = "";
 
             Object.values(REALMS).forEach(realm => {
                 const div = document.createElement('div');
-                div.className = \"game-card flex flex-col md:flex-row justify-between items-start md:items-center gap-4 cursor-pointer hover:border-sky-500 transition\";
+                div.className = "bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 cursor-pointer hover:border-sky-500 transition shadow-md shadow-black/20";
                 div.onclick = () => openRealm(realm.id);
 
                 let completedMissions = 0;
@@ -254,7 +253,7 @@
                         <h3 class="text-xl font-bold text-white mb-1">${realm.name}</h3>
                         <p class="text-sm text-slate-400">${realm.desc}</p>
                     </div>
-                    <div class="bg-slate-950/80 px-4 py-2 rounded-lg border border-slate-800 text-center font-bold text-xs tracking-wider text-sky-400">
+                    <div class="bg-slate-950/80 px-4 py-2 rounded-lg border border-slate-800 text-center font-bold text-xs tracking-wider text-sky-400 whitespace-nowrap">
                         ${completedMissions} / ${realm.missions.length} LIBÉRÉ
                     </div>
                 `;
@@ -268,7 +267,7 @@
             document.getElementById('realm-desc').innerText = realm.desc;
 
             const container = document.getElementById('missions-container');
-            container.innerHTML = \"\";
+            container.innerHTML = "";
 
             const playerRealmProgress = gameState.progress[realmId] || {};
 
@@ -284,15 +283,15 @@
                 const isBoss = i === realm.missions.length - 1;
 
                 const btn = document.createElement('button');
-                btn.className = `btn-game-active w-full p-4 rounded-xl font-medium flex justify-between items-center text-left ${
+                btn.className = `w-full p-4 rounded-xl font-medium flex justify-between items-center text-left transition ${
                     isLocked 
-                    ? 'bg-slate-900/40 text-slate-600 border border-slate-900/60 cursor-not-allowed opacity-40 shadow-none transform-none pointer-events-none' 
-                    : (isBoss ? 'bg-amber-950/30 text-amber-300 border border-amber-800/60' : 'bg-slate-900 text-slate-200 border border-slate-800')
+                    ? 'bg-slate-900/40 text-slate-600 border border-slate-900/60 cursor-not-allowed opacity-40 shadow-none pointer-events-none' 
+                    : (isBoss ? 'bg-amber-950/30 text-amber-300 border border-amber-800/60 hover:bg-amber-950/50' : 'bg-slate-950 text-slate-200 border border-slate-800 hover:border-slate-700')
                 }`;
                 
                 btn.innerHTML = `
-                    <span class="font-bold text-lg">${isBoss ? '🐉 Repaire du Gardien' : 'Mission ' + (i+1) + ' : ' + mission.label}</span>
-                    <span class="tracking-widest">${isLocked ? '🔒 Verrouillé' : (stars > 0 ? '⭐'.repeat(stars) : '○ ○ ○')}</span>
+                    <span class="font-bold text-base md:text-lg">${isBoss ? '🐉 Repaire du Gardien' : 'Mission ' + (i+1) + ' : ' + mission.label}</span>
+                    <span class="tracking-widest whitespace-nowrap ml-2">${isLocked ? '🔒' : (stars > 0 ? '⭐'.repeat(stars) : '○○○')}</span>
                 `;
                 if(!isLocked) btn.onclick = () => startMission(realmId, i);
                 container.appendChild(btn);
@@ -338,7 +337,7 @@
                 saisie: ""
             };
 
-            document.getElementById('game-mission-title').innerText = `${REALMS[realmId].name} - M.${missionId + 1}`;
+            document.getElementById('game-mission-title').innerText = `${REALMS[realmId].name.split(' ')[1]} - M.${missionId + 1}`;
             document.getElementById('game-input').value = "";
             document.getElementById('game-feedback').innerText = "";
             
@@ -385,7 +384,6 @@
                 fb.innerText = `❌ Parade. L'ancienne clé était ${questionCourante.a}`;
             }
 
-            // Désactivation temporaire
             currentActiveGame.index++;
             if(currentActiveGame.index < 10) {
                 setTimeout(() => {
@@ -406,7 +404,7 @@
             else if(currentActiveGame.score >= 5) stars = 1;
 
             document.getElementById('result-score').innerText = currentActiveGame.score;
-            document.getElementById('result-stars').innerText = "⭐".repeat(stars) + "Constants".substring(0, 3 - stars).replace(/./g, '○');
+            document.getElementById('result-stars').innerText = "⭐".repeat(stars) + "○○○".substring(0, 3 - stars);
 
             if(!gameState.progress[currentActiveGame.realmId]) {
                 gameState.progress[currentActiveGame.realmId] = {};
@@ -460,8 +458,8 @@
         }
 
         window.onload = () => {
-    loadGame(); // Laisse l'application décider seule de l'écran de départ
-}
+            loadGame();
+        }
     </script>
 </body>
 </html>
