@@ -8,47 +8,45 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
-        /* Style général de la page (Empêche le blanc pur agressif pour les yeux des élèves) */
+        /* Base de l'interface : évite la fatigue visuelle des élèves */
         body {
             background-color: #0b0f19;
             color: #f1f5f9;
             font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
 
-        /* La carte de jeu principale (Look SF / Espace avec un dégradé sombre) */
+        /* Cartes de l'interface en dégradé de style science-fiction */
         .game-card {
             background: linear-gradient(135deg, #161d30 0%, #0f1524 100%);
             border: 1px solid #24324f;
         }
 
-        /* Bouton Cyber 3D (Effet rétro tactile qui s'enfonce physiquement au clic / appui) */
+        /* Bouton Cyber 3D avec effet d'enfoncement tactile (idéal tablettes/iPad) */
         .btn-game-active {
             transform: translateY(0);
             box-shadow: 0 4px 0px 0px #05070f;
             transition: all 0.1s;
         }
-        /* Changement de position de l'élément au moment du clic actif */
         .btn-game-active:active:not(:disabled) {
             transform: translateY(4px);
             box-shadow: 0 0px 0px 0px #05070f;
         }
 
-        /* Boutons d'options du quiz (Optimisés pour éviter les bugs de latence iPad) */
+        /* Boutons d'options tactiles sans latence iOS */
         .option-btn {
-            touch-action: manipulation; /* Supprime le délai de latence de 300ms au toucher sur iOS */
+            touch-action: manipulation;
             background-color: #172033;
             border: 2px solid #2e3e65;
             transition: all 0.2s;
         }
-        /* Effet de surbrillance au survol de la souris */
         .option-btn:hover:not(:disabled) {
-            border-color: #22d3ee; /* Bordure Cyan */
+            border-color: #22d3ee;
         }
         
-        /* État appliqué lorsqu'un bouton de configuration est sélectionné par l'élève */
+        /* État visuel d'un choix sélectionné dans les menus */
         .option-selected {
-            background-color: #0e3f47 !important; /* Fond cyan très sombre */
-            border-color: #22d3ee !important; /* Bordure Cyan flash */
+            background-color: #0e3f47 !important;
+            border-color: #22d3ee !important;
             box-shadow: 0 0 12px rgba(34, 211, 238, 0.2);
         }
     </style>
@@ -57,7 +55,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Paramètres de connexion au projet Firebase de la classe
         const firebaseConfig = {
             apiKey: "AIzaSyAvXQI3f34J5htG-t9kroM4ynIqCgO9xXI",
             authDomain: "ma-classe-179de.firebaseapp.com",
@@ -67,33 +64,25 @@
             appId: "1:413792574665:web:87c29e054af287018e0118"
         };
 
-        // Initialisation de Firebase et de l'accès à la base Firestore
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const appId = "classe-primaire-2026"; // Identifiant de l'année scolaire en cours
+        const appId = "classe-primaire-2026";
 
-        /**
-         * Enregistre le résultat final d'un élève dans Firestore de manière asynchrone
-         */
         async function enregistrerScoreFirebase(exercice, corrects, fautes) {
-            // Récupère le nom de l'élève (soit dans l'URL, soit dans la session, soit valeur par défaut)
             const urlParams = new URLSearchParams(window.location.search);
             const nomEleve = urlParams.get('eleve') || sessionStorage.getItem('nomEleve') || "Anonyme";
-            
             try {
-                // Ajout d'un nouveau document dans la collection spécifiée
                 await addDoc(collection(db, `artifacts/${appId}/public/data/scores`), {
                     nomEleve: nomEleve,
                     exercice: exercice,
                     corrects: corrects,
                     fautes: fautes,
-                    timestamp: Date.now() // Permet de trier les résultats par ordre chronologique
+                    timestamp: Date.now()
                 });
             } catch (e) { 
-                console.error("Erreur critique de transmission Firebase:", e); 
+                console.error("Erreur Firebase:", e); 
             }
         }
-        // Attachement de la fonction à l'objet global Window pour la rendre accessible depuis les scripts standards
         window.enregistrerScoreFirebase = enregistrerScoreFirebase;
     </script>
 </head>
@@ -135,8 +124,8 @@
                 <label class="block text-xs font-bold text-amber-400 uppercase tracking-widest">2. Mode d'Analyse :</label>
                 <div class="grid grid-cols-2 gap-3">
                     <button onclick="selectMode('A')" id="btn-mode-A" class="mode-btn option-btn text-slate-200 font-bold py-3 px-2 rounded-xl text-sm tracking-wide">🔍 Qui suis-je ?</button>
-                    <button onclick="selectMode('B')" id="btn-mode-B" class="mode-btn option-btn text-slate-200 font-bold py-3 px-2 rounded-xl text-sm tracking-wide">⚠️ L'Intrus</button>
-                    <button onclick="selectMode('C')" id="btn-mode-C" class="mode-btn option-btn text-slate-200 font-bold py-3 px-2 rounded-xl text-sm tracking-wide">📦 Les Boîtes</button>
+                    <button onclick="selectMode('B')" id="btn-mode-B" class="mode-btn option-btn text-slate-200 font-bold py-3 px-2 rounded-xl text-sm tracking-wide">⚠️ L'Intrus Visuel</button>
+                    <button onclick="selectMode('C')" id="btn-mode-C" class="mode-btn option-btn text-slate-200 font-bold py-3 px-2 rounded-xl text-sm tracking-wide">📦 2D vs 3D</button>
                     <button onclick="selectMode('Mixte')" id="btn-mode-Mixte" class="mode-btn option-btn text-slate-200 font-bold py-3 px-2 rounded-xl text-sm tracking-wide">🎲 Aléatoire</button>
                 </div>
             </div>
@@ -153,24 +142,22 @@
                     <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Analyse <span id="num-question" class="text-cyan-400 font-black text-lg">1</span> / 10</span>
                     <span id="label-mode" class="bg-[#090d16] text-slate-300 px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider border border-[#24324f]">Mode</span>
                 </div>
-                <div class="text-right">
-                    <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">XP Gagnée : <span id="score-xp" class="text-amber-400 font-black text-lg">0</span></span>
+                <div class="flex items-center gap-3">
+                    <button onclick="ouvrirAideMemoire()" class="bg-blue-950 hover:bg-blue-900 text-blue-400 border border-blue-500/40 px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-1 transition-all" title="Ouvrir l'aide-mémoire géométrique">
+                        📘 Aide-Mémoire
+                    </button>
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">XP : <span id="score-xp" class="text-amber-400 font-black text-lg">0</span></span>
                 </div>
             </div>
 
-            <div id="game-container" class="game-card rounded-2xl p-6 sm:p-8 border shadow-xl min-h-[410px] flex flex-col relative transition-all duration-300">
+            <div id="game-container" class="game-card rounded-2xl p-6 sm:p-8 border shadow-xl min-h-[440px] flex flex-col relative transition-all duration-300">
                 
                 <div class="absolute top-4 right-4 flex gap-2 z-10">
-                    <button onclick="afficherIndiceSup()" id="btn-pastille-indice" class="hidden bg-amber-950 hover:bg-amber-900 text-amber-400 border border-amber-500/40 p-2.5 rounded-full shadow-lg transition-all" title="Demander un indice (-10 XP)">
-                        💡
-                    </button>
-                    <button onclick="afficherFigureVisuelle()" id="btn-pastille-visuel" class="hidden bg-cyan-950 hover:bg-cyan-900 text-cyan-400 border border-cyan-500/40 p-2.5 rounded-full shadow-lg transition-all" title="Voir la figure radar">
-                        👁️
-                    </button>
+                    <button onclick="afficherIndiceSup()" id="btn-pastille-indice" class="hidden bg-amber-950 hover:bg-amber-900 text-amber-400 border border-amber-500/40 p-2.5 rounded-full shadow-lg transition-all" title="Demander un indice (-10 XP)">💡</button>
+                    <button onclick="afficherFigureVisuelle()" id="btn-pastille-visuel" class="hidden bg-cyan-950 hover:bg-cyan-900 text-cyan-400 border border-cyan-500/40 p-2.5 rounded-full shadow-lg transition-all" title="Voir la figure radar">👁️</button>
                 </div>
 
                 <div id="game-content" class="flex-grow flex flex-col justify-center gap-6 mt-4"></div>
-
                 <div id="feedback" class="text-center font-bold text-base mt-6 min-h-[3.5rem] flex items-center justify-center rounded-xl transition-all duration-300 tracking-wide"></div>
             </div>
         </section>
@@ -202,97 +189,113 @@
             </div>
         </dialog>
 
+        <dialog id="modal-aide" class="bg-transparent backdrop:bg-slate-950/85 p-4 fixed my-auto mx-auto inset-0 z-50 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+            <div class="bg-[#0f1524] rounded-2xl shadow-2xl border border-blue-500/40 p-6 space-y-6 text-left">
+                <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                    <h3 class="text-lg font-black text-blue-400 uppercase tracking-wider flex items-center gap-2">📘 Aide-Mémoire d'Analyse Spatiale</h3>
+                    <button onclick="document.getElementById('modal-aide').close()" class="text-slate-400 hover:text-white font-bold text-xl">✕</button>
+                </div>
+                
+                <div class="space-y-6">
+                    <div>
+                        <h4 class="text-xs font-bold text-amber-400 uppercase tracking-widest mb-3">🔺 Famille des Triangles</h4>
+                        <div id="aide-triangles" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-bold text-cyan-400 uppercase tracking-widest mb-3">🟩 Autres Figures Planes (2D)</h4>
+                        <div id="aide-planes" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-bold text-purple-400 uppercase tracking-widest mb-3">📦 Famille des Solides (3D)</h4>
+                        <div id="aide-solides" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+                    </div>
+                </div>
+                
+                <button onclick="document.getElementById('modal-aide').close()" class="w-full px-4 py-3 text-xs font-bold uppercase tracking-widest text-white bg-blue-900 hover:bg-blue-800 rounded-xl border border-blue-700 btn-game-active">Fermer l'Aide-Mémoire</button>
+            </div>
+        </dialog>
+
     </main>
 
     <script>
-        // ==========================================
-        // BASE DE DONNÉES DES FIGURES ET SOLIDES
-        // ==========================================
-        // Contient les propriétés géométriques fondamentales traduites en langage enfant sous forme d'indices cumulatifs.
+        // =========================================================================
+        // BANQUE DE DONNÉES GÉOMÉTRIQUES CORRIGÉE ET ENRICHIE
+        // =========================================================================
         const banqueGeometrie = {
           "figures_planes": [
-            { "nom": "Carré", "niveaux": ["6H", "7H", "8H"], "indices": ["Je suis un quadrilatère très régulier.", "Mes 4 côtés ont exactement la même longueur.", "J'ai 4 angles droits et mes diagonales se coupent à angle droit."] },
-            { "nom": "Rectangle", "niveaux": ["6H", "7H", "8H"], "indices": ["Je suis un quadrilatère avec des angles droits.", "Mes côtés opposés sont parallèles et de même longueur, mais mes côtés adjacents ne le sont pas.", "Mes diagonales sont de même longueur mais ne se coupent pas à angle droit."] },
-            { "nom": "Triangle", "niveaux": ["6H", "7H"], "indices": ["Je suis la plus simple des figures fermées à côtés droits.", "J'ai exactement 3 sommets.", "Le mot 'tri' au début de mon nom indique le nombre de mes côtés."] },
-            { "nom": "Cercle", "niveaux": ["6H", "7H", "8H"], "indices": ["Je suis une figure parfaitement ronde.", "On me trace à l'aide d'un compas en plantant la pointe sur mon centre.", "Tous les points de ma ligne sont à la même distance (le rayon) du centre."] },
-            { "nom": "Quadrilatère", "niveaux": ["7H", "8H"], "indices": ["Je suis une grande famille de figures planes.", "Mon nom commence par 'quadri' qui signifie quatre.", "Toute figure plate fermée qui possède exactement 4 côtés est l'un de mes membres."] },
-            { "nom": "Triangle rectangle", "niveaux": ["7H", "8H"], "indices": ["Je suis un triangle particulier.", "Tu as absolument besoin d'une équerre pour me vérifier ou me dessiner proprement.", "Je possède un angle droit parfait de 90 degrés."] },
-            { "nom": "Losange", "niveaux": ["7H", "8H"], "indices": ["Je suis un quadrilatère qui ressemble à un carré penché.", "Mes 4 côtés ont exactement la même longueur, mais je n'ai pas d'angles droits.", "Mes diagonales sont perpendiculaires et sont aussi mes seuls axes de symétrie."] },
-            { "nom": "Parallélogramme", "niveaux": ["7H", "8H"], "indices": ["Je suis un quadrilatère dont le nom évoque des lignes qui ne se croisent jamais.", "Mes côtés opposés sont parallèles et de même longueur, mais je n'ai aucun axe de symétrie.", "Le rectangle, le losange et le carré sont des versions spéciales de ma forme."] },
-            { "nom": "Trapèze", "niveaux": ["7H"], "indices": ["Je suis un quadrilatère dont les acrobates de cirque aiment le nom.", "Ma seule obligation est d'avoir au moins deux côtés opposés qui sont parallèles.", "Mes deux côtés parallèles s'appellent la 'grande base' et la 'petite base'."] },
-            { "nom": "Cerf-volant", "niveaux": ["7H", "8H"], "indices": ["Je suis un quadrilatère qui porte le nom d'un objet volant.", "Mes côtés égaux ne sont pas face à face, ils sont côte à côte (adjacents).", "J'ai exactement 1 axe de symétrie qui sépare mes deux côtés égaux de chaque côté."] },
-            { "nom": "Fer de lance", "niveaux": ["7H", "8H"], "indices": ["Je suis un quadrilatère non-convexe qui ressemble à une arme ancienne.", "J'ai la même règle pour mes côtés qu'un cerf-volant, mais ma forme est creuse.", "Je ressemble à une pointe de flèche et je possède un grand angle creux (rentrant)."] },
-            { "nom": "Triangle isocèle", "niveaux": ["8H"], "indices": ["Je suis un triangle avec une propriété de symétrie.", "J'ai au moins deux côtés qui mesurent exactement la même longueur.", "Si on me coupe en deux par mon axe de symétrie, j'ai deux angles à ma base qui sont parfaits."] },
-            { "nom": "Triangle équilatéral", "niveaux": ["8H"], "indices": ["Je suis le plus regular et le plus équilibré de tous les triangles.", "Mes trois côtés mesurent absolument la même longueur.", "J'ai 3 axes de symétrie et chacun de mes trois angles mesure exactement 60 degrés."] },
-            { "nom": "Triangle isocèle rectangle", "niveaux": ["8H"], "indices": ["Je suis une figure double : j'ai les caractéristiques de deux triangles différents.", "Je possède à la fois un angle droit de 90° et deux côtés de même longueur.", "Mes deux petits angles mesurent exactement 45 degrés chacun."] },
-            { "nom": "Trapèze rectangle", "niveaux": ["8H"], "indices": ["Je suis un membre spécial de la famille des trapèzes.", "J'ai 2 côtés parallèles, et l'un de mes côtés non-parallèles est perpendiculaire aux bases.", "Je possède exactement deux angles droits."] },
-            { "nom": "Trapèze isocèle", "niveaux": ["8H"], "indices": ["Je suis un trapèze parfaitement symétrique.", "Mes deux côtés non-parallèles ont exactement la même longueur.", "Je possède un axe de symétrie vertical qui coupe mes deux bases parallèles en leur milieu."] }
+            // Triangles isolés avec indices spécifiques non-ambigus
+            { "nom": "Triangle scalène", "isTriangle": true, "niveaux": ["6H", "7H", "8H"], "vocabulaire": "3 côtés de longueurs toutes différentes. Aucun angle droit, aucun axe de symétrie.", "indices": ["Je suis un triangle quelconque.", "Mes trois côtés ont tous des longueurs différentes.", "Je ne possède aucun angle droit et aucun axe de symétrie."] },
+            { "nom": "Triangle rectangle", "isTriangle": true, "niveaux": ["6H", "7H", "8H"], "vocabulaire": "Possède 1 angle droit (90°). Ses côtés adjacents forment une équerre.", "indices": ["Je suis un triangle doté d'une caractéristique angulaire stricte.", "On doit utiliser une équerre pour tracer mon angle principal.", "Je possède exactement un angle droit parfait de 90 degrés."] },
+            { "nom": "Triangle isocèle", "isTriangle": true, "niveaux": ["7H", "8H"], "vocabulaire": "Possède au moins 2 côtés égaux et 1 axe de symétrie.", "indices": ["Je suis un triangle qui possède un axe de symétrie.", "Deux de mes côtés ont exactement la même longueur.", "Mes deux angles à la base sont également parfaitement égaux."] },
+            { "nom": "Triangle équilatéral", "isTriangle": true, "niveaux": ["7H", "8H"], "vocabulaire": "3 côtés égaux, 3 angles égaux de 60°, 3 axes de symétrie.", "indices": ["Je suis le plus régulier de tous les triangles.", "Mes trois côtés mesurent absolument la même longueur.", "Mes trois angles intérieurs font tous exactement 60 degrés."] },
+            { "nom": "Triangle isocèle rectangle", "isTriangle": true, "niveaux": ["8H"], "vocabulaire": "Combine 1 angle droit et 2 côtés égaux. Ses deux autres angles font 45°.", "indices": ["Je suis un triangle qui fusionne deux propriétés distinctes.", "J'ai à la fois un angle droit de 90° et deux côtés de même longueur.", "Mes deux angles aigus mesurent précisément 45 degrés chacun."] },
+            
+            // Autres figures planes
+            { "nom": "Carré", "niveaux": ["6H", "7H", "8H"], "vocabulaire": "4 côtés égaux, 4 angles droits, diagonales perpendiculaires de même longueur.", "indices": ["Je suis un quadrilatère parfaitement régulier.", "Mes quatre côtés ont exactement la même longueur et j'ai 4 angles droits.", "Mes diagonales se coupent en leur milieu et à angle droit."] },
+            { "nom": "Rectangle", "niveaux": ["6H", "7H", "8H"], "vocabulaire": "4 angles droits, côtés opposés parallèles et égaux 2 à 2.", "indices": ["Je suis un quadrilatère à angles droits.", "Mes côtés opposés sont de même longueur, mais mes côtés consécutifs sont différents.", "Mes diagonales sont égales mais ne se coupent pas à angle droit."] },
+            { "nom": "Cercle", "niveaux": ["6H", "7H", "8H"], "vocabulaire": "Ligne courbe fermée dont tous les points sont à égale distance du centre.", "indices": ["Je suis une figure plane parfaitement ronde.", "On me dessine à l'aide d'un compas.", "Tous mes points extérieurs sont à la même distance du centre."] },
+            { "nom": "Losange", "niveaux": ["7H", "8H"], "vocabulaire": "4 côtés égaux, côtés opposés parallèles, diagonales perpendiculaires.", "indices": ["Je suis un quadrilatère dont les 4 côtés sont égaux.", "Je ressemble à un carré étiré mais je ne possède pas d'angles droits.", "Mes diagonales se coupent perpendiculairement."] },
+            { "nom": "Parallélogramme", "niveaux": ["7H", "8H"], "vocabulaire": "Côtés opposés parallèles et égaux 2 à 2. Aucun angle droit par défaut.", "indices": ["Je suis un quadrilatère dont les côtés opposés sont parallèles.", "Mes côtés face-à-face ont la même longueur, mais je n'ai pas d'angle droit.", "Je ne possède aucun axe de symétrie."] },
+            { "nom": "Trapèze", "niveaux": ["7H", "8H"], "vocabulaire": "Possède au moins 2 côtés opposés parallèles (les bases).", "indices": ["Je suis un quadrilatère défini par une seule paire de lignes parallèles.", "Deux de mes côtés opposés sont parallèles et s'appellent les bases.", "Mes deux autres côtés ne sont pas parallèles."] }
           ],
           "solides": [
-            { "nom": "Cube", "niveaux": ["7H", "8H"], "indices": ["Je suis un solide en 3D très connu dans les jeux de société (comme un dé).", "J'ai un total de 6 faces, 12 arêtes et 8 sommets.", "Toutes mes faces sont des carrés parfaitement identiques."] },
-            { "nom": "Pavé droit", "niveaux": ["7H", "8H"], "indices": ["Je suis un solide en 3D qui ressemble à une boîte à chaussures ou une brique.", "J'ai le même nombre de faces (6), d'arêtes (12) et de sommets (8) que le cube.", "Mes faces ne sont pas des carrés, ce sont des rectangles."] },
-            { "nom": "Pyramide à base carrée", "niveaux": ["7H", "8H"], "indices": ["Je suis un solide en 3D célèbre en Égypte.", "Je possède exactement 5 sommets, dont un qui se trouve tout en haut (l'apex).", "Ma base au sol est un carré, et mes 4 faces latérales sont des triangles."] },
-            { "nom": "Tétraèdre", "niveaux": ["7H", "8H"], "indices": ["Je suis aussi appelé une 'pyramide à base triangulaire'.", "Je suis le plus simple des solides, j'ai seulement 4 sommets et 6 arêtes.", "Toutes mes faces, sans exception, sont des triangles."] }
+            { "nom": "Cube", "niveaux": ["6H", "7H", "8H"], "vocabulaire": "6 faces carrées identiques, 12 arêtes égales, 8 sommets.", "indices": ["Je suis le solide régulier emblématique des dés à jouer.", "Je possède un total de 6 faces, 12 arêtes et 8 sommets.", "Toutes mes faces sont des carrés superposables."] },
+            { "nom": "Pavé droit", "niveaux": ["6H", "7H", "8H"], "vocabulaire": "6 faces rectangulaires (ou carrées), 12 arêtes, 8 sommets.", "indices": ["Je suis un solide qui ressemble à une boîte en carton ou une brique.", "J'ai 6 faces, 12 arêtes et 8 sommets comme le cube.", "Mes faces opposées sont des rectangles parallèles."] },
+            { "nom": "Pyramide à base carrée", "niveaux": ["7H", "8H"], "vocabulaire": "1 base carrée, 4 faces latérales triangulaires, 5 sommets.", "indices": ["Je suis un solide dont la forme évoque les monuments égyptiens.", "Je possède exactement 5 sommets et 5 faces au total.", "Ma base est un carré et mes faces de côté sont des triangles."] },
+            { "nom": "Tétraèdre", "niveaux": ["8H"], "vocabulaire": "Pyramide à base triangulaire. 4 faces triangulaires, 4 sommets, 6 arêtes.", "indices": ["Je suis le plus simple des solides composés de polygones.", "Je possède exactement 4 sommets et 6 arêtes.", "Toutes mes faces sans exception sont des triangles."] }
           ]
         };
 
-        // ==========================================
-        // VARIABLES D'ÉTAT DU COMPTEUR DE JEU
-        // ==========================================
-        let config = { niveau: null, mode: null }; // Stocke les choix initiaux des menus de configuration
+        // =========================================================================
+        // ÉTATS DE JEU GLOBAL
+        // =========================================================================
+        let config = { niveau: null, mode: null };
         let state = {
-            question: 1,           // Index de l'étape courante (Max 10)
-            scoreGlobal: 0,        // Total des bonnes réponses données
-            xp: 0,                 // Jauge d'XP globale accumulée par l'élève
-            donneesFiltrees: [],   // Liste restreinte des figures adaptées au niveau choisi (6H, 7H, 8H)
-            modeCourant: null,     // Conserve la lettre du mode actif pour la manche en cours (Utile pour le mode mixte)
-            cibleCourante: null,   // L'objet géométrique complet (la solution) tiré au sort à la question courante
-            indicesAffiches: 0,    // Compteur interne d'indices dépliés pour l'énigme active
-            pointsManche: 30       // Valeur maximale en XP de la question (Décroit si l'élève demande de l'aide)
+            question: 1,
+            scoreGlobal: 0,
+            xp: 0,
+            donneesFiltrees: [],
+            modeCourant: null,
+            cibleCourante: null,
+            indicesAffiches: 0,
+            pointsManche: 30
         };
+        let blocageSaisie = false; // Bloque le double clic rapide sur tablette
 
-        // Sécurité essentielle anti-double clic fou (Verrouille les écrans tactiles pendant le feedback visuel)
-        let blocageSaisie = false;
-
-        // Extraction et assignation du nom de l'élève connecté via les paramètres URL ou le cache de session
+        // Extraction immédiate du nom de l'élève
         const urlParamsConfig = new URLSearchParams(window.location.search);
         const nomEleveConfig = urlParamsConfig.get('eleve') || sessionStorage.getItem('nomEleve') || "Explorateur";
         document.getElementById('affichage-nom').innerText = `Agent : ${nomEleveConfig}`;
 
-        // ==========================================
-        // MOTEUR DE DESSIN VECTORIEL (RENDU RADAR)
-        // ==========================================
-        /**
-         * Génère dynamiquement une balise SVG contenant le dessin exact de la figure
-         * @param {string} nom - Le nom de l'objet géométrique
-         * @returns {string} - Chaîne XML représentant le composant visuel SVG avec style néon
-         */
-        function getSVGForShape(nom) {
-            const baseClass = "w-32 h-32 text-cyan-400 drop-shadow-[0_0_10px_rgba(34,211,238,0.5)]";
-            const s = `<svg class="${baseClass}" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round">`;
+        // =========================================================================
+        // MOTEUR VECTORIEL : DESSINS SVG NÉON CYBER
+        // =========================================================================
+        function getSVGForShape(nom, customClass = "w-20 h-20 text-cyan-400") {
+            const s = `<svg class="${customClass} drop-shadow-[0_0_6px_rgba(34,211,238,0.4)]" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round">`;
             const e = `</svg>`;
             switch(nom) {
+                case 'Triangle scalène': return s + `<polygon points="25,25 85,45 35,80"/>` + e;
+                case 'Triangle rectangle': return s + `<polygon points="25,20 25,80 85,80"/><polyline points="25,70 35,70 35,80"/>` + e;
+                case 'Triangle isocèle': return s + `<polygon points="50,20 20,80 80,80"/><line x1="35" y1="50" x2="41" y2="50"/><line x1="59" y1="50" x2="65" y2="50"/>` + e;
+                case 'Triangle équilatéral': return s + `<polygon points="50,23 15,83 85,83"/>` + e;
+                case 'Triangle isocèle rectangle': return s + `<polygon points="20,20 20,80 80,80"/><polyline points="20,70 30,70 30,80"/>` + e;
                 case 'Carré': return s + `<rect x="20" y="20" width="60" height="60"/>` + e;
                 case 'Rectangle': return s + `<rect x="10" y="30" width="80" height="40"/>` + e;
-                case 'Triangle': return s + `<polygon points="50,20 15,80 85,80"/>` + e;
-                case 'Cercle': return s + `<circle cx="50" cy="50" r="35"/>` + e;
-                case 'Losange': return s + `<polygon points="50,10 85,50 50,90 15,50"/>` + e;
-                case 'Parallélogramme': return s + `<polygon points="25,30 90,30 75,70 10,70"/>` + e;
+                case 'Cercle': return s + `<circle cx="50" cy="50" r="32"/>` + e;
+                case 'Losange': return s + `<polygon points="50,15 80,50 50,85 20,50"/>` + e;
+                case 'Parallélogramme': return s + `<polygon points="30,30 85,30 70,70 15,70"/>` + e;
                 case 'Trapèze': return s + `<polygon points="30,30 70,30 90,70 10,70"/>` + e;
-                case 'Triangle rectangle': return s + `<polygon points="20,20 20,80 80,80"/><polyline points="20,70 30,70 30,80"/>` + e;
-                case 'Cerf-volant': return s + `<polygon points="50,10 80,40 50,90 20,40"/>` + e;
-                case 'Cube': return s + `<rect x="30" y="30" width="40" height="40"/><polyline points="30,30 45,15 85,15 85,55 70,70"/><polyline points="85,15 70,30"/>` + e;
-                case 'Pyramide à base carrée': return s + `<polygon points="50,15 20,70 80,70"/><polyline points="50,15 35,60 80,70"/><polyline points="20,70 35,60"/>` + e;
-                default: return s + `<text x="50" y="55" font-size="40" text-anchor="middle" fill="currentColor" stroke="none">?</text>` + e; // Fallback d'inconnue
+                case 'Cube': return s + `<rect x="25" y="40" width="45" height="45"/><path d="M25,40 L45,20 L90,20 L90,65 L70,85 M70,40 L90,20 M45,20 L45,45" stroke-dasharray="2,2"/>` + e;
+                case 'Pavé droit': return s + `<rect x="15" y="45" width="55" height="35"/><path d="M15,45 L35,25 L90,25 L90,60 L70,80 M70,45 L90,25" stroke-dasharray="2,2"/>` + e;
+                case 'Pyramide à base carrée': return s + `<polygon points="50,15 15,75 70,85 50,15 70,85 85,65 50,15"/><path d="M15,75 L45,55 L85,65 M45,55 L50,15" stroke-dasharray="2,2"/>` + e;
+                case 'Tétraèdre': return s + `<polygon points="50,15 15,80 85,80 50,15 85,80"/><path d="M15,80 L45,60 L50,15 M45,60 L85,80" stroke-dasharray="2,2"/>` + e;
+                default: return s + `<text x="50" y="55" font-size="30" text-anchor="middle" fill="currentColor" stroke="none">?</text>` + e;
             }
         }
 
-        // ==========================================
-        // GESTION DES MENUS DE SÉLECTION (CONFIG)
-        // ==========================================
-        /**
-         * Enregistre le choix du niveau scolaire et applique l'état graphique actif au bouton cliqué
-         */
+        // =========================================================================
+        // CONFIGURATION INITIALE DES MENUS
+        // =========================================================================
         function selectLevel(lvl) {
             config.niveau = lvl;
             document.querySelectorAll('.lvl-btn').forEach(b => b.classList.remove('option-selected'));
@@ -300,9 +303,6 @@
             checkReady();
         }
 
-        /**
-         * Enregistre le choix du mode de jeu et applique l'état graphique actif au bouton cliqué
-         */
         function selectMode(m) {
             config.mode = m;
             document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('option-selected'));
@@ -310,9 +310,6 @@
             checkReady();
         }
 
-        /**
-         * Débloque le bouton d'initialisation de mission si les deux étapes du menu sont validées
-         */
         function checkReady() {
             const btn = document.getElementById('btn-start');
             if(config.niveau && config.mode) {
@@ -321,32 +318,18 @@
             }
         }
 
-        // ==========================================
-        // INITIALISATION ET ROUTAGE DE LA MISSION
-        // ==========================================
-        /**
-         * Filtre les données selon l'âge et masque l'écran de configuration au profit de la zone de jeu
-         */
         function demarrerMission() {
-            // Extraction ciblée des tableaux selon l'éligibilité H
-            let planes = banqueGeometrie.figures_planes.filter(f => f.niveaux.includes(config.niveau));
-            let solides = banqueGeometrie.solides.filter(f => f.niveaux.includes(config.niveau));
-            
-            // Marquage du type de géométrie pour la mécanique de tri
-            planes = planes.map(p => ({...p, type: 'plane'}));
-            solides = solides.map(s => ({...s, type: 'solide'}));
+            let planes = banqueGeometrie.figures_planes.filter(f => f.niveaux.includes(config.niveau)).map(p => ({...p, type: 'plane'}));
+            let solides = banqueGeometrie.solides.filter(f => f.niveaux.includes(config.niveau)).map(s => ({...s, type: 'solide'}));
             state.donneesFiltrees = [...planes, ...solides];
 
-            // Bascule d'affichage graphique (Moteur DOM CSS standard)
             document.getElementById('config-screen').classList.add('hidden');
             document.getElementById('game-screen').classList.remove('hidden');
             
+            genererContenuAideMemoire(); // Prépare les dessins de la modale d'aide
             chargerQuestion();
         }
 
-        /**
-         * Algorithme d'interversion aléatoire (Mélange de Fisher-Yates) pour briser l'ordre des boutons réponses
-         */
         function melanger(array) {
             let clone = [...array];
             for (let i = clone.length - 1; i > 0; i--) {
@@ -356,193 +339,186 @@
             return clone;
         }
 
-        // ==========================================
-        // ROUTAGE ET CONSTITUTION DES QUESTIONS
-        // ==========================================
-        /**
-         * Réinitialise l'environnement visuel de la carte et distribue vers le bon constructeur d'exercice
-         */
+        // =========================================================================
+        // CHARGEMENT DE LA QUESTION ET ROUTAGE DES EXERCICES
+        // =========================================================================
         function chargerQuestion() {
-            // Vérification si la limite de l'exercice est dépassée
             if (state.question > 10) {
                 terminerMission();
                 return;
             }
 
-            blocageSaisie = false; // Réouverture complète de la détection tactile
+            blocageSaisie = false;
             document.getElementById('num-question').innerText = state.question;
             
-            // Remise à zéro des messages de correction et réinitialisation de la couleur de la carte de base
             const fb = document.getElementById('feedback');
             fb.innerHTML = ''; 
             fb.className = "text-center font-bold text-base mt-6 min-h-[3.5rem] flex items-center justify-center rounded-xl transition-all duration-300";
-            document.getElementById('game-container').className = "game-card rounded-2xl p-6 sm:p-8 border shadow-xl min-h-[410px] flex flex-col relative transition-all duration-300";
+            document.getElementById('game-container').className = "game-card rounded-2xl p-6 sm:p-8 border shadow-xl min-h-[440px] flex flex-col relative transition-all duration-300";
 
-            // Masquage temporaire des boutons d'assistance (Indices / Radars)
             document.getElementById('btn-pastille-indice').classList.add('hidden');
             document.getElementById('btn-pastille-visuel').classList.add('hidden');
 
-            // Traitement adaptatif de l'arborescence si l'option aléatoire "Mixte" est en cours
             state.modeCourant = config.mode === 'Mixte' ? ['A', 'B', 'C'][Math.floor(Math.random()*3)] : config.mode;
             
-            // Routage logique vers les moteurs d'injection html dédiés
             if(state.modeCourant === 'A') genererModeA();
             else if(state.modeCourant === 'B') genererModeB();
             else genererModeC();
         }
 
-        // ==========================================
-        // MODE A : LOGIQUE RECHERCHE DU "QUI SUIS-JE ?"
-        // ==========================================
-        /**
-         * Génère un problème d'identification par devinettes textuelles à indices imbriqués
-         */
+        // =========================================================================
+        // MODE A : IDENTIFICATION (QUI SUIS-JE ?)
+        // =========================================================================
         function genererModeA() {
             document.getElementById('label-mode').innerText = "Mode A : Identification";
-            state.pointsManche = 30; // La valeur initiale est élevée car l'énigme textuelle requiert plus d'analyse
-            state.indicesAffiches = 1; // Un seul indice visible au départ
+            state.pointsManche = 30;
+            state.indicesAffiches = 1;
             
-            // Sélection aléatoire de la figure cible parmi la liste autorisée
             const cible = state.donneesFiltrees[Math.floor(Math.random() * state.donneesFiltrees.length)];
             state.cibleCourante = cible;
 
-            // Filtrage et constitution d'un ensemble de 3 distracteurs erronés uniques
-            let autres = state.donneesFiltrees.filter(d => d.nom !== cible.nom);
+            // SÉCURITÉ INCOHÉRENCE ANTI-TRIANGLES DOUBLES : 
+            // Si la cible est un triangle particulier, évite de mettre un autre triangle particulier dans les choix
+            let autres;
+            if (cible.isTriangle) {
+                autres = state.donneesFiltrees.filter(d => d.nom !== cible.nom && !d.isTriangle);
+            } else {
+                autres = state.donneesFiltrees.filter(d => d.nom !== cible.nom);
+            }
+            
             autres = melanger(autres).slice(0, 3);
-            let options = melanger([cible, ...autres]); // Intégration de la bonne réponse et brassage complet
+            let options = melanger([cible, ...autres]);
 
-            // Injection dynamique des blocs dans le HTML de la page
             const container = document.getElementById('game-content');
             container.innerHTML = `
                 <div class="bg-[#090d16] p-5 rounded-2xl border border-[#24324f] text-center shadow-inner">
-                    <p class="text-xs font-bold text-cyan-400 uppercase tracking-widest mb-3">Dossier Classifié — Flux Crypté</p>
+                    <p class="text-xs font-bold text-cyan-400 uppercase tracking-widest mb-3">Flux d'Indices Détectés</p>
                     <div id="zone-indices" class="space-y-2 min-h-[90px] flex flex-col justify-center">
                         <p class="text-slate-200 text-md font-medium italic">« ${cible.indices[0]} »</p>
                     </div>
                 </div>
-                <div class="grid grid-cols-2 gap-4" id="zone-options">
+                <div class="grid grid-cols-2 gap-4">
                     ${options.map(opt => `<button onclick="validerReponseA('${opt.nom}')" class="option-btn text-slate-200 font-bold py-4 px-2 rounded-xl text-sm tracking-wide btn-game-active w-full">${opt.nom}</button>`).join('')}
                 </div>
             `;
 
-            // Révélation contrôlée des fonctionnalités d'aide à l'écran
             document.getElementById('btn-pastille-indice').classList.remove('hidden');
             document.getElementById('btn-pastille-visuel').classList.remove('hidden');
         }
 
-        /**
-         * Dévoile un indice textuel supplémentaire au clic de l'élève en appliquant une pénalité d'XP
-         */
         function afficherIndiceSup() {
             if(state.indicesAffiches >= 3 || blocageSaisie) return;
-            state.pointsManche -= 10; // Réduction forfaitaire du score potentiel de la question
+            state.pointsManche -= 10;
             const idxText = state.cibleCourante.indices[state.indicesAffiches];
             document.getElementById('zone-indices').innerHTML += `<p class="text-slate-400 text-sm font-medium italic border-t border-slate-800/50 pt-2">« ${idxText} »</p>`;
             state.indicesAffiches++;
-            
-            // Masque l'ampoule si la totalité des indices du fichier JSON est consommée
             if(state.indicesAffiches === 3) document.getElementById('btn-pastille-indice').classList.add('hidden');
         }
 
-        /**
-         * Point d'entrée de validation pour le Mode A
-         */
         function validerReponseA(nomChoisi) {
             if(blocageSaisie) return;
             gererFinManche(nomChoisi === state.cibleCourante.nom, state.cibleCourante.nom);
         }
 
-        // ==========================================
-        // MODE B : LOGIQUE RECHERCHE DE "L'INTRUS"
-        // ==========================================
-        /**
-         * Crée un alignement de 4 figures dont une seule rompt l'homogénéité du groupe (ex: un solide au milieu de formes 2D)
-         */
+        // =========================================================================
+        // MODE B : L'INTRUS VISUEL (SÉPARATION STRICTE PLANE VS SOLIDE)
+        // =========================================================================
         function genererModeB() {
-            document.getElementById('label-mode').innerText = "Mode B : Anomalie (L'Intrus)";
+            document.getElementById('label-mode').innerText = "Mode B : L'Intrus Visuel";
             state.pointsManche = 10;
-            document.getElementById('btn-pastille-visuel').classList.add('hidden'); // Le radar est désactivé ici pour préserver le défi
 
-            let intru, autres;
-            // Pour les niveaux avancés (7H/8H), alternance régulière entre anomalie de Dimension (2D vs 3D) et cas particulier (Cercle sans arête droite)
-            if (config.niveau !== '6H' && Math.random() > 0.5) {
-                const typeIntru = Math.random() > 0.5 ? 'solide' : 'plane';
-                let poolIntru = state.donneesFiltrees.filter(d => d.type === typeIntru);
-                let poolAutres = state.donneesFiltrees.filter(d => d.type !== typeIntru);
-                
-                intru = melanger(poolIntru)[0];
-                autres = melanger(poolAutres).slice(0, 3);
+            let typeGroupe = Math.random() > 0.5 ? 'plane' : 'solide';
+            let poolGroupe = state.donneesFiltrees.filter(d => d.type === typeGroupe);
+            
+            // Si le pool du niveau est trop petit pour faire un groupe homogène, on bascule sur l'autre type
+            if(poolGroupe.length < 3) {
+                typeGroupe = typeGroupe === 'plane' ? 'solide' : 'plane';
+                poolGroupe = state.donneesFiltrees.filter(d => d.type === typeGroupe);
+            }
+
+            let intru;
+            let baseMélangée = melanger(poolGroupe);
+            let elementsDuGroupe = [];
+
+            // CRITÈRES D'INTRUS STRICTS SANS MÉLANGER EN DESSOUS DE LA DIMENSION (2D/3D)
+            if (typeGroupe === 'plane') {
+                // Sous-groupe de Figures Planes : soit 3 Triangles et 1 Autre, soit 3 Quadrilatères et 1 Triangle
+                let triangles = baseMélangée.filter(f => f.isTriangle);
+                let nonTriangles = baseMélangée.filter(f => !f.isTriangle);
+
+                if (triangles.length >= 3 && nonTriangles.length >= 1) {
+                    elementsDuGroupe = triangles.slice(0, 3);
+                    intru = nonTriangles[0];
+                } else if (nonTriangles.length >= 3 && triangles.length >= 1) {
+                    elementsDuGroupe = nonTriangles.slice(0, 3);
+                    intru = triangles[0];
+                } else {
+                    // Fallback sécurité simple si la banque H est restreinte
+                    elementsDuGroupe = baseMélangée.slice(0, 3);
+                    intru = state.donneesFiltrees.find(d => d.type === 'solide') || baseMélangée[3];
+                }
             } else {
-                // Règle de fallback ou niveau de base 6H : Recherche du cercle au milieu de polygones à lignes brisées
-                intru = state.donneesFiltrees.find(d => d.nom === 'Cercle');
-                autres = melanger(state.donneesFiltrees.filter(d => d.nom !== 'Cercle')).slice(0, 3);
-                if(!intru) { 
-                    intru = state.donneesFiltrees[0];
-                    autres = state.donneesFiltrees.slice(1, 4);
+                // Sous-groupe de Solides (3D) : Évite le piège automatique du cercle
+                elementsDuGroupe = baseMélangée.slice(0, 3);
+                // L'intrus doit obligatoirement être un autre solide du niveau
+                let poolIntrusSolides = baseMélangée.filter(s => !elementsDuGroupe.map(e=>e.nom).includes(s.nom));
+                if(poolIntrusSolides.length > 0) {
+                    intru = poolIntrusSolides[0];
+                } else {
+                    // Si pas assez de solides dispo au niveau actuel, on prend une figure plane
+                    intru = state.donneesFiltrees.find(d => d.type === 'plane');
                 }
             }
 
-            state.cibleCourante = intru; // Dans ce mode, l'intrus à éliminer constitue la cible correcte à cliquer
-            let options = melanger([intru, ...autres]);
+            state.cibleCourante = intru;
+            let options = melanger([intru, ...elementsDuGroupe]);
 
             const container = document.getElementById('game-content');
             container.innerHTML = `
-                <p class="text-center text-xs font-bold text-amber-400 uppercase tracking-widest mb-1">Analyse de cohérence :</p>
-                <p class="text-center text-sm text-slate-400 mb-2">Détectez l'élément qui n'appartient pas au même groupe technique.</p>
+                <p class="text-center text-xs font-bold text-amber-400 uppercase tracking-widest mb-1">Analyse des structures :</p>
+                <p class="text-center text-sm text-slate-400 mb-2">Examinez les schémas et éliminez l'intrus qui rompt la règle du groupe.</p>
                 <div class="grid grid-cols-2 gap-4">
                     ${options.map(opt => `
-                        <button onclick="validerReponseB('${opt.nom}')" class="option-btn text-slate-200 font-bold py-5 px-2 rounded-xl flex flex-col items-center gap-2 btn-game-active w-full">
-                            <span class="text-2xl">${opt.type === 'solide' ? '📦' : '📏'}</span>
-                            <span class="text-sm uppercase tracking-wide">${opt.nom}</span>
+                        <button onclick="validerReponseB('${opt.nom}')" class="option-btn text-slate-200 font-bold py-4 px-2 rounded-xl flex flex-col items-center justify-center gap-3 btn-game-active w-full">
+                            <div class="bg-[#090d16] p-2 rounded-lg border border-slate-800 flex items-center justify-center w-24 h-24 shadow-inner">
+                                ${getSVGForShape(opt.nom, "w-16 h-16 text-cyan-400")}
+                            </div>
+                            <span class="text-xs uppercase tracking-wider">${opt.nom}</span>
                         </button>
                     `).join('')}
                 </div>
             `;
         }
 
-        /**
-         * Point d'entrée de validation pour le Mode B
-         */
         function validerReponseB(nomChoisi) {
             if(blocageSaisie) return;
             gererFinManche(nomChoisi === state.cibleCourante.nom, state.cibleCourante.nom);
         }
 
-        // ==========================================
-        // MODE C : LOGIQUE DE CLASSIFICATION "LES BOÎTES"
-        // ==========================================
-        /**
-         * Affiche un concept géométrique unique et demande à l'élève de l'aiguiller vers le bon container structurel
-         */
+        // =========================================================================
+        // MODE C : LES BOÎTES DE TRI CLASSIQUES (EXCLUSIVEMENT 2D VS 3D)
+        // =========================================================================
         function genererModeC() {
-            document.getElementById('label-mode').innerText = "Mode C : Classification";
+            document.getElementById('label-mode').innerText = "Mode C : Tri Structurel (2D vs 3D)";
             state.pointsManche = 10;
-            document.getElementById('btn-pastille-visuel').classList.add('hidden');
 
             const cible = state.donneesFiltrees[Math.floor(Math.random() * state.donneesFiltrees.length)];
             state.cibleCourante = cible;
 
-            let critere1, critere2, bonneBoite;
-            // Détermination algorithmique de la règle d'aiguillage
-            if (config.niveau !== '6H' && Math.random() > 0.5) {
-                // Règle de tri basée sur la dimension spatiale
-                critere1 = "Figures Planes (2D)"; 
-                critere2 = "Solides (3D)";
-                bonneBoite = cible.type === 'plane' ? 1 : 2;
-            } else {
-                // Règle de tri basée sur le dénombrement des sommets / frontières rectilignes (Propriétés des polygones)
-                critere1 = "4 côtés ou plus"; 
-                critere2 = "Moins de 4 côtés / Courbe";
-                const quatreEtPlus = ["Carré", "Rectangle", "Losange", "Parallélogramme", "Trapèze", "Cerf-volant", "Fer de lance", "Quadrilatère", "Trapèze rectangle", "Trapèze isocèle"];
-                bonneBoite = quatreEtPlus.includes(cible.nom) ? 1 : 2;
-            }
-            state.cibleCourante.bonneBoite = bonneBoite; // Enregistrement de la boîte attendue (1 ou 2)
+            // Critère de tri unique, unifié et non-sujet à interprétation
+            let critere1 = "Figure Plane (2D)"; 
+            let critere2 = "Solide (3D)";
+            let bonneBoite = cible.type === 'plane' ? 1 : 2;
+            state.cibleCourante.bonneBoite = bonneBoite;
 
             const container = document.getElementById('game-content');
             container.innerHTML = `
-                <div class="text-center bg-[#090d16] border border-[#24324f] p-5 rounded-2xl mb-2 shadow-inner">
-                    <p class="text-xs font-bold text-cyan-400 uppercase tracking-widest mb-1">Sujet à aiguiller :</p>
-                    <p class="text-2xl font-black text-slate-100 tracking-wider uppercase font-mono">${cible.nom}</p>
+                <div class="text-center bg-[#090d16] border border-[#24324f] p-5 rounded-2xl mb-2 shadow-inner flex flex-col items-center justify-center gap-2">
+                    <p class="text-xs font-bold text-cyan-400 uppercase tracking-widest">Élément à classifier :</p>
+                    <p class="text-xl font-black text-slate-100 tracking-wider uppercase font-mono">${cible.nom}</p>
+                    <div class="bg-[#05070f] p-3 rounded-xl border border-slate-800 mt-1">
+                        ${getSVGForShape(cible.nom, "w-16 h-16 text-amber-400")}
+                    </div>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <button onclick="validerReponseC(1)" class="option-btn text-slate-200 font-bold p-5 rounded-xl flex flex-col items-center gap-2 btn-game-active">
@@ -557,95 +533,106 @@
             `;
         }
 
-        /**
-         * Point d'entrée de validation pour le Mode C (Prise en charge du clic tactile)
-         */
         function validerReponseC(boiteChoisie) {
             if(blocageSaisie) return;
-            gererFinManche(boiteChoisie === state.cibleCourante.bonneBoite, state.cibleCourante.bonneBoite === 1 ? 'Première boîte' : 'Deuxième boîte');
+            gererFinManche(boiteChoisie === state.cibleCourante.bonneBoite, state.cibleCourante.bonneBoite === 1 ? 'Figure Plane (2D)' : 'Solide (3D)');
         }
 
-        // ==========================================
-        // DOUBLE ACCESSIBILITÉ : RECONNAISSANCE CLAVIER
-        // ==========================================
-        /**
-         * Permet la validation au clavier physique pour les élèves à motricité fine restreinte (Mode classification uniquement)
-         */
+        // Accessibilité claviers physiques (Touches 1 et 2)
         window.addEventListener('keydown', (e) => {
             if (state.question > 10 || document.getElementById('game-screen').classList.contains('hidden') || blocageSaisie) return;
-            
-            // Touche "1" déclenche la boîte gauche, touche "2" déclenche la boîte droite
             if (state.modeCourant === 'C') {
                 if (e.key === '1') validerReponseC(1);
                 if (e.key === '2') validerReponseC(2);
             }
         });
 
-        // ==========================================
-        // DÉPLOYEMENT DU COMPOSANT VECTORIEL MODAL
-        // ==========================================
-        /**
-         * Ouvre la fenêtre pop-up native "Dialog" et y dépose le rendu vectoriel néon généré
-         */
         function afficherFigureVisuelle() {
             if (blocageSaisie) return;
             const container = document.getElementById('visuel-svg-container');
-            container.innerHTML = getSVGForShape(state.cibleCourante.nom);
-            document.getElementById('modal-figure').showModal(); // API Modale HTML5 native
+            container.innerHTML = getSVGForShape(state.cibleCourante.nom, "w-32 h-32 text-cyan-400");
+            document.getElementById('modal-figure').showModal();
         }
 
-        // ==========================================
-        // ANALYSE ET ÉVALUATION FORMATIVE DES MANCHES
-        // ==========================================
-        /**
-         * Gère les calculs de scores, modifie l'interface en temps réel selon les résultats et applique une temporisation
-         * @param {boolean} estCorrect - Indique si l'élève a sélectionné la réponse attendue
-         * @param {string} reponseAttendue - Chaîne textuelle contenant la correction explicite
-         */
+        // =========================================================================
+        // COMPOSANT ADDITIONNEL : GÉNÉRATEUR DE L'AIDE-MÉMOIRE ILLUSTRÉ
+        // =========================================================================
+        function ouvrirAideMemoire() {
+            document.getElementById('modal-aide').showModal();
+        }
+
+        function genererContenuAideMemoire() {
+            const zTriangles = document.getElementById('aide-triangles');
+            const zPlanes = document.getElementById('aide-planes');
+            const zSolides = document.getElementById('aide-solides');
+
+            zTriangles.innerHTML = '';
+            zPlanes.innerHTML = '';
+            zSolides.innerHTML = '';
+
+            // 1. Remplissage des triangles
+            banqueGeometrie.figures_planes.filter(f => f.isTriangle).forEach(t => {
+                zTriangles.innerHTML += creerCarteMiniAide(t, "border-amber-500/30");
+            });
+
+            // 2. Remplissage des autres figures planes
+            banqueGeometrie.figures_planes.filter(f => !f.isTriangle).forEach(p => {
+                zPlanes.innerHTML += creerCarteMiniAide(p, "border-cyan-500/30");
+            });
+
+            // 3. Remplissage des solides
+            banqueGeometrie.solides.forEach(s => {
+                zSolides.innerHTML += creerCarteMiniAide(s, "border-purple-500/30");
+            });
+        }
+
+        function creerCarteMiniAide(item, colorClass) {
+            return `
+                <div class="bg-[#090d16] p-3 rounded-xl border ${colorClass} flex flex-col items-center text-center space-y-2">
+                    <span class="text-xs font-black text-slate-200 tracking-wide uppercase block">${item.nom}</span>
+                    <div class="bg-[#05070f] p-2 rounded-lg border border-slate-800 flex items-center justify-center w-20 h-20">
+                        ${getSVGForShape(item.nom, "w-14 h-14 text-slate-300")}
+                    </div>
+                    <p class="text-[11px] leading-tight text-slate-400 font-medium">${item.vocabulaire}</p>
+                </div>
+            `;
+        }
+
+        // =========================================================================
+        // GESTION DU FEEDBACK ET DES RAPPORTS DE FIN
+        // =========================================================================
         function gererFinManche(estCorrect, reponseAttendue) {
-            blocageSaisie = true; // Isolation et verrouillage anti-clic fou pour sécuriser la temporisation sur iPad
-            
+            blocageSaisie = true;
             const fb = document.getElementById('feedback');
             const gc = document.getElementById('game-container');
             
             if (estCorrect) {
                 state.scoreGlobal++;
-                state.xp += state.pointsManche; // Incrémentation dynamique de la récompense
+                state.xp += state.pointsManche;
                 document.getElementById('score-xp').innerText = state.xp;
                 
-                // Changement d'état graphique de l'interface en vert émeraude réconfortant
                 fb.innerText = `🟢 ANALYSE VALIDE (+${state.pointsManche} XP)`;
                 fb.className = "text-center font-bold text-base mt-6 min-h-[3.5rem] flex items-center justify-center rounded-xl transition-all duration-300 bg-emerald-950/80 text-emerald-400 border border-emerald-500/30 shadow-[0_0_15px_rgba(16,185,129,0.1)]";
-                gc.className = "game-card rounded-2xl p-6 sm:p-8 border min-h-[410px] flex flex-col relative transition-all duration-300 border-emerald-500/40 shadow-[0_0_20px_rgba(16,185,129,0.15)]";
+                gc.className = "game-card rounded-2xl p-6 sm:p-8 border min-h-[440px] flex flex-col relative transition-all duration-300 border-emerald-500/40 shadow-[0_0_20px_rgba(16,185,129,0.15)]";
             } else {
-                // Valorisation de l'erreur par l'affichage direct de la réponse attendue
-                fb.innerText = `🔴 SÉCURITÉ COMPROMISE — Solution : ${reponseAttendue}`;
+                fb.innerText = `🔴 CODE ERRONÉ — Attendu : ${reponseAttendue}`;
                 fb.className = "text-center font-bold text-base mt-6 min-h-[3.5rem] flex items-center justify-center rounded-xl transition-all duration-300 bg-rose-950/80 text-rose-400 border border-rose-500/30 shadow-[0_0_15px_rgba(244,63,94,0.1)]";
-                gc.className = "game-card rounded-2xl p-6 sm:p-8 border min-h-[410px] flex flex-col relative transition-all duration-300 border-rose-500/40 shadow-[0_0_20px_rgba(244,63,94,0.15)]";
+                gc.className = "game-card rounded-2xl p-6 sm:p-8 border min-h-[440px] flex flex-col relative transition-all duration-300 border-rose-500/40 shadow-[0_0_20px_rgba(244,63,94,0.15)]";
             }
 
-            // Temporisation de 2,5 secondes : laisse à l'élève le temps de lire la correction avant la question suivante
             setTimeout(() => {
                 state.question++;
                 chargerQuestion();
             }, 2500);
         }
 
-        // ==========================================
-        // CONCLUSION ET SAUVEGARDE DE LA MISSION
-        // ==========================================
-        /**
-         * Calcule le bilan final, adapte l'appréciation textuelle et transmet l'objet de score à Firebase Firestore
-         */
         function terminerMission() {
-            // Permutation des panneaux d'affichage principaux
             document.getElementById('game-screen').classList.add('hidden');
             document.getElementById('end-card').classList.remove('hidden');
             
             document.getElementById('final-xp').innerText = state.xp;
             document.getElementById('final-score').innerText = state.scoreGlobal;
             
-            // Génération d'une appréciation pédagogique ciblée selon le taux de réussite
             const appreciation = document.getElementById('appreciation');
             if (state.scoreGlobal === 10) {
                 appreciation.innerText = "⚡ Incroyable ! Code d'accès décrypté à 100%. Vous êtes un expert géomètre.";
@@ -657,11 +644,9 @@
                 appreciation.innerText = "⚠️ Alerte ! Données corrompues. Un retour au QG d'entraînement est fortement conseillé.";
             }
 
-            // Calcul du ratio d'erreurs et structuration du nom de l'exercice pour le dashboard de suivi enseignant
             const fautes = 10 - state.scoreGlobal;
             const nomExercice = `Geometrie_${config.niveau}_Mode_${config.mode}`;
             
-            // Appel de la méthode asynchrone Firebase importée dans le header
             if (typeof window.enregistrerScoreFirebase === 'function') {
                 window.enregistrerScoreFirebase(nomExercice, state.scoreGlobal, fautes);
             }
