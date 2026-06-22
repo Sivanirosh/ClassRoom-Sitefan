@@ -5,7 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Les Royaumes Perdus de Numéria</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Styles de base pour l'accessibilité et le confort visuel */
+        .select-none { -webkit-user-select: none; user-select: none; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
+    </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen font-sans select-none">
 
@@ -31,7 +37,6 @@
             </button>
         </div>
     </div>
-
 
     <div id="screen-hub" class="container mx-auto px-4 py-6 max-w-2xl hidden">
         <div class="flex justify-between items-center mb-6 bg-slate-900/60 p-4 rounded-xl border border-slate-800">
@@ -62,7 +67,6 @@
         <div id="realms-list" class="grid gap-4"></div>
     </div>
 
-
     <div id="screen-realm" class="container mx-auto px-4 py-6 max-w-xl hidden">
         <button onclick="showScreen('screen-hub')" class="mb-4 text-sm text-sky-400 hover:underline flex items-center gap-1 font-bold">
             ⬅️ Retour à la carte des royaumes
@@ -76,17 +80,26 @@
         </div>
     </div>
 
-
-    <div id="screen-game" class="container mx-auto px-4 py-6 max-w-md hidden">
+    <div id="screen-game" class="container mx-auto px-4 py-6 max-w-xl hidden">
         <div class="game-card bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl text-center">
             
             <div class="flex justify-between items-center text-xs text-slate-400 mb-3">
-                <span id="game-mission-title" class="font-bold uppercase tracking-wider text-sky-400 text-left max-w-[65%] truncate">Mission</span>
-                <span class="font-mono bg-slate-950 px-2 py-1 rounded border border-slate-800">Q. <span id="current-q">1</span> / 10</span>
+                <span id="game-mission-title" class="font-bold uppercase tracking-wider text-sky-400 text-left max-w-[55%] truncate">Mission</span>
+                <div class="flex items-center gap-2">
+                    <button id="btn-help" onclick="toggleHelpWindow()" class="hidden bg-amber-500/20 border border-amber-500/50 text-amber-400 font-bold px-2.5 py-1 rounded animate-pulse text-xs flex items-center gap-1">
+                        💡 Besoin d'aide ?
+                    </button>
+                    <span class="font-mono bg-slate-950 px-2 py-1 rounded border border-slate-800">Q. <span id="current-q">1</span> / 5</span>
+                </div>
+            </div>
+
+            <div id="help-window" class="hidden bg-slate-950 border border-amber-500/40 rounded-xl p-4 mb-4 text-left shadow-inner">
+                <h4 class="text-xs font-black uppercase text-amber-400 tracking-wider mb-2 flex items-center gap-1">🔮 Parchemin d'aide à la numération</h4>
+                <div id="help-content" class="overflow-x-auto"></div>
             </div>
 
             <div class="bg-slate-950 rounded-xl p-5 mb-4 border border-slate-800 min-h-[90px] flex items-center justify-center">
-                <div id="question-text" class="text-xl font-bold text-slate-100 leading-snug">---</div>
+                <div id="question-text" class="text-lg font-bold text-slate-100 leading-snug">---</div>
             </div>
 
             <div class="mb-4">
@@ -108,14 +121,14 @@
                 <button onclick="pressKey('0')" class="bg-slate-800 border border-slate-700 font-bold py-3 text-xl rounded-lg text-white hover:bg-slate-700 active:bg-slate-600 transition">0</button>
                 <button onclick="pressKey('/')" class="bg-slate-800 border border-slate-700 font-black py-3 text-xl rounded-lg text-amber-400 hover:bg-slate-700 transition">/</button>
                 
+                <button onclick="pressKey('\'')" class="bg-slate-800 border border-slate-700 font-bold py-3 text-lg rounded-lg text-sky-400 hover:bg-slate-700 transition">'</button>
                 <button onclick="pressKey('CLR')" class="bg-rose-950/50 border border-rose-900/50 text-rose-400 font-bold py-3 rounded-lg hover:bg-rose-900/40 transition">Effacer</button>
-                <button onclick="pressKey('OK')" id="btn-valider" class="col-span-2 bg-emerald-600 border border-emerald-500 text-white font-black py-3 rounded-lg text-lg hover:bg-emerald-500 transition">Valider</button>
+                <button onclick="pressKey('OK')" id="btn-valider" class="bg-emerald-600 border border-emerald-500 text-white font-black py-3 rounded-lg text-lg hover:bg-emerald-500 transition">Valider</button>
             </div>
 
             <div id="game-feedback" class="text-center font-bold text-sm h-6"></div>
         </div>
     </div>
-
 
     <div id="screen-result" class="container mx-auto px-4 py-6 max-w-md hidden">
         <div class="game-card bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl text-center">
@@ -125,7 +138,7 @@
             <div class="bg-slate-950 rounded-xl p-6 mb-6 border border-slate-800">
                 <div class="text-xs uppercase text-slate-500 tracking-wider mb-1 font-bold">Étoiles Sacrées</div>
                 <div id="result-stars" class="text-4xl mb-4 text-amber-400 tracking-widest">⭐⭐⭐</div>
-                <div class="text-sm text-slate-300">Précision de l'esprit : <span id="result-score" class="font-bold text-sky-400 text-lg">0</span> / 10</div>
+                <div class="text-sm text-slate-300">Précision de l'esprit : <span id="result-score" class="font-bold text-sky-400 text-lg">0</span> / 5</div>
             </div>
 
             <button onclick="finishMissionSummary()" class="w-full bg-sky-600 hover:bg-sky-500 text-white font-black py-3 rounded-xl transition">
@@ -133,7 +146,6 @@
             </button>
         </div>
     </div>
-
 
     <div id="screen-codex" class="container mx-auto px-4 py-6 max-w-xl hidden">
         <button onclick="showScreen('screen-hub')" class="mb-4 text-sm text-sky-400 hover:underline flex items-center gap-1 font-bold">
@@ -146,109 +158,100 @@
         </div>
     </div>
 
-
     <script>
-        // MAPPAGE SCIENTIFIQUE DES CRITÈRES HARMOS DE NUMÉRATION
-        // Cette structure lie chaque niveau à ses objectifs officiels du plan d'études romand.
+        // DONNÉES STRUCTURELLES ADAPTÉES AUX RÈGLES HARMOS (1 Entraînement + 1 Gardien par bloc)
         const HARMOS_DATA = {
             '6H': [
-                { id: '6H-N1', name: '🏞️ Vallée des Collections', desc: 'Dénombrements, paquets de base (10, 100, 1000) et sauts numériques.' },
-                { id: '6H-N2', name: '📜 Runes de Lecture', desc: 'Conversion de la parole aux chiffres et structures de comparaison jusqu\'à 10\'000.' },
-                { id: '6H-N3', name: '📏 Sentier des Droites', desc: 'Lecture de positions graduées et sauts précis à distance constante.' },
-                { id: '6H-N4', name: '💎 Citadelle des Décompositions', desc: 'Analyse fine des ordres (U, D, C, M) et comptage des composants entiers.' },
-                { id: '6H-N5', name: '🌌 Portes de l\'Histoire', desc: 'Exploration des limites numériques supérieurs et codages antiques.' }
+                { id: '6H-N1', name: '🏞️ Vallée des Collections', desc: 'Dénombrements, groupements (10, 100, 1000) et sauts numériques.' },
+                { id: '6H-N2', name: '📜 Runes de Lecture', desc: 'Structure de position et comparaisons fines jusqu\'à 10\'000.' },
+                { id: '6H-N3', name: '📏 Sentier des Droites', desc: 'Lecture de positions graduées et repérages d\'intervalles.' },
+                { id: '6H-N4', name: '💎 Citadelle des Décompositions', desc: 'Analyse et extraction des ordres (U, D, C, M) dans les entiers.' },
+                { id: '6H-N5', name: '🌌 Portes de l\'Histoire', desc: 'Exploration des grands nombres et structures à limites.' }
             ],
             '7H': [
                 { id: '7H-N1', name: '🏰 Domaine des Positions', desc: 'Maîtrise absolue de la structure de positionnement jusqu\'à 1\'000\'000.' },
                 { id: '7H-N2', name: '⚖️ Équilibre des Ordres', desc: 'Encadrements, ordres et droites complexes sous le million.' },
-                { id: '7H-N3', name: '⚡ Noyau des Extractions', desc: 'Variations brutales d\'ordres et isolement de blocs entiers.' },
-                { id: '7H-N4', name: '🍕 Archipel des Fractions', desc: 'Mesures de surfaces, repères fractionnaires simples et décimaux.' },
+                { id: '7H-N3', name: '⚡ Noyau des Extractions', desc: 'Variations d\'ordres complexes et composants de blocs.' },
+                { id: '7H-N4', name: '🍕 Archipel des Fractions', desc: 'Repères fractionnaires variés (demis, tiers, quarts, etc.) et grandeurs.' },
                 { id: '7H-N5', name: '💧 Cascades Décimales', desc: 'Liaison étroite entre fractions et nombres à virgule (max 2 décimales).' }
             ],
             '8H': [
                 { id: '8H-N1', name: '🌌 Confins des Milliards', desc: 'De la poussière des millièmes jusqu\'au gigantisme des milliards.' },
-                { id: '8H-N2', name: '✍️ Temple des Écritures', desc: 'Mots-nombres de haute volée géante sous la barre du billion.' },
-                { id: '8H-N3', name: '🗺️ Cartographie Suprême', desc: 'Intercalation, encadrements drastiques et droites multidimensionnelles.' },
+                { id: '8H-N2', name: '✍️ Temple des Écritures', desc: 'Mots-nombres complexes sous la barre du billion.' },
+                { id: '8H-N3', name: '🗺️ Cartographie Suprême', desc: 'Intercalation, encadrements drastiques et structures multidimensionnelles.' },
                 { id: '8H-N4', name: '⏳ Distorsions de Grandeurs', desc: 'Sauts modulables du minuscule millième à la centaine de millions.' },
-                { id: '8H-N5', name: '🔍 Analyseur de Micro-Valeurs', desc: 'Extraction chirurgicale de composants entiers décimaux.' }
+                { id: '8H-N5', name: '🔍 Analyseur de Micro-Valeurs', desc: 'Extraction chirurgicale de composants décimaux fins.' }
             ]
         };
 
-        // Contenu narratif du Codex lié à la validation des Épreuves de Gardiens (Mission 4 de chaque bloc)
         const CODEX_ITEMS = {
             '6H': { name: 'Le Sceptre d\'Émeraude', desc: 'Canalise les groupements par 10. Restauré en 6H.' },
             '7H': { name: 'L\'Orbe de l\'Éclipse', desc: 'Permet de scinder l\'unité en fractions parfaites. Découvert en 7H.' },
             '8H': { name: 'L\'Éclair de Platine', desc: 'Sonde les infinis du cosmos, des milliards aux millièmes. Conquis en 8H.' }
         };
 
-        // Objet de persistance pour sauvegarder la progression de l'élève
+        // État de sauvegarde global de l'élève
         let gameState = {
             playerName: "",
             selectedGrade: "6H",
-            progress: {}, // Structure: {"6H_6H-N1": {0: 3, 1: 2}} stockant les étoiles par mission
+            progress: {}, // Forme : {"6H_6H-N1": {0: 3}} (0=Entraînement, 1=Gardien)
             unlockedCodex: [] 
         };
 
-        // Moteur temps réel stockant la session de jeu active
+        // Variable d'analyse pour l'affichage de l'aide contextuelle
+        let activeHelpData = null;
+
+        // Session de jeu active
         let currentActiveGame = {
             grade: '6H',
             levelId: '',
             levelIndex: 0,
+            missionId: 0, // 0 = Entraînement, 1 = Gardien
             questions: [],
             index: 0,
             score: 0,
             saisie: "",
-            isTransitioning: false // VARIABLE CLÉ ANTI-SPAM (Bloque les inputs si vrai)
+            isTransitioning: false
         };
 
         /**
-         * FORMATAGE REGEX STYLE SUISSE
-         * Injecte des apostrophes comme séparateurs de milliers pour respecter la norme romande.
-         * Exemple: 9787686 -> 9'787'686
+         * AJOUT DE L'APOSTROPHE COMME SÉPARATEUR SUISSE (ex: 4500 -> 4'500)
          */
         function formatSwiss(num) {
             if (num === null || num === undefined) return "";
             let str = num.toString();
             let parts = str.split('.');
-            // La regex identifie chaque groupe de 3 chiffres en partant de la droite
             parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, "'");
             return parts.join('.');
         }
 
         /**
-         * NETTOYAGE INDULGENT DES ENTRÉES ÉLÈVES
-         * Permet de valider une réponse peu importe si l'élève tape des espaces, des apostrophes ou des virgules.
-         * Exemple: "97'787 686" devient "97787686", ce qui correspond exactement à la donnée brute attendue.
+         * NETTOYAGE DES ENTRÉES ÉLÈVES (Accepte les espaces, virgules et apostrophes de confort)
          */
         function cleanString(str) {
             return str.toString().trim().toLowerCase().replace(/[\s']/g, '').replace(',', '.');
         }
 
         /**
-         * COMMUTATEUR D'ÉCRANS STANDARDISÉ
-         * Gère l'affichage de l'application en masquant tous les modules et en révélant la cible.
+         * COMMUTATEUR D'ÉCRANS
          */
         function showScreen(screenId) {
             ['screen-welcome', 'screen-hub', 'screen-realm', 'screen-game', 'screen-result', 'screen-codex'].forEach(id => {
                 document.getElementById(id).classList.add('hidden');
             });
             document.getElementById(screenId).classList.remove('hidden');
+            // Fermeture systématique de la fenêtre d'aide au changement d'écran
+            document.getElementById('help-window').classList.add('hidden');
         }
 
         /**
-         * CHARGEMENT DE LA SAUVEGARDE
-         * Extrait les informations du disque local du navigateur au démarrage.
+         * CHARGEMENT DU COMPTE ET INITIALISATION DE LA SOUVEGARDE LOCALSTORAGE
          */
         function loadGame() {
-            const saved = localStorage.getItem('numeria_save_v2');
+            const saved = localStorage.getItem('numeria_save_v3');
             if(saved) {
-                try {
-                    gameState = JSON.parse(saved);
-                } catch(e) {
-                    console.error("Erreur de décodage de sauvegarde", e);
-                }
+                try { gameState = JSON.parse(saved); } catch(e) { console.error(e); }
             }
-            // Si aucun joueur n'existe, on force l'écran de bienvenue
             if(!gameState.playerName) {
                 showScreen('screen-welcome');
             } else {
@@ -259,24 +262,21 @@
             }
         }
 
-        // Sauvegarde l'état actuel dans le stockage local
         function saveGame() {
-            localStorage.setItem('numeria_save_v2', JSON.stringify(gameState));
+            localStorage.setItem('numeria_save_v3', JSON.stringify(gameState));
         }
 
-        // Purge complète de la base locale de progression
         function resetGame() {
-            if(confirm("🚨 Voulez-vous vraiment effacer TOUTE la progression de Numéria ?")) {
-                localStorage.removeItem('numeria_save_v2');
+            if(confirm("🚨 Réinitialiser toute la progression ?")) {
+                localStorage.removeItem('numeria_save_v3');
                 gameState = { playerName: "", selectedGrade: "6H", progress: {}, unlockedCodex: [] };
                 showScreen('screen-welcome');
             }
         }
 
-        // Initialisation de la session joueur lors du premier écran
         function startGame() {
             const input = document.getElementById('player-name').value.trim();
-            if(!input) return alert("Inscris ton prénom pour commencer ton aventure !");
+            if(!input) return alert("Inscris ton prénom !");
             gameState.playerName = input;
             gameState.selectedGrade = "6H";
             document.getElementById('display-player-name').innerText = input;
@@ -285,29 +285,20 @@
             showScreen('screen-hub');
         }
 
-        /**
-         * BASCELEMENT DE DEGRÉ HARMOS (6H / 7H / 8H)
-         * Réajuste les classes CSS des boutons pour mettre en évidence la sélection active.
-         */
         function selectGrade(gradeStr) {
             gameState.selectedGrade = gradeStr;
             saveGame();
-            
             ['6H', '7H', '8H'].forEach(g => {
                 const btn = document.getElementById(`btn-grade-${g}`);
-                if(g === gradeStr) {
-                    btn.className = "py-2.5 rounded-lg font-black tracking-wider transition text-center text-lg bg-sky-600 text-white shadow-md border border-sky-500";
-                } else {
-                    btn.className = "py-2.5 rounded-lg font-black tracking-wider transition text-center text-lg bg-slate-900 text-slate-400 border border-slate-800 hover:bg-slate-800";
-                }
+                btn.className = g === gradeStr 
+                    ? "py-2.5 rounded-lg font-black tracking-wider transition text-center text-lg bg-sky-600 text-white shadow-md border border-sky-500"
+                    : "py-2.5 rounded-lg font-black tracking-wider transition text-center text-lg bg-slate-900 text-slate-400 border border-slate-800 hover:bg-slate-800";
             });
-
             renderHubRealms();
         }
 
         /**
-         * CONSTRUCTEUR DYNAMIQUE DU HUB
-         * Génère les cartes visuelles des grands thèmes de numération disponibles pour le degré actif.
+         * AFFICHAGE INTERACTIF DES THEMES APPLICATIFS SÉLECTIONNÉS
          */
         function renderHubRealms() {
             const container = document.getElementById('realms-list');
@@ -316,26 +307,21 @@
 
             currentRealms.forEach((realm, idx) => {
                 const div = document.createElement('div');
-                // Style Tailwind pour des cartes interactives fluides
                 div.className = "bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 cursor-pointer hover:border-sky-500 transition shadow-md shadow-black/20";
                 div.onclick = () => openRealm(realm.id, idx);
-
                 div.innerHTML = `
                     <div class="flex-1">
                         <h3 class="text-lg font-bold text-white mb-0.5">${realm.name}</h3>
                         <p class="text-xs text-slate-400 leading-relaxed">${realm.desc}</p>
                     </div>
-                    <div class="bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800 text-center font-bold text-xs tracking-wider text-sky-400 whitespace-nowrap">
-                        Niveau Ouvert
-                    </div>
+                    <div class="bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800 text-center font-bold text-xs tracking-wider text-sky-400">Explorer</div>
                 `;
                 container.appendChild(div);
             });
         }
 
         /**
-         * INTERFACE DU ROYAUME (AFFICHAGE DES MISSIONS)
-         * Crée les missions individuelles. Tout est configuré pour rester débloqué pour faciliter vos tests.
+         * AFFICHAGE DU TIROIR DES MISSIONS : 1 ENTRAÎNEMENT + 1 GARDIEN SEULEMENT
          */
         function openRealm(realmId, realmIndex) {
             const realm = HARMOS_DATA[gameState.selectedGrade][realmIndex];
@@ -348,144 +334,201 @@
             let saveKey = `${gameState.selectedGrade}_${realmId}`;
             const playerProgress = gameState.progress[saveKey] || {};
 
-            // Chaque royaume présente 4 missions progressives (3 entraînements + 1 Boss Épreuve du Gardien)
-            for(let i = 0; i < 4; i++) {
-                const stars = playerProgress[i] || 0;
-                const isBoss = i === 3; // La quatrième mission est toujours le test de maîtrise
+            // Modifié : Seulement 2 choix possibles (0: Entraînement Unique, 1: Épreuve Finale du Gardien)
+            const types = [
+                { title: "⚔️ Mission d'entraînement unique", isBoss: false, idx: 0 },
+                { title: "🐉 Épreuve souveraine du Gardien", isBoss: true, idx: 1 }
+            ];
 
+            types.forEach(t => {
+                const stars = playerProgress[t.idx] || 0;
                 const btn = document.createElement('button');
                 btn.className = `w-full p-4 rounded-xl font-medium flex justify-between items-center text-left transition ${
-                    isBoss 
+                    t.isBoss 
                     ? 'bg-amber-950/20 text-amber-300 border border-amber-900/50 hover:bg-amber-950/40' 
                     : 'bg-slate-950 text-slate-200 border border-slate-800 hover:border-slate-700'
                 }`;
-                
                 btn.innerHTML = `
-                    <span class="font-bold text-sm md:text-base">${isBoss ? '🐉 Épreuve du Gardien' : 'Mission d\'entraînement ' + (i+1)}</span>
+                    <span class="font-bold text-sm md:text-base">${t.title}</span>
                     <span class="tracking-widest font-mono text-amber-400">${stars > 0 ? '⭐'.repeat(stars) : '○○○'}</span>
                 `;
-                btn.onclick = () => startMission(realmId, realmIndex, i);
+                btn.onclick = () => startMission(realmId, realmIndex, t.idx);
                 container.appendChild(btn);
-            }
+            });
+
             showScreen('screen-realm');
         }
 
         /**
-         * GENERATEUR MATHÉMATIQUE CYCLIQUE HARMOS
-         * C'est le cœur didactique de l'application. Pas de calculs simples ici : on manipule la structure du nombre,
-         * les groupements, les valeurs de position, les fractions et l'extraction de composants.
+         * GÉNÉRATEUR MATHEMATIQUE DIVERSIFIÉ ET COMPACT (5 EXERCICES)
          */
         function generateHarmosQuestions(grade, levelId, missionIdx) {
             let list = [];
-            for(let i=0; i<10; i++) {
+            // Ajusté à 5 itérations pour répondre aux besoins d'allègement de l'activité
+            for(let i=0; i<5; i++) {
                 let text = "";
                 let ans = "";
+                let helpType = null; // Stockage de métadonnées pour le type d'aide visuelle nécessaire
+                let helpMeta = {};
 
-                // --- CLASSIFICATION EXTRACTIVE DES OBJECTIFS 6H ---
                 if(grade === '6H') {
                     if(levelId === '6H-N1') {
-                        // Dénombrer une collection / faire des paquets / sauts
-                        if(missionIdx < 2) {
-                            let p100 = Math.floor(Math.random() * 8) + 1;
-                            let p10 = Math.floor(Math.random() * 9);
+                        // Diversification des paquets et sauts numériques alternés
+                        let type = i % 3;
+                        if(type === 0) {
+                            let p100 = Math.floor(Math.random() * 8) + 2;
+                            let p10 = Math.floor(Math.random() * 9) + 1;
                             text = `Recompose la collection : ${p100} paquets de 100 et ${p10} paquets de 10.`;
                             ans = (p100 * 100 + p10 * 10).toString();
+                        } else if(type === 1) {
+                            let p1000 = Math.floor(Math.random() * 4) + 1;
+                            let p10 = Math.floor(Math.random() * 8) + 2;
+                            text = `Recompose la collection : ${p1000} groupes de 1'000 et ${p10} groupes de 10.`;
+                            ans = (p1000 * 1000 + p10 * 10).toString();
                         } else {
-                            let start = (Math.floor(Math.random() * 50) + 10) * 10;
-                            text = `Compte de 10 en 10 : quel nombre vient juste après ${start} ?`;
-                            ans = (start + 10).toString();
+                            let step = [10, 50, 100][Math.floor(Math.random() * 3)];
+                            let start = (Math.floor(Math.random() * 40) + 10) * 10;
+                            text = `Suis le rythme : avance de ${step} en ${step}. Quel nombre vient juste après ${start} ?`;
+                            ans = (start + step).toString();
                         }
                     } else if(levelId === '6H-N2') {
-                        // Ordre de grandeur et identification de rang sous 10'000
-                        let n = Math.floor(Math.random() * 899) + 101;
-                        if(i % 2 === 0) {
-                            text = `Quel nombre se trouve exactement au milieu entre ${n} et ${n+2} ?`;
-                            ans = (n+1).toString();
-                        } else {
-                            let val = Math.floor(Math.random() * 5000) + 1000;
-                            text = `Dans le nombre ${val}, quel est le chiffre des centaines ?`;
+                        // Identification de la structure des positions de base
+                        let r = Math.floor(Math.random() * 3);
+                        let val = Math.floor(Math.random() * 7000) + 1500;
+                        if(r === 0) {
+                            text = `Dans le nombre entier ${val}, quel est le chiffre des centaines ?`;
                             ans = Math.floor((val % 1000) / 100).toString();
+                            helpType = "table"; helpMeta = { val: val, max: 'M' };
+                        } else if(r === 1) {
+                            text = `Dans le nombre entier ${val}, quel est le chiffre des dizaines ?`;
+                            ans = Math.floor((val % 100) / 10).toString();
+                            helpType = "table"; helpMeta = { val: val, max: 'M' };
+                        } else {
+                            let n = Math.floor(Math.random() * 400) + 100;
+                            text = `Trouve le nombre mystère situé exactement au milieu entre ${n} et ${n+2}.`;
+                            ans = (n+1).toString();
                         }
                     } else if(levelId === '6H-N3') {
-                        // Représentation sur droites graduées
-                        let base = Math.floor(Math.random() * 5) * 1000 + 1000;
-                        text = `Sur une droite graduée de 100 en 100, on part de ${base}. Quelle est la valeur 3 repères plus loin ?`;
-                        ans = (base + 300).toString();
+                        // Lignes graduées dynamiques adaptées aux 6H
+                        let step = [10, 100][Math.floor(Math.random() * 2)];
+                        let base = Math.floor(Math.random() * 5) * 500 + 500;
+                        let jumps = Math.floor(Math.random() * 3) + 2;
+                        text = `Sur une droite graduée de ${step} en ${step}, tu pars de ${base}. Quelle est la valeur située ${jumps} repères plus loin en avant ?`;
+                        ans = (base + (jumps * step)).toString();
+                        helpType = "line"; helpMeta = { base: base, step: step, total: 6 };
                     } else if(levelId === '6H-N4') {
-                        // Extraction du nombre ENTIER de dizaines/centaines
-                        let val = Math.floor(Math.random() * 800) + 150;
-                        text = `Combien de dizaines ENTIÈRES y a-t-il au total dans le nombre ${val} ?`;
-                        ans = Math.floor(val / 10).toString();
+                        // Extraction fine globale de la valeur entière d'un ordre
+                        let val = Math.floor(Math.random() * 4000) + 450;
+                        if(i % 2 === 0) {
+                            text = `Combien de dizaines ENTIÈRES y a-t-il au total dans le nombre ${val} ?`;
+                            ans = Math.floor(val / 10).toString();
+                        } else {
+                            text = `Combien de centaines ENTIÈRES y a-t-il au total dans le nombre ${val} ?`;
+                            ans = Math.floor(val / 100).toString();
+                        }
+                        helpType = "table"; helpMeta = { val: val, max: 'M' };
                     } else {
-                        // Très grands nombres et exploration
-                        let base = 9990 + Math.floor(Math.random() * 8);
-                        text = `Quel nombre est exactement égal à : ${base} + 1 ?`;
+                        let base = 9950 + Math.floor(Math.random() * 30);
+                        text = `Ajoute une seule unité à la structure suivante : ${base} + 1. Quel est le résultat ?`;
                         ans = (base + 1).toString();
                     }
                 } 
-                // --- CLASSIFICATION EXTRACTIVE DES OBJECTIFS 7H ---
                 else if(grade === '7H') {
                     if(levelId === '7H-N1') {
-                        // Décompositions structurelles complexes CM / DM / C sous 1'000'000
-                        let cm = Math.floor(Math.random() * 4) + 1;
-                        let dm = Math.floor(Math.random() * 8) + 1;
-                        text = `Recompose l'écriture abrégée : (${cm} CM) + (${dm} DM) + (5 C)`;
-                        ans = (cm * 100000 + dm * 10000 + 500).toString();
+                        let cm = Math.floor(Math.random() * 5) + 1;
+                        let dm = Math.floor(Math.random() * 6) + 2;
+                        let m = Math.floor(Math.random() * 7) + 1;
+                        let type = i % 2;
+                        if(type === 0) {
+                            text = `Recompose l'écriture abrégée suivante : (${cm} CM) + (${dm} DM) + (5 C)`;
+                            ans = (cm * 100000 + dm * 10000 + 500).toString();
+                        } else {
+                            text = `Recompose l'écriture abrégée suivante : (${dm} DM) + (${m} M) + (8 D)`;
+                            ans = (dm * 10000 + m * 1000 + 80).toString();
+                        }
+                        helpType = "table"; helpMeta = { val: null, max: 'CM' };
                     } else if(levelId === '7H-N2') {
-                        // Intercaler des grands nombres naturels inférieur à l'unité de million
-                        let low = Math.floor(Math.random() * 50000) + 200000;
-                        text = `Trouve le nombre entier manquant : ${low} < ? < ${low+2}`;
+                        let low = Math.floor(Math.random() * 40000) + 100000;
+                        text = `Intercale la valeur manquante : trouve le nombre entier situé entre ${low} et ${low+2}.`;
                         ans = (low+1).toString();
                     } else if(levelId === '7H-N3') {
-                        // Extraction massive d'ordres entiers supérieure
-                        let val = Math.floor(Math.random() * 80000) + 120000;
-                        text = `Combien de centaines ENTIÈRES y a-t-il au total dans ${val} ?`;
-                        ans = Math.floor(val / 100).toString();
+                        let val = Math.floor(Math.random() * 400000) + 150000;
+                        if(i % 2 === 0) {
+                            text = `Combien de centaines ENTIÈRES y a-t-il au total dans le grand nombre ${val} ?`;
+                            ans = Math.floor(val / 100).toString();
+                        } else {
+                            text = `Combien de milliers ENTIERS (unités de mille) y a-t-il au total dans ${val} ?`;
+                            ans = Math.floor(val / 1000).toString();
+                        }
+                        helpType = "table"; helpMeta = { val: val, max: 'CM' };
                     } else if(levelId === '7H-N4') {
-                        // Représentation de fractions simples
-                        text = `Quelle fraction simple correspond à la moitié exacte de l'unité ?`;
-                        ans = "1/2";
+                        // ENRICHISSEMENT ET DIVERSIFICATION DES FRACTIONS (Quarts, Tiers, Écritures complexes)
+                        let pool = [
+                            { q: "Quelle fraction représente la moitié exacte de l'unité ?", a: "1/2" },
+                            { q: "Écris sous forme de fraction le tiers d'une unité entière :", a: "1/3" },
+                            { q: "Si on prend trois quarts d'un gâteau, quelle fraction a été consommée ?", a: "3/4" },
+                            { q: "Écris en fraction la valeur de deux tiers d'une tarte :", a: "2/3" },
+                            { q: "Quelle fraction équivaut à cinq huitièmes d'un segment géométrique ?", a: "5/8" },
+                            { q: "Si une tarte est coupée en six morceaux égaux et qu'on prend tout, quelle fraction a-t-on ?", a: "6/6" },
+                            { q: "Écris la fraction correspondant à quatre quarts de l'unité :", a: "4/4" }
+                        ];
+                        let select = pool[Math.floor(Math.random() * pool.length)];
+                        text = select.q;
+                        ans = select.a;
                     } else {
-                        // Passage de la fraction décimale au nombre à virgule (max 2 décimales)
-                        let frac = [2, 5, 8, 15][Math.floor(Math.random()*4)];
-                        text = `Écris la fraction décimale ${frac}/10 sous forme de nombre à virgule (ex: 0.5)`;
-                        ans = (frac / 10).toString();
+                        let frac = [5, 12, 75, 8, 142][Math.floor(Math.random()*5)];
+                        text = `Convertis la fraction décimale ${frac}/100 sous la forme d'un nombre à virgule (ex: 0.15).`;
+                        ans = (frac / 100).toString();
                     }
                 } 
-                // --- CLASSIFICATION EXTRACTIVE DES OBJECTIFS 8H ---
                 else if(grade === '8H') {
                     if(levelId === '8H-N1') {
-                        // Des milliards aux millièmes combinés
-                        let mil = Math.floor(Math.random() * 8) + 2;
-                        text = `Quel nombre correspond à : ${mil} milliards et 400 milliers ?`;
-                        ans = (mil * 1000000000 + 400000).toString();
+                        let mil = Math.floor(Math.random() * 7) + 2;
+                        let un = Math.floor(Math.random() * 8) + 1;
+                        if(i % 2 === 0) {
+                            text = `Quel nombre s'écrit avec : ${mil} milliards et 500 milliers ?`;
+                            ans = (mil * 1000000000 + 500000).toString();
+                        } else {
+                            text = `Quel nombre s'écrit avec : ${un} milliard et ${mil} millions ?`;
+                            ans = (un * 1000000000 + mil * 1000000).toString();
+                        }
+                        helpType = "table"; helpMeta = { val: null, max: 'G' };
                     } else if(levelId === '8H-N2') {
-                        // Dictée de nombres textuels géants sous le billion
-                        text = `Écris en chiffres : deux millions cinq cent mille.`;
-                        ans = "2500000";
+                        let names = [
+                            { q: "deux millions cinq cent mille", a: "2500000" },
+                            { q: "quatre millions deux cent mille", a: "4200000" },
+                            { q: "un million huit cent mille", a: "1800000" },
+                            { q: "cinq millions sept mille", a: "5007000" }
+                        ];
+                        let sel = names[i % names.length];
+                        text = `Écris en chiffres la dictée de mots suivante : ${sel.q}.`;
+                        ans = sel.a;
                     } else if(levelId === '8H-N3') {
-                        // Intercalation fine et ordre décimal au centième près
-                        text = `Trouve le décimal manquant au centième près : 4.15 < ? < 4.17`;
-                        ans = "4.16";
+                        let base = (Math.floor(Math.random() * 8) + 2) + 0.14;
+                        let fixed = parseFloat(base.toFixed(2));
+                        text = `Trouve la valeur manquante au centième près : ${fixed} < ? < ${(fixed + 0.02).toFixed(2)}`;
+                        ans = (fixed + 0.01).toFixed(2).toString();
                     } else if(levelId === '8H-N4') {
-                        // Saut de valeur du millième à la centaine de millions
-                        text = `Ajoute 5 millièmes au nombre décimal 1.450. Quel est le résultat ?`;
-                        ans = "1.455";
+                        let base = (Math.floor(Math.random() * 5) + 1) + 0.450;
+                        let fixed = parseFloat(base.toFixed(3));
+                        text = `Ajoute exactement 5 millièmes au nombre décimal complexe suivant : ${fixed}.`;
+                        ans = (fixed + 0.005).toFixed(3).toString();
                     } else {
-                        // Extraction chirurgicale des composants décimaux (dixièmes, centièmes entiers)
-                        text = `Combien de dixièmes ENTIERS y a-t-il au total dans le nombre 14.58 ?`;
-                        ans = "145";
+                        let baseDecimal = (Math.floor(Math.random() * 40) + 10) + 0.58;
+                        let fixed = parseFloat(baseDecimal.toFixed(2));
+                        text = `Combien de dixièmes ENTIERS y a-t-il au total dans le nombre décimal ${fixed} ?`;
+                        ans = Math.floor(fixed * 10).toString();
+                        helpType = "table"; helpMeta = { val: fixed, max: 'D', dec: true };
                     }
                 }
 
-                list.push({ q: text, a: ans });
+                list.push({ q: text, a: ans, helpType: helpType, helpMeta: helpMeta });
             }
             return list;
         }
 
         /**
-         * ENCLENCHEMENT DE LA SÉRIE DE QUESTIONS
-         * Instancie l'état du moteur de jeu pour la série de 10 questions requises.
+         * ENCLENCHEMENT D'UNE SÉRIE DE MISSIONS SÉLECTIONNÉES
          */
         function startMission(realmId, realmIndex, missionId) {
             const realm = HARMOS_DATA[gameState.selectedGrade][realmIndex];
@@ -502,7 +545,7 @@
                 isTransitioning: false
             };
 
-            document.getElementById('game-mission-title').innerText = `${realm.name.split(' ')[1]} - M.${missionId + 1}`;
+            document.getElementById('game-mission-title').innerText = `${realm.name.split(' ')[1]} - ${missionId === 0 ? 'Entraînement' : 'Gardien'}`;
             document.getElementById('game-input').value = "";
             document.getElementById('game-feedback').innerText = "";
             
@@ -511,29 +554,96 @@
         }
 
         /**
-         * PRÉSENTATION DE LA QUESTION COURANTE
-         * Extrait la question et applique la Regex Suisse pour formater tous les nombres présents
-         * dans la consigne de manière réglementaire avec apostrophe.
+         * INJECTION ET RENDU DE LA QUESTION COURANTE ET DES COMPOSANTS D'AIDE VISUELLE
          */
         function showQuestion() {
             const cur = currentActiveGame.questions[currentActiveGame.index];
             document.getElementById('current-q').innerText = currentActiveGame.index + 1;
             
-            // Formatage suisse automatique de tous les nombres de 4 chiffres ou plus détectés dans la question
+            // Formatage suisse des valeurs de consignes textuelles automatiques
             let displayedQuestion = cur.q.replace(/\d{4,12}/g, (match) => formatSwiss(parseInt(match)));
             document.getElementById('question-text').innerText = displayedQuestion;
             
             currentActiveGame.saisie = "";
             document.getElementById('game-input').value = "";
-            currentActiveGame.isTransitioning = false; // Fin du blocage anti-spam : l'élève peut à nouveau taper sa réponse
+            currentActiveGame.isTransitioning = false;
+
+            // Masquage initial de la fenêtre d'aide tiroir
+            document.getElementById('help-window').classList.add('hidden');
+            
+            // Si la question possède un composant d'aide, on active le bouton ampoule
+            const helpBtn = document.getElementById('btn-help');
+            if(cur.helpType) {
+                activeHelpData = { type: cur.helpType, meta: cur.helpMeta };
+                helpBtn.classList.remove('hidden');
+            } else {
+                activeHelpData = null;
+                helpBtn.classList.add('hidden');
+            }
         }
 
         /**
-         * CAPTEUR DE TOUCHE (INTERNE - PAVÉ TACTILE)
-         * Réceptionne les clics sur les boutons de l'écran.
+         * ACTIONNEUR D'OUVERTURE / FERMETURE DE L'AMPOULE D'AIDE
+         */
+        function toggleHelpWindow() {
+            const windowEl = document.getElementById('help-window');
+            if(!windowEl.classList.contains('hidden')) {
+                windowEl.classList.add('hidden');
+                return;
+            }
+
+            const contentEl = document.getElementById('help-content');
+            contentEl.innerHTML = "";
+
+            if(!activeHelpData) return;
+
+            // USINE DE RENDU DE L'AIDE PÉDAGOGIQUE SANS DONNER LA RÉPONSE DIRECTE
+            if(activeHelpData.type === "line") {
+                // Construction géométrique d'une ligne graduée
+                const meta = activeHelpData.meta;
+                let html = `<p class="text-xs text-slate-400 mb-2">Observer l'intervalle des graduations successives :</p>`;
+                html += `<div class="flex items-center justify-between bg-slate-900 p-3 rounded border border-slate-800 font-mono text-xs text-amber-300 relative pt-6">`;
+                
+                for(let k=0; k<meta.total; k++) {
+                    let markVal = meta.base + (k * meta.step);
+                    html += `<div class="flex flex-col items-center relative flex-1">
+                                <span class="absolute -top-5 text-[10px] text-slate-500">${formatSwiss(markVal)}</span>
+                                <span class="text-sky-500 font-black">|</span>
+                                <span class="text-[9px] mt-1 text-slate-600">+${meta.step}</span>
+                             </div>`;
+                }
+                html += `</div>`;
+                contentEl.innerHTML = html;
+            } 
+            else if(activeHelpData.type === "table") {
+                // Construction structurelle d'un abaque de numération complet
+                const meta = activeHelpData.meta;
+                let html = `<p class="text-xs text-slate-400 mb-2">Positionne les unités de chaque rang pour analyser le nombre :</p>`;
+                html += `<table class="w-full text-center border-collapse text-xs font-mono border border-slate-700 bg-slate-900"><thead><tr class="bg-slate-800 text-sky-400">`;
+
+                let headers = [];
+                if(meta.max === 'G') headers.push('Milliards');
+                headers.push('CM', 'DM', 'UM', 'C', 'D', 'U');
+                if(meta.dec) headers.push('dixièmes', 'centièmes', 'millièmes');
+
+                headers.forEach(h => {
+                    html += `<th class="border border-slate-700 px-1 py-1 text-[10px]">${h}</th>`;
+                });
+                html += `</tr></thead><tbody><tr>`;
+                headers.forEach(() => {
+                    html += `<td class="border border-slate-700 py-3 text-slate-500 font-bold">.</td>`;
+                });
+                html += `</tr></tbody></table>`;
+                contentEl.innerHTML = html;
+            }
+
+            windowEl.classList.remove('hidden');
+        }
+
+        /**
+         * CAPTEUR DES TOUCHES DE L'ÉCRAN TACTILE
          */
         function pressKey(key) {
-            // SI L'ANTI-SPAM EST ENCLENCHÉ, ON REJETTE IMMÉDIATEMENT L'ACTION
             if(currentActiveGame.isTransitioning) return; 
             
             let inputElement = document.getElementById('game-input');
@@ -543,7 +653,6 @@
                 validerSaisie();
                 return;
             } else {
-                // Limitation de sécurité à 15 caractères pour préserver la mise en page
                 if(currentActiveGame.saisie.length < 15) {
                     currentActiveGame.saisie += key;
                 }
@@ -552,25 +661,18 @@
         }
 
         /**
-         * MOTEUR DE VÉRIFICATION DIDACTIQUE & DE SÉCURITÉ ANTI-SPAM
-         * Valide la saisie de l'élève en ignorant les caractères de confort (espace, apostrophe)
-         * et fige le jeu temporairement pour empêcher le saut intempestif de questions.
+         * VÉRIFICATION LOGIQUE SANS LIEN DE PUNITION DE L'ÉLÈVE
          */
         function validerSaisie() {
-            // Empêche la double soumission (clics multiples sur Valider ou spam de la touche Entrée)
             if(currentActiveGame.isTransitioning || currentActiveGame.saisie === "") return;
             
-            // VERROUILLAGE ANTI-SPAM ACTIVÉ !
             currentActiveGame.isTransitioning = true; 
             
-            // Nettoyage souple des deux côtés pour la comparaison logique pure
             const reponseEleve = cleanString(currentActiveGame.saisie);
             const questionCourante = currentActiveGame.questions[currentActiveGame.index];
             const reponseAttendue = cleanString(questionCourante.a);
             
             const fb = document.getElementById('game-feedback');
-
-            // Formatage suisse appliqué à la réponse correcte pour l'affichage de correction
             let correctionAffiche = isNaN(questionCourante.a) ? questionCourante.a : formatSwiss(questionCourante.a);
 
             if(reponseEleve === reponseAttendue) {
@@ -579,33 +681,31 @@
                 fb.innerText = "⚡ Succès ! Réponse juste.";
             } else {
                 fb.className = "text-center font-bold text-sm text-rose-400";
-                fb.innerText = `❌ Cristal fêlé. La clé était : ${correctionAffiche}`;
+                // Remplacement du terme punitif par une tournure encourageante
+                fb.innerText = `❌ Structure incomplète. La clé était : ${correctionAffiche}`;
             }
 
-            // Incrémentation de l'index de la question
             currentActiveGame.index++;
             
-            // MINUTERIE DE TRANSITION (1.6 seconde)
-            // Laisse le temps d'assimiler l'erreur ou de savourer le succès tout en bloquant toute action clavier/clic
+            // Délai d'assimilation fixé à 1.6 secondes
             setTimeout(() => {
                 fb.innerText = "";
-                if(currentActiveGame.index < 10) {
-                    showQuestion(); // Génère la question suivante et désactive le verrou de transition
+                if(currentActiveGame.index < 5) {
+                    showQuestion();
                 } else {
-                    finirEpreuveJeu(); // Fin de la série
+                    finirEpreuveJeu();
                 }
             }, 1600); 
         }
 
         /**
-         * CLÔTURE DE L'ÉPREUVE ET ATTRIBUTION DES ÉTOILES
-         * Calcule le taux de réussite pour la notation sous forme d'étoiles gamifiées.
+         * CALCUL DU RECONNAISSANCE DES ÉTOILES SUR UN TOTAL DE 5 QUESTIONS
          */
         function finirEpreuveJeu() {
             let stars = 0;
-            if(currentActiveGame.score === 10) stars = 3;
-            else if(currentActiveGame.score >= 8) stars = 2;
-            else if(currentActiveGame.score >= 5) stars = 1;
+            if(currentActiveGame.score === 5) stars = 3;
+            else if(currentActiveGame.score >= 4) stars = 2;
+            else if(currentActiveGame.score >= 3) stars = 1;
 
             document.getElementById('result-score').innerText = currentActiveGame.score;
             document.getElementById('result-stars').innerText = "⭐".repeat(stars) + "○○○".substring(0, 3 - stars);
@@ -615,15 +715,14 @@
                 gameState.progress[saveKey] = {};
             }
             
-            // Enregistrement du meilleur score (on garde le score le plus élevé)
             const oldStars = gameState.progress[saveKey][currentActiveGame.missionId] || 0;
             if(stars > oldStars) {
                 gameState.progress[saveKey][currentActiveGame.missionId] = stars;
             }
 
-            // Vérification de réussite sur l'Épreuve du Gardien (Mission Index 3) pour l'obtention de l'artefact
-            const isBoss = currentActiveGame.missionId === 3;
-            if(isBoss && currentActiveGame.score >= 7) {
+            // Déblocage de l'artefact si c'est le Gardien (missionId = 1) avec un score >= 4
+            const isBoss = currentActiveGame.missionId === 1;
+            if(isBoss && currentActiveGame.score >= 4) {
                 if(!gameState.unlockedCodex.includes(currentActiveGame.grade)) {
                     gameState.unlockedCodex.push(currentActiveGame.grade);
                     document.getElementById('result-status-text').innerText = `🎉 INCROYABLE ! Vous avez débloqué l'artefact : ${CODEX_ITEMS[currentActiveGame.grade].name} !`;
@@ -636,15 +735,10 @@
             showScreen('screen-result');
         }
 
-        // Redirection vers l'écran du royaume à la fermeture des scores
         function finishMissionSummary() {
             openRealm(currentActiveGame.levelId, currentActiveGame.levelIndex);
         }
 
-        /**
-         * RENDU VISUEL DU CODEX
-         * Construit dynamiquement la liste des objets mythiques débloqués par l'étudiant.
-         */
         function renderCodex() {
             const container = document.getElementById('codex-container');
             container.innerHTML = "";
@@ -656,42 +750,36 @@
                 div.className = `p-4 rounded-lg border ${isUnlocked ? 'bg-slate-900 border-amber-500 text-slate-100' : 'bg-slate-950/40 border-slate-900 opacity-30'}`;
                 div.innerHTML = `
                     <h4 class="font-bold text-amber-400 mb-1">${isUnlocked ? '✨ ' + item.name : '??? Artefact Relique ' + gradeKey}</h4>
-                    <p class="text-sm italic text-slate-300">${isUnlocked ? item.desc : 'Battez l\'Épreuve du Gardien de ce degré avec au moins 7 bonnes réponses.'}</p>
+                    <p class="text-sm italic text-slate-300">${isUnlocked ? item.desc : 'Battez l\'Épreuve du Gardien de ce degré avec au moins 4 bonnes réponses.'}</p>
                 `;
                 container.appendChild(div);
             });
         }
 
         /**
-         * ÉCOUTEUR DU CLAVIER PHYSIQUE DE L'ORDINATEUR
-         * Écoute en arrière-plan global les pressions de touches de l'appareil pour assurer la compatibilité clavier.
+         * ÉCOUTEUR COMPLET DU CLAVIER PHYSIQUE (Prend en compte l'apostrophe)
          */
         window.addEventListener('keydown', function(e) {
-            // SÉCURITÉ 1 : Si l'écran de jeu n'est pas actif, on ignore complètement le clavier
             if (document.getElementById('screen-game').classList.contains('hidden')) return;
-            // SÉCURITÉ 2 : Si l'anti-spam de transition est actif, on jette l'entrée
             if (currentActiveGame.isTransitioning) return;
 
             if (e.key >= '0' && e.key <= '9') {
-                // Chiffres standards et pavé numérique
                 pressKey(e.key);
             } else if (e.key === '.' || e.key === ',') {
-                // Aligne le point et la virgule du clavier sur l'opérateur décimal unique '.'
                 pressKey('.');
             } else if (e.key === '/') {
-                // Permet l'écriture des barres de fractions directes
                 pressKey('/');
+            } else if (e.key === "'" || e.key === "4") { 
+                // Capture native de l'apostrophe sur les différents claviers (suisse-romand inclus)
+                if(e.key === "'") pressKey("'");
             } else if (e.key === 'Backspace') {
-                // Gestion native de la touche Retour Arrière (Effacement du dernier caractère)
                 currentActiveGame.saisie = currentActiveGame.saisie.slice(0, -1);
                 document.getElementById('game-input').value = currentActiveGame.saisie;
             } else if (e.key === 'Enter') {
-                // Validation instantanée par la touche Entrée
                 validerSaisie();
             }
         });
 
-        // Déclencheur automatique au chargement complet du document fenêtré
         window.onload = () => {
             loadGame();
         }
