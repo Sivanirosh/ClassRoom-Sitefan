@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace PCP - Assistant Orientation & Dossiers</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #4a90e2;
+            --bg-color: #f5f7fa;
+            --text-color: #333;
+            --chat-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Barre latérale d'informations */
+        .sidebar {
+            width: 300px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+
+        .sidebar h2 {
+            font-size: 1.4rem;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+
+        .info-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .info-box a {
+            color: #54a0ff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Zone Principale de Chat */
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-color);
+        }
+
+        .chat-header {
+            background-color: white;
+            padding: 15px 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-header h1 {
+            margin: 0;
+            font-size: 1.3rem;
+            color: var(--primary-color);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 75%;
+            padding: 12px 16px;
+            border-radius: 8px;
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+
+        .message.bot {
+            background-color: var(--chat-bg);
+            align-self: flex-start;
+            border-left: 4px solid var(--secondary-color);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .message.user {
+            background-color: var(--secondary-color);
+            color: white;
+            align-self: flex-end;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .chat-input-area {
+            padding: 20px;
+            background-color: white;
+            border-top: 1px solid #e1e8ed;
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input-area textarea {
+            flex: 1;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            padding: 12px;
+            resize: none;
+            height: 24px;
+            font-family: inherit;
+            font-size: 0.95rem;
+        }
+
+        .chat-input-area textarea:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+        }
+
+        .chat-input-area button {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 0 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .chat-input-area button:hover {
+            background-color: #357abd;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Barre latérale -->
+    <div class="sidebar">
+        <h2>Ressources PCP</h2>
+        <div class="info-box">
+            <strong>Objectif :</strong> Prépare ton dossier de candidature (CV, Lettre) et explore ton orientation.
+        </div>
+        <div class="info-box">
+            <strong>Filières en Suisse :</strong><br>
+            • AFP (2 ans)<br>
+            • CFC (3-4 ans)<br>
+            • Maturité / Écoles de culture générale<br>
+            • Passerelles, HES, HEP, Universités
+        </div>
+        <div class="info-box">
+            <strong>Recherche d'apprentissage :</strong><br>
+            Consulte le site officiel : <a href="https://www.orientation.ch" target="_blank">orientation.ch</a> pour trouver les places vacantes.
+        </div>
+    </div>
+
+    <!-- Conteneur principal du Chat -->
+    <div class="chat-container">
+        <div class="chat-header">
+            <h1>Assistant Choix Professionnel & Candidatures</h1>
+            <span style="font-size: 0.85rem; color: #7f8c8d;">Connexion sécurisée (Infomaniak AI)</span>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+            <div class="message bot">
+                Bonjour ! Je suis ton assistant pour la Préparation au Choix Professionnel. <br><br>
+                Je peux t'aider à rédiger ou corriger ta <strong>lettre de motivation</strong>, ton <strong>CV</strong>, ou t'expliquer les différentes filières de formation en Suisse (CFC, AFP, Maturité, etc.). <br><br>
+                Dis-moi, quel est ton projet aujourd'hui ou sur quel métier aimerais-tu postuler ?
+            </div>
+        </div>
+
+        <div class="chat-input-area">
+            <textarea id="userInput" placeholder="Écris ton message ici... (ex: Voici le début de ma lettre...)"></textarea>
+            <button id="sendBtn" onclick="sendMessage()">Envoyer</button>
+        </div>
+    </div>
+
+    <script>
+        // CONFIGURATION DE L'API INFOMANIAK
+        const INFOMANIAK_API_KEY = "VOTRE_CLE_API_INFOMANIAK"; 
+        const MODEL_NAME = "mixtral-8x22b-instruct"; // Modèle performant d'Infomaniak
+        
+        // Historique de la conversation (contient les règles et les échanges)
+        let conversationHistory = [
+            {
+                role: "system",
+                content: `Tu es un conseiller en orientation professionnelle et un enseignant spécialisé en Suisse. Ton rôle est d'accompagner des élèves de fin de scolarité obligatoire à concevoir leur dossier de candidature (CV et Lettre de motivation) et à comprendre le système d'orientation suisse (CFC, AFP, Maturité, HEP, HES, AI, etc.).
+
+                Voici le cadre strict et les exemples attendus (le "Dossier École") sur lesquels tu dois obligatoirement t'appuyer :
+                
+                1. EXEMPLE DE LETTRE DE MOTIVATION ATTENDUE :
+                - En-tête complet (Coordonnées élève à gauche, entreprise à droite, lieu et date).
+                - Objet clair (ex: "Candidature pour une place d'apprentissage de Gestionnaire du commerce de détail").
+                - Structure en 3 parties : 
+                  * MOI : Pourquoi ce métier, d'où vient l'intérêt (ex: suite à un stage d'observation).
+                  * VOUS : Pourquoi cette entreprise spécifiquement (sa réputation, sa taille).
+                  * NOUS : Ce que l'élève va apporter (ses qualités professionnelles, sa motivation) et la demande d'entretien.
+                - Formule de politesse formelle adaptée à la Suisse.
+
+                2. EXEMPLE DE CV ATTENDU :
+                - Données personnelles claires.
+                - Formation (Scolarité obligatoire, niveaux de cours).
+                - Stages professionnels (Élément crucial : indiquer l'entreprise, la durée et les tâches observées).
+                - Compétences et Langues.
+                - Centres d'intérêt / Loisirs (qui montrent une régularité ou des qualités).
+
+                3. TON COMPORTEMENT :
+                - Sois bienveillant, encourageant, mais exigeant sur l'orthographe, la structure et la politesse.
+                - Ne rédige JAMAIS la lettre entière à la place de l'élève. Procède par étapes. Pose des questions (ex: "Qu'as-tu fait durant ton stage de carrossier qui t'a plu ?").
+                - Si l'élève te donne un texte, corrige-le en lui expliquant ses erreurs de formulation.
+                - Utilise le tutoiement, adapté à un cadre scolaire.`
+            }
+        ];
+
+        async function sendMessage() {
+            const inputField = document.getElementById("userInput");
+            const userText = inputField.value.trim();
+            if (!userText) return;
+
+            // Afficher le message de l'élève
+            appendMessage(userText, "user");
+            inputField.value = "";
+
+            // Ajouter à l'historique
+            conversationHistory.push({ role: "user", content: userText });
+
+            // Afficher un message de chargement temporaire
+            const loadingId = appendMessage("En train de réfléchir...", "bot");
+
+            try {
+                // Appel à l'API d'Infomaniak (format compatible OpenAI)
+                const response = await fetch("https://api.infomaniak.com/1/ai/chat/completions", {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${INFOMANIAK_API_KEY}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        model: MODEL_NAME,
+                        messages: conversationHistory,
+                        temperature: 0.7
+                    })
+                });
+
+                const data = await response.json();
+                
+                // Retirer le message de chargement
+                document.getElementById(loadingId).remove();
+
+                if (data.choices && data.choices[0]) {
+                    const botReply = data.choices[0].message.content;
+                    appendMessage(botReply, "bot");
+                    // Ajouter la réponse du bot à l'historique pour qu'il s'en souvienne
+                    conversationHistory.push({ role: "assistant", content: botReply });
+                } else {
+                    appendMessage("⚠️ Désolé, je rencontre une petite erreur de connexion avec le serveur.", "bot");
+                }
+
+            } catch (error) {
+                console.error(error);
+                document.getElementById(loadingId).remove();
+                appendMessage("⚠️ Une erreur est survenue lors de l'envoi du message.", "bot");
+            }
+        }
+
+        function appendMessage(text, sender) {
+            const chatMessages = document.getElementById("chatMessages");
+            const messageDiv = document.createElement("div");
+            const id = "msg-" + Date.now();
+            messageDiv.id = id;
+            messageDiv.classList.add("message", sender);
+            
+            // Remplacement des sauts de ligne pour un joli affichage HTML
+            messageDiv.innerHTML = text.replace(/\n/g, "<br>");
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            return id;
+        }
+
+        // Permettre de faire "Entrée" pour envoyer le message
+        document.getElementById("userInput").addEventListener("keydown", function(e) {
+            if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
