@@ -162,6 +162,7 @@
 
     <main class="max-w-6xl mx-auto px-4 py-8 flex-grow w-full">
         
+        <!-- Section de connexion élève -->
         <div id="login-section" class="max-w-md mx-auto bg-white p-8 rounded-3xl shadow-sm border border-slate-100 my-12">
             <div class="text-center mb-6">
                 <span class="text-5xl mb-2 block">👋</span>
@@ -180,11 +181,12 @@
             </form>
         </div>
 
+        <!-- Tableau de bord de l'élève (Masqué par défaut) -->
         <div id="student-dashboard" class="hidden space-y-8">
             <div class="bg-gradient-to-r from-indigo-900 to-indigo-800 text-white p-6 rounded-3xl shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <h2 class="text-2xl font-bold">Heureux de te revoir, <span id="welcome-name" class="text-amber-300"></span> ! 🚀</h2>
-                    <p class="text-indigo-200 text-xs mt-1">Choisis un jeu ci-dessous pour t'entraîner et améliorer tes scores.</p>
+                    <p class="text-indigo-200 text-xs mt-1">Choisis une activité ou un jeu ci-dessous pour t'entraîner.</p>
                 </div>
                 <button onclick="deconnecterEleve()" class="bg-white/10 hover:bg-white/20 text-xs font-semibold px-4 py-2 rounded-xl transition">
                     ❌ Changer de compte
@@ -193,8 +195,10 @@
 
             <div>
                 <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">🎯 Les Défis Disponibles</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Grille adaptative modifiée à 5 colonnes sur les grands écrans (xl:grid-cols-5) pour accueillir la PCP sans casser la mise en page -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
                     
+                    <!-- Activité 1 : Livrets -->
                     <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition-all flex flex-col justify-between group">
                         <div>
                             <span class="text-4xl mb-4 block group-hover:scale-110 transition-transform duration-200">✖️</span>
@@ -206,6 +210,7 @@
                         </button>
                     </div>
 
+                    <!-- Activité 2 : Géométrie -->
                     <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition-all flex flex-col justify-between group">
                         <div>
                             <span class="text-4xl mb-4 block group-hover:scale-110 transition-transform duration-200">📐</span>
@@ -217,6 +222,7 @@
                         </button>
                     </div>
 
+                    <!-- Activité 3 : Nombres Décimaux -->
                     <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition-all flex flex-col justify-between group">
                         <div>
                             <span class="text-4xl mb-4 block group-hover:scale-110 transition-transform duration-200">🔢</span>
@@ -228,6 +234,7 @@
                         </button>
                     </div>
 
+                    <!-- Activité 4 : Numéria RPG -->
                     <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition-all flex flex-col justify-between group">
                         <div>
                             <span class="text-4xl mb-4 block group-hover:scale-110 transition-transform duration-200">📜</span>
@@ -239,10 +246,23 @@
                         </button>
                     </div>
 
+                    <!-- NOUVELLE CARTE - Activité 5 : Orientation PCP -->
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition-all flex flex-col justify-between group">
+                        <div>
+                            <span class="text-4xl mb-4 block group-hover:scale-110 transition-transform duration-200">💼</span>
+                            <h4 class="font-bold text-lg text-slate-800">Espace PCP / Orientation</h4>
+                            <p class="text-slate-500 text-xs mt-1 leading-relaxed">Prépare ton dossier (CV, lettre de motivation) et discute de tes projets d'apprentissage en Suisse avec l'IA.</p>
+                        </div>
+                        <button onclick="lancerActivite('pcp.html')" class="mt-6 bg-amber-50 hover:bg-amber-600 text-amber-700 hover:text-white font-bold text-sm py-3 rounded-xl transition-all">
+                            Ouvrir l'espace ➔
+                        </button>
+                    </div>
+
                 </div>
             </div>
         </div>
 
+        <!-- Tableau de bord enseignant (Masqué par défaut) -->
         <div id="teacher-dashboard" class="hidden space-y-6">
             <div class="flex justify-between items-center">
                 <div>
@@ -264,6 +284,8 @@
                         <option value="Défi Géométrie">Défi Géométrie</option>
                         <option value="Le Calcul Décimal">Le Calcul Décimal</option>
                         <option value="Les Royaumes de Numéria">Les Royaumes de Numéria</option>
+                        <!-- Option ajoutée pour filtrer les futurs scores de l'espace PCP si besoin -->
+                        <option value="Orientation PCP">Orientation PCP</option> 
                     </select>
                 </div>
                 <button onclick="effacerTousLesScores()" class="text-xs font-bold text-red-600 hover:underline">⚠️ Réinitialiser tous les scores</button>
@@ -294,6 +316,7 @@
 
     </main>
 
+    <!-- Modal d'authentification enseignant -->
     <div id="password-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
         <div class="bg-white p-6 rounded-3xl shadow-xl w-full max-w-sm border border-slate-100">
             <h3 class="font-bold text-slate-800 text-lg mb-2">Accès Enseignant</h3>
@@ -313,6 +336,7 @@
         </div>
     </div>
 
+    <!-- Modal d'erreur / Information GitHub Pages -->
     <div id="preview-modal" class="fixed inset-0 bg-slate-950/80 z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white p-6 rounded-3xl shadow-2xl max-w-md w-full text-center border border-slate-100">
             <span class="text-6xl mb-4 block">🚀</span>
