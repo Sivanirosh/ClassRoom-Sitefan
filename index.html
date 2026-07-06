@@ -4,9 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portail Numérique — Classe Primaire</title>
+    <!-- Chargement de Tailwind CSS pour le style et la mise en page adaptative -->
     <script src="https://cdn.tailwindcss.com"></script>
     
     <script type="module">
+        // ==========================================================================
+        // 1. INITIALISATION ET CONFIGURATION DE FIREBASE
+        // ==========================================================================
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, query, onSnapshot, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
@@ -27,9 +31,11 @@
             const auth = getAuth(app);
             const db = getFirestore(app);
 
+            // Exportation des variables clés dans l'objet global window pour y accéder depuis les fonctions HTML
             window.db = db;
             window.appId = appId;
 
+            // Connexion automatique (soit via jeton personnalisé, soit de manière anonyme)
             const initAuth = async () => {
                 try {
                     if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
@@ -43,6 +49,7 @@
             };
             initAuth();
 
+            // Écouteur de changement d'état de l'authentification
             onAuthStateChanged(auth, (user) => {
                 if (user) {
                     window.currentUser = user;
@@ -53,8 +60,12 @@
             console.error("Erreur d'initialisation Firebase :", e);
         }
 
+        // ==========================================================================
+        // 2. GESTION DU FLUX DE DONNÉES DES SCORES (FIRESTORE)
+        // ==========================================================================
         let stopEcouteurScores = null;
 
+        // Déclenche l'écoute en temps réel de la collection des scores sur Firebase
         window.initScoresListener = function() {
             if (stopEcouteurScores) return;
             if (!window.db || !window.appId) return;
@@ -62,12 +73,16 @@
             try {
                 const colRef = collection(window.db, 'artifacts', window.appId, 'public', 'data', 'scores');
 
+                // Utilisation du Snapshot pour intercepter instantanément chaque modification en base de données
                 stopEcouteurScores = onSnapshot(colRef, (snapshot) => {
                     console.log("Mise à jour Firebase reçue. Documents :", snapshot.size);
                     const list = [];
                     snapshot.forEach((doc) => { list.push({ id: doc.id, ...doc.data() }); });
+                    // Tri antichronologique (du plus récent au plus ancien)
                     list.sort((a, b) => b.timestamp - a.timestamp);
                     window.allScores = list;
+                    
+                    // Si la fonction de filtrage de l'enseignant est disponible, on rafraîchit la vue du tableau
                     if (typeof window.filtrerScores === 'function') { window.filtrerScores(); }
                 }, (error) => {
                     console.error("Erreur Firestore :", error);
@@ -81,6 +96,7 @@
             }
         };
 
+        // Désactive l'écouteur pour économiser de la bande passante lorsque l'enseignant quitte son dashboard
         window.arreterEcouteurScores = function() {
             if (stopEcouteurScores) {
                 stopEcouteurScores();
@@ -89,17 +105,23 @@
             }
         };
 
+        // ==========================================================================
+        // 3. SÉCURITÉ ET ACTIONS DE L'ESPACE ENSEIGNANT
+        // ==========================================================================
+        // Empreinte SHA-256 du mot de passe Enseignant pour vérification locale sécurisée
         const MOT_DE_PASSE_HASH = "4d01f24671d785953f82141f5a6e4fa7d15188f4510a78a77d48f1693ea688b0";
 
         window.validerEspaceEnseignant = async function() {
             const mdp = document.getElementById('teacher-password').value;
 
+            // Hachage à la volée du mot de passe saisi à l'aide de l'API Crypto
             const encoder = new TextEncoder();
             const data = encoder.encode(mdp);
             const hashBuffer = await crypto.subtle.digest('SHA-256', data);
             const hashArray = Array.from(new Uint8Array(hashBuffer));
             const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 
+            // Comparaison avec l'empreinte de référence
             if (hashHex === MOT_DE_PASSE_HASH) {
                 document.getElementById('password-modal').classList.add('hidden');
                 document.getElementById('teacher-password').value = "";
@@ -107,6 +129,7 @@
                 document.getElementById('student-dashboard').classList.add('hidden');
                 document.getElementById('teacher-dashboard').classList.remove('hidden');
 
+                // Lancement de la synchronisation des scores
                 window.initScoresListener();
                 filtrerScores();
             } else {
@@ -115,6 +138,7 @@
             }
         };
 
+        // Supprime un élément de score unique via son identifiant Firestore document
         window.effacerScoreUnique = async function(id) {
             if (!confirm("Voulez-vous vraiment supprimer ce résultat ?")) return;
             if (!window.db) return;
@@ -127,6 +151,7 @@
             }
         };
 
+        // purge complète de l'historique des exercices
         window.effacerTousLesScores = async function() {
             if (!confirm("⚠️ ATTENTION : Voulez-vous vraiment supprimer TOUS les scores ? Cette opération est irréversible.")) return;
             if (!window.db) return;
@@ -145,6 +170,7 @@
 </head>
 <body class="bg-slate-50 min-h-screen font-sans flex flex-col justify-between">
 
+    <!-- EN-TÊTE PRINCIPAL -->
     <header class="bg-indigo-900 text-white shadow-md">
         <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
@@ -154,6 +180,7 @@
                     <p class="text-xs text-indigo-200">Espace numérique d'apprentissage autonome</p>
                 </div>
             </div>
+            <!-- Accès au panneau de contrôle maître -->
             <button onclick="ouvrirEspaceEnseignant()" class="bg-indigo-800 hover:bg-indigo-700 text-xs font-semibold px-4 py-2 rounded-xl transition-all flex items-center gap-1">
                 ⚙️ Espace Enseignant
             </button>
@@ -162,7 +189,7 @@
 
     <main class="max-w-6xl mx-auto px-4 py-8 flex-grow w-full">
         
-        <!-- Section de connexion élève -->
+        <!-- ÉCRAN 1 : CONNEXION ÉLÈVE (Saisie du prénom) -->
         <div id="login-section" class="max-w-md mx-auto bg-white p-8 rounded-3xl shadow-sm border border-slate-100 my-12">
             <div class="text-center mb-6">
                 <span class="text-5xl mb-2 block">👋</span>
@@ -181,8 +208,9 @@
             </form>
         </div>
 
-        <!-- Tableau de bord de l'élève (Masqué par défaut) -->
+        <!-- ÉCRAN 2 : TABLEAU DE BORD ÉLÈVE (Sélection des exercices) -->
         <div id="student-dashboard" class="hidden space-y-8">
+            <!-- Bannière de bienvenue personnalisée via SessionStorage -->
             <div class="bg-gradient-to-r from-indigo-900 to-indigo-800 text-white p-6 rounded-3xl shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <h2 class="text-2xl font-bold">Heureux de te revoir, <span id="welcome-name" class="text-amber-300"></span> ! 🚀</h2>
@@ -195,10 +223,11 @@
 
             <div>
                 <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">🎯 Les Défis Disponibles</h3>
-                <!-- Grille adaptative modifiée à 5 colonnes sur les grands écrans (xl:grid-cols-5) pour accueillir la PCP sans casser la mise en page -->
+                
+                <!-- GRILLE DE SÉLECTION (Configurée en 5 colonnes sur grand écran pour accueillir l'espace orientation) -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
                     
-                    <!-- Activité 1 : Livrets -->
+                    <!-- Carte 1 : Livrets -->
                     <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition-all flex flex-col justify-between group">
                         <div>
                             <span class="text-4xl mb-4 block group-hover:scale-110 transition-transform duration-200">✖️</span>
@@ -210,7 +239,7 @@
                         </button>
                     </div>
 
-                    <!-- Activité 2 : Géométrie -->
+                    <!-- Carte 2 : Géométrie -->
                     <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition-all flex flex-col justify-between group">
                         <div>
                             <span class="text-4xl mb-4 block group-hover:scale-110 transition-transform duration-200">📐</span>
@@ -222,7 +251,7 @@
                         </button>
                     </div>
 
-                    <!-- Activité 3 : Nombres Décimaux -->
+                    <!-- Carte 3 : Nombres Décimaux -->
                     <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition-all flex flex-col justify-between group">
                         <div>
                             <span class="text-4xl mb-4 block group-hover:scale-110 transition-transform duration-200">🔢</span>
@@ -234,7 +263,7 @@
                         </button>
                     </div>
 
-                    <!-- Activité 4 : Numéria RPG -->
+                    <!-- Carte 4 : Numéria RPG -->
                     <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition-all flex flex-col justify-between group">
                         <div>
                             <span class="text-4xl mb-4 block group-hover:scale-110 transition-transform duration-200">📜</span>
@@ -246,13 +275,14 @@
                         </button>
                     </div>
 
-                    <!-- NOUVELLE CARTE - Activité 5 : Orientation PCP -->
+                    <!-- Carte 5 : LE BOUTON POUR ACCÉDER AU MODULE PCP -->
                     <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition-all flex flex-col justify-between group">
                         <div>
                             <span class="text-4xl mb-4 block group-hover:scale-110 transition-transform duration-200">💼</span>
                             <h4 class="font-bold text-lg text-slate-800">Espace PCP / Orientation</h4>
                             <p class="text-slate-500 text-xs mt-1 leading-relaxed">Prépare ton dossier (CV, lettre de motivation) et discute de tes projets d'apprentissage en Suisse avec l'IA.</p>
                         </div>
+                        <!-- Déclenche l'ouverture de pcp.html en passant le prénom en paramètre URL -->
                         <button onclick="lancerActivite('pcp.html')" class="mt-6 bg-amber-50 hover:bg-amber-600 text-amber-700 hover:text-white font-bold text-sm py-3 rounded-xl transition-all">
                             Ouvrir l'espace ➔
                         </button>
@@ -262,7 +292,7 @@
             </div>
         </div>
 
-        <!-- Tableau de bord enseignant (Masqué par défaut) -->
+        <!-- ÉCRAN 3 : TABLEAU DE BORD ENSEIGNANT -->
         <div id="teacher-dashboard" class="hidden space-y-6">
             <div class="flex justify-between items-center">
                 <div>
@@ -274,6 +304,7 @@
                 </button>
             </div>
 
+            <!-- Moteur de recherche et filtres de tri -->
             <div class="bg-white p-4 rounded-2xl border border-slate-100 flex flex-wrap gap-4 items-center justify-between">
                 <div class="flex items-center gap-2">
                     <input type="text" id="teacher-search" oninput="filtrerScores()" placeholder="Rechercher un élève..." 
@@ -284,13 +315,13 @@
                         <option value="Défi Géométrie">Défi Géométrie</option>
                         <option value="Le Calcul Décimal">Le Calcul Décimal</option>
                         <option value="Les Royaumes de Numéria">Les Royaumes de Numéria</option>
-                        <!-- Option ajoutée pour filtrer les futurs scores de l'espace PCP si besoin -->
                         <option value="Orientation PCP">Orientation PCP</option> 
                     </select>
                 </div>
                 <button onclick="effacerTousLesScores()" class="text-xs font-bold text-red-600 hover:underline">⚠️ Réinitialiser tous les scores</button>
             </div>
 
+            <!-- Tableau d'affichage des scores -->
             <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden shadow-sm">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
@@ -316,7 +347,8 @@
 
     </main>
 
-    <!-- Modal d'authentification enseignant -->
+    <!-- ROULAGE DES MODALS ET ALERTES INTERACTIVES -->
+    <!-- Modal Mot de passe Enseignant -->
     <div id="password-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
         <div class="bg-white p-6 rounded-3xl shadow-xl w-full max-w-sm border border-slate-100">
             <h3 class="font-bold text-slate-800 text-lg mb-2">Accès Enseignant</h3>
@@ -336,7 +368,7 @@
         </div>
     </div>
 
-    <!-- Modal d'erreur / Information GitHub Pages -->
+    <!-- Modal Garde-fou pour le développement local (Blobs/Previews) -->
     <div id="preview-modal" class="fixed inset-0 bg-slate-950/80 z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white p-6 rounded-3xl shadow-2xl max-w-md w-full text-center border border-slate-100">
             <span class="text-6xl mb-4 block">🚀</span>
@@ -353,6 +385,7 @@
         </div>
     </div>
 
+    <!-- Notifications Toast customisées -->
     <div id="custom-alert" class="fixed bottom-4 right-4 bg-slate-900 text-white px-6 py-4 rounded-2xl shadow-xl transform translate-y-20 opacity-0 transition-all duration-300 z-50 max-w-sm">
         <p id="custom-alert-text" class="text-sm font-semibold"></p>
     </div>
@@ -361,15 +394,20 @@
         <p>© 2026 Classe Numérique Premium — Apprentissage Personnalisé.</p>
     </footer>
 
+    <!-- ==========================================================================
+       4. LOGIQUE DE SCÉNARIO EN JAVASCRIPT VANILLA
+       ========================================================================== -->
     <script>
         let nomEleve = sessionStorage.getItem('nomEleve');
         window.allScores = [];
 
+        // Au chargement, on vérifie si la session de l'élève est active ou s'il faut l'enregistrer
         window.addEventListener('load', () => {
             if (nomEleve) { afficherDashboardEleve(nomEleve); }
             else { afficherFormulaireLogin(); }
         });
 
+        // Affiche l'alerte toast noire en bas à droite
         function afficherMessageNotification(texte) {
             const alertBox = document.getElementById('custom-alert');
             document.getElementById('custom-alert-text').innerText = texte;
@@ -377,6 +415,7 @@
             setTimeout(() => { alertBox.classList.add('translate-y-20', 'opacity-0'); }, 3000);
         }
 
+        // Soumission du formulaire d'entrée élève
         window.connecterEleve = function(event) {
             event.preventDefault();
             const prenom = document.getElementById('student-name').value.trim();
@@ -405,14 +444,21 @@
             document.getElementById('teacher-dashboard').classList.add('hidden');
         }
 
+        // Système central d'aiguillage des fichiers du portail
         window.lancerActivite = function(pageHtml) {
             if (!nomEleve) { afficherMessageNotification("Erreur de session, merci de ressaisir votre prénom."); afficherFormulaireLogin(); return; }
+            
+            // On passe le nom de l'élève dans l'URL pour que le fichier cible (ex: pcp.html) puisse récupérer l'identité
             const queryParams = `?eleve=${encodeURIComponent(nomEleve)}`;
+            
+            // Protection si le fichier est ouvert directement en mode bac à sable local (Blob)
             if (window.location.protocol === 'blob:') {
                 document.getElementById('preview-modal-target').innerText = pageHtml;
                 document.getElementById('preview-modal').classList.remove('hidden');
                 return;
             }
+            
+            // Calcul automatique du dossier parent pour la navigation relative
             let baseDir = window.location.pathname;
             const lastSegment = baseDir.split('/').pop();
             if (lastSegment && !lastSegment.includes('.')) {
@@ -420,6 +466,7 @@
             } else {
                 baseDir = baseDir.substring(0, baseDir.lastIndexOf('/') + 1);
             }
+            // Redirection finale vers l'exercice sélectionné
             window.location.href = window.location.origin + baseDir + pageHtml + queryParams;
         };
 
@@ -439,6 +486,7 @@
             else { afficherFormulaireLogin(); }
         };
 
+        // Algorithme de filtrage dynamique du tableau de suivi Enseignant
         window.filtrerScores = function() {
             const tableBody = document.getElementById('scores-table-body');
             if (!tableBody) return;
@@ -457,15 +505,18 @@
                 return;
             }
 
+            // Génération HTML à la volée des lignes du tableau de suivi
             tableBody.innerHTML = filtered.map(score => {
                 const totalQuestions = (score.corrects || 0) + (score.erreurs || 0);
                 const affichageScore = totalQuestions > 0 ? `${score.corrects} / ${totalQuestions}` : `${score.corrects || 0} / 10`;
                 const pourcentage = totalQuestions > 0 ? Math.round((score.corrects / totalQuestions) * 100) : 0;
                 const date = score.timestamp ? new Date(score.timestamp) : new Date();
                 const affichageDate = date.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' }) + ' à ' + date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+                
                 let couleurReussite = "bg-rose-100 text-rose-700";
                 if (pourcentage >= 80) couleurReussite = "bg-emerald-100 text-emerald-700";
                 else if (pourcentage >= 50) couleurReussite = "bg-amber-100 text-amber-700";
+                
                 return `
                     <tr class="hover:bg-slate-50 transition">
                         <td class="p-4 font-bold text-slate-800">${score.nomEleve}</td>
