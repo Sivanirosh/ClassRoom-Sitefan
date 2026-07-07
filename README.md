@@ -1,95 +1,90 @@
 # Classe Numérique locale
 
-Application SvelteKit pour une classe. Les élèves ouvrent un QG, explorent cinq mondes de travail, puis les résultats sont enregistrés dans SQLite. Le tableau enseignant est protégé par une session serveur.
+Application SvelteKit pour une classe. Les élèves ouvrent le QG, choisissent leur prénom, puis explorent cinq mondes de travail. Les résultats sont enregistrés dans une base SQLite locale. L'enseignant suit la progression depuis un tableau protégé par une session serveur. Tout fonctionne sur une seule machine, sans service externe.
 
-## Pages
+## Prérequis
 
-1. `/`
+* Node.js 20 ou plus récent
+* npm
 
-   QG de la classe
-
-2. `/livrets`
-
-   Atelier des Livrets
-
-3. `/geometrie`
-
-   Défi des Formes
-
-4. `/calculs`
-
-   Calcul Décimal
-
-5. `/numeria`
-
-   Royaumes de Numéria
-
-6. `/pcp`
-
-   Espace PCP et Orientation
-
-7. `/teacher`
-
-   Tableau enseignant protégé
-
-## Installation
+## Démarrage rapide
 
 ```bash
 npm install
+TEACHER_PASSWORD="test" npm run dev
 ```
 
-## Base locale
+L'application est disponible sur `http://localhost:5173`. Le serveur de développement écoute aussi sur le réseau local.
 
-SQLite crée par défaut le fichier suivant.
+## Pages
+
+1. `/` : QG de la classe, choix du prénom et accès aux mondes
+2. `/livrets` : L'Atelier des Livrets, défis de tables de multiplication avec aides visuelles
+3. `/geometrie` : Le Défi des Formes, identification, intrus visuels et tri 2D/3D
+4. `/calculs` : Le Calcul Décimal, opérations décimales avec ardoise tactique
+5. `/numeria` : Les Royaumes de Numéria, quête de numération HarmoS, étoiles et codex
+6. `/pcp` : Espace PCP / Orientation, CV, lettre de motivation et projet professionnel
+7. `/teacher` : tableau enseignant protégé
+8. `/teacher/login` et `/teacher/logout` : connexion et déconnexion de l'enseignant
+
+Les anciennes adresses en `.html` (par exemple `/pcp.html`) sont redirigées automatiquement vers les nouvelles routes.
+
+## Base de données
+
+SQLite via Drizzle ORM. Le fichier est créé automatiquement au premier accès, par défaut ici.
 
 ```bash
 data/classroom.sqlite
 ```
 
-Pour choisir un autre fichier, utilisez cette variable.
+Pour choisir un autre fichier, définissez cette variable.
 
 ```bash
 DATABASE_URL="file:./data/ma_classe.sqlite"
 ```
 
-Créer ou mettre à jour le schéma.
+Le schéma est appliqué automatiquement au premier démarrage. Pour le créer ou le mettre à jour manuellement, lancez cette commande.
 
 ```bash
 npm run db:migrate
 ```
 
+La base utilise le mode WAL et active les clés étrangères. Tables : `students`, `activity_results`, `world_progress`, `teacher_notes`, `teacher_sessions`.
+
 ## Accès enseignant
 
-Pour un essai local rapide.
+Pour un essai local rapide, un mot de passe en clair suffit.
 
 ```bash
 TEACHER_PASSWORD="test" npm run dev
 ```
 
-Pour un usage de classe, générez un hash.
+Pour un usage de classe, générez plutôt un hash.
 
 ```bash
 TEACHER_PASSWORD_INPUT="mot de passe long" npm run teacher:hash
 ```
 
-Puis démarrez avec la valeur obtenue.
+Puis démarrez avec la valeur obtenue. `TEACHER_PASSWORD_HASH` a priorité sur `TEACHER_PASSWORD`.
 
 ```bash
 TEACHER_PASSWORD_HASH="pbkdf2_sha256$..."
 ```
 
-## Développement
+La session enseignant dure 8 heures et vit côté serveur dans la table `teacher_sessions`. Si aucune de ces variables n'est définie, la connexion est refusée.
 
-```bash
-npm run dev
-npm run check
-npm run build
-npm audit
-```
+## Scripts
+
+* `npm run dev` : serveur de développement
+* `npm run check` : vérification des types Svelte et TypeScript
+* `npm run build` : construction de l'application
+* `npm run preview` : aperçu local du résultat du build
+* `npm run db:migrate` : création ou mise à jour du schéma SQLite
+* `npm run teacher:hash` : génération d'un hash de mot de passe enseignant
 
 ## Serveur construit
 
-Fixez `ORIGIN` avec la vraie adresse ouverte dans le navigateur. SvelteKit en a besoin pour accepter les formulaires protégés.
+L'application est construite avec l'adaptateur Node de SvelteKit. Fixez `ORIGIN` avec la vraie adresse ouverte dans le navigateur : SvelteKit en a besoin pour accepter les formulaires protégés, dont la connexion enseignant.
 
 ```bash
 npm run build
@@ -102,6 +97,27 @@ Sur le réseau de classe.
 HOST=0.0.0.0 PORT=3000 ORIGIN=http://ordinateurclasse.local:3000 node build
 ```
 
-## Données
+## Variables d'environnement
 
-Les activités enregistrent le prénom, le monde, la mission, le score, les erreurs et la date dans SQLite. Le tableau enseignant lit ces données et permet de noter une intervention.
+* `DATABASE_URL` : chemin du fichier SQLite, défaut `file:./data/classroom.sqlite`
+* `TEACHER_PASSWORD` : mot de passe enseignant en clair, pour les essais uniquement
+* `TEACHER_PASSWORD_HASH` : hash du mot de passe, recommandé en classe
+* `TEACHER_PASSWORD_INPUT` : entrée du script `teacher:hash`
+* `HOST`, `PORT`, `ORIGIN` : configuration du serveur construit
+
+## Structure du projet
+
+* `src/routes` : pages des mondes, tableau enseignant et point d'API des résultats
+* `src/lib/worlds.ts` : définition des cinq mondes
+* `src/lib/server/db` : client, schéma et migration SQLite
+* `src/lib/server/auth` : hash et vérification du mot de passe enseignant
+* `src/lib/client/activity.ts` : envoi des résultats depuis les activités
+* `src/hooks.server.ts` : redirection des anciennes adresses `.html`
+
+## Données enregistrées
+
+Chaque activité enregistre le prénom de l'élève, le monde, la mission, le score, le nombre d'erreurs et la date. Le tableau enseignant lit ces données, montre la progression par monde et permet de noter une intervention.
+
+## Technologies
+
+SvelteKit 2, Svelte 5, TypeScript, Vite, Drizzle ORM et SQLite.
