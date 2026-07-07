@@ -1,0 +1,16 @@
+node_modules/
+.svelte-kit/
+build/
+.vite/
+.env
+.env.*
+!.env.example
+data/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+.DS_Store
+
+# Khazad-Doom runtime artifacts
+.workflow/runs/
+.workflow/worktrees/
