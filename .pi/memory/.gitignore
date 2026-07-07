@@ -1,8 +1,0 @@
-# Local/generated project-memory data. Do not commit conversation logs or rebuildable indices.
-events/
-index/
-pending/
-*.sqlite
-*.sqlite-*
-*.db
-*.log

@@ -1,9 +1,9 @@
 import { hashTeacherPassword } from './password-hash';
 
-const password = process.argv.slice(2).join(' ');
+const password = process.env.TEACHER_PASSWORD_INPUT ?? process.argv.slice(2).join(' ');
 
 if (!password) {
-  console.error('Usage: npm run teacher:hash -- "mot-de-passe-enseignant"');
+  console.error('Usage: TEACHER_PASSWORD_INPUT="mot de passe enseignant" npm run teacher:hash');
   process.exit(1);
 }
 

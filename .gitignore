@@ -11,6 +11,7 @@ data/
 *.sqlite-wal
 .DS_Store
 
-# Khazad-Doom runtime artifacts
-.workflow/runs/
-.workflow/worktrees/
+.pi/memory/
+.workflow/
+migrations/
+/*.html
