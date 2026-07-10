@@ -5,40 +5,38 @@
 
 <svelte:head>
   <title>Accès enseignant — Classe Numérique</title>
+  <meta name="description" content="Connexion sécurisée au poste de suivi enseignant." />
+  <meta name="theme-color" content="#263457" />
 </svelte:head>
 
-<div class="page">
-  <header class="header">
+<div class="page teacher-page">
+  <header class="header teacher-header">
     <div class="header-inner">
       <div class="brand">
-        <span class="brand-icon">🔐</span>
-        <div>
-          <h1 class="brand-title">Accès enseignant</h1>
-          <p class="brand-subtitle">Session protégée côté serveur</p>
-        </div>
+        <span class="brand-icon" aria-hidden="true">◫</span>
+        <div><h1 class="brand-title">Poste enseignant</h1><p class="brand-subtitle">Accès privé aux signaux pédagogiques</p></div>
       </div>
-      <a class="btn ghost" href="/">↩ QG</a>
+      <a class="btn ghost" href="/">← Camp élève</a>
     </div>
   </header>
 
-  <main class="main">
-    <form method="POST" class="card stack" style="max-width: 30rem; margin: 3rem auto;">
+  <main class="main login-shell">
+    <form method="POST" class="card login-card stack-lg">
       <div class="center">
-        <div style="font-size: 3rem;">📋</div>
-        <h2>Tableau de suivi</h2>
-        <p class="muted small">Le mot de passe n’est jamais vérifié dans le navigateur.</p>
+        <div class="login-icon" aria-hidden="true">⌁</div>
+        <p class="eyebrow" style="margin-top:1rem;">Session protégée</p>
+        <h1 style="font-size:2rem; margin:.3rem 0;">Ouvrir le suivi</h1>
+        <p class="muted small">Les résultats et notes restent dans l’espace enseignant. Le mot de passe est vérifié uniquement par le serveur.</p>
       </div>
 
-      {#if form?.message}
-        <p class="feedback bad">{form.message}</p>
-      {/if}
+      {#if form?.message}<p class="feedback bad" role="alert">{form.message}</p>{/if}
 
-      <label class="label">
+      <label class="label" for="teacher-password">
         Mot de passe enseignant
-        <input class="input" name="password" type="password" autocomplete="current-password" required />
+        <input id="teacher-password" class="input" name="password" type="password" autocomplete="current-password" required />
       </label>
-
-      <button class="btn primary" type="submit">Ouvrir le suivi</button>
+      <button class="btn btn-primary btn-large" type="submit">Accéder au tableau <span aria-hidden="true">→</span></button>
+      <p class="privacy-note"><span aria-hidden="true">●</span><span>La session expire automatiquement après huit heures.</span></p>
     </form>
   </main>
 </div>

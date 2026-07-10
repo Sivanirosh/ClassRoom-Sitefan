@@ -1,6 +1,11 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { getStudentName, submitActivityResult } from '$lib/client/activity';
+  import FeedbackPanel from '$lib/components/FeedbackPanel.svelte';
+  import MissionProgress from '$lib/components/MissionProgress.svelte';
+  import MissionResult from '$lib/components/MissionResult.svelte';
+  import WorldArt from '$lib/components/WorldArt.svelte';
+  import WorldShell from '$lib/components/WorldShell.svelte';
 
   type Level = '6H' | '7H' | '8H';
   type Mode = 'A' | 'B' | 'C' | 'Mixte';
@@ -14,28 +19,36 @@
     hints: string[];
   };
 
+  const TOTAL_QUESTIONS = 6;
+  const modeDetails: Array<{ id: Mode; icon: string; name: string; description: string }> = [
+    { id: 'A', icon: '◌', name: 'Enquête d’indices', description: 'Retrouve une forme grâce à ses propriétés.' },
+    { id: 'B', icon: '◇', name: 'Trouve l’intrus', description: 'Compare quatre formes et repère celle qui change la règle.' },
+    { id: 'C', icon: '▣', name: '2D ou 3D ?', description: 'Classe une figure plane ou un solide.' },
+    { id: 'Mixte', icon: '✦', name: 'Parcours surprise', description: 'Mélange les trois façons d’observer.' }
+  ];
+
   const shapes: Shape[] = [
-    { name: 'Triangle scalène', kind: 'plane', isTriangle: true, levels: ['6H','7H','8H'], vocab: '3 côtés de longueurs toutes différentes.', hints: ['Je suis un triangle quelconque.', 'Mes trois côtés ont des longueurs différentes.', 'Je ne possède aucun angle droit.'] },
-    { name: 'Triangle rectangle', kind: 'plane', isTriangle: true, levels: ['6H','7H','8H'], vocab: 'Possède 1 angle droit à 90°.', hints: ['Je suis un triangle avec un angle à 90°.', 'Tu peux vérifier mon coin avec une équerre.', 'Je combine trois côtés et un angle droit.'] },
-    { name: 'Triangle isocèle', kind: 'plane', isTriangle: true, levels: ['7H','8H'], vocab: 'Possède 2 côtés égaux.', hints: ['Je suis un triangle avec deux côtés égaux.', 'Mes deux angles sur la base sont identiques.', 'Je possède un axe de symétrie.'] },
-    { name: 'Triangle équilatéral', kind: 'plane', isTriangle: true, levels: ['7H','8H'], vocab: '3 côtés égaux et 3 angles égaux.', hints: ['Je suis un triangle parfaitement régulier.', 'Mes trois côtés mesurent la même longueur.', 'Mes trois angles valent chacun 60°.'] },
-    { name: 'Carré', kind: 'plane', isTriangle: false, levels: ['6H','7H','8H'], vocab: '4 côtés égaux et 4 angles droits.', hints: ['Je suis un quadrilatère régulier.', 'Mes 4 côtés sont égaux.', 'J’ai 4 angles droits.'] },
-    { name: 'Rectangle', kind: 'plane', isTriangle: false, levels: ['6H','7H','8H'], vocab: '4 angles droits, côtés opposés égaux.', hints: ['Je suis un quadrilatère allongé.', 'Mes côtés opposés sont de même longueur.', 'J’ai 4 angles droits.'] },
-    { name: 'Cercle', kind: 'plane', isTriangle: false, levels: ['6H','7H','8H'], vocab: 'Courbe fermée sans côté ni angle.', hints: ['Je suis une figure plane ronde.', 'Tous mes points sont à la même distance du centre.', 'On me trace au compas.'] },
-    { name: 'Losange', kind: 'plane', isTriangle: false, levels: ['7H','8H'], vocab: '4 côtés égaux sans forcément avoir d’angles droits.', hints: ['Je ressemble à un carré penché.', 'Mes 4 côtés sont égaux.', 'Mes diagonales se croisent perpendiculairement.'] },
-    { name: 'Parallélogramme', kind: 'plane', isTriangle: false, levels: ['7H','8H'], vocab: 'Côtés opposés parallèles deux à deux.', hints: ['Mes côtés opposés ne se croisent jamais.', 'Je n’ai pas forcément d’angle droit.', 'Je suis un quadrilatère incliné.'] },
-    { name: 'Trapèze', kind: 'plane', isTriangle: false, levels: ['7H','8H'], vocab: 'Possède au moins une paire de côtés opposés parallèles.', hints: ['Je suis un quadrilatère.', 'Deux de mes côtés sont parallèles.', 'Mes bases n’ont pas la même longueur.'] },
-    { name: 'Cube', kind: 'solid', isTriangle: false, levels: ['6H','7H','8H'], vocab: 'Solide à 6 faces carrées.', hints: ['Je suis le solide du dé à jouer.', 'J’ai 6 faces, 12 arêtes et 8 sommets.', 'Toutes mes faces sont des carrés.'] },
-    { name: 'Pavé droit', kind: 'solid', isTriangle: false, levels: ['6H','7H','8H'], vocab: 'Solide à 6 faces rectangulaires.', hints: ['Je ressemble à une boîte à chaussures.', 'Mes faces sont des rectangles.', 'J’ai 12 arêtes.'] },
-    { name: 'Pyramide à base carrée', kind: 'solid', isTriangle: false, levels: ['7H','8H'], vocab: '1 base carrée et 4 faces triangulaires.', hints: ['Je m’élève vers un sommet.', 'Ma base posée au sol est un carré.', 'Mes côtés sont des triangles.'] },
-    { name: 'Tétraèdre', kind: 'solid', isTriangle: false, levels: ['8H'], vocab: 'Solide composé de 4 faces triangulaires.', hints: ['Je suis une pyramide très simple.', 'Toutes mes faces sont triangulaires.', 'Je possède 4 sommets.'] }
+    { name: 'Triangle scalène', kind: 'plane', isTriangle: true, levels: ['6H','7H','8H'], vocab: 'Il a 3 côtés de longueurs toutes différentes.', hints: ['Je suis un triangle quelconque.', 'Mes trois côtés ont des longueurs différentes.', 'Je ne possède aucun angle droit.'] },
+    { name: 'Triangle rectangle', kind: 'plane', isTriangle: true, levels: ['6H','7H','8H'], vocab: 'Il possède 1 angle droit à 90°.', hints: ['Je suis un triangle avec un angle à 90°.', 'Tu peux vérifier mon coin avec une équerre.', 'Je combine trois côtés et un angle droit.'] },
+    { name: 'Triangle isocèle', kind: 'plane', isTriangle: true, levels: ['7H','8H'], vocab: 'Il possède 2 côtés de même longueur.', hints: ['Je suis un triangle avec deux côtés égaux.', 'Mes deux angles sur la base sont identiques.', 'Je possède un axe de symétrie.'] },
+    { name: 'Triangle équilatéral', kind: 'plane', isTriangle: true, levels: ['7H','8H'], vocab: 'Il a 3 côtés égaux et 3 angles égaux.', hints: ['Je suis un triangle parfaitement régulier.', 'Mes trois côtés mesurent la même longueur.', 'Mes trois angles valent chacun 60°.'] },
+    { name: 'Carré', kind: 'plane', isTriangle: false, levels: ['6H','7H','8H'], vocab: 'Il a 4 côtés égaux et 4 angles droits.', hints: ['Je suis un quadrilatère régulier.', 'Mes 4 côtés sont égaux.', 'J’ai 4 angles droits.'] },
+    { name: 'Rectangle', kind: 'plane', isTriangle: false, levels: ['6H','7H','8H'], vocab: 'Il a 4 angles droits et ses côtés opposés sont égaux.', hints: ['Je suis un quadrilatère allongé.', 'Mes côtés opposés sont de même longueur.', 'J’ai 4 angles droits.'] },
+    { name: 'Cercle', kind: 'plane', isTriangle: false, levels: ['6H','7H','8H'], vocab: 'C’est une courbe fermée, sans côté ni angle.', hints: ['Je suis une figure plane ronde.', 'Tous mes points sont à la même distance du centre.', 'On me trace au compas.'] },
+    { name: 'Losange', kind: 'plane', isTriangle: false, levels: ['7H','8H'], vocab: 'Il a 4 côtés égaux, sans forcément avoir d’angles droits.', hints: ['Je ressemble à un carré penché.', 'Mes 4 côtés sont égaux.', 'Mes diagonales se croisent perpendiculairement.'] },
+    { name: 'Parallélogramme', kind: 'plane', isTriangle: false, levels: ['7H','8H'], vocab: 'Ses côtés opposés sont parallèles deux à deux.', hints: ['Mes côtés opposés ne se croisent jamais.', 'Je n’ai pas forcément d’angle droit.', 'Je suis un quadrilatère incliné.'] },
+    { name: 'Trapèze', kind: 'plane', isTriangle: false, levels: ['7H','8H'], vocab: 'Il possède au moins une paire de côtés opposés parallèles.', hints: ['Je suis un quadrilatère.', 'Deux de mes côtés sont parallèles.', 'Mes bases n’ont pas la même longueur.'] },
+    { name: 'Cube', kind: 'solid', isTriangle: false, levels: ['6H','7H','8H'], vocab: 'C’est un solide à 6 faces carrées.', hints: ['Je suis le solide du dé à jouer.', 'J’ai 6 faces, 12 arêtes et 8 sommets.', 'Toutes mes faces sont des carrés.'] },
+    { name: 'Pavé droit', kind: 'solid', isTriangle: false, levels: ['6H','7H','8H'], vocab: 'C’est un solide à 6 faces rectangulaires.', hints: ['Je ressemble à une boîte à chaussures.', 'Mes faces sont des rectangles.', 'J’ai 12 arêtes.'] },
+    { name: 'Pyramide à base carrée', kind: 'solid', isTriangle: false, levels: ['7H','8H'], vocab: 'Elle a 1 base carrée et 4 faces triangulaires.', hints: ['Je m’élève vers un sommet.', 'Ma base posée au sol est un carré.', 'Mes côtés sont des triangles.'] },
+    { name: 'Tétraèdre', kind: 'solid', isTriangle: false, levels: ['8H'], vocab: 'C’est un solide composé de 4 faces triangulaires.', hints: ['Je suis une pyramide très simple.', 'Toutes mes faces sont triangulaires.', 'Je possède 4 sommets.'] }
   ];
 
   let studentName = 'Explorateur';
   let phase: 'config' | 'play' | 'done' = 'config';
-  let level: Level | '' = '';
-  let mode: Mode | '' = '';
-  let question = 1;
+  let level: Level = '6H';
+  let mode: Mode = 'Mixte';
+  let questionNumber = 1;
   let score = 0;
   let xp = 0;
   let currentMode: PlayMode = 'A';
@@ -43,17 +56,23 @@
   let options: Shape[] = [];
   let hintsShown = 1;
   let points = 30;
-  let feedback = '';
-  let blocked = false;
+  let answered = false;
+  let wasCorrect = false;
+  let selectedAnswer = '';
+  let feedbackTitle = '';
+  let feedbackExplanation = '';
   let sentMessage = '';
+  let finishing = false;
   let errorFamilies: string[] = [];
+
+  $: currentModeName = modeDetails.find((item) => item.id === currentMode)?.name ?? 'Observation';
 
   onMount(() => {
     studentName = getStudentName();
   });
 
   function availableShapes(): Shape[] {
-    return shapes.filter((shape) => level && shape.levels.includes(level));
+    return shapes.filter((shape) => shape.levels.includes(level));
   }
 
   function shuffle<T>(items: T[]): T[] {
@@ -65,24 +84,23 @@
   }
 
   function startMission() {
-    if (!level || !mode) return;
     phase = 'play';
-    question = 1;
+    questionNumber = 1;
     score = 0;
     xp = 0;
+    sentMessage = '';
+    finishing = false;
     errorFamilies = [];
     loadQuestion();
   }
 
   function loadQuestion() {
-    if (question > 10) {
-      finishMission();
-      return;
-    }
-
-    blocked = false;
-    feedback = '';
-    currentMode = mode === 'Mixte' ? choose<PlayMode>(['A', 'B', 'C']) : (mode as PlayMode);
+    answered = false;
+    wasCorrect = false;
+    selectedAnswer = '';
+    feedbackTitle = '';
+    feedbackExplanation = '';
+    currentMode = mode === 'Mixte' ? choose<PlayMode>(['A', 'B', 'C']) : mode;
 
     if (currentMode === 'A') generateModeA();
     else if (currentMode === 'B') generateModeB();
@@ -100,6 +118,7 @@
 
   function generateModeB() {
     points = 10;
+    hintsShown = 1;
     const pool = availableShapes();
     const groupKind: 'plane' | 'solid' = Math.random() > 0.5 ? 'plane' : 'solid';
     let group = pool.filter((shape) => shape.kind === groupKind);
@@ -115,45 +134,66 @@
 
   function generateModeC() {
     points = 10;
+    hintsShown = 1;
     current = choose(availableShapes());
     options = [];
   }
 
   function showHint() {
-    if (currentMode !== 'A' || blocked || hintsShown >= current.hints.length) return;
+    if (currentMode !== 'A' || answered || hintsShown >= current.hints.length) return;
     hintsShown += 1;
     points = Math.max(10, points - 10);
   }
 
   function answer(selected: string) {
-    if (blocked) return;
-    blocked = true;
+    if (answered) return;
+    answered = true;
+    selectedAnswer = selected;
+    wasCorrect = currentMode === 'C' ? selected === current.kind : selected === current.name;
 
-    const isCorrect = currentMode === 'C' ? selected === current.kind : selected === current.name;
-    if (isCorrect) {
+    if (wasCorrect) {
       score += 1;
       xp += points;
-      feedback = `🟢 Analyse valide (+${points} XP).`;
+      feedbackTitle = `Bonne observation ! +${points} points de curiosité.`;
     } else {
       errorFamilies = [...errorFamilies, current.name];
-      const expected = currentMode === 'C' ? (current.kind === 'plane' ? 'Figure plane (2D)' : 'Solide (3D)') : current.name;
-      feedback = `🔴 À revoir : cible attendue ${expected}. ${current.vocab}`;
+      feedbackTitle = 'Un détail nous échappait — regardons-le de plus près.';
     }
 
-    question += 1;
-    window.setTimeout(loadQuestion, isCorrect ? 1800 : 3200);
+    if (currentMode === 'B') {
+      const groupLabel = current.kind === 'solid' ? 'figures planes' : 'solides';
+      feedbackExplanation = `${current.name} est l’intrus : ${current.vocab} Les trois autres sont des ${groupLabel}.`;
+    } else {
+      feedbackExplanation = `${current.name} : ${current.vocab}`;
+    }
+  }
+
+  function continueMission() {
+    if (!answered || finishing) return;
+    if (questionNumber >= TOTAL_QUESTIONS) {
+      finishing = true;
+      finishMission();
+      return;
+    }
+    questionNumber += 1;
+    loadQuestion();
+  }
+
+  function optionCorrectValue(): string {
+    return currentMode === 'C' ? current.kind : current.name;
   }
 
   async function finishMission() {
     phase = 'done';
+    sentMessage = 'Ton résultat est gardé dans ton carnet…';
     const report = await submitActivityResult({
       studentName,
       world: 'geometrie',
-      mission: `${level} mode ${mode}`,
+      mission: `${level} · ${modeDetails.find((item) => item.id === mode)?.name ?? mode}`,
       score,
-      total: 10,
+      total: TOTAL_QUESTIONS,
       scoreBasis: 'last',
-      errorCount: 10 - score,
+      errorCount: TOTAL_QUESTIONS - score,
       errorFamilies: Array.from(new Set(errorFamilies)),
       metadata: { xp }
     });
@@ -184,90 +224,141 @@
 </script>
 
 <svelte:head>
-  <title>Le Défi des Formes — Classe Numérique</title>
+  <title>Le Jardin des Formes — Camp des Curieux</title>
+  <meta name="description" content="Observer, comparer et classer les figures planes et les solides." />
 </svelte:head>
 
-<div class="dark-page page">
-  <header class="dark-header">
-    <div class="header-inner">
-      <div class="brand"><span class="brand-icon">📐</span><div><h1 class="brand-title">Secteur : Géométrie</h1><p class="brand-subtitle">Agent : {studentName}</p></div></div>
-      <a class="btn dark" href="/">↩ QG</a>
-    </div>
-  </header>
+<WorldShell world="geometrie" {studentName} section={phase === 'play' ? `Observation ${questionNumber}/${TOTAL_QUESTIONS}` : ''}>
+  {#if phase === 'config'}
+    <section class="world-hero">
+      <div class="world-hero-copy">
+        <p class="eyebrow">Observer, comparer, classer</p>
+        <h1>Entre dans le Jardin des Formes</h1>
+        <p>Ici, les propriétés sont des indices. Regarde les côtés, les angles, les faces et découvre pourquoi chaque forme porte son nom.</p>
+        <div class="session-promise">
+          <span class="promise-item"><strong>6</strong> observations</span>
+          <span class="promise-item">Indices <strong>facultatifs</strong></span>
+          <span class="promise-item">Environ <strong>7 min</strong></span>
+        </div>
+      </div>
+      <div class="world-hero-art"><WorldArt world="geometrie" /></div>
+    </section>
 
-  <main class="main">
-    {#if phase === 'config'}
-      <section class="dark-card stack" style="max-width: 44rem; margin: 0 auto;">
-        <div class="center"><h2>Configuration de la Mission</h2><p class="muted">Paramètre ton module d’entraînement géométrique.</p></div>
-        <div class="stack">
-          <strong class="kicker">1. Niveau de l’Agent</strong>
-          <div class="grid" style="grid-template-columns: repeat(3, 1fr);">
-            {#each ['6H','7H','8H'] as item}
-              <button class="dark-option" class:selected={level === item} type="button" on:click={() => (level = item as Level)}>{item}</button>
-            {/each}
-          </div>
+    <section class="panel-card setup-panel stack-lg">
+      <fieldset class="selection-group">
+        <legend>1. Choisis ton degré</legend>
+        <div class="choice-grid" role="radiogroup" aria-label="Degré scolaire">
+          {#each [{id:'6H', label:'Découverte', detail:'Formes essentielles'}, {id:'7H', label:'Exploration', detail:'Plus de quadrilatères'}, {id:'8H', label:'Grand inventaire', detail:'Toutes les formes'}] as item}
+            <button
+              class="choice-card"
+              class:is-selected={level === item.id}
+              type="button"
+              role="radio"
+              aria-checked={level === item.id}
+              on:click={() => (level = item.id as Level)}
+            ><span class="choice-icon">{item.id}</span><span>{item.label}<small>{item.detail}</small></span></button>
+          {/each}
         </div>
-        <div class="stack">
-          <strong class="kicker">2. Mode d’analyse</strong>
-          <div class="grid" style="grid-template-columns: repeat(2, 1fr);">
-            <button class="dark-option" class:selected={mode === 'A'} type="button" on:click={() => (mode = 'A')}>🔍 Qui suis-je ?</button>
-            <button class="dark-option" class:selected={mode === 'B'} type="button" on:click={() => (mode = 'B')}>⚠️ L’intrus visuel</button>
-            <button class="dark-option" class:selected={mode === 'C'} type="button" on:click={() => (mode = 'C')}>📦 2D vs 3D</button>
-            <button class="dark-option" class:selected={mode === 'Mixte'} type="button" on:click={() => (mode = 'Mixte')}>🎲 Aléatoire</button>
-          </div>
+      </fieldset>
+
+      <fieldset class="selection-group">
+        <legend>2. Choisis une façon d’observer</legend>
+        <div class="choice-grid mode-grid" role="radiogroup" aria-label="Type de parcours">
+          {#each modeDetails as item}
+            <button
+              class="choice-card mode-choice"
+              class:is-selected={mode === item.id}
+              type="button"
+              role="radio"
+              aria-checked={mode === item.id}
+              on:click={() => (mode = item.id)}
+            ><span class="choice-icon" aria-hidden="true">{item.icon}</span><span>{item.name}<small>{item.description}</small></span></button>
+          {/each}
         </div>
-        <button class="btn primary" disabled={!level || !mode} type="button" on:click={startMission}>Initialiser la Mission 🚀</button>
-      </section>
-    {:else if phase === 'play'}
-      <section class="dark-card stack">
-        <div class="mission-top"><span class="badge">Analyse {Math.min(question, 10)} / 10</span><span class="badge">Mode {currentMode}</span><span class="badge">XP : {xp}</span></div>
+      </fieldset>
+
+      <div class="start-row"><button class="btn btn-primary btn-large" type="button" on:click={startMission}>Commencer l’enquête <span aria-hidden="true">→</span></button></div>
+    </section>
+  {:else if phase === 'play'}
+    <section class="mission-shell">
+      <MissionProgress current={questionNumber} total={TOTAL_QUESTIONS} label="Observation" {score} scoreLabel="Trouvées" />
+      <div class="challenge-card">
+        <div class="mission-top"><p class="challenge-prompt">{currentModeName}</p><span class="badge xp-chip">✦ {xp} points</span></div>
 
         {#if currentMode === 'A'}
-          <div class="dark-card compact center">
-            <p class="kicker">Flux d’indices détectés</p>
-            {#each current.hints.slice(0, hintsShown) as hint}
-              <p>« {hint} »</p>
-            {/each}
-            <button class="btn dark" disabled={hintsShown >= current.hints.length || blocked} type="button" on:click={showHint}>💡 Indice (-10 XP)</button>
+          <div class="question-display stack">
+            <p class="eyebrow">Portrait mystère</p>
+            <div class="hint-stack">
+              {#each current.hints.slice(0, hintsShown) as hint}<p class="hint-line">« {hint} »</p>{/each}
+            </div>
           </div>
-          <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));">
+          <div class="help-row">
+            <button class="btn btn-quiet help-toggle" disabled={hintsShown >= current.hints.length || answered} type="button" on:click={showHint}>✦ Un indice de plus · {points > 10 ? `${points - 10} pts` : '10 pts'}</button>
+          </div>
+          <div class="choice-grid">
             {#each options as option}
-              <button class="dark-option" type="button" on:click={() => answer(option.name)}>{option.name}</button>
+              <button
+                class="choice-card"
+                class:is-correct={answered && option.name === optionCorrectValue()}
+                class:is-wrong={answered && selectedAnswer === option.name && !wasCorrect}
+                type="button"
+                aria-disabled={answered}
+                on:click={() => answer(option.name)}
+              >{option.name}</button>
             {/each}
           </div>
         {:else if currentMode === 'B'}
-          <div class="center"><p class="kicker">Analyse des structures</p><p class="muted">Élimine l’intrus qui rompt la règle du groupe.</p></div>
-          <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));">
+          <div class="center"><p class="challenge-prompt">Trois formes partagent une règle. Laquelle est différente ?</p></div>
+          <div class="choice-grid">
             {#each options as option}
-              <button class="dark-option stack" type="button" on:click={() => answer(option.name)}>
-                <span class="shape-box">{@html svgForShape(option.name)}</span>
+              <button
+                class="choice-card shape-choice"
+                class:is-correct={answered && option.name === optionCorrectValue()}
+                class:is-wrong={answered && selectedAnswer === option.name && !wasCorrect}
+                type="button"
+                aria-disabled={answered}
+                on:click={() => answer(option.name)}
+              >
+                <span class="shape-box" aria-hidden="true">{@html svgForShape(option.name)}</span>
                 <span>{option.name}</span>
               </button>
             {/each}
           </div>
         {:else}
-          <div class="dark-card compact center stack">
-            <p class="kicker">Élément à classifier</p>
+          <div class="question-display stack">
+            <p class="eyebrow">À classer</p>
             <h2>{current.name}</h2>
-            <span class="shape-box">{@html svgForShape(current.name)}</span>
+            <span class="shape-box" aria-hidden="true">{@html svgForShape(current.name)}</span>
           </div>
-          <div class="grid" style="grid-template-columns: repeat(2, 1fr);">
-            <button class="dark-option" type="button" on:click={() => answer('plane')}>📥 Figure plane (2D)</button>
-            <button class="dark-option" type="button" on:click={() => answer('solid')}>📥 Solide (3D)</button>
+          <div class="choice-grid">
+            <button class="choice-card" class:is-correct={answered && current.kind === 'plane'} class:is-wrong={answered && selectedAnswer === 'plane' && !wasCorrect} type="button" aria-disabled={answered} on:click={() => answer('plane')}><span class="choice-icon">□</span><span>Figure plane<small>Elle s’étale en 2 dimensions.</small></span></button>
+            <button class="choice-card" class:is-correct={answered && current.kind === 'solid'} class:is-wrong={answered && selectedAnswer === 'solid' && !wasCorrect} type="button" aria-disabled={answered} on:click={() => answer('solid')}><span class="choice-icon">⬡</span><span>Solide<small>Il occupe un volume en 3 dimensions.</small></span></button>
           </div>
         {/if}
 
-        <p class:good={feedback.startsWith('🟢')} class:bad={!feedback.startsWith('🟢')} class="feedback">{feedback}</p>
-      </section>
-    {:else}
-      <section class="dark-card stack center" style="max-width: 36rem; margin: 0 auto;">
-        <h2>🏁 Rapport de Mission Validé</h2>
-        <p style="font-size: 2.5rem; font-weight: 1000; color: var(--cyan);">{score} / 10</p>
-        <p class="badge" style="margin: 0 auto;">XP totale : {xp}</p>
-        <p>{score >= 8 ? '⚡ Expert géomètre : secteur sécurisé.' : '🔍 Mission accomplie, mais le radar indique des failles à corriger.'}</p>
-        <p class="muted small">{sentMessage}</p>
-        <div class="actions" style="justify-content: center;"><button class="btn primary" type="button" on:click={startMission}>Rejouer</button><a class="btn dark" href="/">Retour au QG</a></div>
-      </section>
-    {/if}
-  </main>
-</div>
+        {#if answered}
+          <FeedbackPanel
+            kind={wasCorrect ? 'correct' : 'incorrect'}
+            title={feedbackTitle}
+            explanation={feedbackExplanation}
+            continueLabel={questionNumber === TOTAL_QUESTIONS ? 'Voir mon bilan' : 'Observation suivante'}
+            on:continue={continueMission}
+          />
+        {/if}
+      </div>
+    </section>
+  {:else}
+    <MissionResult
+      {score}
+      total={TOTAL_QUESTIONS}
+      title="Herbier des formes complété !"
+      message={score >= 5 ? 'Tu observes les propriétés comme un vrai géomètre : avec précision et curiosité.' : 'Tu as enrichi ton vocabulaire géométrique. Refaire l’enquête aidera ton œil à repérer les détails plus vite.'}
+      transmissionMessage={sentMessage}
+    >
+      <p slot="detail" class="small muted">{level} · {modeDetails.find((item) => item.id === mode)?.name} · {xp} points de curiosité</p>
+      <button class="btn btn-primary" type="button" on:click={startMission}>Refaire ce parcours</button>
+      <button class="btn btn-quiet" type="button" on:click={() => (phase = 'config')}>Changer de parcours</button>
+      <a class="btn btn-quiet" href="/">Retour à la carte</a>
+    </MissionResult>
+  {/if}
+</WorldShell>
