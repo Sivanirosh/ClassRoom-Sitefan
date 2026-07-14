@@ -1,0 +1,25 @@
+{
+  "name": "classroom-exercise-lab",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "vite --configLoader runner",
+    "check": "svelte-check --config ./svelte.config.js --tsconfig ./tsconfig.json && npm run validate",
+    "validate": "node tools/validate-catalog.mjs",
+    "build": "npm run check && vite build --configLoader runner"
+  },
+  "dependencies": {
+    "svelte": "^5.35.0"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^5.1.0",
+    "@types/node": "^22.15.30",
+    "svelte-check": "^4.2.1",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5"
+  }
+}

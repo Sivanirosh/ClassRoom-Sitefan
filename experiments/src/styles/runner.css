@@ -1,0 +1,114 @@
+:root {
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  color: #17221f;
+  background: #f3f2eb;
+  font-synthesis: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.prototype-frame {
+  min-height: 100vh;
+}
+
+.runner-toolbar {
+  display: grid;
+  min-height: 42px;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 7px 12px;
+  border-bottom: 1px solid #d7d9d2;
+  color: #58635f;
+  background: #f7f6f1;
+  font-size: 0.72rem;
+}
+
+.runner-toolbar a {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border: 1px solid #d7d9d2;
+  border-radius: 7px;
+  color: #195f55;
+  text-decoration: none;
+}
+
+.runner-toolbar > span:last-child {
+  font-family: ui-monospace, monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.prototype-mount {
+  min-height: calc(100vh - 42px);
+}
+
+.runner-message {
+  display: grid;
+  min-height: 100vh;
+  place-content: center;
+  padding: 30px;
+  text-align: center;
+}
+
+.runner-message p {
+  margin: 0 0 10px;
+  color: #195f55;
+  font-family: ui-monospace, monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.runner-message h1 {
+  max-width: 680px;
+  margin: 0;
+  font-size: clamp(2rem, 6vw, 4.5rem);
+  letter-spacing: -0.05em;
+  line-height: 1.05;
+}
+
+.runner-message a {
+  width: fit-content;
+  margin: 28px auto 0;
+  padding: 10px 15px;
+  border-radius: 9px;
+  color: white;
+  background: #195f55;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.runner-message pre {
+  max-width: min(800px, calc(100vw - 40px));
+  overflow: auto;
+  padding: 18px;
+  border: 1px solid #dfb9b1;
+  border-radius: 10px;
+  color: #8b3228;
+  background: #fff1ee;
+  text-align: left;
+  white-space: pre-wrap;
+}
+
+@media (max-width: 620px) {
+  .runner-toolbar {
+    grid-template-columns: auto 1fr;
+  }
+
+  .runner-toolbar > span:last-child {
+    display: none;
+  }
+}
