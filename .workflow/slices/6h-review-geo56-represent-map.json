@@ -3,9 +3,7 @@
   "title": "Review 6H Géographie: geo56-represent-map",
   "goal": "Independently review and, within the same three authorized exercise prefixes, correct the geo56-represent-map construction, practice, and transfer-diagnosis records against the finalized coverage matrix and review rubric. Advance only exercises that fully pass to testing.",
   "status": "open",
-  "depends_on": [
-    "6h-impl-geo56-represent-map"
-  ],
+  "depends_on": [],
   "areas": [
     "experiments/src/exercises/ex-0318-geography-represent-map-construction/",
     "experiments/src/exercises/ex-0319-geography-represent-map-practice/",

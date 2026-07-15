@@ -3,9 +3,7 @@
   "title": "Review 6H Géographie: geo56-sources-inquiry",
   "goal": "Independently review and, within the same three authorized exercise prefixes, correct the geo56-sources-inquiry construction, practice, and transfer-diagnosis records against the finalized coverage matrix and review rubric. Advance only exercises that fully pass to testing.",
   "status": "open",
-  "depends_on": [
-    "6h-impl-geo56-sources-inquiry"
-  ],
+  "depends_on": [],
   "areas": [
     "experiments/src/exercises/ex-0315-geography-sources-inquiry-construction/",
     "experiments/src/exercises/ex-0316-geography-sources-inquiry-practice/",

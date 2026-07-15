@@ -1,6 +1,6 @@
 {
   "agent": "pi",
-  "cockpit": "auto",
+  "cockpit": "direct",
   "parallelism": 4,
   "verify_timeout_seconds": 1200,
   "worker_attempt_timeout_seconds": 0,

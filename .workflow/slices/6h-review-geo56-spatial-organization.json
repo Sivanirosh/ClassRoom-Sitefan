@@ -3,9 +3,7 @@
   "title": "Review 6H Géographie: geo56-spatial-organization",
   "goal": "Independently review and, within the same three authorized exercise prefixes, correct the geo56-spatial-organization construction, practice, and transfer-diagnosis records against the finalized coverage matrix and review rubric. Advance only exercises that fully pass to testing.",
   "status": "open",
-  "depends_on": [
-    "6h-impl-geo56-spatial-organization"
-  ],
+  "depends_on": [],
   "areas": [
     "experiments/src/exercises/ex-0309-geography-spatial-organization-construction/",
     "experiments/src/exercises/ex-0310-geography-spatial-organization-practice/",

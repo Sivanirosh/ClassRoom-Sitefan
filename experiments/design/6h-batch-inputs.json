@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "programId": "per-6h-msn-shs",
-  "preparedAt": "2026-07-15T10:45:56.557319+00:00",
+  "preparedAt": "2026-07-15T12:31:33.272462+00:00",
   "baselineCommit": "5d00e35efbeec6f4e820bab4bc13b387722d2b9e",
   "approvedDecision": {
     "path": "experiments/design/6h-curriculum-coverage-decision-record.md",
@@ -33,7 +33,7 @@
     },
     {
       "path": "experiments/design/6h-production-plan.md",
-      "sha256": "c412e774a5ec862e8a49d0e708b8901ae4be7e98154ec5c64f3589722b017e5b"
+      "sha256": "5c6fb077455d0f2fa67ed6075eff71b2c13bb99422674e92805592498a7581de"
     },
     {
       "path": "experiments/tools/verify-6h-batch-inputs.mjs",
@@ -150,12 +150,12 @@
   "sliceGraph": {
     "directory": ".workflow/slices",
     "selectedRoot": "6h-final-quality-gate",
-    "newSliceCount": 75,
+    "newSliceCount": 71,
     "digestAlgorithm": "sha256 of UTF-8 lines \"<file-sha256>  <repo-relative-path>\\n\" sorted by repo-relative path",
-    "sha256": "537e27a7dcbb01cc69d30065bd08e7507c07af6d5fad3b31224a494041947140",
+    "sha256": "757a3d31ba24e02de450fec4bb8b132cbc8295dee9cea23b3fc7c031682910e9",
     "manifest": {
       "path": "experiments/design/6h-slice-manifest.json",
-      "sha256": "0d22aeef0209fdd7c5f6ca0931972ce13f808e7caa1f5f8a1401a7a273f43eb8"
+      "sha256": "73d6a6fb09c80bf4eb7271349b742ca90deb46ad45d627caa6cd8d08f0dfe2d4"
     },
     "verifyCommand": "node experiments/tools/verify-6h-batch-inputs.mjs"
   },
@@ -163,12 +163,12 @@
     "agent": "pi",
     "parallelism": 4,
     "allowDirty": false,
-    "cockpit": "repository-default",
+    "cockpit": "direct",
     "questions": "use a declared recommended reversible in-scope option; otherwise stop for operator authority"
   },
   "workflowConfig": {
     "path": ".workflow/khazad.json",
-    "sha256": "2f0a211e7128b0665a9db8bfe63b0ada7873532f9cbd1527020dc6b823172e9b"
+    "sha256": "311cce1dcd57fc5c30bf2ca63fc170e9993e2274c080734ac638c765c2dbfef0"
   },
   "baselineSemantics": "Immutable approved parent commit from which batch preparation began; launch HEAD must be a clean descendant and is recorded by Khazad-Doom preflight.",
   "completedPrerequisites": [
@@ -222,6 +222,23 @@
       "recovery": "Integrated preserved ready-to-merge worker output from failed parallel layer."
     },
     {
+      "sliceId": "6h-impl-geo56-location-access",
+      "commits": [
+        "d5c686e",
+        "7ed195a"
+      ],
+      "status": "prototyping",
+      "areas": [
+        "experiments/src/exercises/ex-0306-geography-location-access-construction/",
+        "experiments/src/exercises/ex-0307-geography-location-access-practice/",
+        "experiments/src/exercises/ex-0308-geography-location-access-transfer-diagnosis/"
+      ],
+      "outputDigestAlgorithm": "sha256 of UTF-8 lines \"<file-sha256>  <repo-relative-path>\\n\" sorted by repo-relative path",
+      "outputSha256": "821087c6765a6f8cc6924e40f87dedbc66a68c0c0a4b7b405231c4fa7bb8e0c4",
+      "outputFileCount": 9,
+      "recovery": "Integrated preserved worker output; location-access additionally received the operator smoke-state fix and passed filtered plus full checks."
+    },
+    {
       "sliceId": "6h-impl-geo56-needs-places",
       "commits": [
         "74f8e7b"
@@ -238,21 +255,68 @@
       "recovery": "Integrated preserved ready-to-merge worker output from failed parallel layer."
     },
     {
-      "sliceId": "6h-impl-geo56-location-access",
+      "sliceId": "6h-impl-geo56-represent-map",
       "commits": [
-        "d5c686e",
-        "7ed195a"
+        "22ccf47"
       ],
       "status": "prototyping",
       "areas": [
-        "experiments/src/exercises/ex-0306-geography-location-access-construction/",
-        "experiments/src/exercises/ex-0307-geography-location-access-practice/",
-        "experiments/src/exercises/ex-0308-geography-location-access-transfer-diagnosis/"
+        "experiments/src/exercises/ex-0318-geography-represent-map-construction/",
+        "experiments/src/exercises/ex-0319-geography-represent-map-practice/",
+        "experiments/src/exercises/ex-0320-geography-represent-map-transfer-diagnosis/"
       ],
       "outputDigestAlgorithm": "sha256 of UTF-8 lines \"<file-sha256>  <repo-relative-path>\\n\" sorted by repo-relative path",
-      "outputSha256": "821087c6765a6f8cc6924e40f87dedbc66a68c0c0a4b7b405231c4fa7bb8e0c4",
+      "outputSha256": "d5f7892f969656619b53e4ee908e17cdf563e5e7f9d9a64251d6e998681a551e",
       "outputFileCount": 9,
-      "recovery": "Integrated preserved worker output; location-access additionally received the operator smoke-state fix and passed filtered plus full checks."
+      "recovery": "Recovered from the prior run integration branch after a Herdr stale-pane orchestration failure; full current check, smoke, and build passed."
+    },
+    {
+      "sliceId": "6h-impl-geo56-scale",
+      "commits": [
+        "0dc4844"
+      ],
+      "status": "prototyping",
+      "areas": [
+        "experiments/src/exercises/ex-0312-geography-scale-construction/",
+        "experiments/src/exercises/ex-0313-geography-scale-practice/",
+        "experiments/src/exercises/ex-0314-geography-scale-transfer-diagnosis/"
+      ],
+      "outputDigestAlgorithm": "sha256 of UTF-8 lines \"<file-sha256>  <repo-relative-path>\\n\" sorted by repo-relative path",
+      "outputSha256": "02a32d4a7af56fbdc623ff734c49c34f0b744a564108d0ba50f4e8276918891d",
+      "outputFileCount": 9,
+      "recovery": "Recovered from the prior run integration branch after a Herdr stale-pane orchestration failure; full current check, smoke, and build passed."
+    },
+    {
+      "sliceId": "6h-impl-geo56-sources-inquiry",
+      "commits": [
+        "dcf2cac"
+      ],
+      "status": "prototyping",
+      "areas": [
+        "experiments/src/exercises/ex-0315-geography-sources-inquiry-construction/",
+        "experiments/src/exercises/ex-0316-geography-sources-inquiry-practice/",
+        "experiments/src/exercises/ex-0317-geography-sources-inquiry-transfer-diagnosis/"
+      ],
+      "outputDigestAlgorithm": "sha256 of UTF-8 lines \"<file-sha256>  <repo-relative-path>\\n\" sorted by repo-relative path",
+      "outputSha256": "12f524245ae6be762c5f1e6e7e3d92cbb4c88199e3d15d08d94d091f0d82ec89",
+      "outputFileCount": 9,
+      "recovery": "Recovered from the prior run integration branch after a Herdr stale-pane orchestration failure; full current check, smoke, and build passed."
+    },
+    {
+      "sliceId": "6h-impl-geo56-spatial-organization",
+      "commits": [
+        "0350daa"
+      ],
+      "status": "prototyping",
+      "areas": [
+        "experiments/src/exercises/ex-0309-geography-spatial-organization-construction/",
+        "experiments/src/exercises/ex-0310-geography-spatial-organization-practice/",
+        "experiments/src/exercises/ex-0311-geography-spatial-organization-transfer-diagnosis/"
+      ],
+      "outputDigestAlgorithm": "sha256 of UTF-8 lines \"<file-sha256>  <repo-relative-path>\\n\" sorted by repo-relative path",
+      "outputSha256": "a9074fd26f13e0442b5c3318405e48592c00bd3a044c025488c635fcca9af07d",
+      "outputFileCount": 9,
+      "recovery": "Recovered from the prior run integration branch after a Herdr stale-pane orchestration failure; full current check, smoke, and build passed."
     }
   ]
 }
