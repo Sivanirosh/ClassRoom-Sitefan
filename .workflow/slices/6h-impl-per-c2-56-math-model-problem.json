@@ -3,11 +3,7 @@
   "title": "6H Mathématiques: Démarche, représentation, validation, communication",
   "goal": "Create the three complete isolated Svelte exercise records allocated to cluster PER-C2-56-MATH-MODEL-PROBLEM (MSN 21, MSN 22, MSN 23, MSN 24, MSN 25) using the finalized coverage matrix and quality contract. Implement the approved lenses construction=EX-0136, practice=EX-0137, transfer-diagnosis=EX-0138. Each record must have exercise.ts, a rigorous DESIGN.md, Prototype.svelte, and any owned assets.",
   "status": "open",
-  "depends_on": [
-    "6h-curriculum-map",
-    "6h-exercise-quality-contract",
-    "6h-browser-smoke-harness"
-  ],
+  "depends_on": [],
   "areas": [
     "experiments/src/exercises/ex-0136-math-model-problem-construction/",
     "experiments/src/exercises/ex-0137-math-model-problem-practice/",
@@ -31,6 +27,7 @@
     "The three approved lenses cannot be made meaningfully distinct without changing the cluster boundary or product intent."
   ],
   "verify": [
+    "node experiments/tools/verify-6h-batch-inputs.mjs",
     "cd experiments && npm run check",
     "cd experiments && SMOKE_EXERCISES=EX-0136,EX-0137,EX-0138 npm run test:smoke"
   ],

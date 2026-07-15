@@ -3,11 +3,7 @@
   "title": "6H Sciences: alimentation, respiration, locomotion, croissance",
   "goal": "Create the three complete isolated Svelte exercise records allocated to cluster SCI-C2-56-BODY-INPUTS-MOVEMENT-GROWTH (MSN 25, MSN 27) using the finalized coverage matrix and quality contract. Implement the approved lenses construction=EX-0218, practice=EX-0219, transfer-diagnosis=EX-0220. Each record must have exercise.ts, a rigorous DESIGN.md, Prototype.svelte, and any owned assets.",
   "status": "open",
-  "depends_on": [
-    "6h-curriculum-map",
-    "6h-exercise-quality-contract",
-    "6h-browser-smoke-harness"
-  ],
+  "depends_on": [],
   "areas": [
     "experiments/src/exercises/ex-0218-science-body-inputs-movement-growth-construction/",
     "experiments/src/exercises/ex-0219-science-body-inputs-movement-growth-practice/",
@@ -31,6 +27,7 @@
     "The three approved lenses cannot be made meaningfully distinct without changing the cluster boundary or product intent."
   ],
   "verify": [
+    "node experiments/tools/verify-6h-batch-inputs.mjs",
     "cd experiments && npm run check",
     "cd experiments && SMOKE_EXERCISES=EX-0218,EX-0219,EX-0220 npm run test:smoke"
   ],

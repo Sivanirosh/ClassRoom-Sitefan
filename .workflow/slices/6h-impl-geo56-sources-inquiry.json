@@ -3,11 +3,7 @@
   "title": "6H Géographie: Questionnement, médias et sources",
   "goal": "Create the three complete isolated Svelte exercise records allocated to cluster geo56-sources-inquiry (SHS 21, SHS 23) using the finalized coverage matrix and quality contract. Implement the approved lenses construction=EX-0315, practice=EX-0316, transfer-diagnosis=EX-0317. Each record must have exercise.ts, a rigorous DESIGN.md, Prototype.svelte, and any owned assets.",
   "status": "open",
-  "depends_on": [
-    "6h-curriculum-map",
-    "6h-exercise-quality-contract",
-    "6h-browser-smoke-harness"
-  ],
+  "depends_on": [],
   "areas": [
     "experiments/src/exercises/ex-0315-geography-sources-inquiry-construction/",
     "experiments/src/exercises/ex-0316-geography-sources-inquiry-practice/",
@@ -31,6 +27,7 @@
     "The three approved lenses cannot be made meaningfully distinct without changing the cluster boundary or product intent."
   ],
   "verify": [
+    "node experiments/tools/verify-6h-batch-inputs.mjs",
     "cd experiments && npm run check",
     "cd experiments && SMOKE_EXERCISES=EX-0315,EX-0316,EX-0317 npm run test:smoke"
   ],

@@ -3,11 +3,7 @@
   "title": "6H Sciences: matière, eau, air",
   "goal": "Create the three complete isolated Svelte exercise records allocated to cluster SCI-C2-56-MATTER-WATER-AIR (MSN 25, MSN 26) using the finalized coverage matrix and quality contract. Implement the approved lenses construction=EX-0203, practice=EX-0204, transfer-diagnosis=EX-0205. Each record must have exercise.ts, a rigorous DESIGN.md, Prototype.svelte, and any owned assets.",
   "status": "open",
-  "depends_on": [
-    "6h-curriculum-map",
-    "6h-exercise-quality-contract",
-    "6h-browser-smoke-harness"
-  ],
+  "depends_on": [],
   "areas": [
     "experiments/src/exercises/ex-0203-science-matter-water-air-construction/",
     "experiments/src/exercises/ex-0204-science-matter-water-air-practice/",
@@ -31,6 +27,7 @@
     "The three approved lenses cannot be made meaningfully distinct without changing the cluster boundary or product intent."
   ],
   "verify": [
+    "node experiments/tools/verify-6h-batch-inputs.mjs",
     "cd experiments && npm run check",
     "cd experiments && SMOKE_EXERCISES=EX-0203,EX-0204,EX-0205 npm run test:smoke"
   ],

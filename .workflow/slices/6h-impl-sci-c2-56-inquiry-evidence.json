@@ -3,11 +3,7 @@
   "title": "6H Sciences: enquêter, mesurer, argumenter",
   "goal": "Create the three complete isolated Svelte exercise records allocated to cluster SCI-C2-56-INQUIRY-EVIDENCE (MSN 25, MSN 26, MSN 27, MSN 28) using the finalized coverage matrix and quality contract. Implement the approved lenses construction=EX-0200, practice=EX-0201, transfer-diagnosis=EX-0202. Each record must have exercise.ts, a rigorous DESIGN.md, Prototype.svelte, and any owned assets.",
   "status": "open",
-  "depends_on": [
-    "6h-curriculum-map",
-    "6h-exercise-quality-contract",
-    "6h-browser-smoke-harness"
-  ],
+  "depends_on": [],
   "areas": [
     "experiments/src/exercises/ex-0200-science-inquiry-evidence-construction/",
     "experiments/src/exercises/ex-0201-science-inquiry-evidence-practice/",
@@ -31,6 +27,7 @@
     "The three approved lenses cannot be made meaningfully distinct without changing the cluster boundary or product intent."
   ],
   "verify": [
+    "node experiments/tools/verify-6h-batch-inputs.mjs",
     "cd experiments && npm run check",
     "cd experiments && SMOKE_EXERCISES=EX-0200,EX-0201,EX-0202 npm run test:smoke"
   ],

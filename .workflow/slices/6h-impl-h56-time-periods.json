@@ -3,11 +3,7 @@
   "title": "6H Histoire: Repères temporels et périodisation",
   "goal": "Create the three complete isolated Svelte exercise records allocated to cluster H56-TIME-PERIODS (SHS 22, SHS 23) using the finalized coverage matrix and quality contract. Implement the approved lenses construction=EX-0400, practice=EX-0401, transfer-diagnosis=EX-0402. Each record must have exercise.ts, a rigorous DESIGN.md, Prototype.svelte, and any owned assets.",
   "status": "open",
-  "depends_on": [
-    "6h-curriculum-map",
-    "6h-exercise-quality-contract",
-    "6h-browser-smoke-harness"
-  ],
+  "depends_on": [],
   "areas": [
     "experiments/src/exercises/ex-0400-history-time-periods-construction/",
     "experiments/src/exercises/ex-0401-history-time-periods-practice/",
@@ -31,6 +27,7 @@
     "The three approved lenses cannot be made meaningfully distinct without changing the cluster boundary or product intent."
   ],
   "verify": [
+    "node experiments/tools/verify-6h-batch-inputs.mjs",
     "cd experiments && npm run check",
     "cd experiments && SMOKE_EXERCISES=EX-0400,EX-0401,EX-0402 npm run test:smoke"
   ],

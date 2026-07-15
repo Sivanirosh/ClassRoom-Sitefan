@@ -84,14 +84,14 @@ for (const entry of manifest.files) {
 
 const reachable = new Set();
 function visit(id, stack = []) {
+  if (stack.includes(id)) {
+    failures.push(`dependency cycle: ${[...stack, id].join(' -> ')}`);
+    return;
+  }
   if (reachable.has(id)) return;
   const slice = slices.get(id);
   if (!slice) {
     failures.push(`missing selected-graph dependency ${id} via ${stack.join(' -> ') || 'root'}`);
-    return;
-  }
-  if (stack.includes(id)) {
-    failures.push(`dependency cycle: ${[...stack, id].join(' -> ')}`);
     return;
   }
   reachable.add(id);
@@ -110,6 +110,15 @@ try {
   execFileSync('git', ['merge-base', '--is-ancestor', batch.baselineCommit, 'HEAD'], { cwd: root });
 } catch {
   failures.push(`baseline ${batch.baselineCommit} is not an ancestor of HEAD`);
+}
+
+for (const prerequisite of batch.completedPrerequisites ?? []) {
+  try {
+    execFileSync('git', ['cat-file', '-e', `${prerequisite.commit}^{commit}`], { cwd: root });
+    execFileSync('git', ['merge-base', '--is-ancestor', prerequisite.commit, 'HEAD'], { cwd: root });
+  } catch {
+    failures.push(`completed prerequisite ${prerequisite.sliceId} commit ${prerequisite.commit} is missing or not an ancestor of HEAD`);
+  }
 }
 
 if (requireClean) {

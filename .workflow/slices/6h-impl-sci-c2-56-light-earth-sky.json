@@ -3,11 +3,7 @@
   "title": "6H Sciences: lumière, ombres, repères terrestres",
   "goal": "Create the three complete isolated Svelte exercise records allocated to cluster SCI-C2-56-LIGHT-EARTH-SKY (MSN 25, MSN 26) using the finalized coverage matrix and quality contract. Implement the approved lenses construction=EX-0212, practice=EX-0213, transfer-diagnosis=EX-0214. Each record must have exercise.ts, a rigorous DESIGN.md, Prototype.svelte, and any owned assets.",
   "status": "open",
-  "depends_on": [
-    "6h-curriculum-map",
-    "6h-exercise-quality-contract",
-    "6h-browser-smoke-harness"
-  ],
+  "depends_on": [],
   "areas": [
     "experiments/src/exercises/ex-0212-science-light-earth-sky-construction/",
     "experiments/src/exercises/ex-0213-science-light-earth-sky-practice/",
@@ -31,6 +27,7 @@
     "The three approved lenses cannot be made meaningfully distinct without changing the cluster boundary or product intent."
   ],
   "verify": [
+    "node experiments/tools/verify-6h-batch-inputs.mjs",
     "cd experiments && npm run check",
     "cd experiments && SMOKE_EXERCISES=EX-0212,EX-0213,EX-0214 npm run test:smoke"
   ],

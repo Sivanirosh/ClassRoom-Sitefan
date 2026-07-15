@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "programId": "per-6h-msn-shs",
-  "preparedAt": "2026-07-15T08:10:36.794341+00:00",
+  "preparedAt": "2026-07-15T08:15:23.685508+00:00",
   "baselineCommit": "5d00e35efbeec6f4e820bab4bc13b387722d2b9e",
   "approvedDecision": {
     "path": "experiments/design/6h-curriculum-coverage-decision-record.md",
@@ -33,11 +33,111 @@
     },
     {
       "path": "experiments/design/6h-production-plan.md",
-      "sha256": "d2f9806bcb76ce679fbf6ef0dde9a18138f8c48836f8705528c21392fd6fba83"
+      "sha256": "9cb6ef27f8ba18412c96083acb8a60ef8bb5160b28ce55fcfbd21de709270621"
     },
     {
       "path": "experiments/tools/verify-6h-batch-inputs.mjs",
-      "sha256": "07d755b509a40ff0c457ee5cd281f351d154bff24b2b0052b4f27c9babae32e5"
+      "sha256": "cb4338512df90bf1341cf7769ae9a0d56d8a87af5a0a7469d142221d1d8d1dec"
+    },
+    {
+      "path": "experiments/package.json",
+      "sha256": "4e6b78bf6230e3345d7123492ac8e4f48007cced994828617e69efa6a478372e",
+      "role": "completed-prerequisite-output"
+    },
+    {
+      "path": "experiments/package-lock.json",
+      "sha256": "5dab0e96f1204b4dd650f8ea20d02f73c3d201696e01cb8a5b528898741ad48b",
+      "role": "completed-prerequisite-output"
+    },
+    {
+      "path": "experiments/playwright.config.ts",
+      "sha256": "8c815932009b4ba088e132a1c6f897557a63e7b8ff2b5d60b1aabb3868873d8d",
+      "role": "completed-prerequisite-output"
+    },
+    {
+      "path": "experiments/tests/smoke/README.md",
+      "sha256": "4624ac0278f25496cd06691406b77ff9b35bb1a7d6d15c17b004aeed186d017c",
+      "role": "completed-prerequisite-output"
+    },
+    {
+      "path": "experiments/tests/smoke/catalog.ts",
+      "sha256": "097a842a070cd5fa767d1079a5d7b8f5e6a74abcfbc96f4a3fbcf3d523ee6c0d",
+      "role": "completed-prerequisite-output"
+    },
+    {
+      "path": "experiments/tests/smoke/contract-fixture.html",
+      "sha256": "4a7403b20ea69db5953f0b5ffd955d3fb7d4114e94a781f690fed82767ed9baa",
+      "role": "completed-prerequisite-output"
+    },
+    {
+      "path": "experiments/tests/smoke/contract.ts",
+      "sha256": "65a91b0cd2a5ea480fbf240c1652aa4980fb6e6d3e043efebd1b0ff8c7315331",
+      "role": "completed-prerequisite-output"
+    },
+    {
+      "path": "experiments/tests/smoke/exercise-smoke.spec.ts",
+      "sha256": "a2a2983438a8f2d58bd5fb8c88ac8fbcdfa82a6d12ad581fd1878f4a37719054",
+      "role": "completed-prerequisite-output"
+    },
+    {
+      "path": "experiments/tests/smoke/guard.ts",
+      "sha256": "d6cc40422762c9c9232bdcb84bceb03ea34b943bb40f53647bda82fb66efa677",
+      "role": "completed-prerequisite-output"
+    },
+    {
+      "path": "experiments/tests/smoke/vite-server.mjs",
+      "sha256": "33db43cf4567de2d65a40b7053262a286603686ff54ff795cc94494784a3e354",
+      "role": "completed-prerequisite-output"
+    },
+    {
+      "path": "experiments/curriculum/sources/src-per-0002.md",
+      "sha256": "b1ccdf352a882607c0ab7458966135dea89f849478220ecfd922fff52ebdf9f7",
+      "role": "completed-prerequisite-output"
+    },
+    {
+      "path": "experiments/curriculum/sources/src-per-0003.md",
+      "sha256": "91d5d5878383b5b3f3cfed505a9dedf4fb44c1f41f2d9e329e985ce271a64c09",
+      "role": "completed-prerequisite-output"
+    },
+    {
+      "path": "experiments/curriculum/notes/6h-mathematics.md",
+      "sha256": "0fd2294d8c431f400745b51502a1000a59ef60bb6e0d2c77761d68cb472ae988",
+      "role": "completed-prerequisite-output"
+    },
+    {
+      "path": "experiments/curriculum/notes/6h-science.md",
+      "sha256": "72ce781dd23a7bef4396ead64b76cb2a96ceddbc9ab209ae83966d917b0aec4c",
+      "role": "completed-prerequisite-output"
+    },
+    {
+      "path": "experiments/curriculum/notes/6h-geography.md",
+      "sha256": "63a8e9ef77bdad51ea685ddbb2453e3bbb268f8417c6855abfb4087256c67565",
+      "role": "completed-prerequisite-output"
+    },
+    {
+      "path": "experiments/curriculum/notes/6h-history.md",
+      "sha256": "33b44962ea4c8d7a570a5b712117f085756ad5148c4282f4ac65d695fd5602f2",
+      "role": "completed-prerequisite-output"
+    },
+    {
+      "path": "experiments/curriculum/mappings/6h-coverage-matrix.json",
+      "sha256": "69e558ac7ab9b965df515721cce92505dbf871966d63c757d86110978482f721",
+      "role": "completed-prerequisite-output"
+    },
+    {
+      "path": "experiments/curriculum/mappings/6h-coverage-report.md",
+      "sha256": "1f257f001087c5249a13a853ef6738e793c2e1b0712288fa604a6e021f42e79a",
+      "role": "completed-prerequisite-output"
+    },
+    {
+      "path": "experiments/design/6h-exercise-quality-contract.md",
+      "sha256": "30b215cd80eda18b7bc49ba4b83be18fcb327b6436780c0abf131fb139485a33",
+      "role": "completed-prerequisite-output"
+    },
+    {
+      "path": "experiments/design/6h-review-rubric.md",
+      "sha256": "b1bad520a936d09729fb53dd851e6bd3093d2f9d4b8de61adb7a2bd1ef5edf77",
+      "role": "completed-prerequisite-output"
     }
   ],
   "allocation": {
@@ -50,12 +150,12 @@
   "sliceGraph": {
     "directory": ".workflow/slices",
     "selectedRoot": "6h-final-quality-gate",
-    "newSliceCount": 82,
+    "newSliceCount": 79,
     "digestAlgorithm": "sha256 of UTF-8 lines \"<file-sha256>  <repo-relative-path>\\n\" sorted by repo-relative path",
-    "sha256": "a706790c8ed17ab2d940328fe2ac3647698b4b013bb2d15b1518fe844f60c8ae",
+    "sha256": "1113da717848286f7b109453029ceff9ef5cabeed1e219d5588d20a073f1890d",
     "manifest": {
       "path": "experiments/design/6h-slice-manifest.json",
-      "sha256": "b4f537e90b90793f3c7ff403c5a5f7c8f64eacdc02871165f57e702a3af4bb9a"
+      "sha256": "809aa96b46bd540231778a63936a29bd0d1d449bb90cc5718fd7af75dff0477e"
     },
     "verifyCommand": "node experiments/tools/verify-6h-batch-inputs.mjs"
   },
@@ -70,5 +170,22 @@
     "path": ".workflow/khazad.json",
     "sha256": "328087be5b0faa924b5275bcd289dd5780b7ff4d8b22d57bed8625f6500f308b"
   },
-  "baselineSemantics": "Immutable approved parent commit from which batch preparation began; launch HEAD must be a clean descendant and is recorded by Khazad-Doom preflight."
+  "baselineSemantics": "Immutable approved parent commit from which batch preparation began; launch HEAD must be a clean descendant and is recorded by Khazad-Doom preflight.",
+  "completedPrerequisites": [
+    {
+      "sliceId": "6h-browser-smoke-harness",
+      "commit": "0e0b508",
+      "recovery": "cherry-picked from cancelled run kd-20260715-073808-859fafad; local check, smoke, and build passed"
+    },
+    {
+      "sliceId": "6h-curriculum-map",
+      "commit": "3967524",
+      "recovery": "cherry-picked from cancelled run kd-20260715-073808-859fafad; exact eight intended outputs retained"
+    },
+    {
+      "sliceId": "6h-exercise-quality-contract",
+      "commit": "855b93a",
+      "recovery": "cherry-picked from cancelled run kd-20260715-073808-859fafad; local check passed"
+    }
+  ]
 }
