@@ -11,6 +11,7 @@
     "The contract defines minimum complete states: introduction, active concept manipulation, decision/submission, specific explanatory feedback, recoverable retry or scaffold, continuation, and completion.",
     "The three lenses have distinct purposes and may not be generic reskins: construction makes a relationship visible, practice varies it deliberately, and transfer/diagnosis uses a novel context and records an interpretable error family in local state only.",
     "The accessibility rubric covers full keyboard operation, pointer/touch targets, non-color cues, focus, reduced motion, readable French, 320px responsive behavior, and alternatives to fine-motor drag interactions.",
+    "The testing-readiness rubric binds every 6H prototype to the browser harness smoke contract on visible pupil controls/states, so desktop keyboard and actual 320px touch scenarios must demonstrate incorrect feedback, retry, correct continuation, completion, no horizontal overflow, reduced-motion safety, and zero storage/network side effects through the exercised path.",
     "The evidence rubric requires objective/source/statement traceability, observable learning evidence, misconceptions distinguished from hypotheses, bounded content models, observation plans, and no unsupported 6H or validation claim.",
     "The isolation rubric prohibits classroom imports, cross-exercise imports, persistence, analytics, identity, network calls, and substantial copyrighted source content.",
     "The lifecycle rule requires implementation slices to leave work prototyping and permits paired independent review slices to advance passing work only to testing; validated is reserved for pupil trials.",
@@ -23,6 +24,7 @@
     "You need to change files outside the declared areas."
   ],
   "verify": [
+    "node experiments/tools/verify-6h-batch-inputs.mjs",
     "test -s experiments/design/6h-exercise-quality-contract.md",
     "test -s experiments/design/6h-review-rubric.md"
   ]

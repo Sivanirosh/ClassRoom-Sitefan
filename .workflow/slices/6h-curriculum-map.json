@@ -25,6 +25,7 @@
     "You need to change the immutable exercise ID allocation or files outside the declared areas."
   ],
   "verify": [
+    "node experiments/tools/verify-6h-batch-inputs.mjs",
     "test -s experiments/curriculum/mappings/6h-coverage-matrix.json",
     "test -s experiments/curriculum/mappings/6h-coverage-report.md",
     "cd experiments && npm run check"

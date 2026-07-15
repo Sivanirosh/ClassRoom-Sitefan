@@ -20,6 +20,7 @@
     "The construction, practice, and transfer-diagnosis prototypes use meaningfully different concept-led loops rather than a common multiple-choice reskin; each is student-facing French and self-contained.",
     "Every prototype implements introduction, active manipulation, submission/decision, specific explanatory feedback, scaffolded recovery or retry, continuation, and completion with at least three deliberate content variations.",
     "Keyboard, pointer, and touch paths are present; correctness is not communicated by color alone; motion respects reduced-motion; the layout remains usable at 320px and does not require fine motor precision.",
+    "Every prototype implements the quality contract’s presentation-neutral smoke markers on visible enabled pupil controls and observable states; the markers support automated desktop-keyboard and 320px-touch paths through incorrect feedback, retry, correct continuation, and completion without providing a hidden test-only shortcut.",
     "No prototype imports classroom or sibling-exercise code, performs network calls, persists pupil data, submits results, uses copied proprietary content, or claims pupil validation.",
     "All three records remain status prototyping for independent review."
   ],
@@ -30,7 +31,8 @@
     "The three approved lenses cannot be made meaningfully distinct without changing the cluster boundary or product intent."
   ],
   "verify": [
-    "cd experiments && npm run check"
+    "cd experiments && npm run check",
+    "cd experiments && SMOKE_EXERCISES=EX-0221,EX-0222,EX-0223 npm run test:smoke"
   ],
   "verify_timeout_seconds": 1200
 }

@@ -14,7 +14,7 @@
   "acceptance": [
     "All three designs and prototypes are reviewed against curriculum traceability, year-band honesty, learning-loop completeness, content correctness, French clarity, concept-led diversity, and the approved scope.",
     "All blocking and high findings inside the authorized exercise folders are fixed; no finding is hidden by weakening metadata, acceptance language, or the quality contract.",
-    "Each prototype is inspected across its full interaction path, including an incorrect response and recovery, using keyboard and pointer/touch-equivalent controls at desktop and 320px viewport assumptions.",
+    "Automated browser evidence passes for each prototype across its full incorrect-feedback, retry, correct-continuation, and completion path using desktop keyboard and touch in an actual 320px viewport, with storage/network monitoring through completion; the reviewer also manually inspects pointer behavior, focus visibility/order, non-color cues, reduced motion, and French feedback quality.",
     "The three lenses remain pedagogically distinct and collectively cover the cluster statement mappings without turning end-of-cycle expectations into 6H requirements.",
     "Only records that pass every testing-readiness criterion are changed from prototyping to testing; none are marked validated, promoted, or connected to classroom persistence.",
     "DESIGN.md findings append a dated independent-review entry and preserve remaining pupil-testing hypotheses.",

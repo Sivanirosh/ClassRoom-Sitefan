@@ -1,7 +1,7 @@
 {
   "id": "6h-browser-smoke-harness",
   "title": "6H: browser smoke harness for isolated prototypes",
-  "goal": "Add a standalone browser smoke harness for the Exercise Lab that can enumerate discovered prototype records, load each runner in system Chrome, detect page/console failures and unexpected network or storage use, and exercise a minimal keyboard focus path. Keep it generic and verification-only; do not create a shared exercise runtime or alter classroom code.",
+  "goal": "Add a standalone Playwright smoke harness for the Exercise Lab that discovers prototypes and exercises the complete pupil learning loop in system Chrome at desktop and an actual 320px touch viewport. Keep it generic and verification-only; do not create a shared exercise runtime or alter classroom code.",
   "status": "open",
   "areas": [
     "experiments/package.json",
@@ -10,12 +10,14 @@
     "experiments/tests/smoke/"
   ],
   "acceptance": [
-    "The lab exposes an npm run test:smoke command using a locked browser-test dependency and system Chrome or a documented equivalent, without changing existing validate/check/build semantics.",
-    "The harness discovers prototype IDs from the catalog or a generated manifest rather than hardcoding the initial EX-0001-only catalog, so later merged 6H records are automatically included.",
-    "For each selected prototype it loads /runner/?id=EX-NNNN, waits for the isolated component to mount, fails on runner load errors or uncaught console/page errors, and confirms at least one enabled focusable pupil interaction exists.",
-    "The harness fails on unexpected external network requests and checks that prototypes do not write localStorage or sessionStorage during initial load.",
-    "An environment filter allows a review slice to smoke only its three exercise IDs, while domain/final gates can run the complete discovered set.",
-    "The existing EX-0001 prototype passes the harness, catalog validation, strict check, and production build."
+    "The lab exposes an npm run test:smoke command using a locked Playwright dependency and system Chrome or a documented equivalent, without changing existing validate/check/build semantics.",
+    "The harness discovers prototype IDs and program-per-6h metadata from the catalog or a generated manifest rather than hardcoding IDs; SMOKE_EXERCISES may select exactly the three IDs owned by a paired review.",
+    "The harness defines a documented, presentation-neutral smoke contract made only of data attributes on visible enabled pupil controls and observable exercise states; every new 6H prototype uses it without importing a shared exercise runtime. Legacy EX-0001 receives a load/focus compatibility smoke only.",
+    "For each 6H prototype, a desktop scenario uses Tab/Enter/Space rather than click to complete the primary loop through an incorrect response, specific feedback, retry/recovery, correct response, continuation, and completion.",
+    "For each 6H prototype, a separate browser context with viewport exactly 320px wide and touch enabled taps through incorrect feedback, retry, correct response, continuation, and completion; it also fails on horizontal document overflow or hidden/off-screen required controls.",
+    "The entire exercised path fails on uncaught page/console errors, external or undeclared network requests, localStorage/sessionStorage writes, IndexedDB databases, cookies, or service-worker registration—not only during initial load.",
+    "The smoke contract and harness fail if required controls or feedback are hidden, disabled, duplicated ambiguously, keyboard-inoperable, or if success/error state is exposed only by color; reduced-motion emulation is covered by at least one complete scenario.",
+    "The existing EX-0001 compatibility smoke plus catalog validation, strict check, the complete filtered 6H path, and production build pass."
   ],
   "must_ask_if": [
     "The pinned decision, research, production-plan, or slice-graph inputs in experiments/design/6h-batch-inputs.json do not match the working baseline.",
@@ -24,6 +26,7 @@
     "The proposed harness would send data externally or persist pupil/test state."
   ],
   "verify": [
+    "node experiments/tools/verify-6h-batch-inputs.mjs",
     "cd experiments && npm run check",
     "cd experiments && npm run test:smoke",
     "cd experiments && npm run build"

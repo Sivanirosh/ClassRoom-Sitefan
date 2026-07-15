@@ -21,6 +21,7 @@
     "Statement-level mappings show no missing in-scope 5H–6H progression; explicit 6H endpoints and unbanded end-of-cycle expectations remain correctly distinguished.",
     "Every planned record is discoverable with Prototype.svelte and status testing; any exception is a blocking finding rather than an optimistic pass.",
     "The report samples and compares interaction mechanics across clusters, identifies generic reskins or accessibility regressions, and records zero unresolved blocking/high findings for a pass.",
+    "The report confirms complete browser evidence for every domain exercise: desktop keyboard and actual 320px touch paths reach incorrect feedback, recovery, correct continuation, and completion while reduced-motion, overflow, storage, and network guards remain clean; any exception is blocking/high.",
     "The report includes exact verification commands and results and does not claim pupil validation."
   ],
   "must_ask_if": [

@@ -20,6 +20,7 @@
     "The validator confirms exactly 37 planned clusters and 111 planned 6H exercises, each with one construction, one practice, and one transfer-diagnosis lens; unrelated exercises such as EX-0001 remain allowed and excluded from the count.",
     "Every planned exercise has status testing, never validated/promoted, and every curriculum record distinguishes explicit 6H endpoints from unbanded end-of-cycle expectations.",
     "The final report summarizes domain counts, statement coverage, cluster/lens coverage, source evidence, review evidence, accessibility/interaction gates, residual pupil-testing hypotheses, and zero unresolved blocking/high findings.",
+    "The complete Playwright gate proves every planned exercise reaches incorrect feedback, retry, correct continuation, and completion by desktop keyboard and actual 320px touch paths, with reduced-motion, horizontal-overflow, storage, service-worker, cookie, IndexedDB, and external-network guards enforced through completion.",
     "package.json exposes a validation command for the 6H coverage program without weakening the existing check/build commands.",
     "The complete standalone lab passes catalog validation, Svelte/TypeScript checks, the new coverage validator, and a production build."
   ],

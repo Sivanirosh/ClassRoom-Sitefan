@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "programId": "per-6h-msn-shs",
-  "preparedAt": "2026-07-15T07:24:02.242888+00:00",
+  "preparedAt": "2026-07-15T07:36:06.868837+00:00",
   "baselineCommit": "5d00e35efbeec6f4e820bab4bc13b387722d2b9e",
   "approvedDecision": {
     "path": "experiments/design/6h-curriculum-coverage-decision-record.md",
@@ -33,7 +33,11 @@
     },
     {
       "path": "experiments/design/6h-production-plan.md",
-      "sha256": "d432f5d19c574323b050b197ba59362ea1f49047d7e75741f6ffb2e111df3c6d"
+      "sha256": "9ea040c8dc73d33d04cf831aeb6a03bdd81151e53e079c94ac3b0ad260a7cbf0"
+    },
+    {
+      "path": "experiments/tools/verify-6h-batch-inputs.mjs",
+      "sha256": "07d755b509a40ff0c457ee5cd281f351d154bff24b2b0052b4f27c9babae32e5"
     }
   ],
   "allocation": {
@@ -47,7 +51,13 @@
     "directory": ".workflow/slices",
     "selectedRoot": "6h-final-quality-gate",
     "newSliceCount": 82,
-    "sha256": "a6e99c29c29331f6ff4236daed464113178a870380de1720099283f2ffe861a4"
+    "digestAlgorithm": "sha256 of UTF-8 lines \"<file-sha256>  <repo-relative-path>\\n\" sorted by repo-relative path",
+    "sha256": "3dd545b7680ebf10a723304b15742fcc0f3fad9cd575d552a6cbb9e4f027f2a4",
+    "manifest": {
+      "path": "experiments/design/6h-slice-manifest.json",
+      "sha256": "df33e98fe360d16fe24caddea3f92abf1cd85dbf9b7925fc09589242a0eee17b"
+    },
+    "verifyCommand": "node experiments/tools/verify-6h-batch-inputs.mjs"
   },
   "launchPolicy": {
     "agent": "pi",
@@ -59,5 +69,6 @@
   "workflowConfig": {
     "path": ".workflow/khazad.json",
     "sha256": "328087be5b0faa924b5275bcd289dd5780b7ff4d8b22d57bed8625f6500f308b"
-  }
+  },
+  "baselineSemantics": "Immutable approved parent commit from which batch preparation began; launch HEAD must be a clean descendant and is recorded by Khazad-Doom preflight."
 }

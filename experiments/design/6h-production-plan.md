@@ -54,4 +54,10 @@ This plan allocates immutable exercise IDs before parallel production. Curriculu
 - Its paired review slice depends on that implementation and owns the same prefixes for bounded fixes and the `testing` transition.
 - All cluster implementations depend on the curriculum-map, quality-contract, and browser-smoke-harness slices.
 - Domain audits depend on every paired review in that domain and write reports without broad exercise mutation authority.
-- The final gate depends on all domain audits and verifies all 111 IDs, cluster/lens tags, source mappings, lifecycle states, catalog validity, and the production build.
+- The final gate depends on all domain audits and verifies all 111 IDs, cluster/lens tags, source mappings, lifecycle states, catalog validity, full browser interaction paths, and the production build.
+
+## Launch preflight and browser evidence
+
+- `experiments/design/6h-slice-manifest.json` lists every selected `6h-*.json` file and its SHA-256 in path order. Its graph digest is the SHA-256 of UTF-8 lines `<file-sha256>  <repo-relative-path>\n`, sorted by repository-relative path.
+- `node experiments/tools/verify-6h-batch-inputs.mjs` verifies every pinned input, the approved decision blob, workflow config, per-slice manifest, aggregate graph digest, selected-root closure, slice count, foundation exclusion, and baseline ancestry. Add `--require-clean` immediately before launch.
+- The browser gate is not a load-only smoke. Every 6H prototype must expose the presentation-neutral smoke markers defined by the quality contract on visible pupil controls/states. Playwright must exercise incorrect feedback, retry, correct continuation, and completion by desktop keyboard and at an actual 320px touch viewport while monitoring errors, overflow, storage, service workers, cookies, IndexedDB, and external network activity through completion.
