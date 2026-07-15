@@ -4,6 +4,12 @@ A standalone Svelte laboratory for researching, designing, and prototyping short
 
 The lab is intentionally independent from the classroom application. It does not import classroom routes, styles, components, student identity, storage, or database code.
 
+## Approved production workflow
+
+Roadmap-based prototypes follow [`design/prototype-production-workflow.md`](design/prototype-production-workflow.md): learning brief → mechanics-memory search → three precedent-grounded pitches → one selected three-scene graybox → explicit owner mechanic gate → full expansion → optional polish → final validation.
+
+Reusable game/platform research and prototype outcomes live in [`game-mechanics/`](game-mechanics/). Search that memory before gathering the same precedent evidence again.
+
 ## Start
 
 From this directory:
@@ -37,15 +43,19 @@ PORT=4300 ./dev.sh
 
 ```text
 experiments/
-├── curriculum/                   # PER research, citations, and mappings
-├── templates/exercise/           # Copy to begin a paper design
+├── curriculum/                   # PER research, citations, mappings, roadmaps
+├── design/                       # Approved workflow and decision records
+├── game-mechanics/               # PRE/MEC/APP reusable design memory
+├── templates/
+│   ├── sequence/                 # Brief, pitch, and graybox-script templates
+│   └── exercise/                 # Stable catalog/exercise record template
 ├── src/
 │   ├── exercises/                # Flat collection of stable exercise records
 │   │   └── ex-NNNN-short-name/
 │   │       ├── exercise.ts       # Typed, searchable metadata
-│   │       ├── DESIGN.md         # Full paper design and decisions
-│   │       ├── Prototype.svelte  # Optional; added after paper design
-│   │       └── assets/           # Files owned by this exercise
+│   │       ├── DESIGN.md         # Full design and synchronized findings
+│   │       ├── Prototype.svelte  # Playable graybox, then approved expansion
+│   │       └── assets/           # Late, optional files owned by this exercise
 │   ├── lib/catalog/              # Discovery, schema, and validation
 │   └── pages/                    # Home, catalog, detail, and runner surfaces
 └── dev.sh
@@ -57,11 +67,16 @@ Four digits support a large catalog while preserving readable, immutable IDs. Ex
 
 ## Lifecycle
 
-1. **Curriculum research** — cite authoritative PER material under `curriculum/`.
-2. **Paper design** — copy the template and complete `exercise.ts` plus `DESIGN.md`.
-3. **Prototype** — rename `Prototype.example.svelte` to `Prototype.svelte`, implement one bounded learning loop, and change the status to `prototyping`.
-4. **Testing** — document observations and update the status.
-5. **Promotion or archive** — extract validated work into the classroom application, or preserve the decision history.
+1. **Curriculum roadmap** — cite authoritative PER material and obtain structural owner approval.
+2. **Learning brief** — define checkpoints, evidence, prerequisites, representations, risks, and non-goals.
+3. **Mechanics memory** — search existing `PRE-*`, `MEC-*`, and `APP-*` records; research only gaps.
+4. **Paper pitches** — compare three mechanically distinct, precedent-cited directions.
+5. **Selected graybox** — script and implement one three-scene mechanic test with minimal styling.
+6. **Owner mechanic gate** — revise/reject, or record the exact phrase `mechanic approved for expansion`.
+7. **Expansion** — write the full storyboard and complete the learning sequence through the flexible progression grammar.
+8. **Interaction and optional polish** — build one coherent surface; add motion/art only for a named purpose.
+9. **Final validation** — after all polish, run catalog, type/build, browser, responsive, reduced-motion, and accessibility evidence.
+10. **Memory write-back** — synchronize `DESIGN.md`, append an `APP-*` outcome, then promote, retain, or archive honestly.
 
 Frontend status labels are French; source values remain stable English codes:
 
@@ -72,9 +87,9 @@ Frontend status labels are French; source values remain stable English codes:
 - `promoted`
 - `archived`
 
-## Create a paper design
+## Create a selected exercise record
 
-Choose the next unused ID and a short semantic slug:
+First complete the sequence brief and three-pitch comparison from `templates/sequence/`. After the owner selects one direction for grayboxing, choose the next unused exercise ID and a short semantic slug:
 
 ```bash
 cp -R templates/exercise src/exercises/ex-0001-short-name
@@ -83,8 +98,9 @@ cp -R templates/exercise src/exercises/ex-0001-short-name
 Then:
 
 1. update `id`, `slug`, dates, and all metadata in `exercise.ts`;
-2. complete `DESIGN.md` using cited curriculum research;
-3. leave the prototype file named `Prototype.example.svelte` while the exercise is only on paper.
+2. link `DESIGN.md` to the sequence brief, pitch decision, graybox script, and mechanics-memory records;
+3. preserve the owner gate as pending;
+4. leave the prototype file named `Prototype.example.svelte` until the three-scene graybox implementation begins.
 
 The catalog discovers the record automatically. No central registry needs editing.
 
@@ -96,7 +112,7 @@ Inside the exercise folder:
 mv Prototype.example.svelte Prototype.svelte
 ```
 
-Change the status from `planned` to `prototyping` in the same change. The runner will then become available.
+Change the status from `planned` to `prototyping` in the same change. Implement only the selected three-scene graybox first. The runner will then become available; full expansion remains blocked until the owner records `mechanic approved for expansion`.
 
 ## Isolation contract
 

@@ -2,7 +2,7 @@
 
 Roadmaps are owner-reviewed structural proposals connecting official curriculum evidence to conceptual checkpoints, dependencies, sequence arcs, and provisional exercise ideas.
 
-They are **not** exercise production plans. A roadmap may authorize storyboard work only after explicit structural approval. Each sequence then follows the owner-led process in [`../../design/6h-exercise-production-strategy-decision-record.draft.md`](../../design/6h-exercise-production-strategy-decision-record.draft.md): three distinct mechanic pitches, exact French storyboard, and playable low-fi before visual design.
+They are **not** exercise production plans. After explicit structural approval, each selected sequence follows [`../../design/prototype-production-workflow.md`](../../design/prototype-production-workflow.md): a learning brief, mechanics-memory search, three precedent-grounded mechanic pitches, one selected three-scene graybox, and the explicit owner mechanic gate before full storyboarding or expansion. Roadmap approval does not approve any mechanic.
 
 ## Current roadmap
 

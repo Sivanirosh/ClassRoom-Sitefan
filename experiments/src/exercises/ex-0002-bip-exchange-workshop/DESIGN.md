@@ -1,92 +1,155 @@
 # EX-0002 — Le grand rangement de Bip
 
+## Workflow provenance
+
+- **Roadmap / structural approval:** proposed `6h-mathematics-roadmap`; owner approval still pending
+- **Sequence:** `SEQ-N1 — Structures décimales`
+- **Pilot source:** [`../../../Notes-to-take-to-improve-workflow.txt.txt`](../../../Notes-to-take-to-improve-workflow.txt.txt)
+- **Mechanic memory:** [`PRE-0001`](../../../game-mechanics/precedents/PRE-0001-sokoban.md), [`PRE-0002`](../../../game-mechanics/precedents/PRE-0002-wilmots-warehouse.md), [`PRE-0003`](../../../game-mechanics/precedents/PRE-0003-unpacking.md), [`PRE-0007`](../../../game-mechanics/precedents/PRE-0007-brilliant.md), [`MEC-0001`](../../../game-mechanics/mechanics/MEC-0001-constrained-spatial-organization.md), [`MEC-0004`](../../../game-mechanics/mechanics/MEC-0004-action-first-interactive-learning.md)
+- **Application outcome:** [`APP-0002`](../../../game-mechanics/applications/APP-0002-seq-n1-exchange-workbench.md)
+- **Learning brief / pitch comparison / graybox script:** not created; this historical pilot predates the approved templates
+- **Owner mechanic gate:** `retrospective-not-recorded`
+
+The retrospective records that the redesigned workbench felt better than the rejected answer-card version, but the exact phrase `mechanic approved for expansion` was not used. Approval is not granted retroactively.
+
 ## Decision summary
 
-This is the concept-construction study for `SEQ-N1 — Structures décimales`. A light problem-solving comedy places the pupil beside Bip, an overconfident apprentice inventor whose workshop must be organized before his machine can be demonstrated. The prototype tests whether choosing and observing reversible exchanges makes conservation of quantity and base-ten organization visible without relying on a written rule.
+This is the concept-construction companion in `SEQ-N1`. The pupil directly groups, opens, delivers, undoes, and resets visible base-ten objects while a locked total and rank capacities expose conservation. The mechanic is worth testing because the changed organization and invariant cardinality remain simultaneously inspectable.
 
 ## Curriculum alignment
 
 - **Framework:** PER Cycle 2, 6H
 - **Objective codes:** MSN 22 and transversal MSN 25
 - **Source:** `src-per-0002`, Mathematics pp. 18–21
-- **Sequence:** `SEQ-N1`
 - **Roadmap nodes:** `NUM-01`, `NUM-03`, `NUM-04`
 - **Progressions used:** `P22.02`, `P22.04`, `P22.05`, `P22.12`, `P22.13`
 - **Explicit 6H endpoints informed:** `E6-22.01`, `E6-22.02`, `E6-22.03`, `E6-22.05`, `E6-22.06`
-- **Evidence boundary:** the PER supports grouping, counting steps and translation among representations. Bip, the workshop, the exact cases and the interaction sequence are design interpretations, not prescribed curriculum.
+- **Evidence boundary:** PER supports grouping, counting steps, and translation among representations. Bip, the workshop, exact cases, and interaction sequence are design interpretations.
 
-## Learning objective
+## Observable learning objective
 
-Given a bounded collection or representation, the pupil chooses valid exchanges between ten units of one rank and one unit of the next rank, preserves the cardinal, and relates the resulting organization to its written number.
+Given a bounded collection, the pupil performs valid exchanges between ten objects of one rank and one object of the next, preserves cardinality, and coordinates the resulting organization with written number structure.
 
-## Prerequisites
+## Prerequisites and vocabulary
 
-- Reliable counting of a small visible collection
-- Familiarity with natural-number words and digits
-- Understanding that a closed container may stand for its contents
+- Count a small visible collection reliably.
+- Read familiar natural numbers.
+- Understand that a closed container can represent its contents.
+- Essential French verbs: `assembler`, `ouvrir`, `empaqueter`, `déballer`, `palettiser`, `décharger`, `annuler`.
 
 ## Misconceptions and productive difficulty
 
-The prototype targets three possible response patterns: treating a package as one piece rather than ten contained pieces; believing an exchange changes the total; and omitting a zero when a positional rank is empty. These are design hypotheses to observe, not labels for pupils. Productive difficulty comes from a cascading exchange and an empty tens rank. Accidental difficulty from dragging or pixel precision is excluded: every choice is a large native button.
+Design hypotheses to observe:
 
-## Core interaction hypothesis
+- treating one container as one piece rather than its represented quantity;
+- believing an exchange changes the total;
+- stopping after one exchange when a rank still contains ten objects;
+- omitting an empty rank in a positional representation.
 
-> If the pupil repeatedly chooses an exchange, sees the original pieces remain inspectable inside their new container, and compares equivalent organizations, then grouping by ten becomes a reversible conservation relationship rather than a digit trick.
+Productive difficulty comes from reversible exchange, a two-stage cascade, a capacity constraint, repeated equal deliveries, and a required empty tens rank. Drag precision, timers, and hidden quantities are deliberately excluded.
 
-## Story and progression
+## Evidence of learning
 
-Bip is preparing an invention for a school festival. Each solved scene activates one workshop module.
+Potential evidence includes:
 
-1. **La porte bloquée — orientation:** choose exactly ten pieces for the first pouch. A harmless wrong choice teaches the rule and interface.
-2. **Deux rangements — exploration:** identify another organization of 34 that preserves its quantity.
-3. **L’étagère à neuf places — complication:** interpret the cascade from nine pouches plus thirteen pieces to one crate and three pieces.
-4. **La livraison régulière — strategy:** choose a step of ten to move from 270 to 300 and observe the boundary exchange.
-5. **L’étiquette finale — integration:** coordinate 1’306 with one pallet, three crates, zero pouches and six pieces.
+- selecting and executing an available inverse exchange for a stated constraint;
+- predicting which rank will overflow next;
+- using two successive exchanges to normalize 103;
+- constructing three equal +10 deliveries to reach 300;
+- explaining why several spatial organizations retain the same total.
 
-The final state activates Bip’s machine and points naturally toward companion study EX-0003.
+Completion alone is not a mastery claim.
 
-## Feedback and scaffolding
+## Core mechanic hypothesis
 
-- The submitted action remains visible beside the result.
-- Incorrect feedback names the exact quantity or rank involved.
-- Retry returns to the same scene without resetting the chapter.
-- Bip reacts with brief non-judgmental humor; he may be mistaken, the pupil is never characterized.
-- Support progresses from restating the container capacity, to identifying the relevant rank, to displaying the equivalent decomposition.
-- A revealed explanation never counts as independent validation; future pupil testing should add a fresh equivalent case before any mastery claim.
+> If the pupil directly reorganizes a visible reserve through reversible `10 ↔ 1` exchanges while the total, rank values, capacities, and consequences remain inspectable, then base-ten grouping can become a conservation relationship rather than a digit trick.
+
+- **Primary verbs:** group, open, deliver, inspect, undo, reset.
+- **State model:** four visible ranks worth 1’000, 100, 10, and 1, plus an invariant total.
+- **Challenge source:** exact capacity, future rank overflow, useful organization, and repeated equal-step constraints.
+- **Recovery:** blocked actions leave state unchanged and explain the missing precondition; every committed action can be undone; scenes can be reset.
+- **Mechanical distinction:** unlike EX-0003, the pupil transforms spatial organization while preserving quantity rather than authoring a numeric procedure that changes it.
+
+## Implemented progression
+
+1. **Orientation — La porte est bloquée:** group 10 of 12 pieces into one sachet; opening a nonexistent sachet supplies a recoverable blocked-action path.
+2. **Exploration — Deux formes:** open one of three sachets so `3 sachets + 4 pièces` becomes `2 sachets + 14 pièces` while remaining 34.
+3. **Constraint/complication — Cascade:** group 10 of 13 pieces, then group the resulting 10 sachets, producing `1 caisse + 3 pièces = 103` with no rank above nine.
+4. **Integration — Livraison:** choose three identical +10 deliveries so 270 passes through 280 and 290 to 300.
+5. **Representation independence — Étiquette:** group 10 sachets in `1 palette + 2 caisses + 10 sachets + 6 pièces` to obtain the normalized organization of 1’306 with an empty tens rank.
+
+This historical prototype expanded before the explicit gate existed; the sequence is documented, not newly authorized.
+
+## Feedback and recovery
+
+- The reserve updates immediately after each direct action.
+- Blocked exchanges state the exact missing quantity/container and do not mutate state.
+- Source and destination ranks, exchange event, total, and capacities remain visible.
+- Undo restores the previous reserve and delivery history; reset restores the scene start.
+- Success explains the invariant or positional relationship, not merely correctness.
+- Bip is fallible; pupil identity is never framed as the error.
 
 ## Content model and ambiguity guards
 
-The five authored scenes use exact integer quantities. Container values are fixed at 1, 10, 100 and 1’000. No binary floating point, generated content or ambiguous rounding occurs. Every answer option has been checked against the stated cardinal. Visual containers always include a written value and icon, so color and appearance are not the sole cues.
+Five authored scenes use exact integers. Rank values are fixed at 1, 10, 100, and 1’000. The total is computed from rank counts after every action. Exchange functions remove exactly ten lower-rank objects and add one higher-rank object, or perform the exact inverse. Delivery normalization repeatedly carries groups of ten. No floating point, random generation, or hidden answer-card data remains in the implementation.
 
 ## Interaction states
 
-`introduction → active scene → incorrect feedback → retry` or `correct explanation → continuation → next scene → completion`.
+```text
+intro → active workbench
+active → blocked explanation → active
+active → exchange/delivery → active or success
+active → undo/reset → active
+success → next scene or completion
+```
 
 ## Accessibility and devices
 
-- Native buttons support keyboard, pointer and touch.
-- Controls are at least 44 px and have visible focus.
-- Meaning uses text, counts, symbols and position in addition to color.
-- No drag, hover, sound, timing or animation is required.
-- Reduced-motion removes transitions and the decorative activation movement.
-- The layout stacks without horizontal page overflow at 320 CSS px.
+- Native buttons support keyboard, pointer, and touch; no drag is required.
+- Visual object counts are duplicated by written rank counts, values, total, equations, and accessible labels.
+- Color and animation are supplemental.
+- Focus is visible; live status copy announces action consequences.
+- Reduced motion removes or compresses decorative transitions while preserving state changes.
+- Narrow layouts stack controls and ranks without making horizontal scrolling part of the task.
+
+## Motion and artwork decisions
+
+These were added after mechanic redesign:
+
+- exchange motion clarifies source/destination and blocked/undo events;
+- Bip and workshop images support short narrative orientation;
+- generated item images make rank objects easier to recognize.
+
+Exact values, controls, capacities, and assessed state remain DOM/CSS. The sachet was regenerated from the actual piece reference after an early asset showed unrelated contents. Generated assets require exact-count/equivalence review at rendered size.
 
 ## Prototype boundaries
 
-Included: five authored scenes, one coherent narrative, base-ten exchanges through thousands, counting by ten, digit/decomposition coordination, retry and completion.
+Included: five authored scenes, direct reversible exchanges through thousands, undo/reset, capacity and delivery constraints, synchronized rank/number representations, short narrative, and local completion.
 
-Excluded: unrestricted object manipulation, automatic content generation, scores, timers, identity, persistence, analytics, classroom result submission and claims of pupil validation.
+Excluded: unrestricted drag layout, procedural content generation, scores, timers, identity, persistence, analytics, classroom result submission, and pupil-validation claims.
 
 ## Observation plan
 
-Observe whether pupils understand the pouch as ten contained pieces, whether they anticipate the cascade before reading feedback, whether zero in 1’306 remains meaningful, and whether Bip’s dialogue supports rather than delays play. The hypothesis is weakened if pupils answer from option wording without consulting the representation, or if containers obscure rather than clarify cardinality.
+Observe whether pupils inspect the represented quantity rather than object count alone; anticipate cascade; use inverse exchange productively; recognize the zero tens rank; and understand blocked feedback without interpreting it as punishment. The hypothesis is weakened if control labels, object art, or task prose reveal routes without reasoning about state.
 
 ## Findings and decisions
 
-- **2026-07-15 — Owner-led direction:** retain both workshop construction and console transformation as distinct `SEQ-N1` prototypes rather than choosing one reskin.
-- **2026-07-15 — Narrative direction:** use light problem-solving comedy, short reactive dialogue and visible workshop progress; avoid heavy lore, punishment and decorative stakes.
-- **2026-07-15 — Initial low-fi:** implement authored choice-and-consequence scenes first. Richer free manipulation remains a pupil-testing question, not assumed value.
+- **2026-07-15 — Rejected form:** the first implementation used `read → choose one answer → feedback`; see [`APP-0001`](../../../game-mechanics/applications/APP-0001-seq-n1-answer-loop-convergence.md).
+- **2026-07-15 — Mechanic redesign:** direct reversible exchanges, visible rank state, delivery actions, blocked feedback, undo, and reset replaced answer selection.
+- **2026-07-15 — Interaction-surface revision:** reserve and controls were connected through shared objects, exchange recipes, availability, source/destination emphasis, and tactile controls after owner feedback that the first redesign remained too textual/disconnected.
+- **2026-07-15 — Historical gate:** positive iterative feedback was recorded, but no `mechanic approved for expansion` phrase; status remains `prototyping`.
+- **2026-07-15 — Record synchronization:** removed unused answer-choice payloads and migrated final smoke hooks to the real mechanic controls.
+
+## Final validation evidence
+
+Final post-migration technical checks on 2026-07-15:
+
+- `npm --prefix experiments run check` — passed; zero Svelte diagnostics; catalog valid (3 exercises).
+- `SMOKE_EXERCISES=EX-0002,EX-0003 npm --prefix experiments run test:smoke` — 6/6 passed, including reduced-motion keyboard and 320 px touch paths through real exchange controls and a blocked-action recovery.
+- `npm --prefix experiments run build` — passed.
+
+These results establish technical readiness of the current path only. Automated checks do not validate pupil understanding, French comprehension, generated-image equivalence, or the unrecorded owner mechanic gate.
 
 ## Promotion criteria
 
-Promotion requires observed pupil use showing that the exchange representation clarifies conservation, that incorrect choices lead to productive revision, that exact French copy is understood, and that the complete keyboard/touch paths work without motor or color dependence. `prototyping` must remain until that evidence exists.
+Promotion requires explicit owner disposition, observed pupil use showing that exchange clarifies conservation across fresh cases, understood French copy, accessible keyboard/touch operation, and clear separation between concept errors and interface friction. The exercise remains `prototyping` until that evidence exists.

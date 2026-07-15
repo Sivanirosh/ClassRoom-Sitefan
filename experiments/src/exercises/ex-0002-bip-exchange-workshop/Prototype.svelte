@@ -8,17 +8,9 @@
   import introWorkshop from './assets/intro-workshop.jpg';
   import outroWorkshop from './assets/outro-workshop.jpg';
 
-  type View = 'intro' | 'question' | 'incorrect' | 'correct' | 'complete';
+  type View = 'intro' | 'question' | 'correct' | 'complete';
   type RankCounts = [number, number, number, number];
   type WorkshopAction = 'groupUnits' | 'openTens' | 'groupTens' | 'openHundreds' | 'groupHundreds' | 'openThousands';
-
-  type Choice = {
-    label: string;
-    detail: string;
-    result: RankCounts;
-    resultNumber: string;
-    correct?: boolean;
-  };
 
   type Scene = {
     id: string;
@@ -31,8 +23,6 @@
     after: RankCounts;
     afterNumber: string;
     equation: string;
-    choices: Choice[];
-    wrongIndex: number;
     allowed: WorkshopAction[];
     mode?: 'delivery';
     constraint: string;
@@ -65,12 +55,6 @@
       after: [0, 0, 1, 2],
       afterNumber: '12',
       equation: '12 pièces = 1 sachet de 10 + 2 pièces',
-      choices: [
-        { label: 'Fermer un sachet avec 7 pièces', detail: 'Le sachet n’est pas plein : les 12 pièces restent disponibles.', result: [0, 0, 0, 12], resultNumber: '12' },
-        { label: 'Échanger 10 pièces contre 1 sachet', detail: 'Le sachet contient exactement dix pièces.', result: [0, 0, 1, 2], resultNumber: '12', correct: true },
-        { label: 'Échanger les 12 pièces contre 1 sachet', detail: 'Ce geste laisserait seulement 10 pièces visibles : les 2 autres ne peuvent pas disparaître.', result: [0, 0, 1, 0], resultNumber: '10' }
-      ],
-      wrongIndex: 0,
       allowed: ['groupUnits', 'openTens'],
       constraint: 'Former un sachet exact et garder toutes les pièces.',
       correctFeedback: 'Le contenant visible a changé, mais il renferme toujours dix pièces. Avec les deux pièces restantes, la quantité totale reste 12.',
@@ -87,12 +71,6 @@
       after: [0, 0, 2, 14],
       afterNumber: '34',
       equation: '3 × 10 + 4 = 2 × 10 + 14 = 34',
-      choices: [
-        { label: 'Ouvrir 1 sachet : 2 sachets et 14 pièces', detail: 'Le sachet ouvert rend 10 pièces : 20 + 14 conserve exactement 34.', result: [0, 0, 2, 14], resultNumber: '34', correct: true },
-        { label: 'Ajouter 10 pièces : 3 sachets et 14 pièces', detail: 'Trois sachets valent 30 ; avec 14 pièces, cet essai construit 44.', result: [0, 0, 3, 14], resultNumber: '44' },
-        { label: 'Retirer 1 sachet : 2 sachets et 4 pièces', detail: 'Deux sachets et quatre pièces ne construisent que 24 : il manque un groupe de 10.', result: [0, 0, 2, 4], resultNumber: '24' }
-      ],
-      wrongIndex: 1,
       allowed: ['groupUnits', 'openTens'],
       constraint: 'Obtenir une autre organisation de 34.',
       correctFeedback: 'Ouvrir un sachet rend dix pièces à la table : 3 sachets et 4 pièces deviennent 2 sachets et 14 pièces. La quantité 34 est conservée.',
@@ -109,12 +87,6 @@
       after: [0, 1, 0, 3],
       afterNumber: '103',
       equation: '9 dizaines + 13 unités = 10 dizaines + 3 unités = 103',
-      choices: [
-        { label: 'Faire 2 échanges : 1 caisse, 0 sachet et 3 pièces', detail: 'Dix pièces forment un sachet, puis dix sachets forment une caisse : la cascade conserve 103.', result: [0, 1, 0, 3], resultNumber: '103', correct: true },
-        { label: 'Construire 1 caisse et 3 sachets', detail: 'Une caisse vaut 100 et trois sachets valent 30 : cet essai construit 130.', result: [0, 1, 3, 0], resultNumber: '130' },
-        { label: 'Faire 1 échange : 10 sachets et 3 pièces', detail: 'La quantité 103 est conservée, mais le rang déborde encore : échange aussi les dix sachets.', result: [0, 0, 10, 3], resultNumber: '103' }
-      ],
-      wrongIndex: 1,
       allowed: ['groupUnits', 'openTens', 'groupTens', 'openHundreds'],
       constraint: 'Aucun rang ne peut garder plus de 9 objets.',
       correctFeedback: 'Dix pièces forment le dixième sachet, puis dix sachets forment une caisse. Aucun sachet isolé ne reste : le zéro garde sa place dans 103.',
@@ -131,12 +103,6 @@
       after: [0, 3, 0, 0],
       afterNumber: '300',
       equation: '270 → 280 → 290 → 300  (pas de +10)',
-      choices: [
-        { label: 'Avancer par sachets de 10', detail: 'Trois pas de +10 construisent 280, 290, puis 300 et déclenchent un échange de dizaines.', result: [0, 3, 0, 0], resultNumber: '300', correct: true },
-        { label: 'Avancer par pièces de 1', detail: 'Trois pas de +1 construisent 271, 272, puis 273 : la cible 300 reste loin.', result: [0, 2, 7, 3], resultNumber: '273' },
-        { label: 'Avancer par caisses de 100', detail: 'Trois pas de +100 construisent 370, 470, puis 570 : le pas est trop grand.', result: [0, 5, 7, 0], resultNumber: '570' }
-      ],
-      wrongIndex: 1,
       allowed: [],
       mode: 'delivery',
       constraint: 'Atteindre 300 avec trois livraisons régulières.',
@@ -154,12 +120,6 @@
       after: [1, 3, 0, 6],
       afterNumber: '1’306',
       equation: '1 × 1’000 + 3 × 100 + 0 × 10 + 6 = 1’306',
-      choices: [
-        { label: '1’306 — mille trois cent six', detail: 'Chaque rang, y compris le rang vide des dizaines, est conservé.', result: [1, 3, 0, 6], resultNumber: '1’306', correct: true },
-        { label: '136 — cent trente-six', detail: 'Cette étiquette oublie la palette de 1’000 et déplace les rangs : elle décrit 136.', result: [0, 1, 3, 6], resultNumber: '136' },
-        { label: '1’360 — mille trois cent soixante', detail: 'Cette étiquette place les 6 dans les dizaines et affiche zéro pièce : elle décrit 1’360.', result: [1, 3, 6, 0], resultNumber: '1’360' }
-      ],
-      wrongIndex: 1,
       allowed: ['groupTens', 'openHundreds'],
       constraint: 'Construire 1’306 avec 0 sachet.',
       correctFeedback: 'Les quatre représentations sont alignées : palette, caisses, sachets, pièces et chiffres racontent toutes la quantité 1’306.',
@@ -167,12 +127,21 @@
     }
   ];
 
+  const smokeSuccessPlans: Record<string, string> = {
+    porte: 'groupUnits',
+    'deux-formes': 'openTens',
+    cascade: 'groupUnits,groupTens',
+    livraison: 'deliver:10,deliver:10,deliver:10',
+    etiquette: 'groupTens'
+  };
+
   let view: View = 'intro';
   let sceneIndex = 0;
   let working: RankCounts = [0, 0, 0, 0];
   let history: Array<{ counts: RankCounts; deliveries: number[] }> = [];
   let deliveries: number[] = [];
   let workshopMessage = '';
+  let workshopMessageKind: 'instruction' | 'action' | 'error' = 'instruction';
   let motion: { id: number; from: number; to: number; label: string; kind: 'exchange' | 'open' | 'delivery' | 'blocked' | 'undo' } | null = null;
   let motionId = 0;
   let announcement = '';
@@ -180,7 +149,9 @@
 
   $: scene = scenes[sceneIndex];
   $: displayedNumber = total(working).toLocaleString('fr-CH');
-  $: smokeState = view === 'intro' ? 'ready' : view;
+  $: smokeState = view === 'intro' ? 'ready' : view === 'question' ? 'active' : view === 'correct' ? 'success' : 'complete';
+  $: smokeSuccessPlan = view === 'question' ? smokeSuccessPlans[scene.id] : undefined;
+  $: smokeErrorPlan = view === 'question' && sceneIndex === 0 ? 'openTens' : undefined;
 
   function copy(counts: RankCounts): RankCounts { return [...counts] as RankCounts; }
   function total(counts: RankCounts): number { return counts[0] * 1000 + counts[1] * 100 + counts[2] * 10 + counts[3]; }
@@ -197,6 +168,7 @@
     history = [];
     deliveries = [];
     workshopMessage = current.constraint;
+    workshopMessageKind = 'instruction';
     motion = null;
     view = 'question';
   }
@@ -218,6 +190,7 @@
     working = next;
     deliveries = [...nextDeliveries];
     workshopMessage = message;
+    workshopMessageKind = 'action';
     announcement = message;
     if (goalReached(next, nextDeliveries)) {
       view = 'correct';
@@ -237,6 +210,7 @@
     if (operation.direction === 'group') {
       if (next[operation.low] < 10) {
         workshopMessage = `Il faut 10 ${rankNames[operation.low].toLowerCase()} pour faire cet échange. Rien ne bouge.`;
+        workshopMessageKind = 'error';
         announcement = workshopMessage;
         animate(operation.low, operation.low, 'Groupe incomplet', 'blocked');
         return;
@@ -248,6 +222,7 @@
     } else {
       if (next[operation.high] < 1) {
         workshopMessage = `Il n’y a aucun contenant à ouvrir dans le rang ${rankNames[operation.high].toLowerCase()}.`;
+        workshopMessageKind = 'error';
         announcement = workshopMessage;
         animate(operation.high, operation.high, 'Rien à ouvrir', 'blocked');
         return;
@@ -282,12 +257,17 @@
 
   function undo(): void {
     const previous = history.at(-1);
-    if (!previous) { workshopMessage = 'Rien à annuler : la réserve est déjà dans son état de départ.'; return; }
+    if (!previous) {
+      workshopMessage = 'Rien à annuler : la réserve est déjà dans son état de départ.';
+      workshopMessageKind = 'error';
+      return;
+    }
     working = copy(previous.counts);
     deliveries = [...previous.deliveries];
     history = history.slice(0, -1);
     animate(-1, -1, 'Geste annulé', 'undo');
     workshopMessage = 'Dernier geste annulé. La quantité reste intacte.';
+    workshopMessageKind = 'action';
   }
 
   function resetScene(): void { loadScene(); announcement = 'La réserve revient à son organisation initiale.'; }
@@ -330,6 +310,8 @@
   data-smoke-exercise="EX-0002"
   data-smoke-program="pilot-seq-n1"
   data-smoke-state={smokeState}
+  data-smoke-success-plan={smokeSuccessPlan}
+  data-smoke-error-plan={smokeErrorPlan}
   bind:this={rootElement}
 >
   <div class="dot-field" aria-hidden="true"></div>
@@ -417,7 +399,7 @@
                   <div class="delivery-strip" aria-label="Choisir la taille de la prochaine livraison">
                     <span>Convoi <b>{deliveries.length} / 3</b></span>
                     {#each deliveryOptions as step}
-                      <button type="button" onclick={() => deliver(step)} aria-label={`Livrer ${step} pièce${step > 1 ? 's' : ''}`}>
+                      <button type="button" data-smoke-control={`deliver:${step}`} onclick={() => deliver(step)} aria-label={`Livrer ${step} pièce${step > 1 ? 's' : ''}`}>
                         <img class="mini-material" src={rankAssets[step === 1 ? 3 : step === 10 ? 2 : 1]} alt="" /><strong>+{step}</strong><small>{step === 1 ? 'pièce' : step === 10 ? 'sachet' : 'caisse'}</small>
                       </button>
                     {/each}
@@ -425,7 +407,7 @@
                 {:else}
                   <div class="exchange-tools">
                     {#each scene.allowed as action}
-                      <button class:ready={actionReady(action)} type="button" onclick={() => perform(action)} aria-label={actionVisuals[action].label}>
+                      <button class:ready={actionReady(action)} type="button" data-smoke-control={action} onclick={() => perform(action)} aria-label={actionVisuals[action].label}>
                         <div class="recipe" aria-hidden="true">
                           <span><img class="mini-material" src={rankAssets[actionVisuals[action].from]} alt="" /><b>×{actionVisuals[action].fromCount}</b></span>
                           <em>→</em>
@@ -436,7 +418,7 @@
                     {/each}
                   </div>
                 {/if}
-                <div class="workshop-message" role="status"><span aria-hidden="true">↔</span><p>{workshopMessage}</p></div>
+                <div class="workshop-message" role="status" data-smoke-feedback={workshopMessageKind === 'error' ? 'error' : undefined} data-smoke-feedback-detail={workshopMessageKind === 'error' ? 'true' : undefined}><span aria-hidden="true">↔</span><p>{workshopMessage}</p></div>
                 <div class="utility-actions">
                   <button class="secondary" type="button" onclick={undo} disabled={history.length === 0}>Annuler le dernier geste</button>
                   <button class="text-button" type="button" onclick={resetScene}>Recommencer la scène</button>
@@ -444,7 +426,7 @@
               </section>
               <p class="safe-note"><span aria-hidden="true">↺</span> Essaie librement : chaque échange est visible et réversible.</p>
             {:else}
-              <div class="feedback correct" role="status" tabindex="-1" data-smoke-feedback="correct" data-smoke-feedback-detail>
+              <div class="feedback correct" role="status" tabindex="-1" data-smoke-feedback="success" data-smoke-feedback-detail>
                 <span class="feedback-icon" aria-hidden="true">✓</span>
                 <div><p>Nouveau module activé</p><h2>{scene.unlocked}</h2><p>{scene.correctFeedback}</p></div>
               </div>
@@ -515,18 +497,8 @@
   .text-button { padding:10px 4px; color:var(--teal-dark); background:transparent; border:0; text-decoration:underline; }
   .intro-art { position:relative; min-height:550px; border:1px solid #bcb19b; border-radius:50% 50% 24px 24px; overflow:hidden; background:linear-gradient(#f7d97a 0 46%,#e5b665 46% 48%,#77a49c 48%); box-shadow:22px 24px 0 rgba(24,42,50,.09); }
   .scene-art { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
-  .sun { position:absolute; top:44px; right:50px; width:104px; height:104px; background:#fff7cc; border-radius:50%; box-shadow:0 0 0 18px rgba(255,247,204,.18); }
-  .machine-silhouette { position:absolute; right:30px; bottom:48px; width:230px; height:250px; border:5px solid var(--ink); border-radius:24px 24px 12px 12px; background:#30515a; box-shadow:10px 12px 0 rgba(24,42,50,.18); }
-  .machine-silhouette i { position:absolute; top:32px; width:42px; height:42px; background:#203b43; border:3px solid var(--ink); border-radius:50%; }
-  .machine-silhouette i:nth-child(1){left:22px}.machine-silhouette i:nth-child(2){left:88px}.machine-silhouette i:nth-child(3){right:22px}
-  .machine-silhouette b { position:absolute; left:35px; right:35px; bottom:28px; height:106px; border:3px solid var(--ink); border-radius:8px; background:#f1e4bd; }
   .bip-sprite { display:block; object-fit:contain; filter:drop-shadow(8px 10px 0 rgba(24,42,50,.17)); user-select:none; }
-  .hero-bip { position:absolute; z-index:3; left:24px; bottom:24px; width:220px; height:350px; }
   .story-bip { width:112px; height:180px; margin:0 auto; animation:bipIdle 3.8s ease-in-out infinite; }
-  .completion-bip { position:absolute; z-index:3; left:20px; bottom:20px; width:300px; height:390px; }
-  .piece-pile { position:absolute; z-index:4; right:242px; bottom:18px; width:170px; height:100px; }
-  .piece-pile i { position:absolute; left:var(--x); bottom:var(--y); width:27px; height:27px; border:3px solid var(--ink); border-radius:4px; background:var(--yellow); transform:rotate(var(--r)); }
-  .piece-pile i:nth-child(3n){background:var(--coral)}.piece-pile i:nth-child(3n + 1){background:#eaf4dd}
   .art-note { position:absolute; z-index:5; top:70px; left:36px; padding:12px 14px; background:white; border:2px solid var(--ink); box-shadow:5px 5px 0 var(--ink); font-family:ui-monospace,monospace; font-size:.72rem; font-weight:900; line-height:1.5; transform:rotate(-5deg); }
   .game-shell { position:relative; z-index:1; width:min(1320px,calc(100% - 38px)); margin:auto; padding:18px 0 48px; }
   .game-header { display:flex; min-height:60px; align-items:center; justify-content:space-between; gap:28px; margin-bottom:28px; }
@@ -593,20 +565,17 @@
   .feedback.incorrect { background:#fff0e9; border-color:#dda08d; }.feedback.correct{background:#e8f4e9;border-color:#98c3a2}
   .feedback-icon { display:grid; width:44px; height:44px; place-items:center; color:white; background:var(--red); border-radius:50%; font-size:1.25rem; font-weight:900; }.correct .feedback-icon{background:var(--teal)}
   .feedback p { margin:0; color:var(--muted); font-size:.8rem; line-height:1.55; }.feedback div>p:first-child{color:var(--red);font-size:.65rem;font-weight:900;text-transform:uppercase}.correct div>p:first-child{color:var(--teal-dark)}
-  .feedback h2 { margin:5px 0 8px; font-family:Georgia,serif; font-size:1.8rem; font-weight:500; }.feedback blockquote{margin:14px 0 0;padding:11px 13px;border-left:4px solid var(--coral);background:rgba(255,255,255,.65);font-size:.78rem;line-height:1.5}
+  .feedback h2 { margin:5px 0 8px; font-family:Georgia,serif; font-size:1.8rem; font-weight:500; }
   .feedback-actions { display:flex; justify-content:flex-end; margin-top:18px; }
   .transformation { margin-top:12px; padding:18px; background:white; border:1px solid var(--line); border-radius:11px; }
   .after-ranks { display:grid; grid-template-columns:repeat(4,1fr); gap:7px; }.after-ranks span{padding:10px;text-align:center;background:#edf5e9;border-radius:8px}.after-ranks span.zero{background:#eeeae2;border:1px dashed #b9b1a5}.after-ranks b,.after-ranks small{display:block}.after-ranks b{font-family:Georgia,serif;font-size:1.5rem}.after-ranks small{font-size:.58rem;text-transform:uppercase}
   .transformation>strong { display:block; margin-top:14px; color:var(--teal-dark); font-family:ui-monospace,monospace; font-size:.78rem; text-align:center; }
   .completion { display:grid; min-height:calc(100vh - 140px); grid-template-columns:.9fr 1.1fr; gap:clamp(35px,8vw,100px); align-items:center; padding:44px 5vw; background:var(--paper); border:1px solid var(--line); border-radius:22px; }
   .completion-art { position:relative; min-height:520px; overflow:hidden; border-radius:50% 50% 20px 20px; background:linear-gradient(#24454e 0 57%,#e1b764 57%); }
-  .machine-complete { position:absolute; right:45px; bottom:50px; width:240px; height:300px; border:5px solid #0d262d; border-radius:25px; background:#376572; box-shadow:10px 12px 0 rgba(0,0,0,.2); }
-  .machine-complete i{position:absolute;top:35px;width:43px;height:43px;border:3px solid #0d262d;border-radius:50%;background:var(--yellow)}.machine-complete i:nth-child(1){left:25px}.machine-complete i:nth-child(2){left:96px}.machine-complete i:nth-child(3){right:25px}.machine-complete b{position:absolute;left:50%;bottom:50px;display:grid;width:110px;height:110px;place-items:center;border-radius:50%;color:#17333b;background:#c8f08d;font-size:3rem;transform:translateX(-50%)}
-  .beam { position:absolute; top:-40px; right:-30px; width:390px; height:230px; background:rgba(246,201,79,.4); clip-path:polygon(45% 0,100% 0,72% 100%,0 100%); }
   .completion h1 { margin:20px 0; font-size:clamp(3rem,6vw,6rem); }
   .completion-copy>p:not(.eyebrow){color:var(--muted);line-height:1.7}.completion-copy blockquote{margin:24px 0;padding:16px;border-left:5px solid var(--coral);background:var(--cream);font-family:Georgia,serif;font-size:1.05rem;line-height:1.5}.completion-copy>small{display:block;margin-top:24px;color:var(--muted);font-size:.68rem}
   .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
   @media(max-width:900px){.intro{grid-template-columns:1fr;padding-top:45px}.intro-art{min-height:480px}.scene-layout{grid-template-columns:1fr}.story-rail{position:static;display:grid;grid-template-columns:130px 1fr;align-items:center}.story-rail ol{display:none}.story-bip{grid-row:span 1}.completion{grid-template-columns:1fr}.completion-art{min-height:430px}}
-  @media(max-width:620px){.prototype-root{overflow-x:hidden}.intro,.game-shell{width:calc(100% - 24px)}.intro{padding:34px 0}.intro h1{font-size:clamp(3rem,14.5vw,4rem)}.intro-art{min-height:390px}.machine-silhouette{right:15px;width:175px;height:205px}.hero-bip{left:4px;bottom:10px;width:170px;height:290px}.piece-pile{right:125px}.game-header{align-items:flex-start}.story-progress{width:55vw}.scene-card{padding:20px 14px}.scene-heading h1{font-size:2.7rem}.story-rail{grid-template-columns:92px 1fr;padding:14px}.story-bip{width:82px;height:128px}.speech{margin:0}.rank-grid,.after-ranks{grid-template-columns:repeat(2,1fr)}.exchange-tools{grid-template-columns:1fr}.delivery-strip{grid-template-columns:repeat(3,1fr)}.delivery-strip>span{grid-column:1/-1}.utility-actions{align-items:stretch;flex-direction:column}.utility-actions button{width:100%}.feedback{grid-template-columns:1fr}.feedback-actions{justify-content:stretch}.feedback-actions button{width:100%}.completion{padding:24px 14px}.completion-art{min-height:330px}.machine-complete{right:12px;transform:scale(.72);transform-origin:bottom right}.completion-bip{left:4px;bottom:8px;width:220px;height:300px}.completion h1{font-size:3.1rem}.intro-actions,.completion-actions{align-items:stretch;flex-direction:column}.primary.link,.intro-actions .primary{width:100%}.text-button{width:100%}}
+  @media(max-width:620px){.prototype-root{overflow-x:hidden}.intro,.game-shell{width:calc(100% - 24px)}.intro{padding:34px 0}.intro h1{font-size:clamp(3rem,14.5vw,4rem)}.intro-art{min-height:390px}.game-header{align-items:flex-start}.story-progress{width:55vw}.scene-card{padding:20px 14px}.scene-heading h1{font-size:2.7rem}.story-rail{grid-template-columns:92px 1fr;padding:14px}.story-bip{width:82px;height:128px}.speech{margin:0}.rank-grid,.after-ranks{grid-template-columns:repeat(2,1fr)}.exchange-tools{grid-template-columns:1fr}.delivery-strip{grid-template-columns:repeat(3,1fr)}.delivery-strip>span{grid-column:1/-1}.utility-actions{align-items:stretch;flex-direction:column}.utility-actions button{width:100%}.feedback{grid-template-columns:1fr}.feedback-actions{justify-content:stretch}.feedback-actions button{width:100%}.completion{padding:24px 14px}.completion-art{min-height:330px}.completion h1{font-size:3.1rem}.intro-actions,.completion-actions{align-items:stretch;flex-direction:column}.primary.link,.intro-actions .primary{width:100%}.text-button{width:100%}}
   @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}.feedback.correct,.transformation,.feedback-actions{animation:validationFade 120ms var(--ease-out) both!important}.scene-enter{animation:sceneFade 120ms var(--ease-out) both!important}.delivery-strip button:active{transform:none;border-color:var(--teal)}}
 </style>

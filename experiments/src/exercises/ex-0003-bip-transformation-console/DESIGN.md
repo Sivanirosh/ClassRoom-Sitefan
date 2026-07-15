@@ -1,92 +1,153 @@
 # EX-0003 — La console qui n’en fait qu’à sa tête
 
+## Workflow provenance
+
+- **Roadmap / structural approval:** proposed `6h-mathematics-roadmap`; owner approval still pending
+- **Sequence:** `SEQ-N1 — Structures décimales`
+- **Pilot source:** [`../../../Notes-to-take-to-improve-workflow.txt.txt`](../../../Notes-to-take-to-improve-workflow.txt.txt)
+- **Mechanic memory:** [`PRE-0004`](../../../game-mechanics/precedents/PRE-0004-human-resource-machine.md), [`PRE-0005`](../../../game-mechanics/precedents/PRE-0005-opus-magnum.md), [`PRE-0006`](../../../game-mechanics/precedents/PRE-0006-into-the-breach.md), [`PRE-0007`](../../../game-mechanics/precedents/PRE-0007-brilliant.md), [`MEC-0002`](../../../game-mechanics/mechanics/MEC-0002-program-execute-inspect-revise.md), [`MEC-0003`](../../../game-mechanics/mechanics/MEC-0003-telegraphed-consequences-and-checkpoints.md), [`MEC-0004`](../../../game-mechanics/mechanics/MEC-0004-action-first-interactive-learning.md)
+- **Application outcome:** [`APP-0003`](../../../game-mechanics/applications/APP-0003-seq-n1-transformation-console.md)
+- **Learning brief / pitch comparison / graybox script:** not created; this historical pilot predates the approved templates
+- **Owner mechanic gate:** `retrospective-not-recorded`
+
+The historical pilot records the console redesign but no separate owner disposition for it. The exact phrase `mechanic approved for expansion` was not used, so approval is not granted retroactively.
+
 ## Decision summary
 
-This is the strategy-and-transfer companion to EX-0002 within `SEQ-N1 — Structures décimales`. The same light story continues after Bip’s machine is physically assembled: its console interprets place-value commands too literally and must be tested, predicted and debugged. The prototype is intentionally not a visual reskin of the workshop; its central action is reasoning about change rather than organizing a fixed quantity.
+This is the procedural strategy companion to EX-0002. The pupil authors bounded command sequences, executes or steps through them, inspects deterministic intermediate values, and edits the program. Meaningful checkpoints make order matter in selected scenes instead of disguising commutative arithmetic as a sequencing challenge.
 
 ## Curriculum alignment
 
 - **Framework:** PER Cycle 2, 6H
 - **Objective codes:** MSN 22 and transversal MSN 25
 - **Source:** `src-per-0002`, Mathematics pp. 18–21
-- **Sequence:** `SEQ-N1`
 - **Roadmap nodes:** principally `NUM-03` and `NUM-04`, with visible exchange support from `NUM-01`
 - **Progressions used:** `P22.05`, `P22.09`, `P22.10`, `P22.12`, `P22.13`
 - **Explicit 6H endpoints informed:** `E6-22.03`, `E6-22.05`, `E6-22.06`
-- **Evidence boundary:** the PER supports counting/decounting by place-value steps and translating representations. The faulty console, commands, narrative and debugging cases are original design interpretations.
+- **Evidence boundary:** PER supports counting/decounting by place-value steps and translating representations. Commands, checkpoints, faulty console behavior, and narrative are original design interpretations.
 
-## Learning objective
+## Observable learning objective
 
-Given a natural number and a command of ±1, ±10, ±100 or ±1’000, the pupil predicts the result, identifies which positional ranks change, and repairs an invalid transformation involving an exchange or degrouping.
+Given a natural number, target, and bounded commands of ±1, ±10, ±100, or ±1’000, the pupil constructs and revises a valid transformation, predicts rank changes and crossings, and explains an exchange/degrouping through the execution trace.
 
-## Prerequisites
+## Prerequisites and vocabulary
 
-- Base-ten groupings developed in the workshop or an equivalent prior experience
-- Reading natural numbers through thousands
-- Basic interpretation of addition and subtraction commands
+- Base-ten groupings from EX-0002 or an equivalent experience.
+- Read natural numbers through thousands.
+- Interpret + and − as state transformations.
+- Essential French vocabulary: `commande`, `programme`, `exécuter`, `pas à pas`, `trace`, `borne`, `déplacer`, `supprimer`, `effacer`.
 
 ## Misconceptions and productive difficulty
 
-Possible response patterns include concatenating the intermediate value `10` into the written number, changing the wrong place, appending a zero, or treating subtraction from an empty rank as impossible. The console externalizes these as machine bugs so feedback concerns the reasoning, not the pupil. Productive difficulty comes from predicting boundary crossings and reversing an exchange.
+Design hypotheses to observe:
 
-## Core interaction hypothesis
+- changing the visually similar wrong rank;
+- appending a zero instead of adding a place value;
+- treating subtraction from an empty rank as impossible;
+- accepting ten objects in one positional column without exchanging;
+- assuming that a correct final value also satisfies an ordered route.
 
-> If the pupil predicts a command, observes synchronized blocks and digits, and debugs plausible machine errors, then place-value changes become controllable transformations rather than memorized symbol edits.
+Productive difficulty comes from boundary crossings, debugging an authored faulty program, degrouping, limited slots, and conceptually meaningful intermediate checkpoints. Syntax trivia, typing, and speed are excluded.
 
-## Story and progression
+## Evidence of learning
 
-The workshop from EX-0002 is ready, but Bip’s console must be certified for the festival demonstration.
+Potential evidence includes:
 
-1. **Premier démarrage — orientation:** reach 244 from 243 with `+1` while discovering that commands execute literally and undo is safe.
-2. **Banc d’essai — exploration:** use `+1’000` to change scale while leaving the three lower ranks stable.
-3. **Passage dangereux — complication:** predict `293 + 10` and inspect the exchange producing 303.
-4. **Premier dysfonctionnement — debugging:** repair the invalid `10 | 5 | 6` display for `956 + 100` by exchanging ten hundreds.
-5. **Réserve vide — reversal:** explain how `1’004 − 100` becomes 904 by opening one thousand into ten hundreds.
-6. **Programme final — integration:** combine `−1`, `−10`, `−100` and `−1’000` to transform 2’416 into 1’305 and certify the machine.
+- constructing a command sequence rather than identifying a finished answer;
+- predicting which digits/ranks remain stable;
+- using an execution trace to find the first route divergence;
+- repairing a preloaded `+10` program into the required `+100` transformation;
+- explaining why 1’004 can be treated as ten hundreds and four units for `−100`;
+- satisfying ordered intermediate values before the final target.
 
-## Feedback and scaffolding
+Completion, time, and command count are not mastery measures.
 
-- Commands always have a visible current number, target and transformation trace.
-- A wrong command produces an interpretable consequence rather than punishment.
-- Prediction and machine result remain side by side.
-- Retry preserves the scene and offers one increasingly specific clue.
-- Correct feedback identifies changed and unchanged ranks.
-- Bip’s concise humor frames the machine as fallible and the pupil as its collaborator.
+## Core mechanic hypothesis
+
+> If the pupil authors a bounded program, executes or steps through synchronized positional state, and revises from a deterministic trace and meaningful checkpoints, then place-value changes can become controllable procedures rather than memorized digit edits.
+
+- **Primary verbs:** add command, order, remove, clear, execute, step, inspect, revise.
+- **State model:** start value, target, command slots, current positional digits, required checkpoints, and execution trace.
+- **Challenge source:** bounded instruction vocabulary/slots, boundary crossings, faulty programs, and ordered intermediate states.
+- **Recovery:** programs remain editable; mismatch feedback names final or first checkpoint divergence; execution can be repeated without penalty.
+- **Mechanical distinction:** unlike EX-0002, quantity intentionally changes and the main artifact is an authored procedure rather than a spatial organization.
+
+## Implemented progression
+
+1. **Orientation — Premier démarrage:** add `+1`, execute, and transform 243 into 244; executing an empty program provides a recoverable error path.
+2. **Exploration/ordered constraint — Banc d’essai:** program `+10`, then `+1’000`, moving 293 through mandatory checkpoint 303 to 1’303. Reversing the commands reaches the same final value but fails the checkpoint.
+3. **Complication — Passage dangereux:** use `+1` to transform 999 into 1’000 and inspect the cascading rank exchange.
+4. **Debugging — 10 | 5 | 6:** inspect Bip’s preloaded `+10` program, clear it, replace it with `+100`, and transform 956 into 1’056.
+5. **Inverse transformation — Colonne vide:** use `−100` to transform 1’004 into 904 through degrouping one thousand.
+6. **Independence/integration — Programme de la fête:** order `−1’000, −100, −10, −1` so 2’416 passes through 1’416, 1’316, and 1’306 before reaching 1’305.
+
+This historical prototype expanded before the explicit gate existed; the sequence is documented, not newly authorized.
+
+## Feedback and recovery
+
+- Empty/over-capacity programs and target/checkpoint mismatches produce state-specific written guidance.
+- The live trace keeps every intermediate result aligned with its command.
+- A route may reach the final value yet fail an earlier checkpoint; feedback names the missing checkpoint and asks for reordering.
+- Add/remove/reorder/clear actions preserve an editable program; execution is safe and repeatable.
+- Success traces explain changed and stable ranks.
+- Bip and the machine carry the error framing, never the pupil.
 
 ## Content model and ambiguity guards
 
-Six authored integer transformations are stored as exact values and collectively exercise both directions of the `1`, `10`, `100` and `1’000` steps. Every program is evaluated in advance and each distractor is non-equivalent to the target. Swiss thousands separators are display-only. The prototype does not generate arbitrary arithmetic cases or teach a written addition/subtraction algorithm.
+Six authored integer transformations use exact numeric addition. Available commands and slot counts are bounded per scene. The program evaluator computes every intermediate value, compares ordered checkpoints by trace index, then verifies the final target. Swiss thousands separators are display-only. No random cases, floating point, hidden answer choices, or written-algorithm claims remain.
+
+The checkpoints are deliberate: addition commands commute at the final-sum level, so scene 2 and scene 6 need required intermediate values for order to carry conceptual meaning.
 
 ## Interaction states
 
-`introduction → command/prediction → incorrect consequence → retry` or `correct trace → continuation → next scene → certification`.
+```text
+intro → active program
+active → edit/execute/step → active trace or recoverable error
+active → target + ordered checkpoints satisfied → success
+success → next test or completion
+```
 
 ## Accessibility and devices
 
-- All commands are native buttons with text and symbolic values.
-- Keyboard, touch and pointer use the same decision path.
-- Focus is visible; targets are at least 44 px.
-- State and correctness never depend on color alone.
-- No timer, sound, drag or precise placement is required.
-- Reduced-motion preserves every trace and explanation.
-- The 320 px layout stacks the console panels and command cards.
+- Native discrete controls support keyboard, pointer, and touch.
+- Command labels combine words/symbols and accessible button names; meaning does not rely on color.
+- Start, target, positional digits, checkpoints, program, and trace are written in the DOM.
+- Focus is visible; status messages announce program results.
+- Reduced motion preserves all states and explanations.
+- Narrow layouts stack the console and controls; traces may scroll within their labeled region rather than overflowing the page.
+
+## Motion and artwork decisions
+
+Motion is restrained to state/feedback transitions and is disabled/compressed under reduced motion. Generated imagery is limited to Bip and the intro/outro narrative scenes. Commands, numbers, digits, checkpoints, trace, and assessed state remain DOM/CSS.
 
 ## Prototype boundaries
 
-Included: six authored transformations, prediction, debugging, degrouping, one short program, reactive story feedback and completion.
+Included: six authored transformations, bounded command construction, add/remove/reorder/clear, full execution and step-through, deterministic trace, ordered checkpoints, preloaded faulty program, short narrative, and local completion.
 
-Excluded: free-form calculator behavior, arbitrary number generation, procedural arithmetic teaching, score, persistence, telemetry, identity and claims of validation.
+Excluded: free-form calculator behavior, arbitrary generation, optimization scoring, procedural arithmetic instruction, identity, persistence, telemetry, classroom submission, and pupil-validation claims.
 
 ## Observation plan
 
-Observe whether pupils use the place-value display or only digit patterns; whether the 293→303 and 1’004→904 traces change explanations; whether debugging another system reduces defensiveness; and whether the final four-step negative program demonstrates transfer rather than memory. The hypothesis is weakened if options can be solved by superficial wording or the console animation substitutes for explanation.
+Observe whether pupils inspect positional state instead of using final-digit pattern matching; predict 999→1’000; understand checkpoint failure despite a correct final value; repair rather than merely replace the faulty program blindly; explain degrouping; and use the final trace as evidence. The hypothesis is weakened if pupils follow smoke-route-like memorized command orders without interpreting intermediate states.
 
 ## Findings and decisions
 
-- **2026-07-15 — Companion role:** retain the console as a distinct strategy/debugging study after the workshop construction experience.
-- **2026-07-15 — Narrative direction:** Bip remains a short reactive companion; the machine’s plausible errors carry the conflict.
-- **2026-07-15 — Initial low-fi:** use bounded authored commands and traces before considering an unrestricted sandbox.
+- **2026-07-15 — Rejected form:** the first implementation used `read → choose one answer → feedback`; see [`APP-0001`](../../../game-mechanics/applications/APP-0001-seq-n1-answer-loop-convergence.md).
+- **2026-07-15 — Mechanic redesign:** command slots, execution, step-through, edit controls, checkpoints, and traces replaced answer selection.
+- **2026-07-15 — Conceptual correction:** ordered checkpoints were added where commutative commands would otherwise make sequencing decorative.
+- **2026-07-15 — Historical gate:** positive iterative feedback was recorded, but no `mechanic approved for expansion` phrase; status remains `prototyping`.
+- **2026-07-15 — Record synchronization:** removed unused answer-choice payloads and migrated final smoke hooks to the real mechanic controls.
+
+## Final validation evidence
+
+Final post-migration technical checks on 2026-07-15:
+
+- `npm --prefix experiments run check` — passed; zero Svelte diagnostics; catalog valid (3 exercises).
+- `SMOKE_EXERCISES=EX-0002,EX-0003 npm --prefix experiments run test:smoke` — 6/6 passed, including reduced-motion keyboard and 320 px touch paths through real command programs, execution traces, and an empty-program recovery.
+- `npm --prefix experiments run build` — passed.
+
+These results establish technical readiness of the current path only. Automated checks do not validate pupil reasoning, French comprehension, assistive-technology behavior beyond the covered hooks, or the unrecorded owner mechanic gate.
 
 ## Promotion criteria
 
-Promotion requires pupil observations showing successful prediction and explanation across fresh boundary cases, comprehensible French feedback, usable keyboard/touch operation, and clear separation between conceptual mistakes and interface friction. The record remains `prototyping` until then.
+Promotion requires explicit owner disposition, pupil observations across fresh boundary/route cases, understood French feedback, accessible keyboard/touch use, and clear separation between conceptual errors and interface friction. The exercise remains `prototyping` until that evidence exists.

@@ -1,12 +1,14 @@
 # 6H Exercise Quality and Testing-Readiness Contract
 
+> **Withdrawn batch-specific contract.** This document governed the deleted three-prototypes-per-cluster production method and is retained only as historical evidence. It must not authorize new work or override the approved [`prototype-production-workflow.md`](./prototype-production-workflow.md). Potentially useful validation requirements must be re-evaluated against each approved mechanic after final polish.
+
 **Contract ID:** `6H-QC-1`
 
-**Applies to:** all 111 exercises in `experiments/design/6h-production-plan.json`
+**Former scope:** all 111 exercises in the deleted/withdrawn bulk production plan
 
-**Companion review gate:** `experiments/design/6h-review-rubric.md`
+**Historical companion rubric:** `experiments/design/6h-review-rubric.md`
 
-This document is binding for the 6H implementation and paired independent-review slices. “Must” and “must not” are pass/fail requirements. The approved decision record, finalized curriculum map, Exercise Lab schema and isolation contract remain authoritative; a worker must stop rather than weaken this contract or invent a conflicting curriculum claim.
+Historically, this document was binding for the withdrawn 6H implementation and paired independent-review slices. Its “must” and “must not” language now describes that obsolete method only; no current worker may treat it as production authority.
 
 ## 1. Product boundary
 

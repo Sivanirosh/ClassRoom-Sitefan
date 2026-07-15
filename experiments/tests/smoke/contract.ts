@@ -1,14 +1,33 @@
 import { expect, type Locator, type Page } from '@playwright/test';
 import type { SmokeTarget } from './catalog';
 
-const STATES = ['ready', 'question', 'incorrect', 'correct', 'complete'] as const;
+const STATES = ['ready', 'active', 'success', 'complete'] as const;
 type SmokeState = (typeof STATES)[number];
 type AssertClean = () => Promise<void>;
+type Activate = (control: Locator, label: string) => Promise<void>;
+type PrepareFeedback = (feedback: Locator, label: string) => Promise<void>;
+
+const stateHooks: Record<SmokeState, string[]> = {
+  ready: ['[data-smoke-action="start"]'],
+  active: ['[data-smoke-control]', '[data-smoke-feedback="error"][data-smoke-feedback-detail]'],
+  success: [
+    '[data-smoke-feedback="success"][data-smoke-feedback-detail]',
+    '[data-smoke-action="continue"]'
+  ],
+  complete: ['[data-smoke-completion]']
+};
+const allStateHooks = Object.values(stateHooks).flat();
+const legacyHooks =
+  '[data-smoke-answer], [data-smoke-action="retry"], [data-smoke-feedback="incorrect"], [data-smoke-feedback="correct"]';
 
 function rootFor(page: Page, target: SmokeTarget): Locator {
   return page.locator(
     `[data-smoke-root][data-smoke-exercise="${target.id}"][data-smoke-program="${target.programId}"]`
   );
+}
+
+function escapeAttributeValue(value: string): string {
+  return value.replaceAll('\\', '\\\\').replaceAll('"', '\\"');
 }
 
 async function exactVisible(root: Locator, selector: string, label: string): Promise<Locator> {
@@ -24,21 +43,6 @@ async function exactControl(root: Locator, selector: string, label: string): Pro
   return locator;
 }
 
-const stateHooks: Record<SmokeState, string[]> = {
-  ready: ['[data-smoke-action="start"]'],
-  question: ['[data-smoke-answer="incorrect"]', '[data-smoke-answer="correct"]'],
-  incorrect: [
-    '[data-smoke-feedback="incorrect"][data-smoke-feedback-detail]',
-    '[data-smoke-action="retry"]'
-  ],
-  correct: [
-    '[data-smoke-feedback="correct"][data-smoke-feedback-detail]',
-    '[data-smoke-action="continue"]'
-  ],
-  complete: ['[data-smoke-completion]']
-};
-const allStateHooks = Object.values(stateHooks).flat();
-
 async function expectStateShape(root: Locator, state: SmokeState): Promise<void> {
   const allowed = new Set(stateHooks[state]);
   for (const selector of allStateHooks) {
@@ -49,13 +53,43 @@ async function expectStateShape(root: Locator, state: SmokeState): Promise<void>
       ).toHaveCount(0);
     }
   }
+
+  await expect(root.locator(legacyHooks), 'legacy answer-card smoke hooks are not allowed').toHaveCount(0);
+
+  if (state === 'ready') {
+    await exactControl(root, '[data-smoke-action="start"]', 'start control');
+    await expect(root, 'ready state must not expose a success plan').not.toHaveAttribute(
+      'data-smoke-success-plan'
+    );
+  } else if (state === 'active') {
+    await expect(root, 'active state must expose a non-empty success plan').toHaveAttribute(
+      'data-smoke-success-plan',
+      /\S/
+    );
+    expect(
+      await root.locator('[data-smoke-control]').count(),
+      'active state must expose at least one real pupil control'
+    ).toBeGreaterThan(0);
+  } else if (state === 'success') {
+    await exactVisible(
+      root,
+      '[data-smoke-feedback="success"][data-smoke-feedback-detail]',
+      'success feedback'
+    );
+    await exactControl(root, '[data-smoke-action="continue"]', 'continue control');
+    await expect(root, 'success state must not retain an active plan').not.toHaveAttribute(
+      'data-smoke-success-plan'
+    );
+  } else {
+    await exactVisible(root, '[data-smoke-completion]', 'completion state');
+    await expect(root, 'complete state must not retain an active plan').not.toHaveAttribute(
+      'data-smoke-success-plan'
+    );
+  }
 }
 
 async function expectState(root: Locator, state: SmokeState): Promise<void> {
-  await expect(root, `smoke state must become "${state}"`).toHaveAttribute(
-    'data-smoke-state',
-    state
-  );
+  await expect(root, `smoke state must become "${state}"`).toHaveAttribute('data-smoke-state', state);
   await expectStateShape(root, state);
 }
 
@@ -67,18 +101,45 @@ async function currentState(root: Locator): Promise<SmokeState> {
   return state as SmokeState;
 }
 
-async function feedbackText(root: Locator, kind: 'incorrect' | 'correct'): Promise<string> {
+async function feedbackText(
+  root: Locator,
+  kind: 'error' | 'success',
+  prepare?: PrepareFeedback
+): Promise<string> {
+  const label = `${kind} feedback`;
   const feedback = await exactVisible(
     root,
     `[data-smoke-feedback="${kind}"][data-smoke-feedback-detail]`,
-    `${kind} feedback`
+    label
   );
+  if (prepare) await prepare(feedback, label);
   const text = (await feedback.innerText()).replace(/\s+/g, ' ').trim();
   expect(text.length, `${kind} feedback must contain specific written detail`).toBeGreaterThanOrEqual(
     20
   );
   expect(text, `${kind} feedback must contain words, not only a color or icon`).toMatch(/\p{L}/u);
   return text;
+}
+
+function parsePlan(raw: string | null, label: string, required: boolean): string[] {
+  if (raw === null || raw.trim() === '') {
+    if (required) throw new Error(`${label} is missing or empty.`);
+    return [];
+  }
+
+  const tokens = raw.split(',').map((token) => token.trim());
+  if (tokens.some((token) => token.length === 0)) {
+    throw new Error(`${label} contains an empty control token.`);
+  }
+  return tokens;
+}
+
+async function planFor(
+  root: Locator,
+  attribute: 'data-smoke-success-plan' | 'data-smoke-error-plan' | 'data-smoke-recovery-plan',
+  required = false
+): Promise<string[]> {
+  return parsePlan(await root.getAttribute(attribute), attribute, required);
 }
 
 async function focusByTab(page: Page, control: Locator, label: string): Promise<void> {
@@ -90,14 +151,9 @@ async function focusByTab(page: Page, control: Locator, label: string): Promise<
   throw new Error(`${label} could not be reached with Tab.`);
 }
 
-async function keyboardActivate(
-  page: Page,
-  control: Locator,
-  label: string,
-  key: 'Enter' | 'Space'
-): Promise<void> {
+async function keyboardActivate(page: Page, control: Locator, label: string): Promise<void> {
   await focusByTab(page, control, label);
-  await page.keyboard.press(key);
+  await page.keyboard.press('Enter');
 }
 
 async function assertNoHorizontalOverflow(page: Page): Promise<void> {
@@ -134,10 +190,36 @@ async function prepareTouchTarget(
   );
 }
 
-async function waitForQuestionOrCompletion(root: Locator): Promise<SmokeState> {
+async function executePlan(
+  root: Locator,
+  tokens: string[],
+  label: string,
+  activate: Activate,
+  finalState: 'active' | 'success',
+  afterAction: () => Promise<void>
+): Promise<void> {
+  for (const [index, token] of tokens.entries()) {
+    const control = await exactControl(
+      root,
+      `[data-smoke-control="${escapeAttributeValue(token)}"]`,
+      `${label} control "${token}"`
+    );
+    await activate(control, `${label} control "${token}"`);
+
+    const expectedState = finalState === 'success' && index === tokens.length - 1 ? 'success' : 'active';
+    await expect
+      .poll(() => currentState(root), {
+        message: `${label} step ${index + 1} (${token}) must leave the prototype in ${expectedState}`
+      })
+      .toBe(expectedState);
+    await afterAction();
+  }
+}
+
+async function waitForActiveOrCompletion(root: Locator): Promise<SmokeState> {
   await expect
-    .poll(() => currentState(root), { message: 'continue must reveal another question or completion' })
-    .toMatch(/^(question|complete)$/);
+    .poll(() => currentState(root), { message: 'continue must reveal another active scene or completion' })
+    .toMatch(/^(active|complete)$/);
   return currentState(root);
 }
 
@@ -146,6 +228,51 @@ async function assertCompletion(root: Locator): Promise<void> {
   const completion = await exactVisible(root, '[data-smoke-completion]', 'completion state');
   const text = (await completion.innerText()).replace(/\s+/g, ' ').trim();
   expect(text.length, 'completion must contain written confirmation').toBeGreaterThanOrEqual(10);
+}
+
+async function driveActiveScene(
+  root: Locator,
+  activate: Activate,
+  afterAction: () => Promise<void>,
+  errorAlreadyExercised: boolean,
+  prepareFeedback?: PrepareFeedback
+): Promise<{ errorExercised: boolean; errorText: string | null }> {
+  await expectState(root, 'active');
+  let errorExercised = errorAlreadyExercised;
+  let errorText: string | null = null;
+  const errorFeedback = root.locator(
+    '[data-smoke-feedback="error"][data-smoke-feedback-detail]'
+  );
+  await expect(
+    errorFeedback,
+    'an active scene must not expose stale error feedback before the harness attempts its error plan'
+  ).toHaveCount(0);
+  const errorPlan = await planFor(root, 'data-smoke-error-plan');
+
+  if (errorPlan.length > 0 && !errorAlreadyExercised) {
+    await executePlan(root, errorPlan, 'recoverable-error plan', activate, 'active', afterAction);
+    await expectState(root, 'active');
+    errorText = await feedbackText(root, 'error', prepareFeedback);
+    errorExercised = true;
+
+    const recoveryPlan = await planFor(root, 'data-smoke-recovery-plan');
+    if (recoveryPlan.length > 0) {
+      await executePlan(root, recoveryPlan, 'recovery plan', activate, 'active', afterAction);
+      await expectState(root, 'active');
+    }
+  }
+
+  const successPlan = await planFor(root, 'data-smoke-success-plan', true);
+  await executePlan(root, successPlan, 'success plan', activate, 'success', afterAction);
+  await expectState(root, 'success');
+  const successText = await feedbackText(root, 'success');
+  if (errorText !== null) {
+    expect(successText, 'success and recoverable-error feedback must differ in writing').not.toBe(
+      errorText
+    );
+  }
+
+  return { errorExercised, errorText };
 }
 
 export async function runKeyboardContract(
@@ -164,69 +291,38 @@ export async function runKeyboardContract(
   await assertClean();
 
   const start = await exactControl(root, '[data-smoke-action="start"]', 'start control');
-  await keyboardActivate(page, start, 'start control', 'Enter');
-  await expectState(root, 'question');
+  await keyboardActivate(page, start, 'start control');
+  await expectState(root, 'active');
   await assertClean();
 
-  let completedQuestions = 0;
+  let completedScenes = 0;
+  let errorExercised = false;
   while ((await currentState(root)) !== 'complete') {
-    if (completedQuestions >= 50) {
-      throw new Error(`${target.id} exceeded the 50-question smoke safety limit.`);
+    if (completedScenes >= 50) {
+      throw new Error(`${target.id} exceeded the 50-scene smoke safety limit.`);
     }
 
-    await expectState(root, 'question');
-    const incorrectAnswer = await exactControl(
+    const result = await driveActiveScene(
       root,
-      '[data-smoke-answer="incorrect"]',
-      'known incorrect answer'
+      (control, label) => keyboardActivate(page, control, label),
+      assertClean,
+      errorExercised
     );
-    const correctAnswerBeforeRetry = await exactControl(
-      root,
-      '[data-smoke-answer="correct"]',
-      'known correct answer'
-    );
-    expect(
-      await incorrectAnswer.evaluate(
-        (element, correct) => element !== correct,
-        await correctAnswerBeforeRetry.elementHandle()
-      ),
-      'known correct and incorrect answers must be distinct controls'
-    ).toBe(true);
-    await keyboardActivate(page, incorrectAnswer, 'known incorrect answer', 'Space');
-    await expectState(root, 'incorrect');
-    const incorrectText = await feedbackText(root, 'incorrect');
-    await assertClean();
-
-    const retry = await exactControl(root, '[data-smoke-action="retry"]', 'retry control');
-    await keyboardActivate(page, retry, 'retry control', 'Enter');
-    await expectState(root, 'question');
-    await assertClean();
-
-    const correctAnswer = await exactControl(
-      root,
-      '[data-smoke-answer="correct"]',
-      'known correct answer after retry'
-    );
-    await keyboardActivate(page, correctAnswer, 'known correct answer after retry', 'Space');
-    await expectState(root, 'correct');
-    const correctText = await feedbackText(root, 'correct');
-    expect(correctText, 'correct and incorrect feedback must be distinguishable in writing').not.toBe(
-      incorrectText
-    );
-    await assertClean();
+    errorExercised = result.errorExercised;
 
     const continueControl = await exactControl(
       root,
       '[data-smoke-action="continue"]',
       'continue control'
     );
-    await keyboardActivate(page, continueControl, 'continue control', 'Enter');
-    completedQuestions += 1;
-    await waitForQuestionOrCompletion(root);
+    await keyboardActivate(page, continueControl, 'continue control');
+    completedScenes += 1;
+    await waitForActiveOrCompletion(root);
     await assertClean();
   }
 
-  expect(completedQuestions, 'the primary loop must contain at least one question').toBeGreaterThan(0);
+  expect(completedScenes, 'the primary loop must contain at least one active scene').toBeGreaterThan(0);
+  expect(errorExercised, 'the complete path must expose one recoverable error probe').toBe(true);
   await assertCompletion(root);
   await assertClean();
 }
@@ -253,94 +349,56 @@ export async function runTouchContract(
   await assertNoHorizontalOverflow(page);
   await assertClean();
 
-  const start = await exactControl(root, '[data-smoke-action="start"]', 'start control');
-  await prepareTouchTarget(start, 'start control', viewport);
-  await start.tap();
-  await expectState(root, 'question');
-  await assertNoHorizontalOverflow(page);
-  await assertClean();
+  const activateTouch: Activate = async (control, label) => {
+    await prepareTouchTarget(control, label, viewport);
+    await assertNoHorizontalOverflow(page);
+    await control.tap();
+  };
+  const afterTouchAction = async (): Promise<void> => {
+    await assertNoHorizontalOverflow(page);
+    await assertClean();
+  };
 
-  let completedQuestions = 0;
+  const start = await exactControl(root, '[data-smoke-action="start"]', 'start control');
+  await activateTouch(start, 'start control');
+  await expectState(root, 'active');
+  await afterTouchAction();
+
+  let completedScenes = 0;
+  let errorExercised = false;
   while ((await currentState(root)) !== 'complete') {
-    if (completedQuestions >= 50) {
-      throw new Error(`${target.id} exceeded the 50-question smoke safety limit.`);
+    if (completedScenes >= 50) {
+      throw new Error(`${target.id} exceeded the 50-scene smoke safety limit.`);
     }
 
-    await expectState(root, 'question');
-    const correctAnswerBeforeRetry = await exactControl(
+    const result = await driveActiveScene(
       root,
-      '[data-smoke-answer="correct"]',
-      'known correct answer'
+      activateTouch,
+      afterTouchAction,
+      errorExercised,
+      (feedback, label) => prepareTouchTarget(feedback, label, viewport)
     );
-    await prepareTouchTarget(correctAnswerBeforeRetry, 'known correct answer', viewport);
-    const incorrectAnswer = await exactControl(
-      root,
-      '[data-smoke-answer="incorrect"]',
-      'known incorrect answer'
-    );
-    expect(
-      await incorrectAnswer.evaluate(
-        (element, correct) => element !== correct,
-        await correctAnswerBeforeRetry.elementHandle()
-      ),
-      'known correct and incorrect answers must be distinct controls'
-    ).toBe(true);
-    await prepareTouchTarget(incorrectAnswer, 'known incorrect answer', viewport);
-    await assertNoHorizontalOverflow(page);
-    await incorrectAnswer.tap();
-    await expectState(root, 'incorrect');
+    errorExercised = result.errorExercised;
 
-    const incorrectFeedback = await exactVisible(
+    const successFeedback = await exactVisible(
       root,
-      '[data-smoke-feedback="incorrect"][data-smoke-feedback-detail]',
-      'incorrect feedback'
+      '[data-smoke-feedback="success"][data-smoke-feedback-detail]',
+      'success feedback'
     );
-    await prepareTouchTarget(incorrectFeedback, 'incorrect feedback', viewport);
-    const incorrectText = await feedbackText(root, 'incorrect');
-    const retry = await exactControl(root, '[data-smoke-action="retry"]', 'retry control');
-    await prepareTouchTarget(retry, 'retry control', viewport);
-    await assertNoHorizontalOverflow(page);
-    await assertClean();
-    await retry.tap();
-    await expectState(root, 'question');
-    await assertClean();
-
-    const correctAnswer = await exactControl(
-      root,
-      '[data-smoke-answer="correct"]',
-      'known correct answer after retry'
-    );
-    await prepareTouchTarget(correctAnswer, 'known correct answer after retry', viewport);
-    await assertNoHorizontalOverflow(page);
-    await correctAnswer.tap();
-    await expectState(root, 'correct');
-
-    const correctFeedback = await exactVisible(
-      root,
-      '[data-smoke-feedback="correct"][data-smoke-feedback-detail]',
-      'correct feedback'
-    );
-    await prepareTouchTarget(correctFeedback, 'correct feedback', viewport);
-    const correctText = await feedbackText(root, 'correct');
-    expect(correctText, 'correct and incorrect feedback must be distinguishable in writing').not.toBe(
-      incorrectText
-    );
+    await prepareTouchTarget(successFeedback, 'success feedback', viewport);
     const continueControl = await exactControl(
       root,
       '[data-smoke-action="continue"]',
       'continue control'
     );
-    await prepareTouchTarget(continueControl, 'continue control', viewport);
-    await assertNoHorizontalOverflow(page);
-    await assertClean();
-    await continueControl.tap();
-    completedQuestions += 1;
-    await waitForQuestionOrCompletion(root);
-    await assertNoHorizontalOverflow(page);
-    await assertClean();
+    await activateTouch(continueControl, 'continue control');
+    completedScenes += 1;
+    await waitForActiveOrCompletion(root);
+    await afterTouchAction();
   }
 
-  expect(completedQuestions, 'the primary loop must contain at least one question').toBeGreaterThan(0);
+  expect(completedScenes, 'the primary loop must contain at least one active scene').toBeGreaterThan(0);
+  expect(errorExercised, 'the complete path must expose one recoverable error probe').toBe(true);
   await assertCompletion(root);
   const completion = root.locator('[data-smoke-completion]');
   await prepareTouchTarget(completion, 'completion state', viewport);

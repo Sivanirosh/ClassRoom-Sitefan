@@ -1,10 +1,12 @@
 # 6H Independent Review Rubric
 
+> **Withdrawn batch-specific rubric.** This document is retained for historical review only. It must not be used as an approval authority or override the owner gates in [`prototype-production-workflow.md`](./prototype-production-workflow.md).
+
 **Rubric ID:** `6H-REVIEW-1`
 
-**Binding contract:** `experiments/design/6h-exercise-quality-contract.md`
+**Historical companion contract:** `experiments/design/6h-exercise-quality-contract.md`
 
-Use this rubric in every paired 6H review slice. It is a release gate from `prototyping` to `testing`, not a scoring guide and not a pupil-validation protocol. A reviewer must inspect all three records in the cluster together, exercise the prototypes, run the filtered browser evidence and record concrete file/state evidence. A plausible design description is not a pass when the prototype does something else.
+This rubric was used in every paired slice under the withdrawn bulk method. It is no longer a release gate. Its review questions may inform future checks only when they fit the approved mechanic and current workflow; they do not grant owner approval.
 
 ## 1. Review outcome and severities
 

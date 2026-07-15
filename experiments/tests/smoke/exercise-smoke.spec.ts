@@ -36,38 +36,25 @@ async function focusLegacyPrototype(page: Page): Promise<void> {
   throw new Error('EX-0001 did not expose a focusable prototype control.');
 }
 
-test('SMOKE_EXERCISES accepts exactly one discovered review trio', () => {
-  const trio = ['alpha', 'beta', 'gamma'].map(
+test('SMOKE_EXERCISES accepts any explicit set of distinct discovered prototypes', () => {
+  const discovered = ['alpha', 'beta', 'gamma'].map(
     (id, index): SmokeTarget => ({ ...fixtureTarget, id, lens: `lens-${index + 1}` })
   );
 
-  expect(selectSmokeTargets(trio, 'alpha,beta,gamma').map((target) => target.id)).toEqual([
+  expect(selectSmokeTargets(discovered, 'alpha').map((target) => target.id)).toEqual(['alpha']);
+  expect(selectSmokeTargets(discovered, 'alpha,gamma').map((target) => target.id)).toEqual([
     'alpha',
-    'beta',
     'gamma'
   ]);
-  expect(() => selectSmokeTargets(trio, 'alpha,beta')).toThrow(/pilot pair/);
-  const pilotPair = trio.slice(0, 2).map((target) => ({ ...target, programId: 'pilot-seq-n1' }));
-  expect(selectSmokeTargets(pilotPair, 'alpha,beta').map((target) => target.id)).toEqual([
-    'alpha',
-    'beta'
-  ]);
-  expect(() => selectSmokeTargets(trio, 'alpha,alpha,gamma')).toThrow(/exactly three distinct/);
-  expect(() => selectSmokeTargets(trio, 'alpha,beta,unknown')).toThrow(/not discovered/);
-  expect(() =>
-    selectSmokeTargets(
-      trio.map((target, index) =>
-        index === 2 ? { ...target, cluster: 'different-cluster' } : target
-      ),
-      'alpha,beta,gamma'
-    )
-  ).toThrow(/one 6H cluster/);
+  expect(() => selectSmokeTargets(discovered, '')).toThrow(/one or more distinct/);
+  expect(() => selectSmokeTargets(discovered, 'alpha,alpha')).toThrow(/one or more distinct/);
+  expect(() => selectSmokeTargets(discovered, 'alpha,unknown')).toThrow(/not discovered/);
 });
 
-test('the harness rejects ambiguous, non-tabbable, networked, and auxiliary-realm fixtures', async ({
+test('the harness rejects stale, ambiguous, non-tabbable, networked, and auxiliary-realm fixtures', async ({
   browser
 }, testInfo) => {
-  for (const violation of ['inactive', 'focus', 'fetch', 'frame']) {
+  for (const violation of ['stale-error', 'inactive', 'focus', 'fetch', 'frame']) {
     await test.step(violation, async () => {
       const guarded = await createGuardedPage(browser, baseUrlFor(testInfo), {
         viewport: { width: 1280, height: 800 },
@@ -139,7 +126,7 @@ test('EX-0001 remains loadable and focusable', async ({ browser }, testInfo) => 
   }
 });
 
-test(`all selected ${manifest.programId} prototypes complete the keyboard loop`, async ({
+test(`all selected ${manifest.programId} prototypes complete the keyboard mechanic path`, async ({
   browser
 }, testInfo) => {
   testInfo.annotations.push({
@@ -165,7 +152,7 @@ test(`all selected ${manifest.programId} prototypes complete the keyboard loop`,
   }
 });
 
-test(`all selected ${manifest.programId} prototypes complete the 320px touch loop`, async ({
+test(`all selected ${manifest.programId} prototypes complete the 320px touch mechanic path`, async ({
   browser
 }, testInfo) => {
   testInfo.annotations.push({

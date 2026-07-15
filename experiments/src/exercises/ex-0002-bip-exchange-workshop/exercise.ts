@@ -31,14 +31,14 @@ export default defineExercise({
       'Omettre un rang vide, par exemple écrire 13 au lieu de 103.'
     ],
     evidence: [
-      'Choisir un échange de dix éléments du même rang.',
+      'Effectuer un échange réversible de dix éléments du même rang et vérifier l’invariant.',
       'Reconnaître plusieurs organisations équivalentes d’une même quantité.',
       'Coordonner l’organisation matérielle avec l’écriture chiffrée et décomposée.'
     ]
   },
   gameplay: {
-    coreMechanic: 'Choisir et observer des échanges réversibles de dix éléments afin de ranger l’atelier sans modifier la quantité.',
-    interactionModes: ['choice', 'grouping', 'prediction', 'guided-revision'],
+    coreMechanic: 'Manipuler directement une réserve par échanges réversibles de dix éléments afin de satisfaire des contraintes d’organisation sans modifier la quantité.',
+    interactionModes: ['reversible-exchange', 'spatial-organization', 'prediction', 'guided-revision'],
     estimatedMinutes: 8
   },
   delivery: {

@@ -31,7 +31,7 @@ export default defineExercise({
       'Considérer une soustraction impossible lorsque le rang visé est vide.'
     ],
     evidence: [
-      'Choisir des commandes de ±1, ±10, ±100 et ±1’000 adaptées à une transformation donnée.',
+      'Composer des commandes de ±1, ±10, ±100 et ±1’000 adaptées à une transformation donnée.',
       'Prévoir un passage de rang comme 293 + 10 = 303.',
       'Diagnostiquer et réparer une transformation qui conserve dix éléments dans un rang.',
       'Expliquer un dégroupement comme 1’004 − 100 = 904.',
