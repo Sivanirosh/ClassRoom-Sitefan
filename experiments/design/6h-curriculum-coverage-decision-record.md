@@ -1,20 +1,23 @@
 ---
 title: 6H PER curriculum coverage program
-status: approved
-revision: r1-approved
-approved_on: 2026-07-14
-readiness: conditionally_ready
+status: withdrawn
+revision: r2-withdrawn
+approved_on: null
+withdrawn_on: 2026-07-15
+readiness: not_ready
 owners:
   - repository owner acting as classroom and curriculum owner
 ---
 
 # 6H PER Curriculum Coverage Program
 
+> **Withdrawal notice — 2026-07-15:** The accountable product/classroom owner rejected the bulk production methodology after reviewing generated Geography prototypes and finding inadequate quality and coherence. This record remains historical evidence only and must not authorize architecture, slice generation, or implementation. A replacement strategy is being grilled in `experiments/design/6h-exercise-production-strategy-decision-record.draft.md`.
+
 ## Approval record
 
 | Approver identifier | Accountable role | Approval scope | Revision/digest | Approved at | Disposition |
 |---|---|---|---|---|---|
-| User (chat approver) | Classroom and curriculum owner | Product scope, curriculum authority, quality bar, and KD execution policy | `47f6e78d6966928a` | 2026-07-14T23:48:12+02:00 | Approved |
+| User (chat approver) | Classroom and curriculum owner | Product scope, curriculum authority, quality bar, and KD execution policy | `47f6e78d6966928a` | 2026-07-14T23:48:12+02:00 | Withdrawn 2026-07-15 after prototype review |
 
 A participant without authority for curriculum scope may propose acceptance, but curriculum approval remains pending until confirmed by the accountable classroom or curriculum owner.
 
@@ -24,6 +27,7 @@ A participant without authority for curriculum scope may propose acceptance, but
 |---|---|---|---|---|
 | r1-pending-approval | 2026-07-14 | Draft | Initial convergence record from the 6H coverage interview | Coding assistant with user decisions |
 | r1-approved | 2026-07-14 | Approved | Accountable owner approved revision digest `47f6e78d6966928a`; readiness advanced to conditionally ready | User and coding assistant |
+| r2-withdrawn | 2026-07-15 | Withdrawn | Owner rejected the bulk three-per-cluster KD methodology after generated Geography prototypes lacked quality and coherence; all generated Geography prototypes and active batch slices were removed | User and coding assistant |
 
 ## Executive intent
 

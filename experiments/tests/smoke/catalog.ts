@@ -62,9 +62,15 @@ export async function discoverSmokeManifest(): Promise<SmokeManifest> {
     await server.close();
   }
 
-  const plan = JSON.parse(
-    await readFile(new URL('../../design/6h-production-plan.json', import.meta.url), 'utf8')
-  ) as ProductionPlan;
+  let plan: ProductionPlan;
+  try {
+    plan = JSON.parse(
+      await readFile(new URL('../../design/6h-production-plan.json', import.meta.url), 'utf8')
+    ) as ProductionPlan;
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error;
+    plan = { programId: 'no-active-6h-program', domains: [] };
+  }
   const allocations = new Map<string, Omit<SmokeTarget, 'id' | 'title' | 'programId'>>();
 
   for (const domain of plan.domains) {
