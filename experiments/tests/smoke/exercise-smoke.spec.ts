@@ -46,7 +46,12 @@ test('SMOKE_EXERCISES accepts exactly one discovered review trio', () => {
     'beta',
     'gamma'
   ]);
-  expect(() => selectSmokeTargets(trio, 'alpha,beta')).toThrow(/exactly three distinct/);
+  expect(() => selectSmokeTargets(trio, 'alpha,beta')).toThrow(/pilot pair/);
+  const pilotPair = trio.slice(0, 2).map((target) => ({ ...target, programId: 'pilot-seq-n1' }));
+  expect(selectSmokeTargets(pilotPair, 'alpha,beta').map((target) => target.id)).toEqual([
+    'alpha',
+    'beta'
+  ]);
   expect(() => selectSmokeTargets(trio, 'alpha,alpha,gamma')).toThrow(/exactly three distinct/);
   expect(() => selectSmokeTargets(trio, 'alpha,beta,unknown')).toThrow(/not discovered/);
   expect(() =>
