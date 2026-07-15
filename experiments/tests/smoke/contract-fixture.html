@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smoke contract fixture</title>
+    <style>
+      * { box-sizing: border-box; }
+      body { margin: 0; font-family: sans-serif; }
+      main { width: 100%; min-height: 100vh; padding: 16px; }
+      section { display: grid; max-width: 280px; gap: 12px; }
+      button { min-height: 44px; }
+    </style>
+  </head>
+  <body>
+    <main
+      data-smoke-root
+      data-smoke-exercise="harness-fixture"
+      data-smoke-program="smoke-fixture"
+      data-smoke-state="ready"
+    ></main>
+    <script>
+      const root = document.querySelector('[data-smoke-root]');
+      const violation = new URLSearchParams(location.search).get('violation');
+      let state = 'ready';
+      let violationTriggered = false;
+
+      function show(nextState) {
+        state = nextState;
+        root.dataset.smokeState = state;
+
+        if (state === 'ready') {
+          const tabIndex = violation === 'focus' ? ' tabindex="-1"' : '';
+          const inactive = violation === 'inactive'
+            ? '<button data-smoke-action="retry">Inactive retry</button>'
+            : '';
+          root.innerHTML = `<section><h1>Fixture</h1><button data-smoke-action="start"${tabIndex}>Start</button>${inactive}</section>`;
+          if (violation === 'focus') root.querySelector('[data-smoke-action="start"]').focus();
+        } else if (state === 'question') {
+          root.innerHTML = '<section><h1>Choose the verified answer</h1><button data-smoke-answer="incorrect">Incorrect answer</button><button data-smoke-answer="correct">Correct answer</button></section>';
+          if (!violationTriggered && violation === 'fetch') {
+            violationTriggered = true;
+            fetch('data:text/plain,undeclared').catch(() => {});
+          }
+          if (!violationTriggered && violation === 'frame') {
+            violationTriggered = true;
+            root.append(document.createElement('iframe'));
+          }
+        } else if (state === 'incorrect') {
+          root.innerHTML = '<section><p data-smoke-feedback="incorrect" data-smoke-feedback-detail>This answer misses the stated relationship, so inspect both values and retry.</p><button data-smoke-action="retry">Retry</button></section>';
+        } else if (state === 'correct') {
+          root.innerHTML = '<section><p data-smoke-feedback="correct" data-smoke-feedback-detail>This answer matches the stated relationship and demonstrates the expected reasoning.</p><button data-smoke-action="continue">Continue</button></section>';
+        } else {
+          root.innerHTML = '<section><p data-smoke-completion>The complete pupil loop is finished.</p></section>';
+        }
+
+        root.querySelector('[data-smoke-action="start"]')?.addEventListener('click', () => show('question'));
+        root.querySelector('[data-smoke-answer="incorrect"]')?.addEventListener('click', () => show('incorrect'));
+        root.querySelector('[data-smoke-action="retry"]')?.addEventListener('click', () => show('question'));
+        root.querySelector('[data-smoke-answer="correct"]')?.addEventListener('click', () => show('correct'));
+        root.querySelector('[data-smoke-action="continue"]')?.addEventListener('click', () => show('complete'));
+      }
+
+      show('ready');
+    </script>
+  </body>
+</html>
