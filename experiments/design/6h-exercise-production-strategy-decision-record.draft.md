@@ -1,7 +1,7 @@
 ---
 title: 6H exercise production strategy
 status: draft
-revision: r1-partial-strategy
+revision: r2-math-roadmap-proposed
 approved_on: null
 readiness: not_ready
 owners:
@@ -23,6 +23,7 @@ No replacement strategy is approved. This draft is resumable interview memory on
 |---|---|---|---|---|
 | r0-interview-open | 2026-07-15 | Draft | Opened replacement-strategy grill after withdrawal of the bulk KD methodology | User and coding assistant |
 | r1-partial-strategy | 2026-07-15 | Draft | Captured the Mathematics-first roadmap, owner-led sequence authoring, playable low-fi, language, scenario, hint, and recovery decisions; progression grammar and later rollout gates remain open | User and coding assistant |
+| r2-math-roadmap-proposed | 2026-07-15 | Draft | Produced the first-pass Mathematics structural roadmap with 46 checkpoints, 16 sequences, dependencies, pacing, complete PER progression/6H endpoint coverage, and provisional exercise ideas | Coding assistant; owner approval pending |
 
 ## Executive intent
 
@@ -72,6 +73,7 @@ Define a production strategy that can create coherent, pedagogically strong, pup
 | F-2 | Parallel workers independently optimized local slice acceptance | Withdrawn slice graph and generated commit history | Local acceptance contracts alone cannot own collection-level creative direction |
 | F-3 | The PER evidence base and curriculum map exist independently of the rejected prototypes | `experiments/curriculum/research/`; `experiments/curriculum/mappings/6h-coverage-matrix.json` | Curriculum coverage can be reused without reusing the production method |
 | F-4 | Owner review found the same underlying problem structure repeated behind different UI/UX, with clumsy mechanics, feedback, and progression; weak or ambiguous language; and inconsistent scenarios | Accountable owner review, 2026-07-15 | Visual variety and local completeness cannot stand in for distinct pedagogical design or editorial coherence |
+| F-5 | A draft Mathematics roadmap now maps all 53 PER 5H–6H progressions and all 19 explicit 6H endpoints to 46 conceptual checkpoints in 16 sequences | `experiments/curriculum/roadmaps/6h-mathematics-roadmap.{md,json}`; deterministic inventory/dependency validation | Structural owner review can proceed without authorizing storyboards or prototypes |
 
 ## Hypothesis disposition
 
@@ -110,6 +112,7 @@ Define a production strategy that can create coherent, pedagogically strong, pup
 | Q-23 | What must happen after an answer is revealed so progression remains honest? | Resolved | Product/classroom owner | D-23: fresh structurally equivalent case required for independent closure |
 | Q-24 | What progression pattern should organize cases inside a sequence? | Yes | Product/classroom owner | Explicit progression grammar |
 | Q-4 | Which evidence permits scale beyond the first exemplar? | Yes | Product/classroom owner | Named review and trial gates |
+| Q-25 | Does the owner approve or amend the proposed Mathematics entry probes, 46 checkpoints, dependencies, 16 sequences, pacing, and `SEQ-N1` pilot recommendation? | Yes | Product/curriculum owner | Explicit structural roadmap review |
 
 ## Readiness declaration
 
