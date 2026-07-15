@@ -33,7 +33,7 @@ export default defineExercise({
     evidence: [
       'Composer des commandes de ±1, ±10, ±100 et ±1’000 adaptées à une transformation donnée.',
       'Prévoir un passage de rang comme 293 + 10 = 303.',
-      'Diagnostiquer et réparer une transformation qui conserve dix éléments dans un rang.',
+      'Diagnostiquer et remplacer une commande appliquée au mauvais rang.',
       'Expliquer un dégroupement comme 1’004 − 100 = 904.',
       'Composer plusieurs pas négatifs pour atteindre exactement une cible.'
     ]

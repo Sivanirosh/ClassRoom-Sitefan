@@ -8,9 +8,9 @@
 - **Mechanic memory:** [`PRE-0001`](../../../game-mechanics/precedents/PRE-0001-sokoban.md), [`PRE-0002`](../../../game-mechanics/precedents/PRE-0002-wilmots-warehouse.md), [`PRE-0003`](../../../game-mechanics/precedents/PRE-0003-unpacking.md), [`PRE-0007`](../../../game-mechanics/precedents/PRE-0007-brilliant.md), [`MEC-0001`](../../../game-mechanics/mechanics/MEC-0001-constrained-spatial-organization.md), [`MEC-0004`](../../../game-mechanics/mechanics/MEC-0004-action-first-interactive-learning.md)
 - **Application outcome:** [`APP-0002`](../../../game-mechanics/applications/APP-0002-seq-n1-exchange-workbench.md)
 - **Learning brief / pitch comparison / graybox script:** not created; this historical pilot predates the approved templates
-- **Owner mechanic gate:** `retrospective-not-recorded`
+- **Owner mechanic gate:** `mechanic approved for expansion` — recorded 2026-07-15
 
-The retrospective records that the redesigned workbench felt better than the rejected answer-card version, but the exact phrase `mechanic approved for expansion` was not used. Approval is not granted retroactively.
+The historical expansion preceded the explicit gate and is not retroactively rewritten. After replaying the current prototype on 2026-07-15, the owner identified EX-0002 as the reference-quality prototype and explicitly authorized the current approval phrase.
 
 ## Decision summary
 
@@ -137,8 +137,9 @@ Observe whether pupils inspect the represented quantity rather than object count
 - **2026-07-15 — Rejected form:** the first implementation used `read → choose one answer → feedback`; see [`APP-0001`](../../../game-mechanics/applications/APP-0001-seq-n1-answer-loop-convergence.md).
 - **2026-07-15 — Mechanic redesign:** direct reversible exchanges, visible rank state, delivery actions, blocked feedback, undo, and reset replaced answer selection.
 - **2026-07-15 — Interaction-surface revision:** reserve and controls were connected through shared objects, exchange recipes, availability, source/destination emphasis, and tactile controls after owner feedback that the first redesign remained too textual/disconnected.
-- **2026-07-15 — Historical gate:** positive iterative feedback was recorded, but no `mechanic approved for expansion` phrase; status remains `prototyping`.
+- **2026-07-15 — Historical gate:** positive iterative feedback was recorded, but no approval phrase existed during the original expansion.
 - **2026-07-15 — Record synchronization:** removed unused answer-choice payloads and migrated final smoke hooks to the real mechanic controls.
+- **2026-07-15 — Current owner gate:** after replaying the finished pilot, the owner called EX-0002 the reference-quality prototype and authorized recording `mechanic approved for expansion`. This current decision is not backdated.
 
 ## Final validation evidence
 
@@ -148,8 +149,8 @@ Final post-migration technical checks on 2026-07-15:
 - `SMOKE_EXERCISES=EX-0002,EX-0003 npm --prefix experiments run test:smoke` — 6/6 passed, including reduced-motion keyboard and 320 px touch paths through real exchange controls and a blocked-action recovery.
 - `npm --prefix experiments run build` — passed.
 
-These results establish technical readiness of the current path only. Automated checks do not validate pupil understanding, French comprehension, generated-image equivalence, or the unrecorded owner mechanic gate.
+These results establish technical readiness of the current path only. The owner mechanic gate is now recorded, but automated checks do not validate pupil understanding, French comprehension, or generated-image equivalence.
 
 ## Promotion criteria
 
-Promotion requires explicit owner disposition, observed pupil use showing that exchange clarifies conservation across fresh cases, understood French copy, accessible keyboard/touch operation, and clear separation between concept errors and interface friction. The exercise remains `prototyping` until that evidence exists.
+The owner mechanic gate is now passed. Promotion beyond `prototyping` still requires observed pupil use showing that exchange clarifies conservation across fresh cases, understood French copy, accessible keyboard/touch operation, and clear separation between concept errors and interface friction.

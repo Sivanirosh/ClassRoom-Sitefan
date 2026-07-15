@@ -15,8 +15,8 @@ precedents:
   - "[[PRE-0005-opus-magnum]]"
   - "[[PRE-0006-into-the-breach]]"
   - "[[PRE-0007-brilliant]]"
-outcome: refined-completed-retrospective
-owner_gate: retrospective-not-recorded
+outcome: coherent-simplification-ready-for-owner-replay
+owner_gate: revise-same-mechanic
 created: 2026-07-15
 updated: 2026-07-15
 tags:
@@ -49,8 +49,10 @@ inspect current number, target, and checkpoints
 - The redesign produced a procedural loop built from programming, execution, inspection, and repair.
 - Ordered checkpoints were necessary because arithmetic commands often commute; without a required intermediate state, command order would offer false strategic depth.
 - The execution trace needed to remain visible and editable so feedback explained the route rather than only the final number.
+- **2026-07-15 owner replay:** the owner said the interface direction was correct, but too much information competed at once. EX-0003 needed a more coherent game surface and the same level of finish as EX-0002 while preserving its procedural mechanic.
+- **Current disposition:** revise the same mechanic. Preserve `program → execute → inspect → repair`, but simplify its hierarchy and progressively reveal secondary explanation.
 
-The new explicit approval phrase was not used during this historical iteration. `owner_gate` therefore remains `retrospective-not-recorded`.
+No `mechanic approved for expansion` phrase has been granted for EX-0003.
 
 ## Revisions and rejected forms
 
@@ -59,6 +61,8 @@ The new explicit approval phrase was not used during this historical iteration. 
 - Added a preloaded faulty program for repair.
 - Used deterministic intermediate states to make exchange and degrouping inspectable.
 - Kept generated imagery narrative/decorative; commands, numbers, checkpoints, and traces remain DOM/CSS.
+- Replaced the split display/programmer panels with one route machine: start, command slots, ordered checkpoints, intermediate results, and target now form one causal line.
+- Removed duplicate machine jargon and command codes, compacted the place-value scanner, hid edit affordances when irrelevant, and moved the full success explanation behind an optional disclosure.
 
 ## Reusable lessons
 
@@ -69,7 +73,7 @@ The new explicit approval phrase was not used during this historical iteration. 
 
 ## Validation and accessibility notes
 
-Discrete buttons support keyboard and touch. On 2026-07-15 the smoke harness was migrated to mechanic-neutral control plans; the console passed reduced-motion keyboard and 320 px touch traversal through its real command/execute controls, including an empty-program recovery and all authored traces/checkpoints. Command density and assistive-technology comprehension remain manual/pupil-testing questions.
+Discrete buttons support keyboard and touch. After the coherent-simplification pass on 2026-07-15, the console passed reduced-motion keyboard and 320 px touch traversal through its real route/command controls, including step-through execution, an empty-program recovery, wrong-order repair, removal of a preloaded error, and all authored checkpoints. French comprehension and assistive-technology use remain manual/pupil-testing questions.
 
 ## Related artifacts
 

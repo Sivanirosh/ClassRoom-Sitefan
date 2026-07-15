@@ -14,8 +14,9 @@ precedents:
   - "[[PRE-0002-wilmots-warehouse]]"
   - "[[PRE-0003-unpacking]]"
   - "[[PRE-0007-brilliant]]"
-outcome: refined-completed-retrospective
-owner_gate: retrospective-not-recorded
+outcome: owner-approved-reference-prototype
+owner_gate: "mechanic approved for expansion"
+approved_on: 2026-07-15
 created: 2026-07-15
 updated: 2026-07-15
 tags:
@@ -49,8 +50,9 @@ The final implementation provides explicit base-ten actions, availability state,
 2. The owner found the first reserve/actions presentation too textual and visually disconnected.
 3. The owner asked for more intuitive actions, one coherent surface, and objects understandable without relying on prose.
 4. In response, a later interaction-surface pass connected objects and controls through visual pieces/containers, exchange recipes, availability, source/destination emphasis, blocked-action feedback, and tactile controls.
+5. **2026-07-15 owner replay:** the owner identified EX-0002 as the reference-quality prototype and explicitly authorized recording `mechanic approved for expansion`.
 
-The new explicit approval phrase was not used during this historical iteration. `owner_gate` therefore remains `retrospective-not-recorded`.
+This is a new current owner decision. It does not backdate or manufacture approval for the historical expansion that preceded the gate.
 
 ## Revisions and rejected forms
 

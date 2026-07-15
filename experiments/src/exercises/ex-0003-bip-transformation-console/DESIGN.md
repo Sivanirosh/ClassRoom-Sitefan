@@ -8,9 +8,9 @@
 - **Mechanic memory:** [`PRE-0004`](../../../game-mechanics/precedents/PRE-0004-human-resource-machine.md), [`PRE-0005`](../../../game-mechanics/precedents/PRE-0005-opus-magnum.md), [`PRE-0006`](../../../game-mechanics/precedents/PRE-0006-into-the-breach.md), [`PRE-0007`](../../../game-mechanics/precedents/PRE-0007-brilliant.md), [`MEC-0002`](../../../game-mechanics/mechanics/MEC-0002-program-execute-inspect-revise.md), [`MEC-0003`](../../../game-mechanics/mechanics/MEC-0003-telegraphed-consequences-and-checkpoints.md), [`MEC-0004`](../../../game-mechanics/mechanics/MEC-0004-action-first-interactive-learning.md)
 - **Application outcome:** [`APP-0003`](../../../game-mechanics/applications/APP-0003-seq-n1-transformation-console.md)
 - **Learning brief / pitch comparison / graybox script:** not created; this historical pilot predates the approved templates
-- **Owner mechanic gate:** `retrospective-not-recorded`
+- **Owner mechanic gate:** `revise-same-mechanic`
 
-The historical pilot records the console redesign but no separate owner disposition for it. The exact phrase `mechanic approved for expansion` was not used, so approval is not granted retroactively.
+On 2026-07-15 the owner replayed the current prototype, said the interface direction was correct but too information-dense, and requested a coherent simplification that preserves the procedural loop. The exact phrase `mechanic approved for expansion` has not been granted for EX-0003.
 
 ## Decision summary
 
@@ -77,7 +77,7 @@ Completion, time, and command count are not mastery measures.
 1. **Orientation — Premier démarrage:** add `+1`, execute, and transform 243 into 244; executing an empty program provides a recoverable error path.
 2. **Exploration/ordered constraint — Banc d’essai:** program `+10`, then `+1’000`, moving 293 through mandatory checkpoint 303 to 1’303. Reversing the commands reaches the same final value but fails the checkpoint.
 3. **Complication — Passage dangereux:** use `+1` to transform 999 into 1’000 and inspect the cascading rank exchange.
-4. **Debugging — 10 | 5 | 6:** inspect Bip’s preloaded `+10` program, clear it, replace it with `+100`, and transform 956 into 1’056.
+4. **Debugging — wrong rank:** inspect Bip’s preloaded `+10` command, remove it, replace it with `+100`, and transform 956 into 1’056 while explaining the hundreds-to-thousands exchange.
 5. **Inverse transformation — Colonne vide:** use `−100` to transform 1’004 into 904 through degrouping one thousand.
 6. **Independence/integration — Programme de la fête:** order `−1’000, −100, −10, −1` so 2’416 passes through 1’416, 1’316, and 1’306 before reaching 1’305.
 
@@ -86,7 +86,8 @@ This historical prototype expanded before the explicit gate existed; the sequenc
 ## Feedback and recovery
 
 - Empty/over-capacity programs and target/checkpoint mismatches produce state-specific written guidance.
-- The live trace keeps every intermediate result aligned with its command.
+- One causal route keeps the start, each command slot, required checkpoint, intermediate result, and target aligned.
+- A compact place-value scanner updates from the same route instead of competing with a separate programmer panel.
 - A route may reach the final value yet fail an earlier checkpoint; feedback names the missing checkpoint and asks for reordering.
 - Add/remove/reorder/clear actions preserve an editable program; execution is safe and repeatable.
 - Success traces explain changed and stable ranks.
@@ -111,14 +112,14 @@ success → next test or completion
 
 - Native discrete controls support keyboard, pointer, and touch.
 - Command labels combine words/symbols and accessible button names; meaning does not rely on color.
-- Start, target, positional digits, checkpoints, program, and trace are written in the DOM.
+- Start, target, positional digits, checkpoints, program, and trace are written in the DOM and grouped by the route they describe.
 - Focus is visible; status messages announce program results.
 - Reduced motion preserves all states and explanations.
 - Narrow layouts stack the console and controls; traces may scroll within their labeled region rather than overflowing the page.
 
 ## Motion and artwork decisions
 
-Motion is restrained to state/feedback transitions and is disabled/compressed under reduced motion. Generated imagery is limited to Bip and the intro/outro narrative scenes. Commands, numbers, digits, checkpoints, trace, and assessed state remain DOM/CSS.
+Motion is restrained to press/state feedback and is disabled/compressed under reduced motion. The frequently used command controls respond immediately rather than playing decorative movement. Generated imagery is limited to Bip and the intro/outro narrative scenes. Commands, numbers, digits, checkpoints, trace, and assessed state remain DOM/CSS.
 
 ## Prototype boundaries
 
@@ -135,18 +136,20 @@ Observe whether pupils inspect positional state instead of using final-digit pat
 - **2026-07-15 — Rejected form:** the first implementation used `read → choose one answer → feedback`; see [`APP-0001`](../../../game-mechanics/applications/APP-0001-seq-n1-answer-loop-convergence.md).
 - **2026-07-15 — Mechanic redesign:** command slots, execution, step-through, edit controls, checkpoints, and traces replaced answer selection.
 - **2026-07-15 — Conceptual correction:** ordered checkpoints were added where commutative commands would otherwise make sequencing decorative.
-- **2026-07-15 — Historical gate:** positive iterative feedback was recorded, but no `mechanic approved for expansion` phrase; status remains `prototyping`.
+- **2026-07-15 — Historical gate:** positive iterative feedback was recorded, but no approval phrase existed during the original expansion.
 - **2026-07-15 — Record synchronization:** removed unused answer-choice payloads and migrated final smoke hooks to the real mechanic controls.
+- **2026-07-15 — Current owner replay:** preserve the command-programming mechanic, but revise the presentation because information density and split surfaces kept it below EX-0002's reference quality. Disposition: `revise-same-mechanic`.
+- **2026-07-15 — Coherent simplification:** integrated display and programmer into one route machine, aligned commands with checkpoints/results, removed duplicate command codes and status jargon, compacted the rank scanner, and made the detailed success explanation optional.
 
 ## Final validation evidence
 
-Final post-migration technical checks on 2026-07-15:
+Final post-simplification technical checks on 2026-07-15:
 
 - `npm --prefix experiments run check` — passed; zero Svelte diagnostics; catalog valid (3 exercises).
-- `SMOKE_EXERCISES=EX-0002,EX-0003 npm --prefix experiments run test:smoke` — 6/6 passed, including reduced-motion keyboard and 320 px touch paths through real command programs, execution traces, and an empty-program recovery.
+- `npm --prefix experiments run test:smoke` — 6/6 passed, including reduced-motion keyboard and 320 px touch paths through the integrated route machine, step-through execution, wrong-order reordering, preloaded-command removal, all authored checkpoints, and an empty-program recovery.
 - `npm --prefix experiments run build` — passed.
 
-These results establish technical readiness of the current path only. Automated checks do not validate pupil reasoning, French comprehension, assistive-technology behavior beyond the covered hooks, or the unrecorded owner mechanic gate.
+These results establish technical readiness of the revised path only. Automated checks do not validate pupil reasoning, French comprehension, assistive-technology behavior beyond the covered hooks, or the still-pending owner mechanic gate.
 
 ## Promotion criteria
 
