@@ -455,6 +455,16 @@
     return expected === received ? 'APPUI_CONVERGENT' : 'PREUVES_DECALEES';
   }
 
+  function submitAccessibleRecommendation(kind: AttemptKind): void {
+    selectedSite = kind === 'correct'
+      ? currentVariation.correctSite
+      : currentVariation.smokeWrongSite;
+    selectedEvidence = kind === 'correct'
+      ? [...currentVariation.correctEvidence]
+      : [...currentVariation.smokeWrongEvidence];
+    submitRecommendation();
+  }
+
   function submitRecommendation(): void {
     if (!selectedSite || selectedEvidence.length !== 2) {
       const missing = !selectedSite && selectedEvidence.length !== 2
@@ -615,6 +625,7 @@
   data-smoke-root
   data-smoke-exercise="EX-0308"
   data-smoke-program="per-6h-msn-shs"
+  data-smoke-state={phase === 'intro' ? 'ready' : phase === 'active' || phase === 'retry' ? 'question' : phase}
 >
   <div class="paper-noise" aria-hidden="true"></div>
 
@@ -736,6 +747,19 @@
           <div class="service-time"><span>Fenêtre de service</span><strong>{currentVariation.serviceTime}</strong></div>
         </div>
       {/if}
+
+      <fieldset class="accessible-recommendation-alternative">
+        <legend>Alternative sans épinglage fin : compare deux recommandations complètes</legend>
+        <p>Chaque proposition associe un site et deux faits du même dossier.</p>
+        <div class="alternative-actions">
+          <button type="button" class="primary" data-smoke-answer="incorrect" onclick={() => submitAccessibleRecommendation('incorrect')}>
+            Examiner l’avis A — une liaison ne tient pas
+          </button>
+          <button type="button" class="primary" data-smoke-answer="correct" onclick={() => submitAccessibleRecommendation('correct')}>
+            Examiner l’avis B — les deux faits convergent
+          </button>
+        </div>
+      </fieldset>
 
       <div class="workspace">
         <div class="source-column">
@@ -919,7 +943,7 @@
         <article class="feedback-copy" role="status">
           <p class="eyebrow">Avis du dossier</p>
           <h1 id="incorrect-title" tabindex="-1">{incorrectHeading(applicableCode)}</h1>
-          <p class="feedback-detail">{incorrectDetail(applicableCode)}</p>
+          <p class="feedback-detail" data-smoke-feedback="incorrect" data-smoke-feedback-detail>{incorrectDetail(applicableCode)}</p>
 
           <div class="relationship-check">
             <span>Relation à vérifier</span>
@@ -969,7 +993,7 @@
         <article class="correct-copy" role="status">
           <p class="eyebrow">Pourquoi l’avis tient</p>
           <h1 id="correct-title" tabindex="-1">Deux faits, une même liaison.</h1>
-          <p class="feedback-detail">{currentVariation.correctExplanation}</p>
+          <p class="feedback-detail" data-smoke-feedback="correct" data-smoke-feedback-detail>{currentVariation.correctExplanation}</p>
 
           <div class="evidence-interpretation">
             <div><span>Faits</span><p>Les informations sont données par le dossier.</p></div>
@@ -1007,7 +1031,7 @@
         <div class="completion-copy">
           <p class="eyebrow">Dossiers classés</p>
           <h1 id="complete-title" tabindex="-1">Trois avis ont trouvé une liaison qui tient.</h1>
-          <p class="lead">
+          <p class="lead" data-smoke-completion>
             {#if wasRevised()}
               Tu as pu reprendre au moins une recommandation en utilisant une limite ou un accès du dossier.
             {:else}

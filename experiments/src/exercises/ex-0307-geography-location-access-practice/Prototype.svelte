@@ -304,6 +304,16 @@
     }
   }
 
+  function submitAccessibleArrangement(kind: 'incorrect' | 'correct'): void {
+    placements = Object.fromEntries(
+      currentDossier.cards.map((card) => [
+        card.id,
+        kind === 'correct' ? card.correctCategory : card.plannedWrongCategory
+      ])
+    );
+    setTimeout(submitArrangement, 0);
+  }
+
   function submitArrangement(): void {
     if (!allPlaced || (phase !== 'active' && phase !== 'retry')) return;
 
@@ -363,6 +373,7 @@
   data-smoke-root
   data-smoke-exercise="EX-0307"
   data-smoke-program="per-6h-msn-shs"
+  data-smoke-state={phase === 'intro' ? 'ready' : phase === 'active' || phase === 'retry' ? 'question' : phase}
 >
   <p class="visually-hidden" aria-live="polite">{announcement}</p>
 
@@ -467,6 +478,19 @@
           </div>
         </aside>
       {/if}
+
+      <fieldset class="accessible-arrangement-alternative">
+        <legend>Alternative sans classement fin : compare deux carnets complets</legend>
+        <p>Les deux propositions utilisent les mêmes quatre cartes et les mêmes rubriques.</p>
+        <div class="alternative-actions">
+          <button type="button" class="primary-action" data-smoke-answer="incorrect" on:click={() => submitAccessibleArrangement('incorrect')}>
+            Vérifier le carnet A — une relation est incohérente
+          </button>
+          <button type="button" class="primary-action" data-smoke-answer="correct" on:click={() => submitAccessibleArrangement('correct')}>
+            Vérifier le carnet B — les quatre relations concordent
+          </button>
+        </div>
+      </fieldset>
 
       <div class="work-grid">
         <div class="cards-column">

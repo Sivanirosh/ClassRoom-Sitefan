@@ -767,6 +767,18 @@
     return 'Les quatre calques sont visibles. Compare le plan à la fiche, puis soumets-le.';
   }
 
+  function submitAccessiblePlan(kind: AttemptKind): void {
+    selections = Object.fromEntries(
+      current.layers.map((layer) => {
+        const choice = kind === 'correct'
+          ? correctOption(layer)
+          : (layer.choices.find((candidate) => candidate.smokeWrong) ?? layer.choices[0]);
+        return [layer.id, choice.id];
+      })
+    ) as Selections;
+    setTimeout(submitPlan, 0);
+  }
+
   function submitPlan(): void {
     if (!readyToSubmit || (phase !== 'active' && phase !== 'retry')) return;
     submittedSelections = { ...selections };
@@ -834,6 +846,7 @@
   data-smoke-root
   data-smoke-exercise="EX-0306"
   data-smoke-program="per-6h-msn-shs"
+  data-smoke-state={phase === 'intro' ? 'ready' : phase === 'active' || phase === 'retry' ? 'question' : phase}
 >
   <p class="sr-only" aria-live="polite" aria-atomic="true">{announcement}</p>
 
@@ -940,6 +953,19 @@
           </div>
         </aside>
       {/if}
+
+      <fieldset class="accessible-plan-alternative">
+        <legend>Alternative sans assemblage fin : compare deux plans complets</legend>
+        <p>Ces deux propositions appliquent les mêmes quatre choix que la table de montage.</p>
+        <div class="choice-grid">
+          <button type="button" class="component-choice" data-smoke-answer="incorrect" onclick={() => submitAccessiblePlan('incorrect')}>
+            <span class="choice-copy"><strong>Plan A</strong><small>Un montage qui contredit au moins un repère de la fiche.</small></span>
+          </button>
+          <button type="button" class="component-choice" data-smoke-answer="correct" onclick={() => submitAccessiblePlan('correct')}>
+            <span class="choice-copy"><strong>Plan B</strong><small>Un montage où site, situation, limite et accès suivent la fiche.</small></span>
+          </button>
+        </div>
+      </fieldset>
 
       <div class="workspace">
         <section class="control-deck" aria-labelledby="controls-title">
@@ -1225,13 +1251,12 @@
     <section
       class="completion-state"
       data-smoke-state="complete"
-      data-smoke-completion
       aria-labelledby="complete-title"
     >
       <div class="completion-icon" aria-hidden="true"><span>4</span><small>calques</small></div>
       <p class="eyebrow">Table éteinte · 3 plans soumis</p>
       <h1 id="complete-title" tabindex="-1" bind:this={stateHeading}>Quatre actions rendent un lieu lisible.</h1>
-      <p class="completion-lead">
+      <p class="completion-lead" data-smoke-completion>
         Tu as manipulé les mêmes quatre commandes sur trois fiches : un terrain naturel ou
         construit, un voisin relié, un bord naturel ou construit et une route qui peut rester du
         même côté ou franchir la limite.
