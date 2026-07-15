@@ -7,9 +7,9 @@
     "6h-impl-sci-c2-56-inquiry-evidence"
   ],
   "areas": [
-    "experiments/src/exercises/ex-0200-",
-    "experiments/src/exercises/ex-0201-",
-    "experiments/src/exercises/ex-0202-"
+    "experiments/src/exercises/ex-0200-science-inquiry-evidence-construction/",
+    "experiments/src/exercises/ex-0201-science-inquiry-evidence-practice/",
+    "experiments/src/exercises/ex-0202-science-inquiry-evidence-transfer-diagnosis/"
   ],
   "acceptance": [
     "All three designs and prototypes are reviewed against curriculum traceability, year-band honesty, learning-loop completeness, content correctness, French clarity, concept-led diversity, and the approved scope.",

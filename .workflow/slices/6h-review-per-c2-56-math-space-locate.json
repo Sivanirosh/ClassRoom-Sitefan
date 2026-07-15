@@ -7,9 +7,9 @@
     "6h-impl-per-c2-56-math-space-locate"
   ],
   "areas": [
-    "experiments/src/exercises/ex-0109-",
-    "experiments/src/exercises/ex-0110-",
-    "experiments/src/exercises/ex-0111-"
+    "experiments/src/exercises/ex-0109-math-space-locate-construction/",
+    "experiments/src/exercises/ex-0110-math-space-locate-practice/",
+    "experiments/src/exercises/ex-0111-math-space-locate-transfer-diagnosis/"
   ],
   "acceptance": [
     "All three designs and prototypes are reviewed against curriculum traceability, year-band honesty, learning-loop completeness, content correctness, French clarity, concept-led diversity, and the approved scope.",

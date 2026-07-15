@@ -7,9 +7,9 @@
     "6h-impl-geo56-lexicon"
   ],
   "areas": [
-    "experiments/src/exercises/ex-0321-",
-    "experiments/src/exercises/ex-0322-",
-    "experiments/src/exercises/ex-0323-"
+    "experiments/src/exercises/ex-0321-geography-lexicon-construction/",
+    "experiments/src/exercises/ex-0322-geography-lexicon-practice/",
+    "experiments/src/exercises/ex-0323-geography-lexicon-transfer-diagnosis/"
   ],
   "acceptance": [
     "All three designs and prototypes are reviewed against curriculum traceability, year-band honesty, learning-loop completeness, content correctness, French clarity, concept-led diversity, and the approved scope.",

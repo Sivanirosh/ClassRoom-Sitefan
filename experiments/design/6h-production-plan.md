@@ -50,8 +50,8 @@ This plan allocates immutable exercise IDs before parallel production. Curriculu
 
 ## Parallelization contract
 
-- Each cluster implementation owns only its three allocated `ex-NNNN-*` path prefixes.
-- Its paired review slice depends on that implementation and owns the same prefixes for bounded fixes and the `testing` transition.
+- Each cluster implementation owns only its three preallocated, exact semantic exercise directories (for example `ex-0100-math-space-figures-construction/`), never a partial filename prefix.
+- Its paired review slice depends on that implementation and owns the same exact directories for bounded fixes and the `testing` transition.
 - All cluster implementations depend on the curriculum-map, quality-contract, and browser-smoke-harness slices.
 - Domain audits depend on every paired review in that domain and write reports without broad exercise mutation authority.
 - The final gate depends on all domain audits and verifies all 111 IDs, cluster/lens tags, source mappings, lifecycle states, catalog validity, full browser interaction paths, and the production build.

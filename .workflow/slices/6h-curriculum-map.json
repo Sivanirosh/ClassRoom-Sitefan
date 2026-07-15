@@ -4,10 +4,14 @@
   "goal": "Turn the four approved CIIP/PER research briefs and the immutable production plan into canonical source records, normalized curriculum notes, and a statement-level no-gap coverage matrix for the full official 5H–6H progression in Mathematics, Science, Geography, and History. Preserve the distinction between progression statements, explicit 6H endpoints, and unbanded end-of-cycle expectations.",
   "status": "open",
   "areas": [
-    "experiments/curriculum/sources/src-per-0002",
-    "experiments/curriculum/sources/src-per-0003",
-    "experiments/curriculum/notes/6h-",
-    "experiments/curriculum/mappings/6h-"
+    "experiments/curriculum/sources/src-per-0002.md",
+    "experiments/curriculum/sources/src-per-0003.md",
+    "experiments/curriculum/notes/6h-mathematics.md",
+    "experiments/curriculum/notes/6h-science.md",
+    "experiments/curriculum/notes/6h-geography.md",
+    "experiments/curriculum/notes/6h-history.md",
+    "experiments/curriculum/mappings/6h-coverage-matrix.json",
+    "experiments/curriculum/mappings/6h-coverage-report.md"
   ],
   "acceptance": [
     "Canonical source records cite the current official CIIP/PER Cycle 2 version 3.0 (August 2024), institutional status pages, access dates, page references, and copyright/reuse caveats; no source PDF is committed.",

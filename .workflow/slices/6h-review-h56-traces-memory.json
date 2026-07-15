@@ -7,9 +7,9 @@
     "6h-impl-h56-traces-memory"
   ],
   "areas": [
-    "experiments/src/exercises/ex-0412-",
-    "experiments/src/exercises/ex-0413-",
-    "experiments/src/exercises/ex-0414-"
+    "experiments/src/exercises/ex-0412-history-traces-memory-construction/",
+    "experiments/src/exercises/ex-0413-history-traces-memory-practice/",
+    "experiments/src/exercises/ex-0414-history-traces-memory-transfer-diagnosis/"
   ],
   "acceptance": [
     "All three designs and prototypes are reviewed against curriculum traceability, year-band honesty, learning-loop completeness, content correctness, French clarity, concept-led diversity, and the approved scope.",

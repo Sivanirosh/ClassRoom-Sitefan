@@ -7,9 +7,9 @@
     "6h-impl-sci-c2-56-ecosystem-change"
   ],
   "areas": [
-    "experiments/src/exercises/ex-0227-",
-    "experiments/src/exercises/ex-0228-",
-    "experiments/src/exercises/ex-0229-"
+    "experiments/src/exercises/ex-0227-science-ecosystem-change-construction/",
+    "experiments/src/exercises/ex-0228-science-ecosystem-change-practice/",
+    "experiments/src/exercises/ex-0229-science-ecosystem-change-transfer-diagnosis/"
   ],
   "acceptance": [
     "All three designs and prototypes are reviewed against curriculum traceability, year-band honesty, learning-loop completeness, content correctness, French clarity, concept-led diversity, and the approved scope.",

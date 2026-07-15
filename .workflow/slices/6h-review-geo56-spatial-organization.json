@@ -7,9 +7,9 @@
     "6h-impl-geo56-spatial-organization"
   ],
   "areas": [
-    "experiments/src/exercises/ex-0309-",
-    "experiments/src/exercises/ex-0310-",
-    "experiments/src/exercises/ex-0311-"
+    "experiments/src/exercises/ex-0309-geography-spatial-organization-construction/",
+    "experiments/src/exercises/ex-0310-geography-spatial-organization-practice/",
+    "experiments/src/exercises/ex-0311-geography-spatial-organization-transfer-diagnosis/"
   ],
   "acceptance": [
     "All three designs and prototypes are reviewed against curriculum traceability, year-band honesty, learning-loop completeness, content correctness, French clarity, concept-led diversity, and the approved scope.",

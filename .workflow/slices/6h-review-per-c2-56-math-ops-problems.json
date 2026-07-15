@@ -7,9 +7,9 @@
     "6h-impl-per-c2-56-math-ops-problems"
   ],
   "areas": [
-    "experiments/src/exercises/ex-0121-",
-    "experiments/src/exercises/ex-0122-",
-    "experiments/src/exercises/ex-0123-"
+    "experiments/src/exercises/ex-0121-math-ops-problems-construction/",
+    "experiments/src/exercises/ex-0122-math-ops-problems-practice/",
+    "experiments/src/exercises/ex-0123-math-ops-problems-transfer-diagnosis/"
   ],
   "acceptance": [
     "All three designs and prototypes are reviewed against curriculum traceability, year-band honesty, learning-loop completeness, content correctness, French clarity, concept-led diversity, and the approved scope.",

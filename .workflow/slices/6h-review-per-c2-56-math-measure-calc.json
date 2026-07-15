@@ -7,9 +7,9 @@
     "6h-impl-per-c2-56-math-measure-calc"
   ],
   "areas": [
-    "experiments/src/exercises/ex-0133-",
-    "experiments/src/exercises/ex-0134-",
-    "experiments/src/exercises/ex-0135-"
+    "experiments/src/exercises/ex-0133-math-measure-calc-construction/",
+    "experiments/src/exercises/ex-0134-math-measure-calc-practice/",
+    "experiments/src/exercises/ex-0135-math-measure-calc-transfer-diagnosis/"
   ],
   "acceptance": [
     "All three designs and prototypes are reviewed against curriculum traceability, year-band honesty, learning-loop completeness, content correctness, French clarity, concept-led diversity, and the approved scope.",

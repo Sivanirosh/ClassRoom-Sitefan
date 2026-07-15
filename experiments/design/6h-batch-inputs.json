@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "programId": "per-6h-msn-shs",
-  "preparedAt": "2026-07-15T07:36:06.868837+00:00",
+  "preparedAt": "2026-07-15T08:10:36.794341+00:00",
   "baselineCommit": "5d00e35efbeec6f4e820bab4bc13b387722d2b9e",
   "approvedDecision": {
     "path": "experiments/design/6h-curriculum-coverage-decision-record.md",
@@ -33,7 +33,7 @@
     },
     {
       "path": "experiments/design/6h-production-plan.md",
-      "sha256": "9ea040c8dc73d33d04cf831aeb6a03bdd81151e53e079c94ac3b0ad260a7cbf0"
+      "sha256": "d2f9806bcb76ce679fbf6ef0dde9a18138f8c48836f8705528c21392fd6fba83"
     },
     {
       "path": "experiments/tools/verify-6h-batch-inputs.mjs",
@@ -52,10 +52,10 @@
     "selectedRoot": "6h-final-quality-gate",
     "newSliceCount": 82,
     "digestAlgorithm": "sha256 of UTF-8 lines \"<file-sha256>  <repo-relative-path>\\n\" sorted by repo-relative path",
-    "sha256": "3dd545b7680ebf10a723304b15742fcc0f3fad9cd575d552a6cbb9e4f027f2a4",
+    "sha256": "a706790c8ed17ab2d940328fe2ac3647698b4b013bb2d15b1518fe844f60c8ae",
     "manifest": {
       "path": "experiments/design/6h-slice-manifest.json",
-      "sha256": "df33e98fe360d16fe24caddea3f92abf1cd85dbf9b7925fc09589242a0eee17b"
+      "sha256": "b4f537e90b90793f3c7ff403c5a5f7c8f64eacdc02871165f57e702a3af4bb9a"
     },
     "verifyCommand": "node experiments/tools/verify-6h-batch-inputs.mjs"
   },

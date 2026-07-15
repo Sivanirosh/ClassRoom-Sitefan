@@ -7,9 +7,9 @@
     "6h-impl-sci-c2-56-light-earth-sky"
   ],
   "areas": [
-    "experiments/src/exercises/ex-0212-",
-    "experiments/src/exercises/ex-0213-",
-    "experiments/src/exercises/ex-0214-"
+    "experiments/src/exercises/ex-0212-science-light-earth-sky-construction/",
+    "experiments/src/exercises/ex-0213-science-light-earth-sky-practice/",
+    "experiments/src/exercises/ex-0214-science-light-earth-sky-transfer-diagnosis/"
   ],
   "acceptance": [
     "All three designs and prototypes are reviewed against curriculum traceability, year-band honesty, learning-loop completeness, content correctness, French clarity, concept-led diversity, and the approved scope.",

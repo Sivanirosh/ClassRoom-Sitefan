@@ -7,9 +7,9 @@
     "6h-impl-sci-c2-56-living-diversity-adaptation"
   ],
   "areas": [
-    "experiments/src/exercises/ex-0221-",
-    "experiments/src/exercises/ex-0222-",
-    "experiments/src/exercises/ex-0223-"
+    "experiments/src/exercises/ex-0221-science-living-diversity-adaptation-construction/",
+    "experiments/src/exercises/ex-0222-science-living-diversity-adaptation-practice/",
+    "experiments/src/exercises/ex-0223-science-living-diversity-adaptation-transfer-diagnosis/"
   ],
   "acceptance": [
     "All three designs and prototypes are reviewed against curriculum traceability, year-band honesty, learning-loop completeness, content correctness, French clarity, concept-led diversity, and the approved scope.",

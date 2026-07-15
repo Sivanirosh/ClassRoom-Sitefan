@@ -7,9 +7,9 @@
     "6h-impl-geo56-needs-places"
   ],
   "areas": [
-    "experiments/src/exercises/ex-0300-",
-    "experiments/src/exercises/ex-0301-",
-    "experiments/src/exercises/ex-0302-"
+    "experiments/src/exercises/ex-0300-geography-needs-places-construction/",
+    "experiments/src/exercises/ex-0301-geography-needs-places-practice/",
+    "experiments/src/exercises/ex-0302-geography-needs-places-transfer-diagnosis/"
   ],
   "acceptance": [
     "All three designs and prototypes are reviewed against curriculum traceability, year-band honesty, learning-loop completeness, content correctness, French clarity, concept-led diversity, and the approved scope.",

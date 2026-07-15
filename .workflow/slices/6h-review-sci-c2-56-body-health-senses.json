@@ -7,9 +7,9 @@
     "6h-impl-sci-c2-56-body-health-senses"
   ],
   "areas": [
-    "experiments/src/exercises/ex-0215-",
-    "experiments/src/exercises/ex-0216-",
-    "experiments/src/exercises/ex-0217-"
+    "experiments/src/exercises/ex-0215-science-body-health-senses-construction/",
+    "experiments/src/exercises/ex-0216-science-body-health-senses-practice/",
+    "experiments/src/exercises/ex-0217-science-body-health-senses-transfer-diagnosis/"
   ],
   "acceptance": [
     "All three designs and prototypes are reviewed against curriculum traceability, year-band honesty, learning-loop completeness, content correctness, French clarity, concept-led diversity, and the approved scope.",

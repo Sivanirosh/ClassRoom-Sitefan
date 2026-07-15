@@ -7,9 +7,9 @@
     "6h-impl-sci-c2-56-body-inputs-movement-growth"
   ],
   "areas": [
-    "experiments/src/exercises/ex-0218-",
-    "experiments/src/exercises/ex-0219-",
-    "experiments/src/exercises/ex-0220-"
+    "experiments/src/exercises/ex-0218-science-body-inputs-movement-growth-construction/",
+    "experiments/src/exercises/ex-0219-science-body-inputs-movement-growth-practice/",
+    "experiments/src/exercises/ex-0220-science-body-inputs-movement-growth-transfer-diagnosis/"
   ],
   "acceptance": [
     "All three designs and prototypes are reviewed against curriculum traceability, year-band honesty, learning-loop completeness, content correctness, French clarity, concept-led diversity, and the approved scope.",

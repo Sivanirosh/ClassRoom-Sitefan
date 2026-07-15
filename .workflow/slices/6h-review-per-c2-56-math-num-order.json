@@ -7,9 +7,9 @@
     "6h-impl-per-c2-56-math-num-order"
   ],
   "areas": [
-    "experiments/src/exercises/ex-0115-",
-    "experiments/src/exercises/ex-0116-",
-    "experiments/src/exercises/ex-0117-"
+    "experiments/src/exercises/ex-0115-math-num-order-construction/",
+    "experiments/src/exercises/ex-0116-math-num-order-practice/",
+    "experiments/src/exercises/ex-0117-math-num-order-transfer-diagnosis/"
   ],
   "acceptance": [
     "All three designs and prototypes are reviewed against curriculum traceability, year-band honesty, learning-loop completeness, content correctness, French clarity, concept-led diversity, and the approved scope.",

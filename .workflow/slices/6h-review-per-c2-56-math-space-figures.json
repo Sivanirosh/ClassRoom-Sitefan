@@ -7,9 +7,9 @@
     "6h-impl-per-c2-56-math-space-figures"
   ],
   "areas": [
-    "experiments/src/exercises/ex-0100-",
-    "experiments/src/exercises/ex-0101-",
-    "experiments/src/exercises/ex-0102-"
+    "experiments/src/exercises/ex-0100-math-space-figures-construction/",
+    "experiments/src/exercises/ex-0101-math-space-figures-practice/",
+    "experiments/src/exercises/ex-0102-math-space-figures-transfer-diagnosis/"
   ],
   "acceptance": [
     "All three designs and prototypes are reviewed against curriculum traceability, year-band honesty, learning-loop completeness, content correctness, French clarity, concept-led diversity, and the approved scope.",

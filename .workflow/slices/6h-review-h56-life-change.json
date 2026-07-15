@@ -7,9 +7,9 @@
     "6h-impl-h56-life-change"
   ],
   "areas": [
-    "experiments/src/exercises/ex-0403-",
-    "experiments/src/exercises/ex-0404-",
-    "experiments/src/exercises/ex-0405-"
+    "experiments/src/exercises/ex-0403-history-life-change-construction/",
+    "experiments/src/exercises/ex-0404-history-life-change-practice/",
+    "experiments/src/exercises/ex-0405-history-life-change-transfer-diagnosis/"
   ],
   "acceptance": [
     "All three designs and prototypes are reviewed against curriculum traceability, year-band honesty, learning-loop completeness, content correctness, French clarity, concept-led diversity, and the approved scope.",

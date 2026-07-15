@@ -9,12 +9,12 @@
     "6h-browser-smoke-harness"
   ],
   "areas": [
-    "experiments/src/exercises/ex-0209-",
-    "experiments/src/exercises/ex-0210-",
-    "experiments/src/exercises/ex-0211-"
+    "experiments/src/exercises/ex-0209-science-electricity-safety-construction/",
+    "experiments/src/exercises/ex-0210-science-electricity-safety-practice/",
+    "experiments/src/exercises/ex-0211-science-electricity-safety-transfer-diagnosis/"
   ],
   "acceptance": [
-    "Exactly three catalog records are created with immutable IDs EX-0209, EX-0210, EX-0211 and years [\"6H\"], using one unique semantic folder slug under each authorized ID prefix.",
+    "Exactly three catalog records are created in the exact authorized semantic folders ex-0209-science-electricity-safety-construction/, ex-0210-science-electricity-safety-practice/, ex-0211-science-electricity-safety-transfer-diagnosis/, with immutable IDs EX-0209, EX-0210, EX-0211 and years [\"6H\"].",
     "All metadata references SCI-C2-56-ELECTRICITY-SAFETY, objective codes MSN 25, MSN 26, the finalized source IDs and statement IDs, and tags program-per-6h plus exactly one lens tag.",
     "Each DESIGN.md follows the complete template, distinguishes PER evidence from design interpretation, defines one observable objective, prerequisites, misconceptions/hypotheses, evidence, content model, accessibility, observation plan, findings, and promotion criteria.",
     "The construction, practice, and transfer-diagnosis prototypes use meaningfully different concept-led loops rather than a common multiple-choice reskin; each is student-facing French and self-contained.",

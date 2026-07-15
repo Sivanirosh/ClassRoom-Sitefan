@@ -7,9 +7,9 @@
     "6h-impl-per-c2-56-math-space-transforms"
   ],
   "areas": [
-    "experiments/src/exercises/ex-0106-",
-    "experiments/src/exercises/ex-0107-",
-    "experiments/src/exercises/ex-0108-"
+    "experiments/src/exercises/ex-0106-math-space-transforms-construction/",
+    "experiments/src/exercises/ex-0107-math-space-transforms-practice/",
+    "experiments/src/exercises/ex-0108-math-space-transforms-transfer-diagnosis/"
   ],
   "acceptance": [
     "All three designs and prototypes are reviewed against curriculum traceability, year-band honesty, learning-loop completeness, content correctness, French clarity, concept-led diversity, and the approved scope.",

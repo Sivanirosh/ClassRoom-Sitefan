@@ -7,9 +7,9 @@
     "6h-impl-h56-myth-representation"
   ],
   "areas": [
-    "experiments/src/exercises/ex-0409-",
-    "experiments/src/exercises/ex-0410-",
-    "experiments/src/exercises/ex-0411-"
+    "experiments/src/exercises/ex-0409-history-myth-representation-construction/",
+    "experiments/src/exercises/ex-0410-history-myth-representation-practice/",
+    "experiments/src/exercises/ex-0411-history-myth-representation-transfer-diagnosis/"
   ],
   "acceptance": [
     "All three designs and prototypes are reviewed against curriculum traceability, year-band honesty, learning-loop completeness, content correctness, French clarity, concept-led diversity, and the approved scope.",

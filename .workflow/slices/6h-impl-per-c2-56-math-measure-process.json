@@ -9,12 +9,12 @@
     "6h-browser-smoke-harness"
   ],
   "areas": [
-    "experiments/src/exercises/ex-0130-",
-    "experiments/src/exercises/ex-0131-",
-    "experiments/src/exercises/ex-0132-"
+    "experiments/src/exercises/ex-0130-math-measure-process-construction/",
+    "experiments/src/exercises/ex-0131-math-measure-process-practice/",
+    "experiments/src/exercises/ex-0132-math-measure-process-transfer-diagnosis/"
   ],
   "acceptance": [
-    "Exactly three catalog records are created with immutable IDs EX-0130, EX-0131, EX-0132 and years [\"6H\"], using one unique semantic folder slug under each authorized ID prefix.",
+    "Exactly three catalog records are created in the exact authorized semantic folders ex-0130-math-measure-process-construction/, ex-0131-math-measure-process-practice/, ex-0132-math-measure-process-transfer-diagnosis/, with immutable IDs EX-0130, EX-0131, EX-0132 and years [\"6H\"].",
     "All metadata references PER-C2-56-MATH-MEASURE-PROCESS, objective codes MSN 24, MSN 25, the finalized source IDs and statement IDs, and tags program-per-6h plus exactly one lens tag.",
     "Each DESIGN.md follows the complete template, distinguishes PER evidence from design interpretation, defines one observable objective, prerequisites, misconceptions/hypotheses, evidence, content model, accessibility, observation plan, findings, and promotion criteria.",
     "The construction, practice, and transfer-diagnosis prototypes use meaningfully different concept-led loops rather than a common multiple-choice reskin; each is student-facing French and self-contained.",

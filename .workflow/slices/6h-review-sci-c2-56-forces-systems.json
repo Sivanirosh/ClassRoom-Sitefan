@@ -7,9 +7,9 @@
     "6h-impl-sci-c2-56-forces-systems"
   ],
   "areas": [
-    "experiments/src/exercises/ex-0206-",
-    "experiments/src/exercises/ex-0207-",
-    "experiments/src/exercises/ex-0208-"
+    "experiments/src/exercises/ex-0206-science-forces-systems-construction/",
+    "experiments/src/exercises/ex-0207-science-forces-systems-practice/",
+    "experiments/src/exercises/ex-0208-science-forces-systems-transfer-diagnosis/"
   ],
   "acceptance": [
     "All three designs and prototypes are reviewed against curriculum traceability, year-band honesty, learning-loop completeness, content correctness, French clarity, concept-led diversity, and the approved scope.",

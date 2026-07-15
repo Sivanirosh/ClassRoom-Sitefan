@@ -4,7 +4,7 @@
   "selectedRoot": "6h-final-quality-gate",
   "sliceCount": 82,
   "algorithm": "sha256 of UTF-8 lines \"<file-sha256>  <repo-relative-path>\\n\" sorted by repo-relative path",
-  "digest": "3dd545b7680ebf10a723304b15742fcc0f3fad9cd575d552a6cbb9e4f027f2a4",
+  "digest": "a706790c8ed17ab2d940328fe2ac3647698b4b013bb2d15b1518fe844f60c8ae",
   "files": [
     {
       "path": ".workflow/slices/6h-audit-geography.json",
@@ -28,7 +28,7 @@
     },
     {
       "path": ".workflow/slices/6h-curriculum-map.json",
-      "sha256": "1adffa6f2b915f6177b6eac69b97437015a3106475831c78c2824cf68e82ad41"
+      "sha256": "d6ced029615be9dfda16252e12366eaa36ef2db03c3f4406f82f4c76ded79109"
     },
     {
       "path": ".workflow/slices/6h-exercise-quality-contract.json",
@@ -40,299 +40,299 @@
     },
     {
       "path": ".workflow/slices/6h-impl-geo56-actors-views.json",
-      "sha256": "4f226dcd5bccf3b0bcb62b6d0b43d2b96d3609f3c06ae6c990a5833d318bfabe"
+      "sha256": "df4ecae071262b1d79bde95406885df8952a766f84d60ee3e23676474bbc236f"
     },
     {
       "path": ".workflow/slices/6h-impl-geo56-lexicon.json",
-      "sha256": "e508f5f224ab5c52782b1138956d8242f6daed9d9032c342013a4113c51b8ca0"
+      "sha256": "a543d79d8169876a18612793321a25c1142697ffe4ada2a9e598388b261f9113"
     },
     {
       "path": ".workflow/slices/6h-impl-geo56-location-access.json",
-      "sha256": "fce1005ffed23672a28e126f751da6225dfa2c719429edf3e984de2f419965e9"
+      "sha256": "e2af86bc7aed22112926886c45f0f66d0c057f6d0db0961991621f5ed972f9c8"
     },
     {
       "path": ".workflow/slices/6h-impl-geo56-needs-places.json",
-      "sha256": "3cfdcb30ff8358faf31e543c0c41ebd4a4f65ebe3f900fce27bc9d09346c4fc2"
+      "sha256": "78d4eb54073d41047367c6ffaaee22b97c96eb459d704311191cda486b25d577"
     },
     {
       "path": ".workflow/slices/6h-impl-geo56-represent-map.json",
-      "sha256": "8f99226ec0e2b791bb8a8b6018915bdf1d769e66b2a129f7dae2d304916e8331"
+      "sha256": "8d82787cf78693485e17315260ce6cb76e377d168012ff24c706722881021fb8"
     },
     {
       "path": ".workflow/slices/6h-impl-geo56-scale.json",
-      "sha256": "a9c4c075e21179e8a60ae370871c72c7dd8ed7f2951404eaf23195ccb8f15bd2"
+      "sha256": "a4edd240b369c12bdc1eb6a11574c23db8145d77b238f5ed504ba7aa7e2244a2"
     },
     {
       "path": ".workflow/slices/6h-impl-geo56-sources-inquiry.json",
-      "sha256": "415fd7e6f806e3aa65860884d86af6c9a82222994e0c31dec8b2ba8d4ab12cfb"
+      "sha256": "0eb1ecc43f07259b3f1d1ed7d9ecdd088655ad18abd7e62ad08a64ba620c9b19"
     },
     {
       "path": ".workflow/slices/6h-impl-geo56-spatial-organization.json",
-      "sha256": "e99e76d86585b3aad27adb0539e17717bda989a07154cb9532cf3d13afb087b9"
+      "sha256": "5f7d8aadcdc1da75ba523be6c9440008cab6da0b1bb7fc97da027c0804de5512"
     },
     {
       "path": ".workflow/slices/6h-impl-h56-life-change.json",
-      "sha256": "022ba19b42ebfba2b42b1a9d7265c7d46f0cc17b8cdd195bd0e6c459585e91a0"
+      "sha256": "45d26b9c63adccc1a0f7bd201fea931873f6a4a14b710ab959281166562366da"
     },
     {
       "path": ".workflow/slices/6h-impl-h56-myth-representation.json",
-      "sha256": "4cf38abb4ee11652a8b30ba35f762500ed40722543c10ef18d3bc7a3b683129c"
+      "sha256": "a34dd7e9751547a46e08389abae07542ef1b540ee6b00057351c477b0810d568"
     },
     {
       "path": ".workflow/slices/6h-impl-h56-prehistory-antiquity-societies.json",
-      "sha256": "8e2ee024dfa1d2950b4c5634a6da20d500612c381f689d1e008ec043dc1ea1ed"
+      "sha256": "9a8e15bb23300247903ee3125645f8ace875cb985860381d746710d5130ea2fc"
     },
     {
       "path": ".workflow/slices/6h-impl-h56-source-inquiry.json",
-      "sha256": "c4742e50a5b646d9ae976b9f60c6cd52d015e7b5c156be9247a698a3b84f06f0"
+      "sha256": "2d734f52f9d6d7b7110c4e02ceec9ec6812f16fc3240aa73fcfb50289945a56a"
     },
     {
       "path": ".workflow/slices/6h-impl-h56-time-periods.json",
-      "sha256": "d20025e23b1f3c3314462104c298d3312c1f80c75f0c5167a6536ecadfaead3a"
+      "sha256": "052b3630e09edb2be8c58720466bf63d4e0a6b23af0c42c88c26cb8470fc5270"
     },
     {
       "path": ".workflow/slices/6h-impl-h56-traces-memory.json",
-      "sha256": "e0bf75eaaadb3202a40d4a445b426b5ad51e5b79c106d25b1134a635dcec74ca"
+      "sha256": "5caa2266b8caaec2385e18e33f1fb5941435483599e1c28667d7ce779ae951ee"
     },
     {
       "path": ".workflow/slices/6h-impl-per-c2-56-math-measure-calc.json",
-      "sha256": "45d3f37af428004fdf353bcbd83cbc7cc1030f4d85a7fb228fb21bdafba8a952"
+      "sha256": "62fff973ad12b0de22cee9482a4adf78eafbd76764becf8bceb7e5c354f5a792"
     },
     {
       "path": ".workflow/slices/6h-impl-per-c2-56-math-measure-process.json",
-      "sha256": "18c60ce105694ba10dec56de22aec24fb3de9fe9423d6f1d5839b768eedd9b3c"
+      "sha256": "e9238f3056896f1a3583aab22e2b00ee9672c43c194b98e3bb484b59770642ea"
     },
     {
       "path": ".workflow/slices/6h-impl-per-c2-56-math-model-problem.json",
-      "sha256": "6f800e96cd38d529e2e4fedbf06de13c82003667704750a4b22839c8b5d4256d"
+      "sha256": "4076bd8d780f4c8fb938d0fb7b818ea432dd48b15a1b3d4bb22f4fb4512748b5"
     },
     {
       "path": ".workflow/slices/6h-impl-per-c2-56-math-num-count.json",
-      "sha256": "90604023ff87a3e5b5b34f2b4945ef88555f53eebb2853222e19f71b00ab7c32"
+      "sha256": "3bb04f3da517002d6f9592dd749335c2fab542da3bc746319fb7547d4689c50b"
     },
     {
       "path": ".workflow/slices/6h-impl-per-c2-56-math-num-order.json",
-      "sha256": "5519897736008b37ba89491849025a4dfcd664ad7d03e6e46fde52ff733ea46d"
+      "sha256": "47f98ce41fdb9361b2406d9fe2249bcde038165fdc5d48e7fd3b757908ce8531"
     },
     {
       "path": ".workflow/slices/6h-impl-per-c2-56-math-num-write.json",
-      "sha256": "c532e55fa998d3d6d2e5b95272e9ded2506e27b17195734e98b70c0becde70ec"
+      "sha256": "1ffafaef52e0860700b83cabcc58633a1535ff9c589dae6a473cd8985d246d4d"
     },
     {
       "path": ".workflow/slices/6h-impl-per-c2-56-math-ops-multiples.json",
-      "sha256": "e03d04f9df1bf86aa14d1562414884989e9c9d7f21b5f02115ae8bee339b0eee"
+      "sha256": "c342eb3d323035bf15db0a5dd816d0ead46a217fae4b8deb4a1c4755825277f7"
     },
     {
       "path": ".workflow/slices/6h-impl-per-c2-56-math-ops-problems.json",
-      "sha256": "aa00a06e8b7ec80e5ed1c93d655ed3c485565b991bd8dda7949042edeaf30bb7"
+      "sha256": "029cb09412b7f47f742739d6a7eb46fac406f07b71a88e1b9169a36000cd8f1b"
     },
     {
       "path": ".workflow/slices/6h-impl-per-c2-56-math-ops-tools.json",
-      "sha256": "3a2c3f26094bea805e7d4e26cec5a7c8c4d80809bd99d26bd1bd5cfde09b948b"
+      "sha256": "7706e7b4eb94f93f68f56e87a8050179f726252489f614ff6ad5905b82193b9f"
     },
     {
       "path": ".workflow/slices/6h-impl-per-c2-56-math-space-figures.json",
-      "sha256": "973e9d130b2880c2464400e8ce39859fa0aa49ca67b210a610fd1f18f42f13fc"
+      "sha256": "272b7a534e4c82e16f0331fa75fe85600af75c543778a032b69cad36ad2b33da"
     },
     {
       "path": ".workflow/slices/6h-impl-per-c2-56-math-space-locate.json",
-      "sha256": "e7b79ed12e7f5b464aa59c3cc2c77582b0e1b49f6d4be9f20c721367d53be076"
+      "sha256": "20f90d43786ef328d43a18d953f120e530c19c2d6de131de3010a3f6c8d5fd80"
     },
     {
       "path": ".workflow/slices/6h-impl-per-c2-56-math-space-solids.json",
-      "sha256": "4408a941363016ad1c44980c97c18d04a52c9b9b95c387daaed8ef9443eb18f5"
+      "sha256": "3f10af8f2df8b4ad5c65228ed65812d5c66d601c20ce8405561d9ac7076c17a3"
     },
     {
       "path": ".workflow/slices/6h-impl-per-c2-56-math-space-transforms.json",
-      "sha256": "85d1143b772bda41f8aa217c4ad4fe94bd2daf4d6f8d56968682a3e871ac1607"
+      "sha256": "f20a3cd96fd6005d5e0e678d074725b30c57b654868c41a9bcbe7dc4c7ff1099"
     },
     {
       "path": ".workflow/slices/6h-impl-sci-c2-56-body-health-senses.json",
-      "sha256": "732e38ad41c92629266389f5e3ced49a8a17be69e258ce6f453f0d0be6be2220"
+      "sha256": "9a600a9bddb018ae22132fb1d669c290d928020b2749bebbb0cab044132235b0"
     },
     {
       "path": ".workflow/slices/6h-impl-sci-c2-56-body-inputs-movement-growth.json",
-      "sha256": "1742ca4460a8f78da1c2511e4977418737374889c0740aa2214c17965ce4f3d4"
+      "sha256": "de85f8f3e7ebd10f11d48bb04a3fff17b6ff3f38ccf553bfdcddd45e9bfbec54"
     },
     {
       "path": ".workflow/slices/6h-impl-sci-c2-56-ecosystem-change.json",
-      "sha256": "020909d6eda74ffe9458411f9407c1757154adea430f8dcff9d6bdf6405b6906"
+      "sha256": "2daff3ecc732bb7a560e2edb989980c5bf45782e64864673571625f52db2e261"
     },
     {
       "path": ".workflow/slices/6h-impl-sci-c2-56-electricity-safety.json",
-      "sha256": "f27ec1f0d1893e1dfa21d9899f836db8fe5d4e1cc9f2b2013b40b09c6af12b06"
+      "sha256": "00b286c062402467476b5392c4f9c9b54538c652c785edbe832998813e7eae7b"
     },
     {
       "path": ".workflow/slices/6h-impl-sci-c2-56-forces-systems.json",
-      "sha256": "3db2a1fe9a4fc74e457d8800a87bb0be63bac1603e6adf1098cbb35af3bfda90"
+      "sha256": "3f8d11b450e9e0dd201e38b48ab63033fd75f84aba43f484e71d2131b1ad50fa"
     },
     {
       "path": ".workflow/slices/6h-impl-sci-c2-56-inquiry-evidence.json",
-      "sha256": "8990c0c4d67e47eb12e2e2bb947d0070f5185108c005ad74402cdad14358a97b"
+      "sha256": "a23b811ed9333ea1705948a81aafee33c82f99a5358c14b35955be358c53db31"
     },
     {
       "path": ".workflow/slices/6h-impl-sci-c2-56-life-cycles.json",
-      "sha256": "26a030a2706b87a9f384126410ee62ec62d3d7485a50ed70dc977d7a6e6280c8"
+      "sha256": "302ee6c2a997cc7a27a7042a003faff1d6d2f09c525040204e11ab692e0e0995"
     },
     {
       "path": ".workflow/slices/6h-impl-sci-c2-56-light-earth-sky.json",
-      "sha256": "a766c58ac286f1e9b4b2a856b76acf93c53ee3f3b4759a67103f194ac731162c"
+      "sha256": "1320f28d5723aa7b5e9220dc56b864e94848e0cd5f5e5332e570242edb32ddaf"
     },
     {
       "path": ".workflow/slices/6h-impl-sci-c2-56-living-diversity-adaptation.json",
-      "sha256": "9ffb3ea8ce1fdadf0bb2efa989e4ce7b8161768f2b2e5c830044508e74dab7e2"
+      "sha256": "11d784321251858b4984694c8f9b49e314483847c1fdec23179ed29cc5d09329"
     },
     {
       "path": ".workflow/slices/6h-impl-sci-c2-56-matter-water-air.json",
-      "sha256": "0c2268ae328e106f186e5a911425dcb68b7955855ea9d8ad6cc6061ad0d955b7"
+      "sha256": "59751dea3ea8838cfa5d5d89bfe84b5b638e3c547f8dc46e221c30481dc7f0e2"
     },
     {
       "path": ".workflow/slices/6h-review-geo56-actors-views.json",
-      "sha256": "73429b7395309112871d5d331ffe7df77014c13c0c8c0c0411142027ace262b7"
+      "sha256": "3e9db66409a38329b01599ff734dfc65a0d5eede59e832565ef573232e34479d"
     },
     {
       "path": ".workflow/slices/6h-review-geo56-lexicon.json",
-      "sha256": "bc875d0a0a7ef7340456d157e230db8a0072d67be1b11cb36c9c2817ef35c5a3"
+      "sha256": "ac92cf88649f660f97fa4a17df93f1f9e6193f2f1eafa04be32765b8e09878b1"
     },
     {
       "path": ".workflow/slices/6h-review-geo56-location-access.json",
-      "sha256": "fe99a68d517cb00614af6b5cfc76538efc9c3b15f7a019c6663a61d287d73098"
+      "sha256": "100675ef1cd441cb14ca3f8cb2b6e513fd6f89e31dc789c3557bfa1aef931611"
     },
     {
       "path": ".workflow/slices/6h-review-geo56-needs-places.json",
-      "sha256": "abfce5bdec2e21e79740e5729e5eb8d62738d57d8e3638440e3556f73f08ce92"
+      "sha256": "a3918bf3f52a6a9d0b16147a3f7336fc8c81c8d3e42e48ac9d8bddbbc70d5ca5"
     },
     {
       "path": ".workflow/slices/6h-review-geo56-represent-map.json",
-      "sha256": "27f9cf25ce2178371e39bc26a6c54223df6efda4440487cee5a3347eda452566"
+      "sha256": "d8ab27d8e51f3852568edd02c1dc55d7edbbf110fae77e177689ce70720c9c2f"
     },
     {
       "path": ".workflow/slices/6h-review-geo56-scale.json",
-      "sha256": "158017fa032114e384af1981cc507f2ece6005db40c99637e60a738d2f034932"
+      "sha256": "52298a5443e8fa19989a5a88214fd6ab2c311bc6ea679f418b0009ec3d7dccaf"
     },
     {
       "path": ".workflow/slices/6h-review-geo56-sources-inquiry.json",
-      "sha256": "7b949f9be6eb9c5e22ee784c4404bab44b247fd4a688fd2ad8eac8c780175a52"
+      "sha256": "a9f0b3c1577a1184576aaf46115aec113b5f80cdd9006af4011dd04bf66a5183"
     },
     {
       "path": ".workflow/slices/6h-review-geo56-spatial-organization.json",
-      "sha256": "fc221201eda4072b66a8345fb967195fc59bf34c3328f6b5bd662a38b167857b"
+      "sha256": "f52925badfd788e6e4eff46fe3de9bded9a3ad445593ed00e32a09c4c5dcbddf"
     },
     {
       "path": ".workflow/slices/6h-review-h56-life-change.json",
-      "sha256": "3430e29124b419800da084891550c26a8fed48a7cce48598a4b95678f7905621"
+      "sha256": "16efa61729fa07b5dd21503431122ebc3d4a2e5c45aff2392173854cf2f88fa7"
     },
     {
       "path": ".workflow/slices/6h-review-h56-myth-representation.json",
-      "sha256": "29a47b0b8b30f9723335e5137e395dab5944c36a3fd8b498a9cc280422029fd7"
+      "sha256": "ca7eaf66d0f2ddda98af2659dc39581ad62c9df4238a3c77eff45970dd3ed1c0"
     },
     {
       "path": ".workflow/slices/6h-review-h56-prehistory-antiquity-societies.json",
-      "sha256": "ee4b8e7f28f6b3a667250fbd29d5c7b58fc0824b0e5aefb63ad68f5a8e6611a8"
+      "sha256": "e09568cdb57ad06db2a0af04851944fc62b25a96f8126462c240f014ef250450"
     },
     {
       "path": ".workflow/slices/6h-review-h56-source-inquiry.json",
-      "sha256": "d15f4366c6587eb5854a97ccbe31f2e3799188f4f0a6e94170cc1ea928cbe030"
+      "sha256": "ed635272085ea085621aec62388ad19805572d6b0493f7b3a6b4b8e4b75390c7"
     },
     {
       "path": ".workflow/slices/6h-review-h56-time-periods.json",
-      "sha256": "a3c26cf809544c03c3010eb1edbbc3ded23073319d77b1256108c4fd2d3ead94"
+      "sha256": "96ab9e1c6158fe46453e84be64827de8a87da860db8cd5ec0b7d83f54b9eeb7d"
     },
     {
       "path": ".workflow/slices/6h-review-h56-traces-memory.json",
-      "sha256": "dafeaa319455338d61cd9bcf3ba036bce5deb76e5638bb50984c410fc376776e"
+      "sha256": "7ae4c9a8c2466b38f0e65e2c838f62378b09c1e58163c2218d8913c5ed83d6e3"
     },
     {
       "path": ".workflow/slices/6h-review-per-c2-56-math-measure-calc.json",
-      "sha256": "2f68225944e2f77d47f70a8a9edf3d42992dc036a272ddf172a5c871fad92e1b"
+      "sha256": "b8f73f99b9281a12d3dbc084b2de991328bf11b0cb96c6f0820588084c6b388a"
     },
     {
       "path": ".workflow/slices/6h-review-per-c2-56-math-measure-process.json",
-      "sha256": "e7d9268bede1a2ccb6cd12037e2cf254a38834892bf72377c8170d3fee8197de"
+      "sha256": "88007a8d21488ba92f7f4a0d26112a21271d6e5d50d250211b95f65748853823"
     },
     {
       "path": ".workflow/slices/6h-review-per-c2-56-math-model-problem.json",
-      "sha256": "0ce8b6d70debbeef6c5e383227b50fdeb3312314bf1af71f732de4f0a702d67d"
+      "sha256": "7eb1e43202e03562af4fe9089fed28507ca1468f5bf806bb0c0ef3fd3ff683a1"
     },
     {
       "path": ".workflow/slices/6h-review-per-c2-56-math-num-count.json",
-      "sha256": "51e4b05462de104c0f4f67d134740a0994e7840d238200214d20d9e5f4f645e2"
+      "sha256": "78daca54f1f37ef836bbc81746629f644f4277d996cfc75f588f12034ffd8a91"
     },
     {
       "path": ".workflow/slices/6h-review-per-c2-56-math-num-order.json",
-      "sha256": "8e45410583090df16e63c9d9801f931a8d20dbf62a021e73f46499ee26383050"
+      "sha256": "ac182a58ce4e9bf69c55fa1e105b0699c381ff97a6e3513dda75cba2b7111fd4"
     },
     {
       "path": ".workflow/slices/6h-review-per-c2-56-math-num-write.json",
-      "sha256": "3f0cbb1dce7b3fd868702c795e8936ca51cb99b469e328e8e0fc4905061d0326"
+      "sha256": "8013a6e9d3965d148a2bf297bdf8bb02695cd7a57338a6e2534a40aa084a1fa3"
     },
     {
       "path": ".workflow/slices/6h-review-per-c2-56-math-ops-multiples.json",
-      "sha256": "fcdd9ade970ac34ca2faf7ff211c0f24976e9f92cf74a6a7c8a11fe16ff4738c"
+      "sha256": "c20fe68cb20b4339f8773b79f7949c33d3f1861715713552fede9abdcbe3ed75"
     },
     {
       "path": ".workflow/slices/6h-review-per-c2-56-math-ops-problems.json",
-      "sha256": "758580dd095b467d4e9bafa24ab7f82c7b1dbb14be6bfb70aeabd0e3052d791b"
+      "sha256": "306162d4a8903baf5adf5285d07e0a4a289ca713af1b83b7608719aff0540a39"
     },
     {
       "path": ".workflow/slices/6h-review-per-c2-56-math-ops-tools.json",
-      "sha256": "8f487fc038fc5ab16b586531ae507c177d4df0bf768cb023d73b107b1f183f84"
+      "sha256": "eac3fa6237104e337c600470ca89ba9c4dd7eb796a4599a846673cb886aa27ba"
     },
     {
       "path": ".workflow/slices/6h-review-per-c2-56-math-space-figures.json",
-      "sha256": "d4c39e5ce350eefef9ededeb8b65cb21088f87d2e417291515f8bd243fe3819f"
+      "sha256": "99a600e88b5dabdc7778b72cd3582878a500d47bc2d5bb3f04e4e742025756b6"
     },
     {
       "path": ".workflow/slices/6h-review-per-c2-56-math-space-locate.json",
-      "sha256": "b4c6c2f0bb073c618b077044b10a5bc361478a8a2bc000399ca5c93e1c36b715"
+      "sha256": "7ab3f085a26ae5b458545ceebad44ac316a9c6090187bb46a9d4edc691c7a768"
     },
     {
       "path": ".workflow/slices/6h-review-per-c2-56-math-space-solids.json",
-      "sha256": "e4329e6fc5db0f900214d92ca385fd741264388e91884971e4a8abc3f4c4cb8a"
+      "sha256": "92fb24427d61d9f14fa9e9bdce52b8f86c4edb67f3ab12240ebf611b4a92df28"
     },
     {
       "path": ".workflow/slices/6h-review-per-c2-56-math-space-transforms.json",
-      "sha256": "b4cd83c944c329dd4d924e40a0a5a52b964418dbf46fa7910dad952935193aa9"
+      "sha256": "0677dce7149ec0cc30f638b9d159246027fa00b2a6dc6f87efe25f05505a60e6"
     },
     {
       "path": ".workflow/slices/6h-review-sci-c2-56-body-health-senses.json",
-      "sha256": "34111ce87c44806b2357eecd8985f657e77d8efa8cf7fd69cd80923552b1d761"
+      "sha256": "5a8135cf6a2c6c60633ac5abe7023d4cc5269d8727705d08020e7dc53432beae"
     },
     {
       "path": ".workflow/slices/6h-review-sci-c2-56-body-inputs-movement-growth.json",
-      "sha256": "438358e4299231f1d1f7e434c2949a9ce942acf7c6f683d717a10a5105e0459f"
+      "sha256": "c6cbd609129c6a54727acc18872feee4e62516ad916f3819941503d6f7341e27"
     },
     {
       "path": ".workflow/slices/6h-review-sci-c2-56-ecosystem-change.json",
-      "sha256": "1b08fc34d8dcf88fbe149d8d23e3a4adc7a26b8d8c040fb566ee197485361eed"
+      "sha256": "21371f2b3b33e4e0e3bb8495eccfd66b09c22f88f9d29ab71b12ec0a51674da8"
     },
     {
       "path": ".workflow/slices/6h-review-sci-c2-56-electricity-safety.json",
-      "sha256": "fa96aaadf8992da402e6aa7072cde02b05ccc3a167db5c1ece8989f7e27af1f2"
+      "sha256": "86647f7b93f2e89dcc344245566fd492cdfe933350e287e5a2329a84fb2bc4ff"
     },
     {
       "path": ".workflow/slices/6h-review-sci-c2-56-forces-systems.json",
-      "sha256": "caaa03f4af1cd3d200ea00eafbe75b4251992c3beb66f4a4c8b97c15022f721f"
+      "sha256": "748613c60a3a350ef31f93b8131fb72a8462443c7d6716298774ab41cd37ca9d"
     },
     {
       "path": ".workflow/slices/6h-review-sci-c2-56-inquiry-evidence.json",
-      "sha256": "ab0b4745556a2ce05a68f5bef86c925ed06cb1f2dd2bd63a81c4a736437ae6da"
+      "sha256": "81868ec001cec37959c57545a4bb4d8ba5177dddad4c8f5aae8c3df70bfb2509"
     },
     {
       "path": ".workflow/slices/6h-review-sci-c2-56-life-cycles.json",
-      "sha256": "063f1eaa517568cd6c09389c47df4add079e83224f2ab58117f74a37ce4b267a"
+      "sha256": "002dbc2fea2efa185359f52dd2a2530d96c768369606f85fced51a25a5f91920"
     },
     {
       "path": ".workflow/slices/6h-review-sci-c2-56-light-earth-sky.json",
-      "sha256": "05d4adb2f9f0d1e92d5a195b9f115e9a049bc058c7a94c99ec3b12cd832523b6"
+      "sha256": "81fd16071597393d3426d3e1d2663663623aeb0c8b252565aad6c254efc2fcdb"
     },
     {
       "path": ".workflow/slices/6h-review-sci-c2-56-living-diversity-adaptation.json",
-      "sha256": "b86b3439d9a41c3d7ad09ab7560e148af26ff92df7511cc1852d926edbcc1772"
+      "sha256": "fe879d5fb804c560ebf7c2903bf6836b817f2e0d2b2d436d1b5748c81e7e16ce"
     },
     {
       "path": ".workflow/slices/6h-review-sci-c2-56-matter-water-air.json",
-      "sha256": "f8d7ec8d43aba156350f6775c74ede95ba08264f329a90de0fb90e2d3062f53b"
+      "sha256": "cc321434619d055e36eb94c75e7f408609cd88ca27a1d6335cea410c065de19d"
     }
   ]
 }

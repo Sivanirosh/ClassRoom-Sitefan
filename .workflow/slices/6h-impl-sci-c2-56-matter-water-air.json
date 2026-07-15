@@ -9,12 +9,12 @@
     "6h-browser-smoke-harness"
   ],
   "areas": [
-    "experiments/src/exercises/ex-0203-",
-    "experiments/src/exercises/ex-0204-",
-    "experiments/src/exercises/ex-0205-"
+    "experiments/src/exercises/ex-0203-science-matter-water-air-construction/",
+    "experiments/src/exercises/ex-0204-science-matter-water-air-practice/",
+    "experiments/src/exercises/ex-0205-science-matter-water-air-transfer-diagnosis/"
   ],
   "acceptance": [
-    "Exactly three catalog records are created with immutable IDs EX-0203, EX-0204, EX-0205 and years [\"6H\"], using one unique semantic folder slug under each authorized ID prefix.",
+    "Exactly three catalog records are created in the exact authorized semantic folders ex-0203-science-matter-water-air-construction/, ex-0204-science-matter-water-air-practice/, ex-0205-science-matter-water-air-transfer-diagnosis/, with immutable IDs EX-0203, EX-0204, EX-0205 and years [\"6H\"].",
     "All metadata references SCI-C2-56-MATTER-WATER-AIR, objective codes MSN 25, MSN 26, the finalized source IDs and statement IDs, and tags program-per-6h plus exactly one lens tag.",
     "Each DESIGN.md follows the complete template, distinguishes PER evidence from design interpretation, defines one observable objective, prerequisites, misconceptions/hypotheses, evidence, content model, accessibility, observation plan, findings, and promotion criteria.",
     "The construction, practice, and transfer-diagnosis prototypes use meaningfully different concept-led loops rather than a common multiple-choice reskin; each is student-facing French and self-contained.",

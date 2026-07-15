@@ -7,9 +7,9 @@
     "6h-impl-geo56-scale"
   ],
   "areas": [
-    "experiments/src/exercises/ex-0312-",
-    "experiments/src/exercises/ex-0313-",
-    "experiments/src/exercises/ex-0314-"
+    "experiments/src/exercises/ex-0312-geography-scale-construction/",
+    "experiments/src/exercises/ex-0313-geography-scale-practice/",
+    "experiments/src/exercises/ex-0314-geography-scale-transfer-diagnosis/"
   ],
   "acceptance": [
     "All three designs and prototypes are reviewed against curriculum traceability, year-band honesty, learning-loop completeness, content correctness, French clarity, concept-led diversity, and the approved scope.",

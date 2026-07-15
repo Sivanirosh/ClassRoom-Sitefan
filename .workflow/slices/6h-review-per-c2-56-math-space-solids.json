@@ -7,9 +7,9 @@
     "6h-impl-per-c2-56-math-space-solids"
   ],
   "areas": [
-    "experiments/src/exercises/ex-0103-",
-    "experiments/src/exercises/ex-0104-",
-    "experiments/src/exercises/ex-0105-"
+    "experiments/src/exercises/ex-0103-math-space-solids-construction/",
+    "experiments/src/exercises/ex-0104-math-space-solids-practice/",
+    "experiments/src/exercises/ex-0105-math-space-solids-transfer-diagnosis/"
   ],
   "acceptance": [
     "All three designs and prototypes are reviewed against curriculum traceability, year-band honesty, learning-loop completeness, content correctness, French clarity, concept-led diversity, and the approved scope.",

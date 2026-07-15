@@ -7,9 +7,9 @@
     "6h-impl-h56-source-inquiry"
   ],
   "areas": [
-    "experiments/src/exercises/ex-0406-",
-    "experiments/src/exercises/ex-0407-",
-    "experiments/src/exercises/ex-0408-"
+    "experiments/src/exercises/ex-0406-history-source-inquiry-construction/",
+    "experiments/src/exercises/ex-0407-history-source-inquiry-practice/",
+    "experiments/src/exercises/ex-0408-history-source-inquiry-transfer-diagnosis/"
   ],
   "acceptance": [
     "All three designs and prototypes are reviewed against curriculum traceability, year-band honesty, learning-loop completeness, content correctness, French clarity, concept-led diversity, and the approved scope.",

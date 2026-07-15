@@ -9,12 +9,12 @@
     "6h-browser-smoke-harness"
   ],
   "areas": [
-    "experiments/src/exercises/ex-0315-",
-    "experiments/src/exercises/ex-0316-",
-    "experiments/src/exercises/ex-0317-"
+    "experiments/src/exercises/ex-0315-geography-sources-inquiry-construction/",
+    "experiments/src/exercises/ex-0316-geography-sources-inquiry-practice/",
+    "experiments/src/exercises/ex-0317-geography-sources-inquiry-transfer-diagnosis/"
   ],
   "acceptance": [
-    "Exactly three catalog records are created with immutable IDs EX-0315, EX-0316, EX-0317 and years [\"6H\"], using one unique semantic folder slug under each authorized ID prefix.",
+    "Exactly three catalog records are created in the exact authorized semantic folders ex-0315-geography-sources-inquiry-construction/, ex-0316-geography-sources-inquiry-practice/, ex-0317-geography-sources-inquiry-transfer-diagnosis/, with immutable IDs EX-0315, EX-0316, EX-0317 and years [\"6H\"].",
     "All metadata references geo56-sources-inquiry, objective codes SHS 21, SHS 23, the finalized source IDs and statement IDs, and tags program-per-6h plus exactly one lens tag.",
     "Each DESIGN.md follows the complete template, distinguishes PER evidence from design interpretation, defines one observable objective, prerequisites, misconceptions/hypotheses, evidence, content model, accessibility, observation plan, findings, and promotion criteria.",
     "The construction, practice, and transfer-diagnosis prototypes use meaningfully different concept-led loops rather than a common multiple-choice reskin; each is student-facing French and self-contained.",

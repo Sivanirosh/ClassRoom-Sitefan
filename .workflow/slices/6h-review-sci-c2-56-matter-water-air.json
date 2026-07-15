@@ -7,9 +7,9 @@
     "6h-impl-sci-c2-56-matter-water-air"
   ],
   "areas": [
-    "experiments/src/exercises/ex-0203-",
-    "experiments/src/exercises/ex-0204-",
-    "experiments/src/exercises/ex-0205-"
+    "experiments/src/exercises/ex-0203-science-matter-water-air-construction/",
+    "experiments/src/exercises/ex-0204-science-matter-water-air-practice/",
+    "experiments/src/exercises/ex-0205-science-matter-water-air-transfer-diagnosis/"
   ],
   "acceptance": [
     "All three designs and prototypes are reviewed against curriculum traceability, year-band honesty, learning-loop completeness, content correctness, French clarity, concept-led diversity, and the approved scope.",

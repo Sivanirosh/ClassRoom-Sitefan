@@ -7,9 +7,9 @@
     "6h-impl-per-c2-56-math-model-problem"
   ],
   "areas": [
-    "experiments/src/exercises/ex-0136-",
-    "experiments/src/exercises/ex-0137-",
-    "experiments/src/exercises/ex-0138-"
+    "experiments/src/exercises/ex-0136-math-model-problem-construction/",
+    "experiments/src/exercises/ex-0137-math-model-problem-practice/",
+    "experiments/src/exercises/ex-0138-math-model-problem-transfer-diagnosis/"
   ],
   "acceptance": [
     "All three designs and prototypes are reviewed against curriculum traceability, year-band honesty, learning-loop completeness, content correctness, French clarity, concept-led diversity, and the approved scope.",

@@ -7,9 +7,9 @@
     "6h-impl-per-c2-56-math-measure-process"
   ],
   "areas": [
-    "experiments/src/exercises/ex-0130-",
-    "experiments/src/exercises/ex-0131-",
-    "experiments/src/exercises/ex-0132-"
+    "experiments/src/exercises/ex-0130-math-measure-process-construction/",
+    "experiments/src/exercises/ex-0131-math-measure-process-practice/",
+    "experiments/src/exercises/ex-0132-math-measure-process-transfer-diagnosis/"
   ],
   "acceptance": [
     "All three designs and prototypes are reviewed against curriculum traceability, year-band honesty, learning-loop completeness, content correctness, French clarity, concept-led diversity, and the approved scope.",

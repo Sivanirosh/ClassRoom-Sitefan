@@ -7,9 +7,9 @@
     "6h-impl-sci-c2-56-life-cycles"
   ],
   "areas": [
-    "experiments/src/exercises/ex-0224-",
-    "experiments/src/exercises/ex-0225-",
-    "experiments/src/exercises/ex-0226-"
+    "experiments/src/exercises/ex-0224-science-life-cycles-construction/",
+    "experiments/src/exercises/ex-0225-science-life-cycles-practice/",
+    "experiments/src/exercises/ex-0226-science-life-cycles-transfer-diagnosis/"
   ],
   "acceptance": [
     "All three designs and prototypes are reviewed against curriculum traceability, year-band honesty, learning-loop completeness, content correctness, French clarity, concept-led diversity, and the approved scope.",

@@ -1,8 +1,8 @@
 # Khazad-Doom Area Contract
 
-`areas` in `.workflow/slices/*.json` are repo-relative literal path prefixes, not globs.
+`areas` in `.workflow/slices/*.json` are repo-relative path authorities, not globs or arbitrary filename-string prefixes.
 
-Use directory prefixes with a trailing slash and exact file paths:
+Use directory paths with a trailing slash and exact file paths. A trailing-slash directory authorizes descendants; a value without a trailing slash authorizes only that exact path. For example, `ex-0100-` does **not** authorize `ex-0100-some-slug/`.
 
 ```text
 src/normia/       ✅ directory prefix

@@ -7,9 +7,9 @@
     "6h-impl-h56-prehistory-antiquity-societies"
   ],
   "areas": [
-    "experiments/src/exercises/ex-0415-",
-    "experiments/src/exercises/ex-0416-",
-    "experiments/src/exercises/ex-0417-"
+    "experiments/src/exercises/ex-0415-history-prehistory-antiquity-societies-construction/",
+    "experiments/src/exercises/ex-0416-history-prehistory-antiquity-societies-practice/",
+    "experiments/src/exercises/ex-0417-history-prehistory-antiquity-societies-transfer-diagnosis/"
   ],
   "acceptance": [
     "All three designs and prototypes are reviewed against curriculum traceability, year-band honesty, learning-loop completeness, content correctness, French clarity, concept-led diversity, and the approved scope.",

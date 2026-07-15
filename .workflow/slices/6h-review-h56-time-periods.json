@@ -7,9 +7,9 @@
     "6h-impl-h56-time-periods"
   ],
   "areas": [
-    "experiments/src/exercises/ex-0400-",
-    "experiments/src/exercises/ex-0401-",
-    "experiments/src/exercises/ex-0402-"
+    "experiments/src/exercises/ex-0400-history-time-periods-construction/",
+    "experiments/src/exercises/ex-0401-history-time-periods-practice/",
+    "experiments/src/exercises/ex-0402-history-time-periods-transfer-diagnosis/"
   ],
   "acceptance": [
     "All three designs and prototypes are reviewed against curriculum traceability, year-band honesty, learning-loop completeness, content correctness, French clarity, concept-led diversity, and the approved scope.",

@@ -7,9 +7,9 @@
     "6h-impl-geo56-represent-map"
   ],
   "areas": [
-    "experiments/src/exercises/ex-0318-",
-    "experiments/src/exercises/ex-0319-",
-    "experiments/src/exercises/ex-0320-"
+    "experiments/src/exercises/ex-0318-geography-represent-map-construction/",
+    "experiments/src/exercises/ex-0319-geography-represent-map-practice/",
+    "experiments/src/exercises/ex-0320-geography-represent-map-transfer-diagnosis/"
   ],
   "acceptance": [
     "All three designs and prototypes are reviewed against curriculum traceability, year-band honesty, learning-loop completeness, content correctness, French clarity, concept-led diversity, and the approved scope.",

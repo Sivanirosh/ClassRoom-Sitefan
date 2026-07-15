@@ -7,9 +7,9 @@
     "6h-impl-geo56-location-access"
   ],
   "areas": [
-    "experiments/src/exercises/ex-0306-",
-    "experiments/src/exercises/ex-0307-",
-    "experiments/src/exercises/ex-0308-"
+    "experiments/src/exercises/ex-0306-geography-location-access-construction/",
+    "experiments/src/exercises/ex-0307-geography-location-access-practice/",
+    "experiments/src/exercises/ex-0308-geography-location-access-transfer-diagnosis/"
   ],
   "acceptance": [
     "All three designs and prototypes are reviewed against curriculum traceability, year-band honesty, learning-loop completeness, content correctness, French clarity, concept-led diversity, and the approved scope.",

@@ -7,9 +7,9 @@
     "6h-impl-per-c2-56-math-ops-tools"
   ],
   "areas": [
-    "experiments/src/exercises/ex-0124-",
-    "experiments/src/exercises/ex-0125-",
-    "experiments/src/exercises/ex-0126-"
+    "experiments/src/exercises/ex-0124-math-ops-tools-construction/",
+    "experiments/src/exercises/ex-0125-math-ops-tools-practice/",
+    "experiments/src/exercises/ex-0126-math-ops-tools-transfer-diagnosis/"
   ],
   "acceptance": [
     "All three designs and prototypes are reviewed against curriculum traceability, year-band honesty, learning-loop completeness, content correctness, French clarity, concept-led diversity, and the approved scope.",

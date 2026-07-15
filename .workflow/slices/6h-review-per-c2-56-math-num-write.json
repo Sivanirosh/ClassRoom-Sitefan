@@ -7,9 +7,9 @@
     "6h-impl-per-c2-56-math-num-write"
   ],
   "areas": [
-    "experiments/src/exercises/ex-0118-",
-    "experiments/src/exercises/ex-0119-",
-    "experiments/src/exercises/ex-0120-"
+    "experiments/src/exercises/ex-0118-math-num-write-construction/",
+    "experiments/src/exercises/ex-0119-math-num-write-practice/",
+    "experiments/src/exercises/ex-0120-math-num-write-transfer-diagnosis/"
   ],
   "acceptance": [
     "All three designs and prototypes are reviewed against curriculum traceability, year-band honesty, learning-loop completeness, content correctness, French clarity, concept-led diversity, and the approved scope.",

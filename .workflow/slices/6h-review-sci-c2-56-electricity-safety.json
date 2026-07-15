@@ -7,9 +7,9 @@
     "6h-impl-sci-c2-56-electricity-safety"
   ],
   "areas": [
-    "experiments/src/exercises/ex-0209-",
-    "experiments/src/exercises/ex-0210-",
-    "experiments/src/exercises/ex-0211-"
+    "experiments/src/exercises/ex-0209-science-electricity-safety-construction/",
+    "experiments/src/exercises/ex-0210-science-electricity-safety-practice/",
+    "experiments/src/exercises/ex-0211-science-electricity-safety-transfer-diagnosis/"
   ],
   "acceptance": [
     "All three designs and prototypes are reviewed against curriculum traceability, year-band honesty, learning-loop completeness, content correctness, French clarity, concept-led diversity, and the approved scope.",
