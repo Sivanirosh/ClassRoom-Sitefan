@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "programId": "per-6h-msn-shs",
-  "preparedAt": "2026-07-15T08:16:32.990644+00:00",
+  "preparedAt": "2026-07-15T10:41:53.533898+00:00",
   "baselineCommit": "5d00e35efbeec6f4e820bab4bc13b387722d2b9e",
   "approvedDecision": {
     "path": "experiments/design/6h-curriculum-coverage-decision-record.md",
@@ -33,11 +33,11 @@
     },
     {
       "path": "experiments/design/6h-production-plan.md",
-      "sha256": "47db325331f2a319595b44cabb7dffc924a406ba03e776256f03063947df1041"
+      "sha256": "c412e774a5ec862e8a49d0e708b8901ae4be7e98154ec5c64f3589722b017e5b"
     },
     {
       "path": "experiments/tools/verify-6h-batch-inputs.mjs",
-      "sha256": "cb4338512df90bf1341cf7769ae9a0d56d8a87af5a0a7469d142221d1d8d1dec"
+      "sha256": "198d16a14fb49db4d8ef794660d196d32c900fc27b353d4d8135dfd6a044a8dc"
     },
     {
       "path": "experiments/package.json",
@@ -150,12 +150,12 @@
   "sliceGraph": {
     "directory": ".workflow/slices",
     "selectedRoot": "6h-final-quality-gate",
-    "newSliceCount": 79,
+    "newSliceCount": 75,
     "digestAlgorithm": "sha256 of UTF-8 lines \"<file-sha256>  <repo-relative-path>\\n\" sorted by repo-relative path",
-    "sha256": "1113da717848286f7b109453029ceff9ef5cabeed1e219d5588d20a073f1890d",
+    "sha256": "537e27a7dcbb01cc69d30065bd08e7507c07af6d5fad3b31224a494041947140",
     "manifest": {
       "path": "experiments/design/6h-slice-manifest.json",
-      "sha256": "809aa96b46bd540231778a63936a29bd0d1d449bb90cc5718fd7af75dff0477e"
+      "sha256": "0d22aeef0209fdd7c5f6ca0931972ce13f808e7caa1f5f8a1401a7a273f43eb8"
     },
     "verifyCommand": "node experiments/tools/verify-6h-batch-inputs.mjs"
   },
@@ -186,6 +186,73 @@
       "sliceId": "6h-exercise-quality-contract",
       "commit": "855b93a",
       "recovery": "cherry-picked from cancelled run kd-20260715-073808-859fafad; local check passed"
+    }
+  ],
+  "completedSlices": [
+    {
+      "sliceId": "6h-impl-geo56-actors-views",
+      "commits": [
+        "2a9a91a"
+      ],
+      "status": "prototyping",
+      "areas": [
+        "experiments/src/exercises/ex-0303-geography-actors-views-construction/",
+        "experiments/src/exercises/ex-0304-geography-actors-views-practice/",
+        "experiments/src/exercises/ex-0305-geography-actors-views-transfer-diagnosis/"
+      ],
+      "outputDigestAlgorithm": "sha256 of UTF-8 lines \"<file-sha256>  <repo-relative-path>\\n\" sorted by repo-relative path",
+      "outputSha256": "5c3cae923ad85edc1647f5ce1dfbb67e01015129b16c93ddea2131cd87f8c386",
+      "outputFileCount": 9,
+      "recovery": "Integrated preserved ready-to-merge worker output from failed parallel layer."
+    },
+    {
+      "sliceId": "6h-impl-geo56-lexicon",
+      "commits": [
+        "04fef27"
+      ],
+      "status": "prototyping",
+      "areas": [
+        "experiments/src/exercises/ex-0321-geography-lexicon-construction/",
+        "experiments/src/exercises/ex-0322-geography-lexicon-practice/",
+        "experiments/src/exercises/ex-0323-geography-lexicon-transfer-diagnosis/"
+      ],
+      "outputDigestAlgorithm": "sha256 of UTF-8 lines \"<file-sha256>  <repo-relative-path>\\n\" sorted by repo-relative path",
+      "outputSha256": "b53998db40841aecdc59acff1c5ca3472bbf1ba63df035fcc543ab0e5ff1ce93",
+      "outputFileCount": 9,
+      "recovery": "Integrated preserved ready-to-merge worker output from failed parallel layer."
+    },
+    {
+      "sliceId": "6h-impl-geo56-needs-places",
+      "commits": [
+        "74f8e7b"
+      ],
+      "status": "prototyping",
+      "areas": [
+        "experiments/src/exercises/ex-0300-geography-needs-places-construction/",
+        "experiments/src/exercises/ex-0301-geography-needs-places-practice/",
+        "experiments/src/exercises/ex-0302-geography-needs-places-transfer-diagnosis/"
+      ],
+      "outputDigestAlgorithm": "sha256 of UTF-8 lines \"<file-sha256>  <repo-relative-path>\\n\" sorted by repo-relative path",
+      "outputSha256": "12482297d6d701314a5e8d05644021a58d5d6613777fb25bf204c98881e3cd19",
+      "outputFileCount": 9,
+      "recovery": "Integrated preserved ready-to-merge worker output from failed parallel layer."
+    },
+    {
+      "sliceId": "6h-impl-geo56-location-access",
+      "commits": [
+        "d5c686e",
+        "7ed195a"
+      ],
+      "status": "prototyping",
+      "areas": [
+        "experiments/src/exercises/ex-0306-geography-location-access-construction/",
+        "experiments/src/exercises/ex-0307-geography-location-access-practice/",
+        "experiments/src/exercises/ex-0308-geography-location-access-transfer-diagnosis/"
+      ],
+      "outputDigestAlgorithm": "sha256 of UTF-8 lines \"<file-sha256>  <repo-relative-path>\\n\" sorted by repo-relative path",
+      "outputSha256": "821087c6765a6f8cc6924e40f87dedbc66a68c0c0a4b7b405231c4fa7bb8e0c4",
+      "outputFileCount": 9,
+      "recovery": "Integrated preserved worker output; location-access additionally received the operator smoke-state fix and passed filtered plus full checks."
     }
   ]
 }

@@ -3,9 +3,7 @@
   "title": "Review 6H Géographie: geo56-needs-places",
   "goal": "Independently review and, within the same three authorized exercise prefixes, correct the geo56-needs-places construction, practice, and transfer-diagnosis records against the finalized coverage matrix and review rubric. Advance only exercises that fully pass to testing.",
   "status": "open",
-  "depends_on": [
-    "6h-impl-geo56-needs-places"
-  ],
+  "depends_on": [],
   "areas": [
     "experiments/src/exercises/ex-0300-geography-needs-places-construction/",
     "experiments/src/exercises/ex-0301-geography-needs-places-practice/",

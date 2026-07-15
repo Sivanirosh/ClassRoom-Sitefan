@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "programId": "per-6h-msn-shs",
   "selectedRoot": "6h-final-quality-gate",
-  "sliceCount": 79,
+  "sliceCount": 75,
   "algorithm": "sha256 of UTF-8 lines \"<file-sha256>  <repo-relative-path>\\n\" sorted by repo-relative path",
-  "digest": "1113da717848286f7b109453029ceff9ef5cabeed1e219d5588d20a073f1890d",
+  "digest": "537e27a7dcbb01cc69d30065bd08e7507c07af6d5fad3b31224a494041947140",
   "files": [
     {
       "path": ".workflow/slices/6h-audit-geography.json",
@@ -25,22 +25,6 @@
     {
       "path": ".workflow/slices/6h-final-quality-gate.json",
       "sha256": "53c7e82f51b7815645a61989ac5e1c43dad0242417bde0bbff98fd142e7b62d7"
-    },
-    {
-      "path": ".workflow/slices/6h-impl-geo56-actors-views.json",
-      "sha256": "13d03bc608601bc7c5780518144b988c7b8ab892520d63034d21f8ea0f22a287"
-    },
-    {
-      "path": ".workflow/slices/6h-impl-geo56-lexicon.json",
-      "sha256": "c7dee25bdfba4d277020ce53770bf2f4a8a3d9c432f9cd96b1819db510b95cd8"
-    },
-    {
-      "path": ".workflow/slices/6h-impl-geo56-location-access.json",
-      "sha256": "b30d4e291adb433b20b04dd6482297dbc08beea8960c7f9230e5d00fc72780bf"
-    },
-    {
-      "path": ".workflow/slices/6h-impl-geo56-needs-places.json",
-      "sha256": "3a703530e8b1dd3973568e2efba5ebc3aa9eb5f85486e30d94aa2f186fc5f8c3"
     },
     {
       "path": ".workflow/slices/6h-impl-geo56-represent-map.json",
@@ -176,19 +160,19 @@
     },
     {
       "path": ".workflow/slices/6h-review-geo56-actors-views.json",
-      "sha256": "3e9db66409a38329b01599ff734dfc65a0d5eede59e832565ef573232e34479d"
+      "sha256": "a1b091692d0dad46ec3182b3120064ddd5046052b4a7f4c7f03b1c4f457b1e9a"
     },
     {
       "path": ".workflow/slices/6h-review-geo56-lexicon.json",
-      "sha256": "ac92cf88649f660f97fa4a17df93f1f9e6193f2f1eafa04be32765b8e09878b1"
+      "sha256": "4b817923fe3e6267851c86c531c40f69ff7af6e1386385d0ce51f056d2ba2e70"
     },
     {
       "path": ".workflow/slices/6h-review-geo56-location-access.json",
-      "sha256": "100675ef1cd441cb14ca3f8cb2b6e513fd6f89e31dc789c3557bfa1aef931611"
+      "sha256": "114e8434fbcdd146c22ff8250d7bea054887172693599d103570d85758b9ffcc"
     },
     {
       "path": ".workflow/slices/6h-review-geo56-needs-places.json",
-      "sha256": "a3918bf3f52a6a9d0b16147a3f7336fc8c81c8d3e42e48ac9d8bddbbc70d5ca5"
+      "sha256": "b9c3f4eabdbc6b82c96e728d1788cf1af82f534e0abd88d0b2b8819e6ca85b76"
     },
     {
       "path": ".workflow/slices/6h-review-geo56-represent-map.json",

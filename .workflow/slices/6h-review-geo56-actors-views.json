@@ -3,9 +3,7 @@
   "title": "Review 6H Géographie: geo56-actors-views",
   "goal": "Independently review and, within the same three authorized exercise prefixes, correct the geo56-actors-views construction, practice, and transfer-diagnosis records against the finalized coverage matrix and review rubric. Advance only exercises that fully pass to testing.",
   "status": "open",
-  "depends_on": [
-    "6h-impl-geo56-actors-views"
-  ],
+  "depends_on": [],
   "areas": [
     "experiments/src/exercises/ex-0303-geography-actors-views-construction/",
     "experiments/src/exercises/ex-0304-geography-actors-views-practice/",

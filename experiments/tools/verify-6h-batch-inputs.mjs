@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -118,6 +118,33 @@ for (const prerequisite of batch.completedPrerequisites ?? []) {
     execFileSync('git', ['merge-base', '--is-ancestor', prerequisite.commit, 'HEAD'], { cwd: root });
   } catch {
     failures.push(`completed prerequisite ${prerequisite.sliceId} commit ${prerequisite.commit} is missing or not an ancestor of HEAD`);
+  }
+}
+
+function filesUnder(path) {
+  const absolute = resolve(root, path);
+  if (!statSync(absolute).isDirectory()) return [path];
+  return readdirSync(absolute, { recursive: true })
+    .map((child) => `${path.replace(/\/$/, '')}/${child}`)
+    .filter((child) => statSync(resolve(root, child)).isFile());
+}
+
+for (const completed of batch.completedSlices ?? []) {
+  for (const commit of completed.commits) {
+    try {
+      execFileSync('git', ['cat-file', '-e', `${commit}^{commit}`], { cwd: root });
+      execFileSync('git', ['merge-base', '--is-ancestor', commit, 'HEAD'], { cwd: root });
+    } catch {
+      failures.push(`completed slice ${completed.sliceId} commit ${commit} is missing or not an ancestor of HEAD`);
+    }
+  }
+
+  if (requireClean) {
+    const outputFiles = completed.areas.flatMap(filesUnder).sort((left, right) => left.localeCompare(right));
+    const outputLines = outputFiles.map((path) => `${sha256(bytes(path))}  ${path}\n`).join('');
+    const outputDigest = sha256(Buffer.from(outputLines, 'utf8'));
+    check(outputFiles.length === completed.outputFileCount, `${completed.sliceId}: output file count ${outputFiles.length} != ${completed.outputFileCount}`);
+    check(outputDigest === completed.outputSha256, `${completed.sliceId}: output digest ${outputDigest} != ${completed.outputSha256}`);
   }
 }
 
