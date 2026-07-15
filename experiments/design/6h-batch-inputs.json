@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "programId": "per-6h-msn-shs",
-  "preparedAt": "2026-07-15T10:41:53.533898+00:00",
+  "preparedAt": "2026-07-15T10:45:56.557319+00:00",
   "baselineCommit": "5d00e35efbeec6f4e820bab4bc13b387722d2b9e",
   "approvedDecision": {
     "path": "experiments/design/6h-curriculum-coverage-decision-record.md",
@@ -37,7 +37,7 @@
     },
     {
       "path": "experiments/tools/verify-6h-batch-inputs.mjs",
-      "sha256": "198d16a14fb49db4d8ef794660d196d32c900fc27b353d4d8135dfd6a044a8dc"
+      "sha256": "d3a964a1c648e0789ef4656d6ac2e45342cac4538af83f49c509fb66e41e4bc4"
     },
     {
       "path": "experiments/package.json",

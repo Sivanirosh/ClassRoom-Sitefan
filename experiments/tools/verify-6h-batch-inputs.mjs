@@ -60,7 +60,7 @@ check(manifest.algorithm === expectedAlgorithm, 'slice manifest algorithm is not
 check(manifest.selectedRoot === batch.sliceGraph.selectedRoot, 'slice manifest selected root differs from batch input');
 check(manifest.sliceCount === batch.sliceGraph.newSliceCount, 'slice manifest count differs from batch input');
 
-const sortedFiles = [...manifest.files].sort((left, right) => left.path.localeCompare(right.path));
+const sortedFiles = [...manifest.files].sort((left, right) => left.path < right.path ? -1 : left.path > right.path ? 1 : 0);
 check(JSON.stringify(sortedFiles) === JSON.stringify(manifest.files), 'slice manifest files are not sorted by path');
 check(new Set(manifest.files.map((entry) => entry.path)).size === manifest.files.length, 'slice manifest contains duplicate paths');
 
@@ -140,7 +140,7 @@ for (const completed of batch.completedSlices ?? []) {
   }
 
   if (requireClean) {
-    const outputFiles = completed.areas.flatMap(filesUnder).sort((left, right) => left.localeCompare(right));
+    const outputFiles = completed.areas.flatMap(filesUnder).sort((left, right) => left < right ? -1 : left > right ? 1 : 0);
     const outputLines = outputFiles.map((path) => `${sha256(bytes(path))}  ${path}\n`).join('');
     const outputDigest = sha256(Buffer.from(outputLines, 'utf8'));
     check(outputFiles.length === completed.outputFileCount, `${completed.sliceId}: output file count ${outputFiles.length} != ${completed.outputFileCount}`);
