@@ -1,0 +1,33 @@
+{
+  "id": "6h-curriculum-map",
+  "title": "6H: authoritative curriculum map and coverage matrix",
+  "goal": "Turn the four approved CIIP/PER research briefs and the immutable production plan into canonical source records, normalized curriculum notes, and a statement-level no-gap coverage matrix for the full official 5H–6H progression in Mathematics, Science, Geography, and History. Preserve the distinction between progression statements, explicit 6H endpoints, and unbanded end-of-cycle expectations.",
+  "status": "open",
+  "areas": [
+    "experiments/curriculum/sources/src-per-0002",
+    "experiments/curriculum/sources/src-per-0003",
+    "experiments/curriculum/notes/6h-",
+    "experiments/curriculum/mappings/6h-"
+  ],
+  "acceptance": [
+    "Canonical source records cite the current official CIIP/PER Cycle 2 version 3.0 (August 2024), institutional status pages, access dates, page references, and copyright/reuse caveats; no source PDF is committed.",
+    "Every progression statement listed in the four domain research briefs has a stable local statement ID, source trace, year-band classification, and one or more approved cluster mappings.",
+    "Every expectation explicitly marked 6e is labeled as a 6H endpoint; every unbanded expectation remains labeled end-of-cycle and is used only as directional or diagnostic evidence.",
+    "The matrix includes all 37 approved clusters and all 111 immutable exercise IDs from experiments/design/6h-production-plan.json, with exactly one construction, one practice, and one transfer-diagnosis lens per cluster.",
+    "A machine-readable matrix and a human-readable coverage report show zero unmapped in-scope progression statements; overlaps and cross-cluster statements are explicit rather than silently duplicated.",
+    "Geography and History follow PER context only, without an assumed canton layer or MER content presented as normative."
+  ],
+  "must_ask_if": [
+    "The pinned decision, research, production-plan, or slice-graph inputs in experiments/design/6h-batch-inputs.json do not match the working baseline.",
+    "Primary CIIP/PER evidence contradicts a research brief or requires adding, removing, splitting, or merging one of the 37 approved clusters.",
+    "An official source is inaccessible and completeness would require an unsupported inference.",
+    "You need to reproduce substantial copyrighted curriculum text or copy an official PDF into the repository.",
+    "You need to change the immutable exercise ID allocation or files outside the declared areas."
+  ],
+  "verify": [
+    "test -s experiments/curriculum/mappings/6h-coverage-matrix.json",
+    "test -s experiments/curriculum/mappings/6h-coverage-report.md",
+    "cd experiments && npm run check"
+  ],
+  "verify_timeout_seconds": 1200
+}

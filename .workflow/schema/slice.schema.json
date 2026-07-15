@@ -1,0 +1,125 @@
+{
+  "$id": "https://khazad-doom.local/slice.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "acceptance": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "areas": {
+      "items": {
+        "description": "Repo-relative literal path prefix; globs, parent traversal, absolute paths, leading/trailing whitespace, and leading ./ are rejected.",
+        "minLength": 1,
+        "pattern": "^(?!\\s)(?!/)(?!\\.\\/)(?!.*\\.\\.)(?!.*[\\*\\?\\[\\]])(?!.*\\s$).+$",
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "closed_at": {
+      "type": "string"
+    },
+    "closed_by_run": {
+      "type": "string"
+    },
+    "depends_on": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "github_issue": {
+      "type": "string"
+    },
+    "goal": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "id": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$",
+      "type": "string"
+    },
+    "must_ask_if": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "provenance": {
+      "additionalProperties": false,
+      "properties": {
+        "created_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "created_by": {
+          "enum": [
+            "operator",
+            "worker+daemon"
+          ],
+          "type": "string"
+        },
+        "generation": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "origin_proposal_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "parent_slice_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "parent_slice_id",
+        "origin_proposal_id",
+        "generation",
+        "created_by",
+        "created_at"
+      ],
+      "type": "object"
+    },
+    "status": {
+      "enum": [
+        "open",
+        "closed"
+      ],
+      "type": "string"
+    },
+    "title": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "verify": {
+      "description": "Worker-local verification commands; keep them inside the slice's fix authority.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "verify_profile": {
+      "description": "Integration-gate profile name. Profile commands run after merges, not as worker-local slice checks.",
+      "type": "string"
+    },
+    "verify_timeout_seconds": {
+      "maximum": 86400,
+      "minimum": 0,
+      "type": "integer"
+    }
+  },
+  "required": [
+    "id",
+    "title",
+    "goal",
+    "acceptance"
+  ],
+  "title": "Khazad-Doom JSON Issue Slice",
+  "type": "object"
+}

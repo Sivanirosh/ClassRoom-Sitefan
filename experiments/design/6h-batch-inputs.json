@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "programId": "per-6h-msn-shs",
+  "preparedAt": "2026-07-15T07:24:02.242888+00:00",
+  "baselineCommit": "5d00e35efbeec6f4e820bab4bc13b387722d2b9e",
+  "approvedDecision": {
+    "path": "experiments/design/6h-curriculum-coverage-decision-record.md",
+    "gitBlob": "e26ed1549a657648963b7cfeba74c13a177fc38b",
+    "sha256": "801e695c0e83e8397f2d0e252db22ac4a77aa1984dc799123e3849e7de521c48",
+    "approvedSourceRevisionDigest": "47f6e78d6966928a",
+    "note": "The source revision digest identifies the owner-approved pre-approval content; the committed approved artifact is pinned here by Git blob and full SHA-256."
+  },
+  "inputs": [
+    {
+      "path": "experiments/curriculum/research/6h-mathematics-coverage.md",
+      "sha256": "408d5a8b54a8b53671e97e14a63e2ec8229cf4081dea77f3f95c763aed8897aa"
+    },
+    {
+      "path": "experiments/curriculum/research/6h-science-coverage.md",
+      "sha256": "104180663c3d6caa514073864659514d1625e123d8c2f9077a77f40db460241e"
+    },
+    {
+      "path": "experiments/curriculum/research/6h-geography-coverage.md",
+      "sha256": "ccfb443c15bd1ca6d3471bb3d5d19639efa8c5ae8fcc5277640beeded2e3833a"
+    },
+    {
+      "path": "experiments/curriculum/research/6h-history-coverage.md",
+      "sha256": "6f05993762da34e102060f99ef8070feae025413e24c46b476f81bc6aaf0ec9e"
+    },
+    {
+      "path": "experiments/design/6h-production-plan.json",
+      "sha256": "4ea91620d8a4c06bf1921da23d6ab11be676a933b656f00a9c9b86cdce849cfc"
+    },
+    {
+      "path": "experiments/design/6h-production-plan.md",
+      "sha256": "d432f5d19c574323b050b197ba59362ea1f49047d7e75741f6ffb2e111df3c6d"
+    }
+  ],
+  "allocation": {
+    "clusters": 37,
+    "exercises": 111,
+    "lensesPerCluster": 3,
+    "firstId": "EX-0100",
+    "lastId": "EX-0417"
+  },
+  "sliceGraph": {
+    "directory": ".workflow/slices",
+    "selectedRoot": "6h-final-quality-gate",
+    "newSliceCount": 82,
+    "sha256": "a6e99c29c29331f6ff4236daed464113178a870380de1720099283f2ffe861a4"
+  },
+  "launchPolicy": {
+    "agent": "pi",
+    "parallelism": 6,
+    "allowDirty": false,
+    "cockpit": "repository-default",
+    "questions": "use a declared recommended reversible in-scope option; otherwise stop for operator authority"
+  },
+  "workflowConfig": {
+    "path": ".workflow/khazad.json",
+    "sha256": "328087be5b0faa924b5275bcd289dd5780b7ff4d8b22d57bed8625f6500f308b"
+  }
+}

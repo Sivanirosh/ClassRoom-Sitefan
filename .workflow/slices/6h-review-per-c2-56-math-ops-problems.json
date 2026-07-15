@@ -1,0 +1,34 @@
+{
+  "id": "6h-review-per-c2-56-math-ops-problems",
+  "title": "Review 6H Mathématiques: PER-C2-56-MATH-OPS-PROBLEMS",
+  "goal": "Independently review and, within the same three authorized exercise prefixes, correct the PER-C2-56-MATH-OPS-PROBLEMS construction, practice, and transfer-diagnosis records against the finalized coverage matrix and review rubric. Advance only exercises that fully pass to testing.",
+  "status": "open",
+  "depends_on": [
+    "6h-impl-per-c2-56-math-ops-problems"
+  ],
+  "areas": [
+    "experiments/src/exercises/ex-0121-",
+    "experiments/src/exercises/ex-0122-",
+    "experiments/src/exercises/ex-0123-"
+  ],
+  "acceptance": [
+    "All three designs and prototypes are reviewed against curriculum traceability, year-band honesty, learning-loop completeness, content correctness, French clarity, concept-led diversity, and the approved scope.",
+    "All blocking and high findings inside the authorized exercise folders are fixed; no finding is hidden by weakening metadata, acceptance language, or the quality contract.",
+    "Each prototype is inspected across its full interaction path, including an incorrect response and recovery, using keyboard and pointer/touch-equivalent controls at desktop and 320px viewport assumptions.",
+    "The three lenses remain pedagogically distinct and collectively cover the cluster statement mappings without turning end-of-cycle expectations into 6H requirements.",
+    "Only records that pass every testing-readiness criterion are changed from prototyping to testing; none are marked validated, promoted, or connected to classroom persistence.",
+    "DESIGN.md findings append a dated independent-review entry and preserve remaining pupil-testing hypotheses.",
+    "The catalog validates with all three prototypes discoverable."
+  ],
+  "must_ask_if": [
+    "A blocking finding cannot be fixed inside the three declared exercise prefixes.",
+    "The coverage matrix or quality contract is contradictory, missing, or would need to be weakened.",
+    "An exercise needs to be archived, replaced, or materially changes its approved objective or cluster boundary.",
+    "A decision involves credentials, destructive changes, copyrighted content, persistence, new dependencies, or files outside the declared areas."
+  ],
+  "verify": [
+    "cd experiments && npm run check",
+    "cd experiments && SMOKE_EXERCISES=EX-0121,EX-0122,EX-0123 npm run test:smoke"
+  ],
+  "verify_timeout_seconds": 1800
+}

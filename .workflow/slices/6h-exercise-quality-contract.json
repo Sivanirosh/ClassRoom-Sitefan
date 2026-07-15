@@ -1,0 +1,29 @@
+{
+  "id": "6h-exercise-quality-contract",
+  "title": "6H: exercise quality and testing-readiness contract",
+  "goal": "Define the binding production and independent-review contract for all 111 exercises: concept-led interaction, three distinct lenses, French age-appropriate language, specific feedback, accessibility, responsive behavior, evidence honesty, isolation, and the testing lifecycle ceiling.",
+  "status": "open",
+  "areas": [
+    "experiments/design/6h-exercise-quality-contract.md",
+    "experiments/design/6h-review-rubric.md"
+  ],
+  "acceptance": [
+    "The contract defines minimum complete states: introduction, active concept manipulation, decision/submission, specific explanatory feedback, recoverable retry or scaffold, continuation, and completion.",
+    "The three lenses have distinct purposes and may not be generic reskins: construction makes a relationship visible, practice varies it deliberately, and transfer/diagnosis uses a novel context and records an interpretable error family in local state only.",
+    "The accessibility rubric covers full keyboard operation, pointer/touch targets, non-color cues, focus, reduced motion, readable French, 320px responsive behavior, and alternatives to fine-motor drag interactions.",
+    "The evidence rubric requires objective/source/statement traceability, observable learning evidence, misconceptions distinguished from hypotheses, bounded content models, observation plans, and no unsupported 6H or validation claim.",
+    "The isolation rubric prohibits classroom imports, cross-exercise imports, persistence, analytics, identity, network calls, and substantial copyrighted source content.",
+    "The lifecycle rule requires implementation slices to leave work prototyping and permits paired independent review slices to advance passing work only to testing; validated is reserved for pupil trials.",
+    "The visual guidance explicitly allows independent studies inspired by high-quality interactive learning while prohibiting copied Brilliant.org content, branding, assets, or proprietary interaction text."
+  ],
+  "must_ask_if": [
+    "The pinned decision, research, production-plan, or slice-graph inputs in experiments/design/6h-batch-inputs.json do not match the working baseline.",
+    "The quality bar would require a new runtime dependency, shared exercise engine, persistence, network access, or a change to the existing lab isolation contract.",
+    "Any requirement conflicts with the approved decision record or would permit automated validated status.",
+    "You need to change files outside the declared areas."
+  ],
+  "verify": [
+    "test -s experiments/design/6h-exercise-quality-contract.md",
+    "test -s experiments/design/6h-review-rubric.md"
+  ]
+}

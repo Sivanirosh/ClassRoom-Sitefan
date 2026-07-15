@@ -1,0 +1,36 @@
+{
+  "id": "6h-impl-sci-c2-56-forces-systems",
+  "title": "6H Sciences: équilibres et transmissions",
+  "goal": "Create the three complete isolated Svelte exercise records allocated to cluster SCI-C2-56-FORCES-SYSTEMS (MSN 25, MSN 26) using the finalized coverage matrix and quality contract. Implement the approved lenses construction=EX-0206, practice=EX-0207, transfer-diagnosis=EX-0208. Each record must have exercise.ts, a rigorous DESIGN.md, Prototype.svelte, and any owned assets.",
+  "status": "open",
+  "depends_on": [
+    "6h-curriculum-map",
+    "6h-exercise-quality-contract",
+    "6h-browser-smoke-harness"
+  ],
+  "areas": [
+    "experiments/src/exercises/ex-0206-",
+    "experiments/src/exercises/ex-0207-",
+    "experiments/src/exercises/ex-0208-"
+  ],
+  "acceptance": [
+    "Exactly three catalog records are created with immutable IDs EX-0206, EX-0207, EX-0208 and years [\"6H\"], using one unique semantic folder slug under each authorized ID prefix.",
+    "All metadata references SCI-C2-56-FORCES-SYSTEMS, objective codes MSN 25, MSN 26, the finalized source IDs and statement IDs, and tags program-per-6h plus exactly one lens tag.",
+    "Each DESIGN.md follows the complete template, distinguishes PER evidence from design interpretation, defines one observable objective, prerequisites, misconceptions/hypotheses, evidence, content model, accessibility, observation plan, findings, and promotion criteria.",
+    "The construction, practice, and transfer-diagnosis prototypes use meaningfully different concept-led loops rather than a common multiple-choice reskin; each is student-facing French and self-contained.",
+    "Every prototype implements introduction, active manipulation, submission/decision, specific explanatory feedback, scaffolded recovery or retry, continuation, and completion with at least three deliberate content variations.",
+    "Keyboard, pointer, and touch paths are present; correctness is not communicated by color alone; motion respects reduced-motion; the layout remains usable at 320px and does not require fine motor precision.",
+    "No prototype imports classroom or sibling-exercise code, performs network calls, persists pupil data, submits results, uses copied proprietary content, or claims pupil validation.",
+    "All three records remain status prototyping for independent review."
+  ],
+  "must_ask_if": [
+    "The authoritative coverage matrix is missing, contradictory, or does not map this cluster to all listed statement IDs.",
+    "A proposed activity would present an unbanded end-of-Cycle-2 expectation as a mandatory 6H endpoint.",
+    "You need a network service, new dependency, copyrighted media, pupil data, persistence, or files outside the declared areas.",
+    "The three approved lenses cannot be made meaningfully distinct without changing the cluster boundary or product intent."
+  ],
+  "verify": [
+    "cd experiments && npm run check"
+  ],
+  "verify_timeout_seconds": 1200
+}

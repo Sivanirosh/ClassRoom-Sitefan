@@ -1,0 +1,39 @@
+{
+  "id": "6h-final-quality-gate",
+  "title": "6H: final coverage, catalog, and build gate",
+  "goal": "Create a deterministic coverage validator and run the final program audit after all four domain audits pass. Verify that all 37 clusters and 111 immutable exercise IDs are present, correctly mapped, testing-ready, isolated, and buildable, then publish the final evidence report without claiming pupil validation.",
+  "status": "open",
+  "depends_on": [
+    "6h-audit-mathematics",
+    "6h-audit-science",
+    "6h-audit-geography",
+    "6h-audit-history"
+  ],
+  "areas": [
+    "experiments/tools/validate-6h-coverage.mjs",
+    "experiments/package.json",
+    "experiments/curriculum/mappings/6h-final-coverage-report.md",
+    "experiments/reviews/6h-final-quality-gate.md"
+  ],
+  "acceptance": [
+    "A deterministic validator reads experiments/design/6h-production-plan.json, the finalized machine-readable coverage matrix, and the discovered catalog; it fails on missing/duplicate IDs, missing prototypes/designs, incorrect years, absent source/cluster/lens tags, wrong lifecycle state, or unmapped progression statements.",
+    "The validator confirms exactly 37 planned clusters and 111 planned 6H exercises, each with one construction, one practice, and one transfer-diagnosis lens; unrelated exercises such as EX-0001 remain allowed and excluded from the count.",
+    "Every planned exercise has status testing, never validated/promoted, and every curriculum record distinguishes explicit 6H endpoints from unbanded end-of-cycle expectations.",
+    "The final report summarizes domain counts, statement coverage, cluster/lens coverage, source evidence, review evidence, accessibility/interaction gates, residual pupil-testing hypotheses, and zero unresolved blocking/high findings.",
+    "package.json exposes a validation command for the 6H coverage program without weakening the existing check/build commands.",
+    "The complete standalone lab passes catalog validation, Svelte/TypeScript checks, the new coverage validator, and a production build."
+  ],
+  "must_ask_if": [
+    "Any domain audit contains an unresolved blocker/high finding or any expected cluster/exercise/mapping is absent or contradictory.",
+    "Passing would require weakening validation, changing the immutable plan, relabeling an end-of-cycle expectation as 6H, marking work validated, or mutating exercise files outside declared areas.",
+    "A required fix needs new dependencies, persistence, network access, copyrighted content, or product behavior outside the approved decision record."
+  ],
+  "verify": [
+    "cd experiments && npm run validate",
+    "cd experiments && npm run validate:6h",
+    "cd experiments && npm run check",
+    "cd experiments && npm run test:smoke",
+    "cd experiments && npm run build"
+  ],
+  "verify_timeout_seconds": 2400
+}

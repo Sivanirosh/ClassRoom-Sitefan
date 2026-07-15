@@ -12,6 +12,9 @@ data/
 .DS_Store
 
 .pi/memory/
-.workflow/
 migrations/
 /*.html
+
+# Khazad-Doom runtime artifacts
+.workflow/runs/
+.workflow/worktrees/

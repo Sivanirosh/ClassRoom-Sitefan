@@ -1,0 +1,37 @@
+{
+  "id": "6h-audit-geography",
+  "title": "6H domain audit: Géographie",
+  "goal": "Audit the complete testing-ready Géographie collection after all paired cluster reviews. Produce an evidence report covering curriculum gaps/overlaps, three-lens completeness, status honesty, interaction diversity, accessibility risks, and catalog/build integrity without broad mutation authority.",
+  "status": "open",
+  "depends_on": [
+    "6h-review-geo56-needs-places",
+    "6h-review-geo56-actors-views",
+    "6h-review-geo56-location-access",
+    "6h-review-geo56-spatial-organization",
+    "6h-review-geo56-scale",
+    "6h-review-geo56-sources-inquiry",
+    "6h-review-geo56-represent-map",
+    "6h-review-geo56-lexicon"
+  ],
+  "areas": [
+    "experiments/reviews/6h-geography-audit.md"
+  ],
+  "acceptance": [
+    "The report enumerates every planned cluster and exercise ID in the domain and confirms one construction, one practice, and one transfer-diagnosis record per cluster.",
+    "Statement-level mappings show no missing in-scope 5H–6H progression; explicit 6H endpoints and unbanded end-of-cycle expectations remain correctly distinguished.",
+    "Every planned record is discoverable with Prototype.svelte and status testing; any exception is a blocking finding rather than an optimistic pass.",
+    "The report samples and compares interaction mechanics across clusters, identifies generic reskins or accessibility regressions, and records zero unresolved blocking/high findings for a pass.",
+    "The report includes exact verification commands and results and does not claim pupil validation."
+  ],
+  "must_ask_if": [
+    "Any planned exercise is missing, not testing-ready, incorrectly mapped, or has a blocking/high curriculum, interaction, accessibility, copyright, or lifecycle finding.",
+    "Fixing a finding would require mutating an exercise or any file outside the report path; propose a bounded follow-up/replan instead."
+  ],
+  "verify": [
+    "test -s experiments/reviews/6h-geography-audit.md",
+    "cd experiments && npm run check",
+    "cd experiments && npm run test:smoke",
+    "cd experiments && npm run build"
+  ],
+  "verify_timeout_seconds": 1800
+}

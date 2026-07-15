@@ -1,0 +1,36 @@
+{
+  "id": "6h-impl-geo56-sources-inquiry",
+  "title": "6H Géographie: Questionnement, médias et sources",
+  "goal": "Create the three complete isolated Svelte exercise records allocated to cluster geo56-sources-inquiry (SHS 21, SHS 23) using the finalized coverage matrix and quality contract. Implement the approved lenses construction=EX-0315, practice=EX-0316, transfer-diagnosis=EX-0317. Each record must have exercise.ts, a rigorous DESIGN.md, Prototype.svelte, and any owned assets.",
+  "status": "open",
+  "depends_on": [
+    "6h-curriculum-map",
+    "6h-exercise-quality-contract",
+    "6h-browser-smoke-harness"
+  ],
+  "areas": [
+    "experiments/src/exercises/ex-0315-",
+    "experiments/src/exercises/ex-0316-",
+    "experiments/src/exercises/ex-0317-"
+  ],
+  "acceptance": [
+    "Exactly three catalog records are created with immutable IDs EX-0315, EX-0316, EX-0317 and years [\"6H\"], using one unique semantic folder slug under each authorized ID prefix.",
+    "All metadata references geo56-sources-inquiry, objective codes SHS 21, SHS 23, the finalized source IDs and statement IDs, and tags program-per-6h plus exactly one lens tag.",
+    "Each DESIGN.md follows the complete template, distinguishes PER evidence from design interpretation, defines one observable objective, prerequisites, misconceptions/hypotheses, evidence, content model, accessibility, observation plan, findings, and promotion criteria.",
+    "The construction, practice, and transfer-diagnosis prototypes use meaningfully different concept-led loops rather than a common multiple-choice reskin; each is student-facing French and self-contained.",
+    "Every prototype implements introduction, active manipulation, submission/decision, specific explanatory feedback, scaffolded recovery or retry, continuation, and completion with at least three deliberate content variations.",
+    "Keyboard, pointer, and touch paths are present; correctness is not communicated by color alone; motion respects reduced-motion; the layout remains usable at 320px and does not require fine motor precision.",
+    "No prototype imports classroom or sibling-exercise code, performs network calls, persists pupil data, submits results, uses copied proprietary content, or claims pupil validation.",
+    "All three records remain status prototyping for independent review."
+  ],
+  "must_ask_if": [
+    "The authoritative coverage matrix is missing, contradictory, or does not map this cluster to all listed statement IDs.",
+    "A proposed activity would present an unbanded end-of-Cycle-2 expectation as a mandatory 6H endpoint.",
+    "You need a network service, new dependency, copyrighted media, pupil data, persistence, or files outside the declared areas.",
+    "The three approved lenses cannot be made meaningfully distinct without changing the cluster boundary or product intent."
+  ],
+  "verify": [
+    "cd experiments && npm run check"
+  ],
+  "verify_timeout_seconds": 1200
+}

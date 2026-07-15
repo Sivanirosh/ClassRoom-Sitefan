@@ -1,0 +1,22 @@
+{
+  "agent": "pi",
+  "cockpit": "auto",
+  "parallelism": 6,
+  "verify_timeout_seconds": 1200,
+  "worker_attempt_timeout_seconds": 0,
+  "worker_question_timeout_seconds": 300,
+  "worker_no_output_warning_seconds": 900,
+  "worker_termination_grace_seconds": 30,
+  "integration_repair": "auto",
+  "gate_fail_fast": true,
+  "worktree_setup": [
+    {
+      "command": "npm ci --prefix experiments",
+      "timeout_seconds": 600
+    }
+  ],
+  "handoff": {
+    "push": false,
+    "create_pr": false
+  }
+}
