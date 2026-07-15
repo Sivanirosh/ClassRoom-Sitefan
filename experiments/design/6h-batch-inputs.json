@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "programId": "per-6h-msn-shs",
-  "preparedAt": "2026-07-15T08:15:23.685508+00:00",
+  "preparedAt": "2026-07-15T08:16:32.990644+00:00",
   "baselineCommit": "5d00e35efbeec6f4e820bab4bc13b387722d2b9e",
   "approvedDecision": {
     "path": "experiments/design/6h-curriculum-coverage-decision-record.md",
@@ -33,7 +33,7 @@
     },
     {
       "path": "experiments/design/6h-production-plan.md",
-      "sha256": "9cb6ef27f8ba18412c96083acb8a60ef8bb5160b28ce55fcfbd21de709270621"
+      "sha256": "47db325331f2a319595b44cabb7dffc924a406ba03e776256f03063947df1041"
     },
     {
       "path": "experiments/tools/verify-6h-batch-inputs.mjs",
@@ -161,14 +161,14 @@
   },
   "launchPolicy": {
     "agent": "pi",
-    "parallelism": 6,
+    "parallelism": 4,
     "allowDirty": false,
     "cockpit": "repository-default",
     "questions": "use a declared recommended reversible in-scope option; otherwise stop for operator authority"
   },
   "workflowConfig": {
     "path": ".workflow/khazad.json",
-    "sha256": "328087be5b0faa924b5275bcd289dd5780b7ff4d8b22d57bed8625f6500f308b"
+    "sha256": "2f0a211e7128b0665a9db8bfe63b0ada7873532f9cbd1527020dc6b823172e9b"
   },
   "baselineSemantics": "Immutable approved parent commit from which batch preparation began; launch HEAD must be a clean descendant and is recorded by Khazad-Doom preflight.",
   "completedPrerequisites": [

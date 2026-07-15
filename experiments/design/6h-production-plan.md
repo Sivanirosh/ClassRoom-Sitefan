@@ -53,6 +53,7 @@ This plan allocates immutable exercise IDs before parallel production. Curriculu
 - Each cluster implementation owns only its three preallocated, exact semantic exercise directories (for example `ex-0100-math-space-figures-construction/`), never a partial filename prefix.
 - Its paired review slice depends on that implementation and owns the same exact directories for bounded fixes and the `testing` transition.
 - The curriculum map, quality contract, and browser smoke harness were completed and integrated as pinned baseline prerequisites (`3967524`, `855b93a`, `0e0b508`) after the first launch exposed an area-contract defect. The clean relaunch selects the remaining 79-slice closure; every implementation verifies the pinned prerequisite outputs before its local checks.
+- Safe concurrency is four real Pi workers, the maximum supported by Khazad-Doom cockpit layout v2. A six-worker launch was rejected before worker execution and made no repository changes.
 - Domain audits depend on every paired review in that domain and write reports without broad exercise mutation authority.
 - The final gate depends on all domain audits and verifies all 111 IDs, cluster/lens tags, source mappings, lifecycle states, catalog validity, full browser interaction paths, and the production build.
 
