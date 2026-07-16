@@ -2,9 +2,9 @@
 sequence: SEQ-M1
 sequence_scope: bounded-pair-MES-01-to-MES-02
 checkpoint: MES-01
-status: proposed-learning-contract
+status: owner-approved-learning-contract
 revision: r0-unit-iteration-contract
-owner_learning_contract_gate: pending
+owner_learning_contract_gate: approved
 mechanic_authority: none
 ---
 
@@ -174,22 +174,19 @@ The retained handoff must include:
 
 ## Owner learning-contract gate
 
-The owner must judge the three contract elements together:
+The owner judged the three contract elements together: the core-learning sentence, successful-pupil statement, and expected cognitive process. Approval locks those elements, the representation/evidence boundaries, and the `MES-01 → MES-02` handoff for semantic-fit work. Material changes return to this gate.
 
-1. the **core-learning sentence**;
-2. the **successful-pupil statement**;
-3. the **expected cognitive process**.
+Approval authorizes established-task/mechanics-memory research and one or more semantic-fit rationales only. It does not approve the paver scenario as a mechanic, any semantic-fit candidate, catalog implementation, mechanic, or expansion.
 
-Allowed dispositions:
+- **Owner response:** `Approve contract (Recommended)`
+- **Normalized disposition:** `approve learning contract`
+- **Required changes:** none
+- **Revision/digest judged:** `r0-unit-iteration-contract`; pre-record `sha256:61b3d070afcc9a41fdb7422434b41f7cb640207aa0c16a3a5d414392531fad14`
+- **Recorded by / role:** repository owner acting as product/curriculum owner
+- **Recorded at:** 2026-07-16
 
-- `approve learning contract`;
-- approve with named changes;
-- `revise the learning goal`;
-- `park the checkpoint`.
+## Next authorized artifact
 
-Approval would authorize established-task/mechanics-memory research and semantic-fit rationales only. It would not approve the paver scenario as a mechanic, any catalog implementation, or expansion.
+Create `MECHANIC-FIT.md` from established classroom-task evidence and relevant mechanics memory. Each credible candidate must map learning operation → pupil/game action → inspectable system evidence, state its generic-answer-control falsification test, separate required mathematical acts from optional game-layer decisions, and receive its own owner disposition.
 
-- **Owner disposition:** pending
-- **Revision judged:** `r0-unit-iteration-contract`
-- **Recorded by / role:** pending
-- **Recorded at:** pending
+No candidate count is required. Do not create a catalog exercise until a named candidate is approved.

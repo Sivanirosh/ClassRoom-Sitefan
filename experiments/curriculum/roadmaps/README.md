@@ -6,5 +6,5 @@ They are **not** exercise production plans. After explicit structural approval o
 
 ## Current roadmap
 
-- [`6h-mathematics-roadmap.md`](./6h-mathematics-roadmap.md) — human-readable structural proposal; globally unapproved except for the recorded bounded decisions. The approved `SEQ-N2` spine is paused. `MES-01 → MES-02` is the active workflow-pilot slice; its bounded spine `r0-bounded-measurement-pair` is owner-approved, while the separate `MES-01` learning-contract gate remains pending.
+- [`6h-mathematics-roadmap.md`](./6h-mathematics-roadmap.md) — human-readable structural proposal; globally unapproved except for the recorded bounded decisions. The approved `SEQ-N2` spine is paused. `MES-01 → MES-02` is the active workflow-pilot slice; its bounded spine `r0-bounded-measurement-pair` and `MES-01` contract `r0-unit-iteration-contract` are separately owner-approved. Established-task/mechanics research and semantic-fit rationales are now allowed, but no candidate or implementation is approved.
 - [`6h-mathematics-roadmap.json`](./6h-mathematics-roadmap.json) — canonical structured representation used for coverage, dependency, and partial-approval records.

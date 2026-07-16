@@ -62,19 +62,22 @@
       },
       {
         "approvedOn": "2026-07-16",
-        "recordStatus": "current-bounded-workflow-pilot-spine-approved",
-        "scope": "MES-01 -> MES-02 as the active bounded workflow-pilot design pair with an owner-approved bounded spine",
+        "recordStatus": "current-bounded-workflow-pilot-mes01-learning-contract-approved",
+        "scope": "MES-01 -> MES-02 as the active bounded workflow-pilot design pair with an owner-approved bounded spine and MES-01 learning contract",
         "pilotRevision": "MES-01-MES-02-pilot-2026-07-16",
         "boundedSpineRevision": "r0-bounded-measurement-pair",
         "boundedSpinePreRecordSha256": "6cb3e93488cadc89df7a3ff28792432ca46c12a87600340fb8cfedb226597df1",
+        "mes01LearningContractRevision": "r0-unit-iteration-contract",
+        "mes01LearningContractPreRecordSha256": "61b3d070afcc9a41fdb7422434b41f7cb640207aa0c16a3a5d414392531fad14",
         "authority": "repository owner",
         "allows": [
-          "owner review and disposition of the precise MES-01 learning contract"
+          "established-task and mechanics-memory research for MES-01",
+          "draft one or more independently credible MES-01 semantic-fit rationales for owner disposition"
         ],
         "excludes": [
           "approval of the full SEQ-M1 spine",
           "MES-04 or MES-06 design or production authority",
-          "approval of any learning contract by implication",
+          "approval of the MES-02 learning contract by implication",
           "semantic-fit candidate approval",
           "catalog-graybox implementation",
           "mechanic approval or expansion",
@@ -355,7 +358,7 @@
       ],
       "conceptualArc": "Construire l’étalon, estimer, comparer puis utiliser correctement la règle.",
       "boundedWorkflowPilot": {
-        "status": "owner-approved-bounded-pair-spine-learning-contract-pending",
+        "status": "owner-approved-bounded-spine-and-mes01-learning-contract-semantic-fit-pending",
         "pilotDesignatedOn": "2026-07-16",
         "revision": "MES-01-MES-02-pilot-2026-07-16",
         "nodeIds": [
@@ -371,9 +374,21 @@
           "artifact": "experiments/design/sequences/seq-m1/SEQUENCE-SPINE.md",
           "normalizedDisposition": "approve bounded pair spine"
         },
-        "nextGate": "owner disposition on the precise MES-01 learning contract r0-unit-iteration-contract",
+        "mes01LearningContract": {
+          "status": "owner-approved",
+          "approvedOn": "2026-07-16",
+          "revision": "r0-unit-iteration-contract",
+          "preRecordDigest": "sha256:61b3d070afcc9a41fdb7422434b41f7cb640207aa0c16a3a5d414392531fad14",
+          "artifact": "experiments/design/sequences/seq-m1/mes-01/LEARNING-BRIEF.md",
+          "normalizedDisposition": "approve learning contract"
+        },
+        "nextGate": "owner disposition on each named MES-01 semantic-fit candidate after MECHANIC-FIT research",
         "fullSequenceSpineApproved": false,
         "learningContractsApproved": false,
+        "approvedLearningContractIds": [
+          "MES-01"
+        ],
+        "semanticFitResearchAllowed": true,
         "semanticFitCandidatesApproved": false,
         "catalogGrayboxImplementationAllowed": false,
         "mechanicsApproved": false,
@@ -1621,7 +1636,7 @@
     }
   ],
   "nextGate": {
-    "required": "Owner disposition on the precise MES-01 learning contract r0-unit-iteration-contract",
+    "required": "Research established MES-01 task/mechanics evidence, write MECHANIC-FIT rationales, then obtain an independent owner disposition on every named candidate",
     "completedSpineGate": {
       "artifact": "experiments/design/sequences/seq-m1/SEQUENCE-SPINE.md",
       "ownerResponse": "Approve spine (Recommended)",
@@ -1630,14 +1645,22 @@
       "preRecordDigest": "sha256:6cb3e93488cadc89df7a3ff28792432ca46c12a87600340fb8cfedb226597df1",
       "recordedOn": "2026-07-16"
     },
-    "learningContractArtifact": "experiments/design/sequences/seq-m1/mes-01/LEARNING-BRIEF.md",
-    "allowedLearningContractDispositions": [
-      "approve learning contract",
+    "completedLearningContractGate": {
+      "artifact": "experiments/design/sequences/seq-m1/mes-01/LEARNING-BRIEF.md",
+      "ownerResponse": "Approve contract (Recommended)",
+      "normalizedDisposition": "approve learning contract",
+      "revision": "r0-unit-iteration-contract",
+      "preRecordDigest": "sha256:61b3d070afcc9a41fdb7422434b41f7cb640207aa0c16a3a5d414392531fad14",
+      "recordedOn": "2026-07-16"
+    },
+    "semanticFitArtifact": "experiments/design/sequences/seq-m1/mes-01/MECHANIC-FIT.md",
+    "allowedCandidateDispositions": [
+      "approve for catalog graybox",
       "approve with named changes",
-      "revise the learning goal",
-      "park the checkpoint"
+      "revise",
+      "reject"
     ],
-    "afterLearningContractApproval": "Research established classroom task families and write one or more semantic-fit rationales; do not implement until the owner approves a named candidate for a distinct low-fi catalog graybox.",
+    "afterCandidateApproval": "Create one distinct low-fi catalog exercise per approved candidate; do not expand any candidate before its own replay and exact mechanic approved for expansion gate.",
     "activePilot": "MES-01 -> MES-02",
     "num02Status": "paused-after-owner-rejected-A-B-C",
     "fullSeqM1Approved": false,

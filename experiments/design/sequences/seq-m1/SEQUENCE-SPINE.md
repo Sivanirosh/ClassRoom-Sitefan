@@ -15,8 +15,9 @@ owner_gate: approved
 - **Curriculum source:** PER MSN 24, especially `P24.02`, `P24.03`, and `P24.06`.
 - **Pilot-scope decision:** on 2026-07-16, the owner paused `NUM-02` and designated `MES-01 → MES-02` as the active bounded workflow pilot.
 - **Bounded-spine decision:** on 2026-07-16, the owner approved this exact `r0-bounded-measurement-pair` spine without named changes; the recorded gate and pre-record digest appear below.
-- **What that decision authorizes:** owner review and disposition of the precise `MES-01` learning contract.
-- **What it does not authorize:** the full `SEQ-M1` spine; `MES-04` or `MES-06`; any learning contract, semantic-fit candidate, catalog graybox, mechanic, expansion, or global roadmap scope.
+- **Learning-contract decision:** on 2026-07-16, the owner separately approved `MES-01` contract `r0-unit-iteration-contract`; its record and pre-record digest live in [`mes-01/LEARNING-BRIEF.md`](./mes-01/LEARNING-BRIEF.md).
+- **What the current authority permits:** established-task/mechanics-memory research and semantic-fit rationales for `MES-01`.
+- **What it does not authorize:** the full `SEQ-M1` spine; `MES-04` or `MES-06`; the `MES-02` learning contract; any semantic-fit candidate, catalog graybox, mechanic, expansion, or global roadmap scope.
 - **Workflow:** [`prototype-production-workflow.md`](../../prototype-production-workflow.md), revision `r3-learning-contract-semantic-fit`.
 - **Research boundary:** [`num-02-and-paving-task-precedents.md`](../../../curriculum/research/num-02-and-paving-task-precedents.md) distinguishes cardinality estimation from unit-iteration measurement.
 
@@ -139,4 +140,6 @@ Approval applies only to this bounded pair’s order, boundaries, prerequisites,
 - **Recorded by / role:** repository owner acting as product/curriculum owner
 - **Recorded at:** 2026-07-16
 
-**Next gate:** accountable owner disposition on the `MES-01` learning contract `r0-unit-iteration-contract`. No semantic-fit rationale or implementation is authorized before that separate gate passes.
+**Completed next gate:** the owner approved `MES-01` learning contract `r0-unit-iteration-contract` on 2026-07-16.
+
+**Current gate:** research established task/mechanics evidence, write one or more credible semantic-fit rationales, and obtain an independent owner disposition for every named candidate. No catalog implementation is authorized before a candidate passes that gate.
