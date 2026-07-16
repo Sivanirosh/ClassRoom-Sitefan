@@ -1,16 +1,22 @@
 # Exercise template
 
-Use this template only after a sequence learning brief and three mechanically distinct pitches are complete and the owner has selected one direction for grayboxing.
+Use this template only after all of the following are recorded for one checkpoint:
+
+1. its sequence spine is owner-approved;
+2. its precise learning contract is owner-approved;
+3. an established-task-grounded semantic-fit rationale is owner-approved for catalog grayboxing.
+
+Then:
 
 1. Follow [`../../design/prototype-production-workflow.md`](../../design/prototype-production-workflow.md).
-2. Create the brief, pitch comparison, and graybox script from [`../sequence/`](../sequence/).
-3. Search and cite relevant [`../../game-mechanics/`](../../game-mechanics/) records.
-4. Choose the next unused stable exercise ID.
+2. Use the learning-contract and `MECHANIC-FIT` templates from [`../sequence/`](../sequence/).
+3. Search and cite relevant [`../../game-mechanics/`](../../game-mechanics/) records and primary task sources.
+4. Choose the next unused stable exercise ID. Every approved candidate receives a distinct catalog identity.
 5. Copy this directory to `src/exercises/ex-NNNN-short-name/`.
-6. Update `exercise.ts` and the graybox-relevant portions of `DESIGN.md`.
-7. Keep `status: 'planned'` and `Prototype.example.svelte` until graybox implementation begins.
+6. Update `exercise.ts` and the graybox-relevant portions of `DESIGN.md`; `DESIGN.md` is the required three-scene source of truth.
+7. Keep `status: 'planned'` and `Prototype.example.svelte` until implementation of the approved candidate begins.
 8. Rename the component to `Prototype.svelte` and set `status: 'prototyping'` when implementation begins.
-9. Build only the selected three-scene mechanic test first.
-10. Do not expand until the owner records `mechanic approved for expansion`.
+9. Build only the approved three-scene low-fi mechanic test first. Do not create a separate throwaway comparison page.
+10. Do not expand until the owner records `mechanic approved for expansion` for this exact exercise, sequence, and checkpoint.
 
 Do not import classroom application code into the experiment.

@@ -4,13 +4,16 @@ record_type: application
 title: "Sequence — adaptation name"
 summary: "One-sentence outcome of applying or rejecting the mechanic."
 sequence_id: SEQ-XX
+checkpoint_ids:
+  - NUM-XX
+gate_scope: SEQ-XX/NUM-XX
 exercise_ids:
   - EX-XXXX
 mechanics:
   - MEC-XXXX-mechanic-name
 precedents:
   - PRE-XXXX-precedent-name
-outcome: graybox-revision
+outcome: catalog-graybox-revision
 owner_gate: not-requested
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
@@ -20,25 +23,29 @@ tags:
 
 # APP-XXXX — Sequence — adaptation name
 
-## Learning target
+## Approved learning contract
 
-Link the roadmap sequence, checkpoint, brief, and exercise design.
+Link the roadmap scope, sequence spine, checkpoint brief, and recorded owner learning-contract disposition. Quote the core learning and successful-pupil statement judged at the gate.
 
-## Adaptation hypothesis
+## Provenance and semantic-fit hypothesis
 
-Explain how the mechanic was expected to make the learning relationship playable.
+- Established classroom task/problem sources:
+- Game/platform precedents:
+- `PRE-*` / `MEC-*` records:
+- Owner-approved semantic-fit rationale:
+- Expected cognition → player action → inspectable evidence claim:
 
 ## Implemented loop
 
-Describe what the pupil actually did, not what the pitch promised.
+Describe what the pupil actually did in the catalog graybox, not what the rationale promised. If rejection happened before catalog implementation, state that explicitly.
 
 ## Owner findings
 
-Record dated observations and exact gate disposition. Never infer approval.
+Record dated observations, exercise/sequence/checkpoint gate scope, and exact disposition. Never infer or propagate approval.
 
 ## Revisions and rejected forms
 
-Preserve what changed and why.
+Preserve what changed and why. Distinguish rejection of this adaptation from evidence against the abstract mechanic or source task.
 
 ## Reusable lessons
 
@@ -49,12 +56,14 @@ Preserve what changed and why.
 
 ## Validation and accessibility notes
 
-Record relevant checks and unresolved pupil-testing questions.
+Record relevant lightweight/full checks and unresolved pupil-testing questions. Technical operability does not establish learning quality or semantic fit.
 
 ## Related artifacts
 
-- Brief:
-- Pitches:
-- Graybox script:
-- Exercise design:
-- Retrospective:
+- Sequence spine:
+- Learning brief:
+- Semantic-fit rationale:
+- Classroom task research:
+- Optional graybox script:
+- Catalog exercise design:
+- Retrospective/review:

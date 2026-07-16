@@ -5,8 +5,9 @@ This repository-local, Obsidian-compatible collection preserves reusable mechani
 Its purpose is simple:
 
 ```text
-search existing memory → research only gaps → save useful findings
-→ create grounded pitches → test one graybox → write outcomes back
+approve the learning contract → search established classroom tasks
+→ search existing memory → research only gaps → explain semantic fit
+→ test owner-approved candidates as catalog grayboxes → write outcomes back
 ```
 
 It is **not** a certification system, an exhaustive game catalog, or a replacement for owner playtesting.
@@ -82,19 +83,21 @@ rg -n '^## (Source-backed loop|Transferable pattern|Owner findings)' experiments
 
 ## Write path
 
-### Before pitches
+### Before semantic-fit rationales
 
-1. Search this collection first.
-2. Research only missing or stale facts.
-3. Add/update `PRE-*` and `MEC-*` records.
-4. Cite relevant record IDs in every paper pitch.
+1. Start from the approved sequence spine and one owner-approved checkpoint learning contract.
+2. Search repository curriculum research for established classroom problem/task families first.
+3. Search this mechanics memory next; research only missing or stale facts.
+4. Add/update `PRE-*` and `MEC-*` records.
+5. Cite the task sources and relevant memory records in every candidate rationale.
+6. Do not invent candidates to fill a quota or present an uncited synthesis as established practice.
 
-### After selection and grayboxing
+### After semantic-fit disposition and catalog grayboxing
 
-1. Create/update an `APP-*` record.
-2. Preserve the selected, revised, and rejected forms.
-3. Record the actual owner disposition; never infer approval.
-4. Link back to the sequence artifacts and exercise `DESIGN.md`.
+1. Create/update an `APP-*` record for the sequence, checkpoint, and catalog exercise—or for a rejected pre-catalog adaptation when its lesson is durable.
+2. Preserve approved, revised, and rejected forms without confusing rejection of an adaptation with evidence against an abstract mechanic.
+3. Record the actual owner disposition and gate scope; never infer or propagate approval.
+4. Link back to the learning contract, semantic-fit rationale, source tasks, and catalog `DESIGN.md`.
 
 ### After final production
 
@@ -128,4 +131,4 @@ Choose the next unused numeric ID within the record type. IDs never change when 
 
 The binding process is [`../design/prototype-production-workflow.md`](../design/prototype-production-workflow.md).
 
-The initial records were seeded from the first `SEQ-N1` retrospective and first-party research performed on 2026-07-15. They preserve research memory; only a playable graybox and explicit owner judgment can approve an adaptation.
+The initial records were seeded from the first `SEQ-N1` retrospective on 2026-07-15; later records preserve first-party research for subsequent checkpoint cycles. They are research memory only. An approved learning contract and semantic-fit rationale authorize a low-fi catalog graybox; only replay plus explicit owner judgment scoped to the catalog exercise, sequence, and checkpoint can approve expansion.

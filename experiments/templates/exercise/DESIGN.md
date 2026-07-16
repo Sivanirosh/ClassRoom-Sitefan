@@ -2,21 +2,41 @@
 
 ## Workflow provenance
 
-- **Roadmap / structural approval:**
-- **Sequence ID:**
-- **Learning brief:**
-- **Mechanic-pitch decision:**
-- **Graybox script:**
+- **Roadmap / bounded-scope authority:**
+- **Sequence spine and owner disposition:**
+- **Sequence / checkpoint ID:**
+- **Learning brief and owner learning-contract disposition:**
+- **Semantic-fit rationale and owner candidate disposition:**
+- **Established classroom task sources:**
+- **Optional graybox working script:**
 - **Precedent records (`PRE-*`):**
 - **Mechanic records (`MEC-*`):**
-- **Application record (`APP-*`):** create/update after owner playtest
-- **Owner mechanic gate:** pending
+- **Application record (`APP-*`):** create/update after owner replay
+- **Owner expansion gate:** pending
 
 Follow [`../../design/prototype-production-workflow.md`](../../design/prototype-production-workflow.md). Full expansion requires the exact owner phrase `mechanic approved for expansion`.
 
 ## Decision summary
 
-State the learning problem, selected mechanic, primary pupil verbs, source of challenge, and why this interaction is worth grayboxing.
+State the approved learning contract, approved semantic-fit candidate, primary pupil verbs, source of challenge, and why the proposed actions causally embody the expected cognition.
+
+## Approved learning contract
+
+- **Core learning:**
+- **Successful-pupil statement:**
+- **Expected cognitive process:**
+- **Required representation/evidence:**
+- **Downstream handoff:**
+
+Do not silently revise these during implementation. Return a material change to the named owner gate.
+
+## Semantic-fit mapping carried into the graybox
+
+| Learning operation | Pupil/game action | System consequence or inspectable evidence | Scene(s) testing it |
+|---|---|---|---|
+| | | | |
+
+Reject or return the candidate if generic answer controls could replace its actions without changing the reasoning.
 
 ## Curriculum alignment
 
@@ -55,9 +75,9 @@ Describe which actions, revisions, traces, or explanations provide evidence beyo
 - **Feedback/recovery loop:**
 - **Why this is mechanically distinct from nearby exercises:**
 
-## Three-scene graybox
+## Three-scene catalog graybox
 
-Link the exact action/copy script. Keep this implementation bounded to:
+This `DESIGN.md` is the required graybox source of truth. Link an optional working script only when useful. Keep implementation bounded to:
 
 1. **Orientation** — teach the action and representation.
 2. **Complication** — expose the mechanic's true source of challenge.
@@ -86,16 +106,17 @@ Link the exact action/copy script. Keep this implementation bounded to:
 
 Allowed dispositions:
 
-- revise the same graybox;
-- return to paper pitches;
-- park/archive;
-- record `mechanic approved for expansion`.
+- revise the same catalog graybox;
+- return to the semantic-fit rationale or learning contract;
+- reject/archive this candidate;
+- keep it for comparison without expansion;
+- record `mechanic approved for expansion` for this exact exercise, sequence, and checkpoint.
 
 **Current gate:** pending
 
-## Full sequence progression
+## Full exercise progression
 
-Complete this section only after mechanic approval. Use the flexible conceptual grammar where applicable:
+Complete this section only after mechanic approval. The sequence spine—not this exercise—owns cross-checkpoint progression. Use the flexible within-exercise grammar where applicable:
 
 ```text
 orientation → exploration → constraint → complication

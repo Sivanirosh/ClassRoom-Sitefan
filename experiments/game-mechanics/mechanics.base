@@ -22,6 +22,10 @@ properties:
     displayName: "Learning affordances"
   sequence_id:
     displayName: "Sequence"
+  checkpoint_ids:
+    displayName: "Checkpoints"
+  gate_scope:
+    displayName: "Gate scope"
   exercise_ids:
     displayName: "Exercises"
   outcome:
@@ -83,6 +87,8 @@ views:
       - id
       - file.name
       - sequence_id
+      - checkpoint_ids
+      - gate_scope
       - exercise_ids
       - mechanics
       - outcome

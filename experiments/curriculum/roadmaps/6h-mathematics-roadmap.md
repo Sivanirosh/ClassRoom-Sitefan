@@ -1,6 +1,6 @@
 # Mathématiques 6H — roadmap conceptuelle
 
-> **Statut : proposition structurelle, non approuvée.** Ce document constitue le premier passage du processus à deux niveaux. Il ne contient ni storyboard final, ni direction visuelle, ni prototype. Chaque idée d’exercice reste provisoire jusqu’à la co-conception et au low-fi jouable.
+> **Statut global : proposition structurelle non approuvée, avec décisions bornées.** Le 2026-07-16, le propriétaire a approuvé la spine révisée `SEQ-N2 = NUM-02 → NUM-05 → NUM-06`, puis rejeté les trois directions mécaniques `NUM-02` et mis ce checkpoint en pause sans révoquer la spine. Le même jour, il a désigné `MES-01 → MES-02` comme pilote actif borné du workflow révisé. Cette désignation n’approuve ni la spine complète `SEQ-M1`, ni le contrat d’apprentissage d’un checkpoint, ni une mécanique, un graybox catalogue ou une expansion. Le calendrier global et toute autre portée restent non approuvés.
 
 ## 1. Autorité et limites
 
@@ -9,6 +9,8 @@
 - **Règle d’honnêteté :** les attentes `EC-*` non millésimées restent directionnelles; elles ne deviennent pas des seuils 6H.
 - **Limite importante :** le PER publie une colonne commune 5e–6e, pas une liste normative séparée de fin 5H. L’entrée ci-dessous est donc un diagnostic de conception à confirmer par le propriétaire/enseignant, pas une citation officielle.
 - **Ordre proposé :** les phases et semaines sont une hypothèse de progression, pas un calendrier CIIP obligatoire.
+- **Décision bornée historique :** périmètre et spine `SEQ-N2 = NUM-02, NUM-05, NUM-06`; preuves `NUM-01`/`NUM-04` importées sans autorité de mécanique; `NUM-07` déplacé dans `SEQ-N1` sans autorité de production. Gate enregistré dans [`SEQ-N2/SEQUENCE-SPINE.md`](../../design/sequences/seq-n2/SEQUENCE-SPINE.md). `NUM-02` est maintenant en pause.
+- **Pilote actif borné :** paire de conception `MES-01 → MES-02` seulement. Son prochain gate porte sur une spine bornée et un contrat d’apprentissage précis, pas sur une mécanique.
 
 Sources : [`6h-mathematics-coverage.md`](../research/6h-mathematics-coverage.md) · [`src-per-0002.md`](../sources/src-per-0002.md) · [stratégie de production](../../design/6h-exercise-production-strategy-decision-record.draft.md)
 
@@ -17,8 +19,9 @@ Sources : [`6h-mathematics-coverage.md`](../research/6h-mathematics-coverage.md)
 - **5 strands :** Nombres et numération, Opérations et relations, Grandeurs et mesures, Espace et géométrie, Modélisation transversale.
 - **16 séquences conceptuelles**, dont une transversale.
 - **46 checkpoints observables**, chacun avec dépendances, preuve attendue et idée d’exercice.
-- **Unité de production future :** une séquence entière; les nœuds deviennent des beats nommés et inspectables.
-- **Pilot recommandé après approbation :** `SEQ-N1 — Structures décimales`.
+- **Unité de cohérence :** une séquence entière avec progression et handoffs explicites.
+- **Unité de prototypage mécanique :** un exercice-checkpoint à la fois, avec gate propriétaire propre.
+- **Pilote actif :** éprouver le workflow `contrat d’apprentissage → tâches établies → argument de fit sémantique → graybox catalogue` sur la paire bornée `MES-01 → MES-02`. Aucun livrable aval n’est préapprouvé.
 
 ## 3. Entrée diagnostique proposée
 
@@ -83,17 +86,21 @@ flowchart LR
 | `NUM-01` **Regrouper pour dénombrer** | Organise une collection en unités, dizaines, centaines ou milliers et conserve le cardinal pendant les échanges. | entrée | Atelier de regroupement: construire puis compresser une collection en paquets de 10/100 sans changer sa quantité. | `P22.02` `P22.04` `E6-22.01` `E6-22.02` |
 | `NUM-03` **Changer de pas dans une suite** | Compte et décompte depuis n’importe quel nombre par pas de 1, 10, 100 puis 1’000. | `NUM-01` | Sauts calibrés: choisir un pas puis anticiper l’atterrissage sur une ligne qui zoome aux changements de rang. | `P22.05` `E6-22.03` |
 | `NUM-04` **Relier quantité, oral, chiffres et décomposition** | Coordonne groupements, nom oral, écriture chiffrée et décomposition de position. | `NUM-01` | Transformateur de nombres: échanger des blocs et voir simultanément évoluer nom, chiffres et décomposition. | `P22.11` `P22.12` `P22.13` `E6-22.05` `E6-22.06` |
+| `NUM-07` **Transformer un rang sans perdre le nombre** | Anticipe l’effet de ±1/10/100/1’000 et des relations dix ou cent fois plus. | `NUM-03`, `NUM-04` | Console de valeur de position: actionner un seul levier et prévoir quels chiffres et groupements doivent changer. | `P22.09` `P22.10` |
+
+> **Placement de `NUM-07` révisé par le propriétaire le 2026-07-16.** Ce déplacement ferme l’arc conceptuel de `SEQ-N1`; il n’approuve pas son exercice, sa mécanique ou la production de `SEQ-N1`.
 
 #### `SEQ-N2` — Relations entre nombres · P2
 
-**Arc :** Des repères approximatifs à l’ordre, l’intervalle et la valeur de position.
+> **Périmètre borné et spine révisée approuvés le 2026-07-16, puis mis en pause au checkpoint `NUM-02`.** La spine comprend `NUM-02`, `NUM-05`, `NUM-06`, avec `NUM-01` et `NUM-04` comme preuves préalables importées seulement. Le propriétaire a rejeté A/B/C pour objectif d’apprentissage insuffisamment clair et fit sémantique faible; le comparateur temporaire a été supprimé. Aucun script, exercice catalogue, mécanisme ou expansion `NUM-02` n’est autorisé.
+
+**Arc :** Des repères approximatifs à l’ordre exact, puis à l’intervalle et à la localisation sur une ligne graduée.
 
 | Nœud | Checkpoint observable | Dépendances | Idée d’exercice provisoire | PER |
 |---|---|---|---|---|
-| `NUM-02` **Estimer avec des repères** | Encadre une quantité avant comptage en s’appuyant sur des collections repères. | `NUM-01` | Fenêtre-éclair: voir brièvement une collection, placer une fourchette, puis révéler les paquets qui expliquent l’écart. | `P22.03` |
+| `NUM-02` **Estimer avec des repères** | Encadre une quantité avant comptage en s’appuyant sur des collections repères. | `NUM-01` | **En pause :** A/B/C rejetés; reformuler le contrat d’apprentissage avant toute nouvelle piste. | `P22.03` |
 | `NUM-05` **Comparer et ordonner par valeur de position** | Compare, ordonne, encadre et intercale des naturels en justifiant le premier rang décisif. | `NUM-04` | Duel des rangs: révéler les chiffres de gauche à droite jusqu’au rang qui décide, puis construire un intrus entre deux bornes. | `P22.07` `E6-22.04` |
 | `NUM-06` **Localiser un nombre sur une ligne** | Utilise bornes et intervalles pour placer ou lire un nombre sur une bande numérique. | `NUM-05` | Nombre caché: resserrer un intervalle sur une ligne graduée en choisissant des bornes informatives. | `P22.08` |
-| `NUM-07` **Transformer un rang sans perdre le nombre** | Anticipe l’effet de ±1/10/100/1’000 et des relations dix ou cent fois plus. | `NUM-03`, `NUM-04` | Console de valeur de position: actionner un seul levier et prévoir quels chiffres et groupements doivent changer. | `P22.09` `P22.10` |
 
 #### `SEQ-N3` — Fractions de quantités · P3
 
@@ -157,12 +164,16 @@ flowchart LR
 
 #### `SEQ-M1` — Ce que mesurer veut dire · P1
 
-**Arc :** Construire l’étalon, estimer, comparer puis utiliser correctement la règle.
+> **Pilote actif borné au 2026-07-16 : `MES-01 → MES-02` seulement.** Ce choix sert à éprouver le workflow révisé; il n’approuve pas toute la spine `SEQ-M1`, les idées ci-dessous, un contrat d’apprentissage, une mécanique ou une implémentation. `MES-04` et `MES-06` restent hors portée.
+
+**Arc proposé de la séquence complète :** Construire l’étalon, estimer, comparer puis utiliser correctement la règle.
+
+**Arc borné à soumettre au gate :** comprendre qu’une longueur se mesure en itérant la même unité bout à bout, puis mobiliser cette unité comme repère pour estimer avant de vérifier.
 
 | Nœud | Checkpoint observable | Dépendances | Idée d’exercice provisoire | PER |
 |---|---|---|---|---|
-| `MES-01` **Construire et répéter une unité** | Comprend mesurer comme couvrir ou itérer une même unité sans trou ni chevauchement. | entrée | Paveur d’unités: couvrir longueur, aire ou volume avec un étalon déplaçable et détecter trous/chevauchements. | `P24.02` `P24.06` |
-| `MES-02` **Estimer avant de mesurer** | Choisit un repère de grandeur et formule une estimation contrôlable. | `MES-01` | Ancre puis révèle: choisir un objet-repère, encadrer la grandeur et seulement ensuite utiliser l’instrument. | `P24.03` |
+| `MES-01` **Construire et répéter une unité** | Comprend mesurer comme couvrir ou itérer une même unité sans trou ni chevauchement. | entrée | **Piste de tâche, non approuvée :** mesurer un chemin d’un pavé de large en répétant un pavé-étalon de 50 cm bout à bout, sans trou ni chevauchement. | `P24.02` `P24.06` |
+| `MES-02` **Estimer avant de mesurer** | Choisit un repère de grandeur et formule une estimation contrôlable. | `MES-01` | **Piste de tâche, non approuvée :** prévoir le nombre de pavés et la longueur du chemin avant chantier, puis vérifier par itération et interpréter manque ou surplus. | `P24.03` |
 | `MES-04` **Comparer des longueurs** | Compare des longueurs malgré orientation, courbure ou position différentes. | `MES-01` | Laboratoire des chemins: redresser, superposer ou reporter des parcours trompeurs. | `P24.06` `E6-24.01` |
 | `MES-06` **Lire et utiliser une règle graduée** | Aligne le zéro, lit l’échelle, mesure ou trace un segment et communique un encadrement si nécessaire. | `MES-01`, `NUM-04` | Règle à pièges: diagnostiquer zéro décalé, graduation masquée et mesure par différence. | `P24.07` `E6-24.02` |
 
@@ -345,15 +356,27 @@ Le JSON canonique contient le détail. Contrôle effectué lors de la générati
 
 </details>
 
-## 10. Gate d’approbation structurelle
+## 10. Gates d’autorité structurelle
 
-Avant tout storyboard ou prototype, le propriétaire doit explicitement accepter ou corriger :
+### Gate global — encore ouvert
+
+Pour produire hors d’une exception bornée, le propriétaire doit explicitement accepter ou corriger :
 
 1. les cinq sondes d’entrée comme hypothèses raisonnables de début 6H;
 2. les 46 checkpoints et leur granularité;
 3. les dépendances et les 16 séquences;
 4. le pacing suggéré;
 5. chaque idée d’exercice comme piste, sans engagement de mécanique;
-6. `SEQ-N1` ou une autre séquence comme pilote.
+6. la ou les premières séquences autorisées.
 
-Après cette approbation seulement : trois pitches mécaniquement distincts pour la séquence pilote, choix propriétaire, storyboard exact en français, puis low-fi jouable sans cosmétique.
+Ce gate global reste ouvert. Il ne bloque pas une exception dont le périmètre est explicitement enregistré.
+
+### Spine approuvée mais pilote en pause — `SEQ-N2 / NUM-02`
+
+La spine `SEQ-N2` reste approuvée avec les preuves `NUM-01`/`NUM-04` importées sans production et `NUM-07` déplacé dans `SEQ-N1`. Les trois directions `NUM-02` et leur comparaison temporaire sont rejetées; aucun travail mécanique ne peut reprendre sans nouveau contrat d’apprentissage approuvé.
+
+### Pilote actif borné — `MES-01 → MES-02`
+
+La désignation du pilote autorise la préparation et la revue d’une spine bornée pour la paire, puis d’un contrat d’apprentissage à la fois. Elle ne vaut pas approbation de `SEQ-M1`, de `MES-04`/`MES-06`, d’un candidat mécanique ou de code.
+
+**Prochain gate :** approuver ou corriger la spine bornée `MES-01 → MES-02`, puis approuver séparément le contrat d’apprentissage précis de `MES-01` (phrase d’apprentissage central, énoncé de réussite et cognition attendue). Ce n’est qu’ensuite que des tâches de classe établies et des arguments de fit sémantique pourront être proposés. Chaque candidat approuvé aura son propre exercice graybox catalogue et son propre gate `mechanic approved for expansion`.

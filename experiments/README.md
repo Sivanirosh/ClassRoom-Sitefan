@@ -6,7 +6,7 @@ The lab is intentionally independent from the classroom application. It does not
 
 ## Approved production workflow
 
-Roadmap-based prototypes follow [`design/prototype-production-workflow.md`](design/prototype-production-workflow.md): learning brief → mechanics-memory search → three precedent-grounded pitches → one selected three-scene graybox → explicit owner mechanic gate → full expansion → optional polish → final validation.
+Roadmap-based prototypes follow [`design/prototype-production-workflow.md`](design/prototype-production-workflow.md): approved roadmap slice → sequence spine → owner spine gate → precise checkpoint learning contract → owner learning-contract gate → established classroom-task and mechanics-memory research → one or more semantic-fit rationales → owner-approved candidates become distinct low-fi catalog grayboxes → owner mechanic gate scoped to catalog exercise + sequence + checkpoint → expansion → handoff review → optional polish → final validation.
 
 Reusable game/platform research and prototype outcomes live in [`game-mechanics/`](game-mechanics/). Search that memory before gathering the same precedent evidence again.
 
@@ -47,7 +47,7 @@ experiments/
 ├── design/                       # Approved workflow and decision records
 ├── game-mechanics/               # PRE/MEC/APP reusable design memory
 ├── templates/
-│   ├── sequence/                 # Brief, pitch, and graybox-script templates
+│   ├── sequence/                 # Spine, learning-contract, semantic-fit, and optional script templates
 │   └── exercise/                 # Stable catalog/exercise record template
 ├── src/
 │   ├── exercises/                # Flat collection of stable exercise records
@@ -67,16 +67,18 @@ Four digits support a large catalog while preserving readable, immutable IDs. Ex
 
 ## Lifecycle
 
-1. **Curriculum roadmap** — cite authoritative PER material and obtain structural owner approval.
-2. **Learning brief** — define checkpoints, evidence, prerequisites, representations, risks, and non-goals.
-3. **Mechanics memory** — search existing `PRE-*`, `MEC-*`, and `APP-*` records; research only gaps.
-4. **Paper pitches** — compare three mechanically distinct, precedent-cited directions.
-5. **Selected graybox** — script and implement one three-scene mechanic test with minimal styling.
-6. **Owner mechanic gate** — revise/reject, or record the exact phrase `mechanic approved for expansion`.
-7. **Expansion** — write the full storyboard and complete the learning sequence through the flexible progression grammar.
-8. **Interaction and optional polish** — build one coherent surface; add motion/art only for a named purpose.
-9. **Final validation** — after all polish, run catalog, type/build, browser, responsive, reduced-motion, and accessibility evidence.
-10. **Memory write-back** — synchronize `DESIGN.md`, append an `APP-*` outcome, then promote, retain, or archive honestly.
+1. **Curriculum roadmap** — cite authoritative PER material and obtain structural owner approval for a full roadmap or explicit slice.
+2. **Sequence spine and gate** — define checkpoint order, source traceability, prerequisite routes, representations, evidence handoffs, and learner-visible progression; record owner approval or return it to the roadmap.
+3. **Active checkpoint learning contract** — write one core-learning sentence, one successful-pupil statement, the expected cognitive process, boundaries, evidence, risks, equivalent-access route, and downstream handoff; record owner approval.
+4. **Established-task and mechanics research** — start from known classroom problem/task families, then search existing `PRE-*`, `MEC-*`, and `APP-*` records and research only gaps.
+5. **Semantic-fit rationales** — present only candidates with a causal learning-operation → player-action → system-evidence mapping. There is no fixed candidate count.
+6. **Catalog grayboxes** — implement every owner-approved candidate directly as its own stable three-scene, low-fi catalog exercise. Skip standalone comparison prototypes.
+7. **Owner mechanic gate** — revise/reject each catalog exercise, or record its sequence/checkpoint/exercise scope and exact phrase `mechanic approved for expansion`.
+8. **Exercise expansion** — write the full exercise progression and complete it through the flexible learning grammar.
+9. **Handoff, interaction, and optional polish** — verify the sequence handoff, build one coherent surface, and add motion/art only for a named purpose.
+10. **Final validation and memory write-back** — after all polish, run the technical suite, synchronize `DESIGN.md`, append an `APP-*` outcome, then promote, retain, or archive honestly.
+
+After all checkpoint exercises in a sequence are independently approved and expanded, run the sequence integration review. Approval never propagates from one checkpoint mechanic to another.
 
 Frontend status labels are French; source values remain stable English codes:
 
@@ -87,9 +89,9 @@ Frontend status labels are French; source values remain stable English codes:
 - `promoted`
 - `archived`
 
-## Create a selected exercise record
+## Create an approved catalog-graybox record
 
-First complete the sequence brief and three-pitch comparison from `templates/sequence/`. After the owner selects one direction for grayboxing, choose the next unused exercise ID and a short semantic slug:
+First pass the owner gates for `SEQUENCE-SPINE.md` and the checkpoint learning contract. Complete `MECHANIC-FIT.md` from the sequence template, grounding each candidate in established classroom-task evidence. After the owner approves a named candidate for catalog grayboxing, choose the next unused exercise ID and a short semantic slug:
 
 ```bash
 cp -R templates/exercise src/exercises/ex-0001-short-name
@@ -98,9 +100,9 @@ cp -R templates/exercise src/exercises/ex-0001-short-name
 Then:
 
 1. update `id`, `slug`, dates, and all metadata in `exercise.ts`;
-2. link `DESIGN.md` to the sequence brief, pitch decision, graybox script, and mechanics-memory records;
-3. preserve the owner gate as pending;
-4. leave the prototype file named `Prototype.example.svelte` until the three-scene graybox implementation begins.
+2. link `DESIGN.md` to the sequence brief, semantic-fit disposition, task sources, and mechanics-memory records;
+3. preserve the expansion owner gate as pending;
+4. leave the prototype file named `Prototype.example.svelte` until the approved three-scene catalog-graybox implementation begins.
 
 The catalog discovers the record automatically. No central registry needs editing.
 
@@ -112,7 +114,7 @@ Inside the exercise folder:
 mv Prototype.example.svelte Prototype.svelte
 ```
 
-Change the status from `planned` to `prototyping` in the same change. Implement only the selected three-scene graybox first. The runner will then become available; full expansion remains blocked until the owner records `mechanic approved for expansion`.
+Change the status from `planned` to `prototyping` in the same change. Implement only the approved candidate’s three-scene catalog graybox first. The runner will then become available; full exercise expansion remains blocked until the owner records this catalog exercise, sequence, and checkpoint scope and `mechanic approved for expansion`.
 
 ## Isolation contract
 
@@ -136,4 +138,4 @@ npm run check     # Complete Svelte, TypeScript, and catalog validation
 npm run build     # Full fail-fast production compilation
 ```
 
-There are intentionally no exercise records or curriculum findings in the initial scaffold.
+Catalog records are experimental evidence, not validated classroom content. Use `npm run validate` for current structural status and each exercise’s recorded owner/pupil evidence for its actual maturity.

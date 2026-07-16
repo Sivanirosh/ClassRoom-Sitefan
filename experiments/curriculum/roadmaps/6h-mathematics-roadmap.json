@@ -14,7 +14,73 @@
     ],
     "researchBrief": "experiments/curriculum/research/6h-mathematics-coverage.md",
     "strategyDraft": "experiments/design/6h-exercise-production-strategy-decision-record.draft.md",
-    "policy": "All 5H–6H progressions are mapped. Only E6 statements are hard 6H endpoints. EC statements are directional only."
+    "policy": "All 5H–6H progressions are mapped. Only E6 statements are hard 6H endpoints. EC statements are directional only.",
+    "partialApprovals": [
+      {
+        "approvedOn": "2026-07-16",
+        "recordStatus": "superseded-by-seq-n2-dependency-resolution-2026-07-16",
+        "scope": "Historical bounded review/design membership for SEQ-N2 nodes NUM-02, NUM-05, NUM-06, NUM-07, plus the approved prerequisite route NUM-01 -> NUM-02",
+        "authority": "repository owner",
+        "excludes": [
+          "dependency authority for NUM-03 and NUM-04",
+          "owner approval of the complete sequence spine",
+          "all other sequences and nodes",
+          "global pacing",
+          "checkpoint pitch selection or mechanics",
+          "prototype expansion"
+        ]
+      },
+      {
+        "approvedOn": "2026-07-16",
+        "recordStatus": "superseded-by-seq-n2-spine-approval-2026-07-16",
+        "scope": "Revised SEQ-N2 membership NUM-02, NUM-05, NUM-06; imported prerequisite evidence from NUM-01 and NUM-04; NUM-07 moved to SEQ-N1 after NUM-03/NUM-04",
+        "authority": "repository owner",
+        "excludes": [
+          "checkpoint mechanics or prototypes for NUM-01, NUM-03, NUM-04, or NUM-07",
+          "production authority for SEQ-N1",
+          "owner approval of the revised SEQ-N2 spine",
+          "all unrelated roadmap scope and global pacing",
+          "checkpoint pitch selection or prototype expansion"
+        ]
+      },
+      {
+        "approvedOn": "2026-07-16",
+        "recordStatus": "current-structural-spine-paused-at-num-02",
+        "scope": "Owner-approved dependency-closed SEQ-N2 spine NUM-02 -> NUM-05 -> NUM-06 with imported prerequisite evidence from NUM-01 and NUM-04",
+        "revision": "r1-dependency-closed",
+        "reviewedPreRecordSha256": "a65cbb9a85b27b671515983370122575387e07845a238cf4aa651473c1f779e9",
+        "authority": "repository owner",
+        "subsequentDisposition": "NUM-02 directions A/B/C rejected; mechanic cycle paused without revoking spine approval",
+        "excludes": [
+          "any active NUM-02 mechanic direction",
+          "NUM-02 script or catalog-graybox implementation",
+          "mechanic or prototype production for NUM-01, NUM-04, or relocated NUM-07",
+          "production authority for SEQ-N1",
+          "all unrelated roadmap scope and global pacing",
+          "prototype expansion"
+        ]
+      },
+      {
+        "approvedOn": "2026-07-16",
+        "recordStatus": "current-bounded-workflow-pilot",
+        "scope": "MES-01 -> MES-02 as the active bounded workflow-pilot design pair",
+        "revision": "MES-01-MES-02-pilot-2026-07-16",
+        "authority": "repository owner",
+        "allows": [
+          "draft and review a bounded pair spine",
+          "draft and review one precise checkpoint learning contract at a time"
+        ],
+        "excludes": [
+          "approval of the full SEQ-M1 spine",
+          "MES-04 or MES-06 design or production authority",
+          "approval of any learning contract by implication",
+          "semantic-fit candidate approval",
+          "catalog-graybox implementation",
+          "mechanic approval or expansion",
+          "all unrelated roadmap scope and global pacing"
+        ]
+      }
+    ]
   },
   "scope": {
     "entry": "Provisional diagnostic interpretation of expected 5H exit; PER v3.0 does not publish a separate 5H endpoint list in the 5H–6H column.",
@@ -136,9 +202,10 @@
       "nodeIds": [
         "NUM-01",
         "NUM-03",
-        "NUM-04"
+        "NUM-04",
+        "NUM-07"
       ],
-      "conceptualArc": "Du groupement matériel au nombre écrit et aux changements d’échelle de comptage."
+      "conceptualArc": "Du groupement matériel au nombre écrit, aux changements d’échelle de comptage et aux transformations contrôlées de rang."
     },
     {
       "id": "SEQ-N2",
@@ -148,10 +215,63 @@
       "nodeIds": [
         "NUM-02",
         "NUM-05",
-        "NUM-06",
-        "NUM-07"
+        "NUM-06"
       ],
-      "conceptualArc": "Des repères approximatifs à l’ordre, l’intervalle et la valeur de position."
+      "conceptualArc": "Des repères approximatifs à l’ordre exact, puis à l’intervalle et à la localisation sur une ligne graduée.",
+      "approval": {
+        "status": "approved-dependency-closed-sequence-spine",
+        "approvedOn": "2026-07-16",
+        "approvedImportedPrerequisiteEvidenceNodeIds": [
+          "NUM-01",
+          "NUM-04"
+        ],
+        "importedEvidenceDoesNotAuthorizeMechanicProduction": true,
+        "relocatedNodeIds": [
+          {
+            "nodeId": "NUM-07",
+            "toSequenceId": "SEQ-N1",
+            "mechanicProductionApproved": false
+          }
+        ],
+        "firstMechanicCycleNodeId": "NUM-02",
+        "sequenceSpine": {
+          "status": "owner-approved",
+          "approvedOn": "2026-07-16",
+          "revision": "r1-dependency-closed",
+          "reviewedPreRecordSha256": "a65cbb9a85b27b671515983370122575387e07845a238cf4aa651473c1f779e9",
+          "artifact": "experiments/design/sequences/seq-n2/SEQUENCE-SPINE.md",
+          "dependencyClosure": "closed-by-imported-prerequisite-evidence"
+        },
+        "mechanicCycleStatus": "paused-after-owner-rejection",
+        "ownerDisposition": {
+          "date": "2026-07-16",
+          "scope": "SEQ-N2 / NUM-02 directions A, B, and C",
+          "disposition": "reject-all-three",
+          "reasons": [
+            "core learning purpose was not sufficiently clear before mechanic design",
+            "player actions were semantically misaligned with the intended pupil cognition"
+          ],
+          "applicationRecord": "experiments/game-mechanics/applications/APP-0004-num02-semantic-fit-rejection.md"
+        },
+        "pitchComparisonAid": {
+          "status": "closed-and-deleted-after-disposition",
+          "skill": "prototype",
+          "formerArtifact": "experiments/tmp/num-02-mechanic-comparison.html",
+          "variants": [
+            "A",
+            "B",
+            "C"
+          ],
+          "countsAsGraybox": false,
+          "authorizedAnyMechanic": false,
+          "changesDefaultWorkflow": false
+        },
+        "learningContractApprovalRequiredBeforeRestart": true,
+        "semanticFitApprovalRequiredBeforeCatalogGraybox": true,
+        "grayboxScriptingAllowed": false,
+        "catalogGrayboxImplementationAllowed": false,
+        "mechanicsApproved": false
+      }
     },
     {
       "id": "SEQ-N3",
@@ -232,7 +352,28 @@
         "MES-04",
         "MES-06"
       ],
-      "conceptualArc": "Construire l’étalon, estimer, comparer puis utiliser correctement la règle."
+      "conceptualArc": "Construire l’étalon, estimer, comparer puis utiliser correctement la règle.",
+      "boundedWorkflowPilot": {
+        "status": "active-design-pilot-downstream-gates-pending",
+        "approvedOn": "2026-07-16",
+        "revision": "MES-01-MES-02-pilot-2026-07-16",
+        "nodeIds": [
+          "MES-01",
+          "MES-02"
+        ],
+        "proposedBoundedArc": "Comprendre qu’une longueur se mesure en itérant la même unité bout à bout, puis mobiliser cette unité comme repère pour estimer avant de vérifier.",
+        "nextGate": "owner disposition on the bounded pair spine, followed by a separate MES-01 learning-contract gate",
+        "fullSequenceSpineApproved": false,
+        "learningContractsApproved": false,
+        "semanticFitCandidatesApproved": false,
+        "catalogGrayboxImplementationAllowed": false,
+        "mechanicsApproved": false,
+        "expansionApproved": false,
+        "excludedNodeIds": [
+          "MES-04",
+          "MES-06"
+        ]
+      }
     },
     {
       "id": "SEQ-M2",
@@ -355,7 +496,7 @@
       "checkpoint": "Encadre une quantité avant comptage en s’appuyant sur des collections repères.",
       "entrySignal": "Donne une estimation comme devinette isolée ou recompte immédiatement.",
       "observableEvidence": "Annonce un intervalle plausible, choisit un repère et ajuste après révélation du groupement.",
-      "provisionalExerciseIdea": "Fenêtre-éclair: voir brièvement une collection, placer une fourchette, puis révéler les paquets qui expliquent l’écart.",
+      "provisionalExerciseIdea": "Paused: directions A/B/C rejected; approve a revised learning contract before any new mechanic rationale.",
       "per": {
         "progressions": [
           "P22.03"
@@ -463,8 +604,8 @@
       "id": "NUM-07",
       "strand": "numbers",
       "title": "Transformer un rang sans perdre le nombre",
-      "sequenceId": "SEQ-N2",
-      "suggestedPhase": "P2",
+      "sequenceId": "SEQ-N1",
+      "suggestedPhase": "P1",
       "dependencies": [
         "NUM-03",
         "NUM-04"
@@ -831,7 +972,7 @@
       "checkpoint": "Comprend mesurer comme couvrir ou itérer une même unité sans trou ni chevauchement.",
       "entrySignal": "Compare seulement à l’œil ou change d’unité en cours de mesure.",
       "observableEvidence": "Organise un mesurage reproductible et explique le nombre obtenu.",
-      "provisionalExerciseIdea": "Paveur d’unités: couvrir longueur, aire ou volume avec un étalon déplaçable et détecter trous/chevauchements.",
+      "provisionalExerciseIdea": "Unapproved task direction: measure a one-paver-wide path by iterating one 50 cm reference paver endpoint-to-endpoint without gaps or overlaps.",
       "per": {
         "progressions": [
           "P24.02",
@@ -855,7 +996,7 @@
       "checkpoint": "Choisit un repère de grandeur et formule une estimation contrôlable.",
       "entrySignal": "Donne un nombre sans unité ni repère.",
       "observableEvidence": "Justifie une fourchette puis analyse l’écart avec la mesure.",
-      "provisionalExerciseIdea": "Ancre puis révèle: choisir un objet-repère, encadrer la grandeur et seulement ensuite utiliser l’instrument.",
+      "provisionalExerciseIdea": "Unapproved task direction: predict paver count and path length before construction, then verify by unit iteration and interpret shortage or surplus.",
       "per": {
         "progressions": [
           "P24.03"
@@ -1471,8 +1612,26 @@
     }
   ],
   "nextGate": {
-    "required": "Accountable owner structural approval",
-    "afterApproval": "Co-author three mechanically distinct pitches for one pilot sequence, then storyboard and playable low-fi.",
-    "recommendedPilot": "SEQ-N1"
+    "required": "Owner disposition on the bounded MES-01 -> MES-02 pair spine, followed by a separate owner disposition on the precise MES-01 learning contract",
+    "sequenceSpineArtifact": "experiments/design/sequences/seq-m1/SEQUENCE-SPINE.md",
+    "learningContractArtifact": "experiments/design/sequences/seq-m1/mes-01/LEARNING-BRIEF.md",
+    "allowedSpineDispositions": [
+      "approve bounded pair spine",
+      "approve with named structural changes",
+      "return to roadmap/dependencies",
+      "park bounded pair"
+    ],
+    "allowedLearningContractDispositions": [
+      "approve learning contract",
+      "approve with named changes",
+      "revise the learning goal",
+      "park the checkpoint"
+    ],
+    "afterLearningContractApproval": "Research established classroom task families and write one or more semantic-fit rationales; do not implement until the owner approves a named candidate for a distinct low-fi catalog graybox.",
+    "activePilot": "MES-01 -> MES-02",
+    "num02Status": "paused-after-owner-rejected-A-B-C",
+    "fullSeqM1Approved": false,
+    "mechanicsApproved": false,
+    "globalRoadmapGateRemainsOpen": true
   }
 }
