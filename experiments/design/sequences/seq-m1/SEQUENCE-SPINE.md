@@ -142,4 +142,4 @@ Approval applies only to this bounded pair’s order, boundaries, prerequisites,
 
 **Completed next gate:** the owner approved `MES-01` learning contract `r0-unit-iteration-contract` on 2026-07-16.
 
-**Current gate:** research established task/mechanics evidence, write one or more credible semantic-fit rationales, and obtain an independent owner disposition for every named candidate. No catalog implementation is authorized before a candidate passes that gate.
+**Current gate:** [`mes-01/MECHANIC-FIT.md`](./mes-01/MECHANIC-FIT.md) records two independently reviewed candidate rationales. Obtain a separate owner disposition for `MES01-FIT-A-endpoint-relay` and `MES01-FIT-B-trace-debugger`. No catalog implementation is authorized before its named candidate passes that gate.

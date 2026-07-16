@@ -10,7 +10,7 @@
 - **Limite importante :** le PER publie une colonne commune 5e–6e, pas une liste normative séparée de fin 5H. L’entrée ci-dessous est donc un diagnostic de conception à confirmer par le propriétaire/enseignant, pas une citation officielle.
 - **Ordre proposé :** les phases et semaines sont une hypothèse de progression, pas un calendrier CIIP obligatoire.
 - **Décision bornée historique :** périmètre et spine `SEQ-N2 = NUM-02, NUM-05, NUM-06`; preuves `NUM-01`/`NUM-04` importées sans autorité de mécanique; `NUM-07` déplacé dans `SEQ-N1` sans autorité de production. Gate enregistré dans [`SEQ-N2/SEQUENCE-SPINE.md`](../../design/sequences/seq-n2/SEQUENCE-SPINE.md). `NUM-02` est maintenant en pause.
-- **Pilote actif borné :** paire de conception `MES-01 → MES-02` seulement. Sa spine `r0-bounded-measurement-pair` et le contrat `MES-01` `r0-unit-iteration-contract` sont approuvés séparément; le prochain gate porte sur chaque candidat de fit sémantique, après recherche, pas sur du code.
+- **Pilote actif borné :** paire de conception `MES-01 → MES-02` seulement. Sa spine `r0-bounded-measurement-pair` et le contrat `MES-01` `r0-unit-iteration-contract` sont approuvés séparément. La recherche et `MECHANIC-FIT.md` proposent maintenant `MES01-FIT-A-endpoint-relay` et `MES01-FIT-B-trace-debugger`; le prochain gate porte séparément sur chacun, pas sur du code.
 
 Sources : [`6h-mathematics-coverage.md`](../research/6h-mathematics-coverage.md) · [`src-per-0002.md`](../sources/src-per-0002.md) · [stratégie de production](../../design/6h-exercise-production-strategy-decision-record.draft.md)
 
@@ -379,4 +379,4 @@ La spine `SEQ-N2` reste approuvée avec les preuves `NUM-01`/`NUM-04` importées
 
 La spine bornée `r0-bounded-measurement-pair` et le contrat d’apprentissage `MES-01` `r0-unit-iteration-contract` sont approuvés par deux gates distincts. Cela autorise la recherche de tâches/mécaniques et la rédaction d’arguments de fit sémantique pour `MES-01`; cela ne vaut pas approbation de `SEQ-M1`, de `MES-04`/`MES-06`, du contrat `MES-02`, d’un candidat ou de code.
 
-**Prochain gate :** après la recherche, approuver, corriger, réviser ou rejeter chaque candidat `MES-01` nommé dans `MECHANIC-FIT.md`. Chaque candidat approuvé aura son propre exercice graybox catalogue et son propre gate `mechanic approved for expansion`.
+**Prochain gate :** enregistrer une disposition indépendante pour `MES01-FIT-A-endpoint-relay` et `MES01-FIT-B-trace-debugger` dans [`MECHANIC-FIT.md`](../../design/sequences/seq-m1/mes-01/MECHANIC-FIT.md). Chaque candidat approuvé aura son propre exercice graybox catalogue et son propre gate `mechanic approved for expansion`; aucun code n’est autorisé avant ce gate sémantique.

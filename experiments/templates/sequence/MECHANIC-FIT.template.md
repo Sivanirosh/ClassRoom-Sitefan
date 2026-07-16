@@ -104,6 +104,6 @@ Record one row per candidate.
 
 | Date | Candidate | Disposition | Rationale / constraints | Catalog exercise authority |
 |---|---|---|---|---|
-| | | approve for catalog graybox / approve with constraints / revise / reject / park | | none until explicitly approved |
+| | | approve for catalog graybox / approve with named graybox constraints / revise rationale / reject candidate / park checkpoint | | none until explicitly approved |
 
 An approval authorizes one low-fi catalog exercise for the named candidate and checkpoint. It does not grant `mechanic approved for expansion`.

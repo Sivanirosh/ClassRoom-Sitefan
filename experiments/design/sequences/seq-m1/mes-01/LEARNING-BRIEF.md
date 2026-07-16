@@ -185,8 +185,8 @@ Approval authorizes established-task/mechanics-memory research and one or more s
 - **Recorded by / role:** repository owner acting as product/curriculum owner
 - **Recorded at:** 2026-07-16
 
-## Next authorized artifact
+## Current semantic-fit artifact
 
-Create `MECHANIC-FIT.md` from established classroom-task evidence and relevant mechanics memory. Each credible candidate must map learning operation → pupil/game action → inspectable system evidence, state its generic-answer-control falsification test, separate required mathematical acts from optional game-layer decisions, and receive its own owner disposition.
+[`MECHANIC-FIT.md`](./MECHANIC-FIT.md) revision `r0-two-credible-candidates` now records the established-task/mechanics search and two independently credible rationales. Each maps learning operation → pupil/game action → inspectable system evidence, states its generic-answer-control falsification test, separates required mathematical acts from optional game-layer decisions, and remains pending its own owner disposition.
 
-No candidate count is required. Do not create a catalog exercise until a named candidate is approved.
+No catalog exercise is authorized until a named candidate receives `approve for catalog graybox` or `approve with named graybox constraints`.
