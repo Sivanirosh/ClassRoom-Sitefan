@@ -10,7 +10,7 @@
 - **Limite importante :** le PER publie une colonne commune 5e–6e, pas une liste normative séparée de fin 5H. L’entrée ci-dessous est donc un diagnostic de conception à confirmer par le propriétaire/enseignant, pas une citation officielle.
 - **Ordre proposé :** les phases et semaines sont une hypothèse de progression, pas un calendrier CIIP obligatoire.
 - **Décision bornée historique :** périmètre et spine `SEQ-N2 = NUM-02, NUM-05, NUM-06`; preuves `NUM-01`/`NUM-04` importées sans autorité de mécanique; `NUM-07` déplacé dans `SEQ-N1` sans autorité de production. Gate enregistré dans [`SEQ-N2/SEQUENCE-SPINE.md`](../../design/sequences/seq-n2/SEQUENCE-SPINE.md). `NUM-02` est maintenant en pause.
-- **Pilote actif borné :** paire de conception `MES-01 → MES-02` seulement. Sa spine `r0-bounded-measurement-pair` et le contrat `MES-01` `r0-unit-iteration-contract` sont approuvés séparément. La recherche et `MECHANIC-FIT.md` proposent maintenant `MES01-FIT-A-endpoint-relay` et `MES01-FIT-B-trace-debugger`; le prochain gate porte séparément sur chacun, pas sur du code.
+- **Pilote actif borné :** paire de conception `MES-01 → MES-02` seulement. Sa spine `r0-bounded-measurement-pair` et le contrat `MES-01` `r0-unit-iteration-contract` sont approuvés séparément. Le propriétaire a ensuite approuvé `MES01-FIT-A-endpoint-relay` et `MES01-FIT-B-trace-debugger` séparément, avec contraintes nommées, pour un graybox catalogue distinct chacun. Aucune expansion n’est approuvée.
 
 Sources : [`6h-mathematics-coverage.md`](../research/6h-mathematics-coverage.md) · [`src-per-0002.md`](../sources/src-per-0002.md) · [stratégie de production](../../design/6h-exercise-production-strategy-decision-record.draft.md)
 
@@ -164,7 +164,7 @@ flowchart LR
 
 #### `SEQ-M1` — Ce que mesurer veut dire · P1
 
-> **Pilote actif borné au 2026-07-16 : `MES-01 → MES-02` seulement.** Sa spine `r0-bounded-measurement-pair` et le contrat d’apprentissage `MES-01` `r0-unit-iteration-contract` sont approuvés séparément; cela n’approuve pas toute la spine `SEQ-M1`, le contrat `MES-02`, les idées ci-dessous comme mécaniques, un candidat de fit sémantique ou une implémentation. `MES-04` et `MES-06` restent hors portée.
+> **Pilote actif borné au 2026-07-16 : `MES-01 → MES-02` seulement.** Sa spine `r0-bounded-measurement-pair` et le contrat d’apprentissage `MES-01` `r0-unit-iteration-contract` sont approuvés séparément. Deux candidats `MES-01` ont ensuite reçu une autorité bornée pour un graybox catalogue distinct chacun; aucune mécanique n’est approuvée pour expansion. Toute la spine `SEQ-M1`, le contrat `MES-02`, `MES-04` et `MES-06` restent hors portée.
 
 **Arc proposé de la séquence complète :** Construire l’étalon, estimer, comparer puis utiliser correctement la règle.
 
@@ -377,6 +377,6 @@ La spine `SEQ-N2` reste approuvée avec les preuves `NUM-01`/`NUM-04` importées
 
 ### Pilote actif borné — `MES-01 → MES-02`
 
-La spine bornée `r0-bounded-measurement-pair` et le contrat d’apprentissage `MES-01` `r0-unit-iteration-contract` sont approuvés par deux gates distincts. Cela autorise la recherche de tâches/mécaniques et la rédaction d’arguments de fit sémantique pour `MES-01`; cela ne vaut pas approbation de `SEQ-M1`, de `MES-04`/`MES-06`, du contrat `MES-02`, d’un candidat ou de code.
+La spine bornée `r0-bounded-measurement-pair` et le contrat d’apprentissage `MES-01` `r0-unit-iteration-contract` sont approuvés par deux gates distincts. Le 2026-07-16, le propriétaire a aussi donné séparément `approve with named graybox constraints` à `MES01-FIT-A-endpoint-relay` et `MES01-FIT-B-trace-debugger`, contre le pré-enregistrement `sha256:81409988ab623d12ed27837ea63dcd20604a5d7dfaeb4a298ebd7e41ca1bd057`.
 
-**Prochain gate :** enregistrer une disposition indépendante pour `MES01-FIT-A-endpoint-relay` et `MES01-FIT-B-trace-debugger` dans [`MECHANIC-FIT.md`](../../design/sequences/seq-m1/mes-01/MECHANIC-FIT.md). Chaque candidat approuvé aura son propre exercice graybox catalogue et son propre gate `mechanic approved for expansion`; aucun code n’est autorisé avant ce gate sémantique.
+**Travail maintenant autorisé :** créer un exercice catalogue low-fi `MES-01` distinct pour chaque candidat, sous ses contraintes enregistrées, puis rejouer chacun indépendamment. Aucun des deux ne peut s’étendre sans son propre gate exact `mechanic approved for expansion`, borné à son exercice catalogue + `SEQ-M1` + `MES-01`. Le reste de `SEQ-M1`, `MES-02`, `MES-04`, `MES-06` et le pacing global demeurent non approuvés.

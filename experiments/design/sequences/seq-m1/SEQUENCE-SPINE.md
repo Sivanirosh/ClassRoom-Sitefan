@@ -16,8 +16,9 @@ owner_gate: approved
 - **Pilot-scope decision:** on 2026-07-16, the owner paused `NUM-02` and designated `MES-01 → MES-02` as the active bounded workflow pilot.
 - **Bounded-spine decision:** on 2026-07-16, the owner approved this exact `r0-bounded-measurement-pair` spine without named changes; the recorded gate and pre-record digest appear below.
 - **Learning-contract decision:** on 2026-07-16, the owner separately approved `MES-01` contract `r0-unit-iteration-contract`; its record and pre-record digest live in [`mes-01/LEARNING-BRIEF.md`](./mes-01/LEARNING-BRIEF.md).
-- **What the current authority permits:** established-task/mechanics-memory research and semantic-fit rationales for `MES-01`.
-- **What it does not authorize:** the full `SEQ-M1` spine; `MES-04` or `MES-06`; the `MES-02` learning contract; any semantic-fit candidate, catalog graybox, mechanic, expansion, or global roadmap scope.
+- **Semantic-fit decisions:** on 2026-07-16, the owner separately approved `MES01-FIT-A-endpoint-relay` and `MES01-FIT-B-trace-debugger` with named constraints; the records and shared pre-record digest live in [`mes-01/MECHANIC-FIT.md`](./mes-01/MECHANIC-FIT.md).
+- **What the current authority permits:** one distinct constrained low-fi `MES-01` catalog exercise per approved candidate, followed by independent owner replay.
+- **What it does not authorize:** the full `SEQ-M1` spine; `MES-04` or `MES-06`; the `MES-02` learning contract; any expansion, polish/full storyboarding, or global roadmap scope.
 - **Workflow:** [`prototype-production-workflow.md`](../../prototype-production-workflow.md), revision `r3-learning-contract-semantic-fit`.
 - **Research boundary:** [`num-02-and-paving-task-precedents.md`](../../../curriculum/research/num-02-and-paving-task-precedents.md) distinguishes cardinality estimation from unit-iteration measurement.
 
@@ -73,7 +74,7 @@ If these signals are absent, pause the route and collect teacher-supported evide
 - **No conversion dependency:** centimetre-to-metre conversion may be offered as supplied equivalence or later enrichment, but it is not required evidence for this bounded pair.
 - **No ruler instruction:** correct use of a graduated ruler belongs to `MES-06`, outside this pilot.
 
-## Proposed learning progression
+## Approved bounded learning progression
 
 ### MES-01 — Construct the measuring operation
 
@@ -140,6 +141,8 @@ Approval applies only to this bounded pair’s order, boundaries, prerequisites,
 - **Recorded by / role:** repository owner acting as product/curriculum owner
 - **Recorded at:** 2026-07-16
 
-**Completed next gate:** the owner approved `MES-01` learning contract `r0-unit-iteration-contract` on 2026-07-16.
+**Completed learning-contract gate:** the owner approved `MES-01` learning contract `r0-unit-iteration-contract` on 2026-07-16.
 
-**Current gate:** [`mes-01/MECHANIC-FIT.md`](./mes-01/MECHANIC-FIT.md) records two independently reviewed candidate rationales. Obtain a separate owner disposition for `MES01-FIT-A-endpoint-relay` and `MES01-FIT-B-trace-debugger`. No catalog implementation is authorized before its named candidate passes that gate.
+**Completed semantic-fit gate:** the owner approved `MES01-FIT-A-endpoint-relay` and `MES01-FIT-B-trace-debugger` separately on 2026-07-16 with the named constraints recorded in [`mes-01/MECHANIC-FIT.md`](./mes-01/MECHANIC-FIT.md), pre-record `sha256:81409988ab623d12ed27837ea63dcd20604a5d7dfaeb4a298ebd7e41ca1bd057`.
+
+**Current gate:** create one distinct low-fi `MES-01` catalog exercise per approved candidate and replay each independently. Neither may expand without its own catalog exercise + `SEQ-M1` + `MES-01`-scoped exact phrase `mechanic approved for expansion`.

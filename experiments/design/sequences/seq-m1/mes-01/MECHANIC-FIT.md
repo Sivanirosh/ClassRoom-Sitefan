@@ -2,10 +2,12 @@
 sequence: SEQ-M1
 sequence_scope: bounded-pair-MES-01-to-MES-02
 checkpoint: MES-01
-status: proposed-semantic-fit-rationales
+status: semantic-fit-candidates-approved-for-catalog-grayboxes
 revision: r0-two-credible-candidates
-owner_candidate_gate: pending-per-candidate
-catalog_graybox_authority: none
+owner_candidate_gate: approved-with-named-graybox-constraints-per-candidate
+owner_gate_recorded_on: 2026-07-16
+pre_record_digest: sha256:81409988ab623d12ed27837ea63dcd20604a5d7dfaeb4a298ebd7e41ca1bd057
+catalog_graybox_authority: two-distinct-MES-01-low-fi-exercises-only
 mechanic_authority: none
 ---
 
@@ -185,7 +187,17 @@ Record one independent disposition per candidate. Allowed dispositions are `appr
 
 | Date | Candidate | Disposition | Rationale / constraints | Catalog exercise authority |
 |---|---|---|---|---|
-| — | `MES01-FIT-A-endpoint-relay` | pending | — | none |
-| — | `MES01-FIT-B-trace-debugger` | pending | — | none |
+| 2026-07-16 | `MES01-FIT-A-endpoint-relay` | `approve with named graybox constraints` | Keep the count action independent; no automatic snapping or counting; require line-only transfer and equivalent relation controls. | one distinct `MES-01` low-fi catalog exercise only |
+| 2026-07-16 | `MES01-FIT-B-trace-debugger` | `approve with named graybox constraints` | Require direct state edits, no prepared answer list, exactly one focal fault before transfer, mandatory blank-plan transfer, and non-motion step mode. | one distinct `MES-01` low-fi catalog exercise only |
 
-An approval authorizes one distinct low-fi catalog exercise for that named candidate and `MES-01` only. It does not grant `mechanic approved for expansion`, authorize the other candidate, or permit polish/full storyboarding.
+### Recorded owner responses
+
+- **Candidate A exact response:** `Approve + constraints (Recommended)`
+- **Candidate A normalized disposition:** `approve with named graybox constraints`
+- **Candidate B exact response:** `Approve + constraints (Recommended)`
+- **Candidate B normalized disposition:** `approve with named graybox constraints`
+- **Shared pre-record artifact digest:** `sha256:81409988ab623d12ed27837ea63dcd20604a5d7dfaeb4a298ebd7e41ca1bd057`
+- **Recorded by / role:** repository owner acting as product, classroom, and curriculum owner
+- **Recorded at:** 2026-07-16
+
+Each approval authorizes one distinct low-fi catalog exercise for its named candidate and `MES-01` only. Neither grants `mechanic approved for expansion`, authorizes polish/full storyboarding, or propagates to `MES-02` or any unrelated scope.

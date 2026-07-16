@@ -16,22 +16,22 @@ mechanic_authority: none
 - **Roadmap checkpoint:** `MES-01 — Construire et répéter une unité`.
 - **Curriculum basis:** PER MSN 24 `P24.02` and `P24.06`.
 - **Active pilot decision:** the owner designated `MES-01 → MES-02` as the bounded workflow pilot on 2026-07-16.
-- **Current authority:** owner learning-contract review only. The bounded spine gate is passed; this brief remains pending and grants no downstream authority unless separately approved.
-- **Not authorized:** semantic-fit candidates, a catalog exercise, a graybox, mechanic approval, polish, or expansion.
+- **Current authority:** this learning contract is owner-approved. A separate 2026-07-16 semantic-fit gate now authorizes one constrained low-fi `MES-01` catalog exercise for each of `MES01-FIT-A-endpoint-relay` and `MES01-FIT-B-trace-debugger`.
+- **Not authorized:** `mechanic approved for expansion`, polish/full storyboarding, the `MES-02` contract, full `SEQ-M1`, or unrelated implementation.
 
-## Proposed learning contract
+## Approved learning contract
 
-### Core learning — approval required
+### Core learning — approved
 
 > **Measuring a length with a shorter unit means repeating the same invariant unit from the length’s origin to its endpoint, placing each repetition exactly at the previous endpoint without gaps or overlaps; the repetition count expresses the length in that unit.**
 
-### Successful-pupil statement — approval required
+### Successful-pupil statement — approved
 
 > **« J’ai gardé le même pavé de 50 cm. Je l’ai répété depuis le début du chemin, chaque fois juste au bout du précédent, sans trou ni chevauchement. Le pavé tient 6 fois : le chemin mesure 6 longueurs de pavé. »**
 
 The values and paver context may change later; the statement’s mathematical relations may not.
 
-### Expected cognitive process — approval required
+### Expected cognitive process — approved
 
 1. **Identify the magnitude.** Attend to the path’s length from a named start to a named finish, not its area or the number of depicted objects.
 2. **Establish the invariant unit.** Treat one paver-length as the same unit every time it is moved.
@@ -187,6 +187,6 @@ Approval authorizes established-task/mechanics-memory research and one or more s
 
 ## Current semantic-fit artifact
 
-[`MECHANIC-FIT.md`](./MECHANIC-FIT.md) revision `r0-two-credible-candidates` now records the established-task/mechanics search and two independently credible rationales. Each maps learning operation → pupil/game action → inspectable system evidence, states its generic-answer-control falsification test, separates required mathematical acts from optional game-layer decisions, and remains pending its own owner disposition.
+[`MECHANIC-FIT.md`](./MECHANIC-FIT.md) revision `r0-two-credible-candidates` records the established-task/mechanics search and two independently credible rationales. On 2026-07-16 the owner separately gave both `approve with named graybox constraints`, against pre-record `sha256:81409988ab623d12ed27837ea63dcd20604a5d7dfaeb4a298ebd7e41ca1bd057`.
 
-No catalog exercise is authorized until a named candidate receives `approve for catalog graybox` or `approve with named graybox constraints`.
+Current authority permits one distinct low-fi `MES-01` catalog exercise for each named candidate under its recorded constraints. It does not permit expansion, polish, `MES-02`, or unrelated implementation.

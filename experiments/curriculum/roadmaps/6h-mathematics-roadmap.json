@@ -358,7 +358,7 @@
       ],
       "conceptualArc": "Construire l’étalon, estimer, comparer puis utiliser correctement la règle.",
       "boundedWorkflowPilot": {
-        "status": "owner-approved-bounded-spine-and-mes01-learning-contract-semantic-fit-pending",
+        "status": "owner-approved-semantic-fit-catalog-grayboxes-authorized",
         "pilotDesignatedOn": "2026-07-16",
         "revision": "MES-01-MES-02-pilot-2026-07-16",
         "nodeIds": [
@@ -382,26 +382,53 @@
           "artifact": "experiments/design/sequences/seq-m1/mes-01/LEARNING-BRIEF.md",
           "normalizedDisposition": "approve learning contract"
         },
-        "semanticFitProposal": {
-          "status": "proposed-owner-dispositions-pending",
+        "semanticFitGate": {
+          "status": "owner-approved-with-named-graybox-constraints",
+          "approvedOn": "2026-07-16",
           "revision": "r0-two-credible-candidates",
+          "preRecordDigest": "sha256:81409988ab623d12ed27837ea63dcd20604a5d7dfaeb4a298ebd7e41ca1bd057",
           "artifact": "experiments/design/sequences/seq-m1/mes-01/MECHANIC-FIT.md",
           "researchArtifact": "experiments/curriculum/research/mes-01-unit-iteration-mechanic-precedents.md",
-          "candidateIds": [
-            "MES01-FIT-A-endpoint-relay",
-            "MES01-FIT-B-trace-debugger"
+          "candidateDispositions": [
+            {
+              "candidateId": "MES01-FIT-A-endpoint-relay",
+              "ownerResponse": "Approve + constraints (Recommended)",
+              "normalizedDisposition": "approve with named graybox constraints",
+              "constraints": [
+                "independent count action",
+                "no automatic snapping or counting",
+                "line-only transfer",
+                "equivalent relation controls"
+              ]
+            },
+            {
+              "candidateId": "MES01-FIT-B-trace-debugger",
+              "ownerResponse": "Approve + constraints (Recommended)",
+              "normalizedDisposition": "approve with named graybox constraints",
+              "constraints": [
+                "direct state edits",
+                "no prepared answer list",
+                "exactly one focal fault before transfer",
+                "mandatory blank-plan transfer",
+                "non-motion step mode"
+              ]
+            }
           ],
-          "catalogAuthority": "none"
+          "catalogAuthority": "one distinct low-fi MES-01 catalog exercise per approved candidate only"
         },
-        "nextGate": "independent owner disposition on MES01-FIT-A-endpoint-relay and MES01-FIT-B-trace-debugger",
+        "nextGate": "create and independently replay one distinct low-fi MES-01 catalog exercise per approved candidate",
         "fullSequenceSpineApproved": false,
         "learningContractsApproved": false,
         "approvedLearningContractIds": [
           "MES-01"
         ],
         "semanticFitResearchAllowed": true,
-        "semanticFitCandidatesApproved": false,
-        "catalogGrayboxImplementationAllowed": false,
+        "semanticFitCandidatesApproved": true,
+        "approvedSemanticFitCandidateIds": [
+          "MES01-FIT-A-endpoint-relay",
+          "MES01-FIT-B-trace-debugger"
+        ],
+        "catalogGrayboxImplementationAllowed": true,
         "mechanicsApproved": false,
         "expansionApproved": false,
         "excludedNodeIds": [
@@ -1647,7 +1674,7 @@
     }
   ],
   "nextGate": {
-    "required": "Independent owner disposition on MES01-FIT-A-endpoint-relay and MES01-FIT-B-trace-debugger; no catalog implementation before a named candidate passes",
+    "required": "Create and independently replay one distinct low-fi MES-01 catalog exercise per approved candidate; no expansion before each exercise's separately scoped exact phrase",
     "completedSpineGate": {
       "artifact": "experiments/design/sequences/seq-m1/SEQUENCE-SPINE.md",
       "ownerResponse": "Approve spine (Recommended)",
@@ -1664,14 +1691,17 @@
       "preRecordDigest": "sha256:61b3d070afcc9a41fdb7422434b41f7cb640207aa0c16a3a5d414392531fad14",
       "recordedOn": "2026-07-16"
     },
-    "completedSemanticFitResearch": {
+    "completedSemanticFitGate": {
       "researchArtifact": "experiments/curriculum/research/mes-01-unit-iteration-mechanic-precedents.md",
       "semanticFitArtifact": "experiments/design/sequences/seq-m1/mes-01/MECHANIC-FIT.md",
       "revision": "r0-two-credible-candidates",
+      "preRecordDigest": "sha256:81409988ab623d12ed27837ea63dcd20604a5d7dfaeb4a298ebd7e41ca1bd057",
+      "recordedOn": "2026-07-16",
       "candidateIds": [
         "MES01-FIT-A-endpoint-relay",
         "MES01-FIT-B-trace-debugger"
-      ]
+      ],
+      "normalizedDispositionPerCandidate": "approve with named graybox constraints"
     },
     "allowedCandidateDispositions": [
       "approve for catalog graybox",
@@ -1680,7 +1710,7 @@
       "reject candidate",
       "park checkpoint"
     ],
-    "afterCandidateApproval": "Create one distinct low-fi catalog exercise per approved candidate; do not expand any candidate before its own replay and exact mechanic approved for expansion gate.",
+    "currentAuthorizedWork": "Create one distinct low-fi MES-01 catalog exercise per approved candidate under its named constraints; replay each independently; do not expand any candidate before its own catalog exercise + SEQ-M1 + MES-01-scoped exact mechanic approved for expansion gate.",
     "activePilot": "MES-01 -> MES-02",
     "num02Status": "paused-after-owner-rejected-A-B-C",
     "fullSeqM1Approved": false,
