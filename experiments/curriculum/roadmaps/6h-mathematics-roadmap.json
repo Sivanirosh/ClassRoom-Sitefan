@@ -62,13 +62,14 @@
       },
       {
         "approvedOn": "2026-07-16",
-        "recordStatus": "current-bounded-workflow-pilot",
-        "scope": "MES-01 -> MES-02 as the active bounded workflow-pilot design pair",
-        "revision": "MES-01-MES-02-pilot-2026-07-16",
+        "recordStatus": "current-bounded-workflow-pilot-spine-approved",
+        "scope": "MES-01 -> MES-02 as the active bounded workflow-pilot design pair with an owner-approved bounded spine",
+        "pilotRevision": "MES-01-MES-02-pilot-2026-07-16",
+        "boundedSpineRevision": "r0-bounded-measurement-pair",
+        "boundedSpinePreRecordSha256": "6cb3e93488cadc89df7a3ff28792432ca46c12a87600340fb8cfedb226597df1",
         "authority": "repository owner",
         "allows": [
-          "draft and review a bounded pair spine",
-          "draft and review one precise checkpoint learning contract at a time"
+          "owner review and disposition of the precise MES-01 learning contract"
         ],
         "excludes": [
           "approval of the full SEQ-M1 spine",
@@ -354,15 +355,23 @@
       ],
       "conceptualArc": "Construire l’étalon, estimer, comparer puis utiliser correctement la règle.",
       "boundedWorkflowPilot": {
-        "status": "active-design-pilot-downstream-gates-pending",
-        "approvedOn": "2026-07-16",
+        "status": "owner-approved-bounded-pair-spine-learning-contract-pending",
+        "pilotDesignatedOn": "2026-07-16",
         "revision": "MES-01-MES-02-pilot-2026-07-16",
         "nodeIds": [
           "MES-01",
           "MES-02"
         ],
-        "proposedBoundedArc": "Comprendre qu’une longueur se mesure en itérant la même unité bout à bout, puis mobiliser cette unité comme repère pour estimer avant de vérifier.",
-        "nextGate": "owner disposition on the bounded pair spine, followed by a separate MES-01 learning-contract gate",
+        "approvedBoundedArc": "Comprendre qu’une longueur se mesure en itérant la même unité bout à bout, puis mobiliser cette unité comme repère pour estimer avant de vérifier.",
+        "boundedPairSpine": {
+          "status": "owner-approved",
+          "approvedOn": "2026-07-16",
+          "revision": "r0-bounded-measurement-pair",
+          "preRecordDigest": "sha256:6cb3e93488cadc89df7a3ff28792432ca46c12a87600340fb8cfedb226597df1",
+          "artifact": "experiments/design/sequences/seq-m1/SEQUENCE-SPINE.md",
+          "normalizedDisposition": "approve bounded pair spine"
+        },
+        "nextGate": "owner disposition on the precise MES-01 learning contract r0-unit-iteration-contract",
         "fullSequenceSpineApproved": false,
         "learningContractsApproved": false,
         "semanticFitCandidatesApproved": false,
@@ -1612,15 +1621,16 @@
     }
   ],
   "nextGate": {
-    "required": "Owner disposition on the bounded MES-01 -> MES-02 pair spine, followed by a separate owner disposition on the precise MES-01 learning contract",
-    "sequenceSpineArtifact": "experiments/design/sequences/seq-m1/SEQUENCE-SPINE.md",
+    "required": "Owner disposition on the precise MES-01 learning contract r0-unit-iteration-contract",
+    "completedSpineGate": {
+      "artifact": "experiments/design/sequences/seq-m1/SEQUENCE-SPINE.md",
+      "ownerResponse": "Approve spine (Recommended)",
+      "normalizedDisposition": "approve bounded pair spine",
+      "revision": "r0-bounded-measurement-pair",
+      "preRecordDigest": "sha256:6cb3e93488cadc89df7a3ff28792432ca46c12a87600340fb8cfedb226597df1",
+      "recordedOn": "2026-07-16"
+    },
     "learningContractArtifact": "experiments/design/sequences/seq-m1/mes-01/LEARNING-BRIEF.md",
-    "allowedSpineDispositions": [
-      "approve bounded pair spine",
-      "approve with named structural changes",
-      "return to roadmap/dependencies",
-      "park bounded pair"
-    ],
     "allowedLearningContractDispositions": [
       "approve learning contract",
       "approve with named changes",

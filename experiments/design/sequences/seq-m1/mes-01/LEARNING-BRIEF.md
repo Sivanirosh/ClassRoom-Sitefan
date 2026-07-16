@@ -12,11 +12,11 @@ mechanic_authority: none
 
 ## Gate status and authority
 
-- **Proposed bounded spine:** [`../SEQUENCE-SPINE.md`](../SEQUENCE-SPINE.md), `r0-bounded-measurement-pair`; owner disposition pending.
+- **Approved bounded spine:** [`../SEQUENCE-SPINE.md`](../SEQUENCE-SPINE.md), owner-approved `r0-bounded-measurement-pair` on 2026-07-16; pre-record `sha256:6cb3e93488cadc89df7a3ff28792432ca46c12a87600340fb8cfedb226597df1`.
 - **Roadmap checkpoint:** `MES-01 — Construire et répéter une unité`.
 - **Curriculum basis:** PER MSN 24 `P24.02` and `P24.06`.
 - **Active pilot decision:** the owner designated `MES-01 → MES-02` as the bounded workflow pilot on 2026-07-16.
-- **Current authority:** draft and review only. This brief cannot pass its learning-contract gate unless the bounded spine is approved first.
+- **Current authority:** owner learning-contract review only. The bounded spine gate is passed; this brief remains pending and grants no downstream authority unless separately approved.
 - **Not authorized:** semantic-fit candidates, a catalog exercise, a graybox, mechanic approval, polish, or expansion.
 
 ## Proposed learning contract

@@ -83,7 +83,7 @@ On 2026-07-16 the owner rejected A, B, and C as presented, rejected `Fenêtre ca
 - No `NUM-02` direction is selected; no script or catalog graybox is authorized.
 - No N2 mechanic is approved for expansion; the structurally approved N2 spine remains paused.
 - Do not infer that the rejected adaptations invalidate every abstract `MEC-*` pattern; the recorded failure is semantic application and process timing.
-- The active workflow pilot is now the bounded measurement pair `MES-01 → MES-02`; its proposed [`SEQUENCE-SPINE.md`](../sequences/seq-m1/SEQUENCE-SPINE.md) and [`MES-01` learning contract](../sequences/seq-m1/mes-01/LEARNING-BRIEF.md) await separate owner dispositions.
+- The active workflow pilot is now the bounded measurement pair `MES-01 → MES-02`; its [`SEQUENCE-SPINE.md`](../sequences/seq-m1/SEQUENCE-SPINE.md) `r0-bounded-measurement-pair` is owner-approved, while the separate [`MES-01` learning contract](../sequences/seq-m1/mes-01/LEARNING-BRIEF.md) remains pending.
 - Technical checks cannot establish pupil learning, French comprehension, equivalent accessibility, or classroom suitability.
 
 ## Verification

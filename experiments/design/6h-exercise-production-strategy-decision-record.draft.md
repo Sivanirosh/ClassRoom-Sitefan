@@ -1,7 +1,7 @@
 ---
 title: 6H exercise production strategy
 status: draft
-revision: r16-measurement-pilot-semantic-fit-workflow
+revision: r17-measurement-pair-spine-approved
 approved_on: null
 readiness: not_ready
 owners:
@@ -23,8 +23,9 @@ owners:
 | Repository owner | Product/classroom owner | `SEQ-N2 / NUM-02` A/B/C mechanic directions and temporary comparison | [`sequences/seq-n2/num-02/MECHANIC-PITCHES.md`](./sequences/seq-n2/num-02/MECHANIC-PITCHES.md) | 2026-07-16 | Reject all directions; pause `NUM-02` |
 | Repository owner | Product, classroom, curriculum, and technical owner | Learning-contract gate, established-task grounding, semantic-fit rationales, and direct low-fi catalog grayboxes for one or more approved candidates | [`prototype-production-workflow.md`](./prototype-production-workflow.md), `r3-learning-contract-semantic-fit` | 2026-07-16 | Approved workflow refinement |
 | Repository owner | Product and curriculum owner | Active workflow-pilot design slice `MES-01 → MES-02` only; full `SEQ-M1`, mechanics, catalog grayboxes, and expansion remain separately gated | `MES-01-MES-02-pilot-2026-07-16` | 2026-07-16 | Approved bounded pilot pivot |
+| Repository owner | Product and curriculum owner | Bounded `MES-01 → MES-02` pair spine only: order, boundaries, prerequisites, evidence handoff, semantic distinctions, and excluded nodes; no `MES-01` learning-contract or downstream authority | [`sequences/seq-m1/SEQUENCE-SPINE.md`](./sequences/seq-m1/SEQUENCE-SPINE.md), `r0-bounded-measurement-pair`, pre-record `sha256:6cb3e93488cadc89df7a3ff28792432ca46c12a87600340fb8cfedb226597df1` | 2026-07-16 | `approve bounded pair spine` |
 
-The revised bounded `SEQ-N2` spine remains structurally approved but is paused after the owner rejected all three `NUM-02` mechanic directions for unclear learning purpose and semantic misalignment. The temporary comparison was deleted and authorized no script, catalog exercise, mechanic, or expansion. Workflow `r3` now requires an owner-approved core-learning sentence, successful-pupil statement, and expected cognitive process before established-task research and semantic-fit rationales. There is no fixed candidate quota or throwaway comparison phase. The active workflow pilot is the bounded measurement pair `MES-01 → MES-02`; its spine, learning contracts, candidate rationales, catalog grayboxes, and expansion gates remain unapproved until separately recorded.
+The revised bounded `SEQ-N2` spine remains structurally approved but is paused after the owner rejected all three `NUM-02` mechanic directions for unclear learning purpose and semantic misalignment. The temporary comparison was deleted and authorized no script, catalog exercise, mechanic, or expansion. Workflow `r3` now requires an owner-approved core-learning sentence, successful-pupil statement, and expected cognitive process before established-task research and semantic-fit rationales. There is no fixed candidate quota or throwaway comparison phase. The active workflow pilot is the bounded measurement pair `MES-01 → MES-02`; its bounded spine is owner-approved, while the `MES-01` learning contract, candidate rationales, catalog grayboxes, and expansion gates remain unapproved until separately recorded.
 
 ## Revision history
 
@@ -47,6 +48,7 @@ The revised bounded `SEQ-N2` spine remains structurally approved but is paused a
 | r14-num02-comparison-aid | 2026-07-16 | Closed after owner replay | Recorded a `NUM-02`-only exception after prose/previews proved insufficient: three one-loop throwaway variants built with `/skill:prototype`; no mechanic authority followed | User and coding assistant |
 | r15-num02-semantic-rejection | 2026-07-16 | `NUM-02` paused | Recorded owner rejection of A/B/C for unclear learning purpose and semantic misalignment; deleted the comparison; preserved the failure in `APP-0004` | User and coding assistant |
 | r16-measurement-pilot-semantic-fit-workflow | 2026-07-16 | Bounded pilot pivot approved; downstream gates pending | Replaced fixed three-pitch/prototype comparison with learning-contract approval, established-task grounding, semantic-fit rationales, and direct catalog grayboxes; moved the active workflow pilot to `MES-01 → MES-02` without approving full `SEQ-M1` or any mechanic | User and coding assistant |
+| r17-measurement-pair-spine-approved | 2026-07-16 | Bounded pair spine approved; learning-contract gate pending | Recorded owner approval of `r0-bounded-measurement-pair` without propagating authority to full `SEQ-M1`, the `MES-01` learning contract, semantic-fit work, implementation, or expansion | User and coding assistant |
 
 ## Executive intent
 
@@ -169,10 +171,10 @@ Define a production strategy that can create coherent, pedagogically strong, pup
 | Q-28 | Are motion and generated assets always late optional passes, and what evidence authorizes each? | Resolved | Product/classroom owner | D-31: both are late, optional, and must have a named explanatory, usability, or narrative purpose |
 | Q-29 | What record types, required properties, indexing, and update rules make the game-mechanics vault informative and reliably retrievable? | Non-blocking implementation detail | Product/technical owner | D-28 and D-29 settle the information model and purpose; frontmatter fields, Obsidian Base views, templates, and write-back instructions may be designed without introducing an approval lifecycle |
 | Q-30 | What evidence maturity must a precedent or mechanic record reach before it may satisfy a semantic-fit rationale? | Resolved as a traceability rather than certification requirement | Product/classroom owner | D-29 and D-37: cite first-party sources, separate task facts from adaptation, and rely on catalog replay plus owner judgment rather than a vault maturity score |
-| Q-31 | Is the full `SEQ-M1` spine approved, or only the active workflow-pilot pair `MES-01 → MES-02`? | Blocking outside the pair | Product/curriculum owner | D-40 authorizes only the bounded pair as a design pilot; its proposed spine and each learning contract still require recorded owner gates, while `MES-04`, `MES-06`, and global pacing remain unapproved |
+| Q-31 | Is the full `SEQ-M1` spine approved, or only the active workflow-pilot pair `MES-01 → MES-02`? | Resolved for the pair; blocking outside it | Product/curriculum owner | The bounded pair spine `r0-bounded-measurement-pair` is owner-approved; full `SEQ-M1`, `MES-04`, `MES-06`, each learning contract, and global pacing remain separately unapproved |
 
 ## Readiness declaration
 
 **State:** `not_ready`
 
-Workflow `r3-learning-contract-semantic-fit` is approved. The dependency-closed `SEQ-N2` spine remains structurally approved but paused; A/B/C are rejected and no `NUM-02` implementation authority exists. The bounded pair `MES-01 → MES-02` is the active workflow pilot, but its proposed pair spine, checkpoint learning contracts, semantic-fit candidates, catalog grayboxes, and expansion gates remain separately pending. The broader 6H production strategy remains `not_ready` because Q-25 and Q-31 block every unrelated roadmap scope, full `SEQ-M1`, and global pacing. Mechanics memory remains lightweight research memory rather than a certification bureaucracy.
+Workflow `r3-learning-contract-semantic-fit` is approved. The dependency-closed `SEQ-N2` spine remains structurally approved but paused; A/B/C are rejected and no `NUM-02` implementation authority exists. The bounded pair `MES-01 → MES-02` is the active workflow pilot and its pair spine is owner-approved; the `MES-01` learning contract, semantic-fit candidates, catalog grayboxes, and expansion gates remain separately pending. The broader 6H production strategy remains `not_ready` because Q-25 and the unresolved scope outside Q-31 block every unrelated roadmap area, full `SEQ-M1`, and global pacing. Mechanics memory remains lightweight research memory rather than a certification bureaucracy.

@@ -1,6 +1,6 @@
 # Mathématiques 6H — roadmap conceptuelle
 
-> **Statut global : proposition structurelle non approuvée, avec décisions bornées.** Le 2026-07-16, le propriétaire a approuvé la spine révisée `SEQ-N2 = NUM-02 → NUM-05 → NUM-06`, puis rejeté les trois directions mécaniques `NUM-02` et mis ce checkpoint en pause sans révoquer la spine. Le même jour, il a désigné `MES-01 → MES-02` comme pilote actif borné du workflow révisé. Cette désignation n’approuve ni la spine complète `SEQ-M1`, ni le contrat d’apprentissage d’un checkpoint, ni une mécanique, un graybox catalogue ou une expansion. Le calendrier global et toute autre portée restent non approuvés.
+> **Statut global : proposition structurelle non approuvée, avec décisions bornées.** Le 2026-07-16, le propriétaire a approuvé la spine révisée `SEQ-N2 = NUM-02 → NUM-05 → NUM-06`, puis rejeté les trois directions mécaniques `NUM-02` et mis ce checkpoint en pause sans révoquer la spine. Le même jour, il a désigné `MES-01 → MES-02` comme pilote actif borné du workflow révisé, puis approuvé sa spine `r0-bounded-measurement-pair`. Cette approbation bornée n’approuve ni la spine complète `SEQ-M1`, ni le contrat d’apprentissage `MES-01`, ni une mécanique, un graybox catalogue ou une expansion. Le calendrier global et toute autre portée restent non approuvés.
 
 ## 1. Autorité et limites
 
@@ -10,7 +10,7 @@
 - **Limite importante :** le PER publie une colonne commune 5e–6e, pas une liste normative séparée de fin 5H. L’entrée ci-dessous est donc un diagnostic de conception à confirmer par le propriétaire/enseignant, pas une citation officielle.
 - **Ordre proposé :** les phases et semaines sont une hypothèse de progression, pas un calendrier CIIP obligatoire.
 - **Décision bornée historique :** périmètre et spine `SEQ-N2 = NUM-02, NUM-05, NUM-06`; preuves `NUM-01`/`NUM-04` importées sans autorité de mécanique; `NUM-07` déplacé dans `SEQ-N1` sans autorité de production. Gate enregistré dans [`SEQ-N2/SEQUENCE-SPINE.md`](../../design/sequences/seq-n2/SEQUENCE-SPINE.md). `NUM-02` est maintenant en pause.
-- **Pilote actif borné :** paire de conception `MES-01 → MES-02` seulement. Son prochain gate porte sur une spine bornée et un contrat d’apprentissage précis, pas sur une mécanique.
+- **Pilote actif borné :** paire de conception `MES-01 → MES-02` seulement. Sa spine bornée `r0-bounded-measurement-pair` est approuvée; le prochain gate porte uniquement sur le contrat d’apprentissage précis de `MES-01`, pas sur une mécanique.
 
 Sources : [`6h-mathematics-coverage.md`](../research/6h-mathematics-coverage.md) · [`src-per-0002.md`](../sources/src-per-0002.md) · [stratégie de production](../../design/6h-exercise-production-strategy-decision-record.draft.md)
 
@@ -164,11 +164,11 @@ flowchart LR
 
 #### `SEQ-M1` — Ce que mesurer veut dire · P1
 
-> **Pilote actif borné au 2026-07-16 : `MES-01 → MES-02` seulement.** Ce choix sert à éprouver le workflow révisé; il n’approuve pas toute la spine `SEQ-M1`, les idées ci-dessous, un contrat d’apprentissage, une mécanique ou une implémentation. `MES-04` et `MES-06` restent hors portée.
+> **Pilote actif borné au 2026-07-16 : `MES-01 → MES-02` seulement.** Sa spine `r0-bounded-measurement-pair` est approuvée; cela n’approuve pas toute la spine `SEQ-M1`, les idées ci-dessous, le contrat d’apprentissage `MES-01`, une mécanique ou une implémentation. `MES-04` et `MES-06` restent hors portée.
 
 **Arc proposé de la séquence complète :** Construire l’étalon, estimer, comparer puis utiliser correctement la règle.
 
-**Arc borné à soumettre au gate :** comprendre qu’une longueur se mesure en itérant la même unité bout à bout, puis mobiliser cette unité comme repère pour estimer avant de vérifier.
+**Arc borné approuvé :** comprendre qu’une longueur se mesure en itérant la même unité bout à bout, puis mobiliser cette unité comme repère pour estimer avant de vérifier.
 
 | Nœud | Checkpoint observable | Dépendances | Idée d’exercice provisoire | PER |
 |---|---|---|---|---|
@@ -377,6 +377,6 @@ La spine `SEQ-N2` reste approuvée avec les preuves `NUM-01`/`NUM-04` importées
 
 ### Pilote actif borné — `MES-01 → MES-02`
 
-La désignation du pilote autorise la préparation et la revue d’une spine bornée pour la paire, puis d’un contrat d’apprentissage à la fois. Elle ne vaut pas approbation de `SEQ-M1`, de `MES-04`/`MES-06`, d’un candidat mécanique ou de code.
+La spine bornée `r0-bounded-measurement-pair` est approuvée. Cette décision autorise seulement le gate séparé du contrat d’apprentissage `MES-01`; elle ne vaut pas approbation de `SEQ-M1`, de `MES-04`/`MES-06`, du contrat lui-même, d’un candidat mécanique ou de code.
 
-**Prochain gate :** approuver ou corriger la spine bornée `MES-01 → MES-02`, puis approuver séparément le contrat d’apprentissage précis de `MES-01` (phrase d’apprentissage central, énoncé de réussite et cognition attendue). Ce n’est qu’ensuite que des tâches de classe établies et des arguments de fit sémantique pourront être proposés. Chaque candidat approuvé aura son propre exercice graybox catalogue et son propre gate `mechanic approved for expansion`.
+**Prochain gate :** approuver, corriger, renvoyer ou parquer le contrat d’apprentissage précis `MES-01` `r0-unit-iteration-contract` (phrase d’apprentissage centrale, énoncé de réussite et cognition attendue). Ce n’est qu’après son approbation que des tâches de classe établies et des arguments de fit sémantique pourront être proposés. Chaque candidat approuvé aura son propre exercice graybox catalogue et son propre gate `mechanic approved for expansion`.

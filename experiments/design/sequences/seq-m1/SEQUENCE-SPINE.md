@@ -1,10 +1,10 @@
 ---
 sequence: SEQ-M1
 scope: bounded-pair-MES-01-to-MES-02
-status: proposed-bounded-pair-spine
+status: owner-approved-bounded-pair-spine
 revision: r0-bounded-measurement-pair
 active_checkpoint: MES-01
-owner_gate: pending
+owner_gate: approved
 ---
 
 # SEQ-M1 — Bounded workflow-pilot spine: MES-01 → MES-02
@@ -14,15 +14,16 @@ owner_gate: pending
 - **Roadmap:** [`6h-mathematics-roadmap.md`](../../../curriculum/roadmaps/6h-mathematics-roadmap.md)
 - **Curriculum source:** PER MSN 24, especially `P24.02`, `P24.03`, and `P24.06`.
 - **Pilot-scope decision:** on 2026-07-16, the owner paused `NUM-02` and designated `MES-01 → MES-02` as the active bounded workflow pilot.
-- **What that decision authorizes:** drafting and reviewing this bounded pair spine, then one checkpoint learning contract at a time.
-- **What it does not authorize:** the full `SEQ-M1` spine; `MES-04` or `MES-06`; approval of this spine by implication; any learning contract, semantic-fit candidate, catalog graybox, mechanic, expansion, or global roadmap scope.
+- **Bounded-spine decision:** on 2026-07-16, the owner approved this exact `r0-bounded-measurement-pair` spine without named changes; the recorded gate and pre-record digest appear below.
+- **What that decision authorizes:** owner review and disposition of the precise `MES-01` learning contract.
+- **What it does not authorize:** the full `SEQ-M1` spine; `MES-04` or `MES-06`; any learning contract, semantic-fit candidate, catalog graybox, mechanic, expansion, or global roadmap scope.
 - **Workflow:** [`prototype-production-workflow.md`](../../prototype-production-workflow.md), revision `r3-learning-contract-semantic-fit`.
 - **Research boundary:** [`num-02-and-paving-task-precedents.md`](../../../curriculum/research/num-02-and-paving-task-precedents.md) distinguishes cardinality estimation from unit-iteration measurement.
 
 ## Bounded pair identity
 
 - **Pair:** `MES-01 → MES-02`
-- **Proposed conceptual arc:** understand that a length is measured by iterating one invariant unit endpoint-to-endpoint, then use that known unit as a magnitude reference to estimate before verifying.
+- **Approved bounded conceptual arc:** understand that a length is measured by iterating one invariant unit endpoint-to-endpoint, then use that known unit as a magnitude reference to estimate before verifying.
 - **Shared conceptual object:** the length of one straight, one-paver-wide path and one invariant paver-length unit.
 - **Stable scenario hypothesis:** a path must be planned before construction. A single 50 cm reference paver is available; the pupil first establishes how it can measure a path, then uses it to estimate an order before checking.
 - **Scenario status:** bounded context for learning-contract review, not an approved mechanic or catalog implementation.
@@ -129,16 +130,13 @@ Do not escalate by adding area, mixed unit sizes, ruler graduations, conversion 
 
 ## Owner spine gate
 
-This proposal has **no structural-spine approval yet**. Record exactly one accountable disposition:
+Approval applies only to this bounded pair’s order, boundaries, prerequisites, evidence handoff, semantic distinctions, and out-of-scope nodes. It authorizes only the `MES-01` learning-contract gate. It does not approve the full `SEQ-M1` spine, the proposed scenario, a semantic-fit candidate, catalog implementation, mechanic, or expansion.
 
-- `approve bounded pair spine`;
-- approve with named structural changes;
-- return to roadmap/dependencies;
-- park the bounded pair.
+- **Owner response:** `Approve spine (Recommended)`
+- **Normalized disposition:** `approve bounded pair spine`
+- **Required changes:** none
+- **Revision/digest judged:** `r0-bounded-measurement-pair`; pre-record `sha256:6cb3e93488cadc89df7a3ff28792432ca46c12a87600340fb8cfedb226597df1`
+- **Recorded by / role:** repository owner acting as product/curriculum owner
+- **Recorded at:** 2026-07-16
 
-Approval of this spine would authorize only the `MES-01` learning-contract gate. It would not approve the proposed scenario, a semantic-fit candidate, catalog implementation, mechanic, or expansion.
-
-- **Owner disposition:** pending
-- **Revision judged:** `r0-bounded-measurement-pair`
-- **Recorded by / role:** pending
-- **Recorded at:** pending
+**Next gate:** accountable owner disposition on the `MES-01` learning contract `r0-unit-iteration-contract`. No semantic-fit rationale or implementation is authorized before that separate gate passes.
