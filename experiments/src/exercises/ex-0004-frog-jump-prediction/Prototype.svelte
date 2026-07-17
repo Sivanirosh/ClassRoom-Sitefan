@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onDestroy, tick } from 'svelte';
+  import pondAtmosphere from './assets/pond-garden-atmosphere.webp';
 
   type View = 'intro' | 'active' | 'success' | 'complete';
   type Mode = 'tutorial' | 'prediction';
@@ -79,6 +80,9 @@
   let messageKind: MessageKind = 'instruction';
   let announcement = '';
   let errorProbeCompleted = false;
+  let lastJumpDistance: 1 | 2 | null = null;
+  let jumpEpoch = 0;
+  let runGeneration = 0;
   let rootElement: HTMLElement;
   let timer: ReturnType<typeof setTimeout> | undefined;
 
@@ -95,6 +99,15 @@
     ? { x: unitReferenceStart.x + 5, y: unitReferenceStart.y - 5 }
     : { x: unitReferenceStart.x - 13, y: unitReferenceStart.y - 4 };
   $: frogPoint = pointAt(coveredUnits, scene);
+  $: discrepancyUnits = Math.abs(scene.targetUnits - coveredUnits);
+  $: discrepancyStart = outcome === 'over' ? finishPoint : frogPoint;
+  $: discrepancyEnd = outcome === 'over' ? frogPoint : finishPoint;
+  $: discrepancyLabel = scene.orientation === 'horizontal'
+    ? { x: (discrepancyStart.x + discrepancyEnd.x) / 2, y: originPoint.y - 5 }
+    : { x: originPoint.x + 13, y: (discrepancyStart.y + discrepancyEnd.y) / 2 + 1 };
+  $: showOverflowEvidence = outcome === 'over' && (
+    frogPoint.x <= 7 || frogPoint.x >= 113 || frogPoint.y <= 7 || frogPoint.y >= 93
+  );
   $: smokeState = view === 'intro' ? 'ready' : view === 'active' ? 'active' : view === 'success' ? 'success' : 'complete';
   $: smokeSuccessPlan = view === 'active'
     ? scene.mode === 'tutorial'
@@ -111,7 +124,7 @@
     ? String(scene.smokeErrorValue)
     : String(requiredActions);
 
-  onDestroy(clearTimer);
+  onDestroy(invalidateRun);
 
   function calculateRequiredActions(current: Scene): number {
     let units = 0;
@@ -150,6 +163,11 @@
     timer = undefined;
   }
 
+  function invalidateRun(): void {
+    runGeneration += 1;
+    clearTimer();
+  }
+
   async function focus(selector: string): Promise<void> {
     await tick();
     rootElement.querySelector<HTMLElement>(selector)?.focus();
@@ -166,13 +184,15 @@
   }
 
   function loadScene(index: number): void {
-    clearTimer();
+    invalidateRun();
     sceneIndex = index;
     coveredUnits = 0;
     executedActions = 0;
     prediction = null;
     predictionText = '';
     trace = [];
+    lastJumpDistance = null;
+    jumpEpoch = 0;
     running = false;
     outcome = 'idle';
     message = baseMessage(scenes[index]);
@@ -195,6 +215,8 @@
     if (running || scene.mode !== 'tutorial') return;
     const distance = nextDistance(coveredUnits);
     const next = coveredUnits + distance;
+    lastJumpDistance = distance;
+    jumpEpoch += 1;
     trace = [...trace, { from: coveredUnits, to: next, distance }];
     coveredUnits = next;
     executedActions += 1;
@@ -224,12 +246,15 @@
   }
 
   async function executePrediction(value: number): Promise<void> {
-    clearTimer();
+    invalidateRun();
+    const generation = runGeneration;
     prediction = value;
     running = true;
     coveredUnits = 0;
     executedActions = 0;
     trace = [];
+    lastJumpDistance = null;
+    jumpEpoch = 0;
     outcome = 'idle';
     message = `Prédiction engagée : ${value} saut${value > 1 ? 's' : ''}. Observe la chaîne automatique.`;
     messageKind = 'action';
@@ -238,32 +263,39 @@
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reducedMotion) {
       for (let index = 0; index < value; index += 1) advanceAutomaticStep();
-      await resolvePrediction();
+      await resolvePrediction(generation);
       return;
     }
 
-    runAnimatedStep(value);
+    runAnimatedStep(value, generation);
   }
 
-  function runAnimatedStep(total: number): void {
+  function runAnimatedStep(total: number, generation: number): void {
+    if (generation !== runGeneration || view !== 'active') return;
     if (executedActions >= total) {
-      void resolvePrediction();
+      void resolvePrediction(generation);
       return;
     }
     advanceAutomaticStep();
     announcement = `Saut ${executedActions} sur ${total}.`;
-    timer = setTimeout(() => runAnimatedStep(total), 260);
+    timer = setTimeout(() => {
+      timer = undefined;
+      runAnimatedStep(total, generation);
+    }, 260);
   }
 
   function advanceAutomaticStep(): void {
     const distance = nextDistance(coveredUnits);
     const next = coveredUnits + distance;
+    lastJumpDistance = distance;
+    jumpEpoch += 1;
     trace = [...trace, { from: coveredUnits, to: next, distance }];
     coveredUnits = next;
     executedActions += 1;
   }
 
-  async function resolvePrediction(): Promise<void> {
+  async function resolvePrediction(generation: number): Promise<void> {
+    if (generation !== runGeneration || view !== 'active') return;
     clearTimer();
     running = false;
 
@@ -290,12 +322,15 @@
 
   async function retry(): Promise<void> {
     if (running || outcome === 'idle') return;
+    invalidateRun();
     if (scene.id === 'horizontal') errorProbeCompleted = true;
     coveredUnits = 0;
     executedActions = 0;
     prediction = null;
     predictionText = '';
     trace = [];
+    lastJumpDistance = null;
+    jumpEpoch = 0;
     outcome = 'idle';
     message = `Le passage ${sceneIndex + 1} recommence ici. Observe encore l’unité et la longueur, puis engage une nouvelle prédiction.`;
     messageKind = 'instruction';
@@ -317,11 +352,13 @@
   }
 
   async function restart(): Promise<void> {
-    clearTimer();
+    invalidateRun();
     view = 'intro';
     sceneIndex = 0;
     coveredUnits = 0;
     trace = [];
+    lastJumpDistance = null;
+    jumpEpoch = 0;
     announcement = 'Retour à la présentation du jeu.';
     await focus('#intro-title');
   }
@@ -342,6 +379,7 @@
   data-smoke-success-plan={smokeSuccessPlan}
   data-smoke-error-plan={smokeErrorPlan}
   data-smoke-recovery-plan={smokeRecoveryPlan}
+  class:show-overflow-evidence={showOverflowEvidence}
   bind:this={rootElement}
 >
   <p class="sr-only" aria-live="polite">{announcement}</p>
@@ -349,6 +387,7 @@
   {#if view === 'intro'}
     <section class="intro" aria-labelledby="intro-title">
       <div class="intro-card">
+        <img class="generated-atmosphere" src={pondAtmosphere} alt="" aria-hidden="true" />
         <div class="intro-copy">
           <p class="kicker">Le jardin des unités · EX-0004</p>
           <h1 id="intro-title" tabindex="-1">Le saut<br /><em>juste</em></h1>
@@ -442,7 +481,7 @@
 
         <div class="pond-frame">
           <div class="frame-plaque" aria-hidden="true"><span></span> Jardin de l’étang <span></span></div>
-          <section class="playfield" aria-label={`Grille unitaire, trajet ${scene.orientation === 'vertical' ? 'vertical' : 'horizontal'} : ${coveredUnits} unités parcourues`}>
+          <section class:overflow-evidence={showOverflowEvidence} class="playfield" aria-label={`Grille unitaire, trajet ${scene.orientation === 'vertical' ? 'vertical' : 'horizontal'} : ${coveredUnits} unités parcourues`}>
             <svg viewBox="0 0 120 100" role="img" aria-labelledby="path-title path-desc">
               <title id="path-title">Trajet de la grenouille dans le jardin-étang</title>
               <desc id="path-desc">Grille carrée. La grenouille a exécuté {executedActions} action{executedActions === 1 ? '' : 's'} et parcouru {coveredUnits} unité{coveredUnits === 1 ? '' : 's'}. Le départ, l’arrivée et les traces restent visibles.</desc>
@@ -520,9 +559,18 @@
               {#each trace as item}
                 {@const from = pointAt(item.from, scene)}
                 {@const to = pointAt(item.to, scene)}
-                <line class:double={item.distance === 2} class="completed-line" x1={from.x} y1={from.y} x2={to.x} y2={to.y} stroke-width={traceWidth(item)}></line>
+                <line class:double={item.distance === 2} class:vertical={scene.orientation === 'vertical'} class="completed-line" x1={from.x} y1={from.y} x2={to.x} y2={to.y} stroke-width={traceWidth(item)}></line>
+                <circle class="landing-ripple" cx={to.x} cy={to.y} r="3.4"></circle>
                 <circle class="landing" cx={to.x} cy={to.y} r="1.8"></circle>
               {/each}
+
+              {#if outcome === 'short' || outcome === 'over'}
+                <g class="discrepancy" aria-hidden="true">
+                  <line x1={discrepancyStart.x} y1={discrepancyStart.y} x2={discrepancyEnd.x} y2={discrepancyEnd.y}></line>
+                  <rect x={discrepancyLabel.x - 9} y={discrepancyLabel.y - 3.8} width="18" height="5.5" rx="2"></rect>
+                  <text x={discrepancyLabel.x} y={discrepancyLabel.y}>écart {discrepancyUnits}</text>
+                </g>
+              {/if}
 
               {#each scene.obstacleUnits as units}
                 {@const obstacle = pointAt(units, scene)}
@@ -537,21 +585,25 @@
                 </g>
               {/each}
 
-              <g class:short={outcome === 'short'} class:over={outcome === 'over'} class:running class="frog" transform={`translate(${frogPoint.x} ${frogPoint.y})`} aria-label={`Grenouille après ${executedActions} action${executedActions === 1 ? '' : 's'}`}>
-                <ellipse class="frog-shadow" cy="4.8" rx="5.5" ry="1.7"></ellipse>
-                <path class="frog-leg" d="M-4 1 Q-6.6 2 -7 4.8 Q-5 4.3 -2.9 3.1 M4 1 Q6.6 2 7 4.8 Q5 4.3 2.9 3.1"></path>
-                <ellipse class="frog-body" rx="5.6" ry="4.5"></ellipse>
-                <ellipse class="frog-belly" cy="1.3" rx="3.3" ry="2.4"></ellipse>
-                <circle class="frog-eye-bump" cx="-2.5" cy="-3.8" r="1.8"></circle><circle class="frog-eye-bump" cx="2.5" cy="-3.8" r="1.8"></circle>
-                <circle class="eye" cx="-2.5" cy="-3.9" r=".58"></circle><circle class="eye" cx="2.5" cy="-3.9" r=".58"></circle>
-                <circle class="frog-cheek" cx="-3.7" cy="-.1" r=".55"></circle><circle class="frog-cheek" cx="3.7" cy="-.1" r=".55"></circle>
-                <path class="frog-mouth" d="M-2 1 Q0 2.6 2 1"></path>
+              <g class="frog" transform={`translate(${frogPoint.x} ${frogPoint.y})`} aria-label={`Grenouille après ${executedActions} action${executedActions === 1 ? '' : 's'}`}>
+                {#key jumpEpoch}
+                  <g class="frog-figure" class:jumping={jumpEpoch > 0} class:double-jump={lastJumpDistance === 2} class:short={outcome === 'short'} class:over={outcome === 'over'}>
+                    <ellipse class="frog-shadow" cy="4.8" rx="5.5" ry="1.7"></ellipse>
+                    <path class="frog-leg" d="M-4 1 Q-6.6 2 -7 4.8 Q-5 4.3 -2.9 3.1 M4 1 Q6.6 2 7 4.8 Q5 4.3 2.9 3.1"></path>
+                    <ellipse class="frog-body" rx="5.6" ry="4.5"></ellipse>
+                    <ellipse class="frog-belly" cy="1.3" rx="3.3" ry="2.4"></ellipse>
+                    <circle class="frog-eye-bump" cx="-2.5" cy="-3.8" r="1.8"></circle><circle class="frog-eye-bump" cx="2.5" cy="-3.8" r="1.8"></circle>
+                    <circle class="eye" cx="-2.5" cy="-3.9" r=".58"></circle><circle class="eye" cx="2.5" cy="-3.9" r=".58"></circle>
+                    <circle class="frog-cheek" cx="-3.7" cy="-.1" r=".55"></circle><circle class="frog-cheek" cx="3.7" cy="-.1" r=".55"></circle>
+                    <path class="frog-mouth" d="M-2 1 Q0 2.6 2 1"></path>
+                  </g>
+                {/key}
+                {#if scene.mode === 'tutorial'}
+                  <foreignObject x="-9" y="-9" width="18" height="18">
+                    <button class="world-frog-control" type="button" data-smoke-control="jump" onclick={tutorialJump} aria-label="Toucher la grenouille pour lui faire faire un saut d’une unité"></button>
+                  </foreignObject>
+                {/if}
               </g>
-              {#if scene.mode === 'tutorial'}
-                <foreignObject x={frogPoint.x - 9} y={frogPoint.y - 9} width="18" height="18">
-                  <button class="world-frog-control" type="button" data-smoke-control="jump" onclick={tutorialJump} aria-label="Toucher la grenouille pour lui faire faire un saut d’une unité"></button>
-                </foreignObject>
-              {/if}
             </svg>
           </section>
           <p class="board-measure"><span aria-hidden="true"></span> Chaque côté de carré garde exactement la longueur d’un saut ordinaire.</p>
@@ -651,7 +703,7 @@
           {#each trace as item}
             {@const from = pointAt(item.from, scene)}
             {@const to = pointAt(item.to, scene)}
-            <line class:double={item.distance === 2} class="completed-line" x1={from.x} y1={from.y} x2={to.x} y2={to.y} stroke-width={traceWidth(item)}></line>
+            <line class:double={item.distance === 2} class:vertical={scene.orientation === 'vertical'} class="completed-line" x1={from.x} y1={from.y} x2={to.x} y2={to.y} stroke-width={traceWidth(item)}></line>
             <circle class="landing" cx={to.x} cy={to.y} r="1.8"></circle>
           {/each}
           {#each scene.obstacleUnits as units}
@@ -665,14 +717,16 @@
               <path class="frog-mouth" d="M-1.8 1 Q0 2.3 1.8 1"></path>
             </g>
           {/each}
-          <g class="frog" transform={`translate(${frogPoint.x} ${frogPoint.y})`} aria-label="Grenouille exactement à l’Arrivée">
-            <ellipse class="frog-shadow" cy="4.8" rx="5.5" ry="1.7"></ellipse>
-            <path class="frog-leg" d="M-4 1 Q-6.6 2 -7 4.8 Q-5 4.3 -2.9 3.1 M4 1 Q6.6 2 7 4.8 Q5 4.3 2.9 3.1"></path>
-            <ellipse class="frog-body" rx="5.6" ry="4.5"></ellipse><ellipse class="frog-belly" cy="1.3" rx="3.3" ry="2.4"></ellipse>
-            <circle class="frog-eye-bump" cx="-2.5" cy="-3.8" r="1.8"></circle><circle class="frog-eye-bump" cx="2.5" cy="-3.8" r="1.8"></circle>
-            <circle class="eye" cx="-2.5" cy="-3.9" r=".58"></circle><circle class="eye" cx="2.5" cy="-3.9" r=".58"></circle>
-            <circle class="frog-cheek" cx="-3.7" cy="-.1" r=".55"></circle><circle class="frog-cheek" cx="3.7" cy="-.1" r=".55"></circle>
-            <path class="frog-mouth" d="M-2 1 Q0 2.6 2 1"></path>
+          <g class="frog arrived" transform={`translate(${frogPoint.x} ${frogPoint.y})`} aria-label="Grenouille exactement à l’Arrivée">
+            <g class="frog-figure">
+              <ellipse class="frog-shadow" cy="4.8" rx="5.5" ry="1.7"></ellipse>
+              <path class="frog-leg" d="M-4 1 Q-6.6 2 -7 4.8 Q-5 4.3 -2.9 3.1 M4 1 Q6.6 2 7 4.8 Q5 4.3 2.9 3.1"></path>
+              <ellipse class="frog-body" rx="5.6" ry="4.5"></ellipse><ellipse class="frog-belly" cy="1.3" rx="3.3" ry="2.4"></ellipse>
+              <circle class="frog-eye-bump" cx="-2.5" cy="-3.8" r="1.8"></circle><circle class="frog-eye-bump" cx="2.5" cy="-3.8" r="1.8"></circle>
+              <circle class="eye" cx="-2.5" cy="-3.9" r=".58"></circle><circle class="eye" cx="2.5" cy="-3.9" r=".58"></circle>
+              <circle class="frog-cheek" cx="-3.7" cy="-.1" r=".55"></circle><circle class="frog-cheek" cx="3.7" cy="-.1" r=".55"></circle>
+              <path class="frog-mouth" d="M-2 1 Q0 2.6 2 1"></path>
+            </g>
           </g>
         </svg>
       </div>
@@ -726,6 +780,8 @@
       radial-gradient(circle at 8% 86%, rgba(65, 129, 106, .16), transparent 28rem),
       linear-gradient(145deg, #eef2e8 0%, #e3eadf 54%, #edf0e5 100%);
   }
+
+  .prototype-root.show-overflow-evidence { overflow-x: clip; }
 
   .sr-only {
     position: absolute;
@@ -820,15 +876,32 @@
   .intro-card::before {
     content: "";
     position: absolute;
+    z-index: 2;
     inset: 16px;
     border: 1px solid rgba(157, 72, 54, .15);
     border-radius: 27px;
     pointer-events: none;
   }
-  .intro-copy { position: relative; z-index: 1; display: grid; justify-items: start; gap: 20px; }
+  .generated-atmosphere {
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    right: 0;
+    width: 68%;
+    height: 31%;
+    object-fit: cover;
+    object-position: center top;
+    opacity: .22;
+    filter: saturate(.72) contrast(.92);
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, .7) 42%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, .7) 42%, transparent 100%);
+    pointer-events: none;
+  }
+  .intro-copy { position: relative; z-index: 3; display: grid; justify-items: start; gap: 20px; }
   .intro-copy .primary { margin-top: 6px; }
   .intro-art {
     position: relative;
+    z-index: 1;
     min-width: 0;
     filter: drop-shadow(0 16px 18px rgba(30, 66, 55, .15));
   }
@@ -967,6 +1040,7 @@
   }
   .frame-plaque span { width: 5px; height: 5px; border-radius: 50%; background: var(--persimmon); }
   .playfield { width: 100%; overflow: hidden; border: 1px solid rgba(18, 57, 48, .62); border-radius: 18px; background: #91c2b3; }
+  .playfield.overflow-evidence, .playfield.overflow-evidence svg { overflow: visible; }
   .playfield svg, .success-map svg { aspect-ratio: 6 / 5; }
   .board-measure {
     display: flex;
@@ -997,7 +1071,24 @@
   .lotus .petal { fill: #f0c0b1; stroke: #9d594f; stroke-width: .38; }
   .lotus-two { opacity: .78; }
   .garden-reeds path { fill: none; stroke: #2d6352; stroke-width: 1.1; stroke-linecap: round; }
-  .pond-ripples path { fill: none; stroke: #e8f1dc; stroke-width: .75; stroke-linecap: round; opacity: .72; }
+  .pond-ripples path {
+    fill: none;
+    stroke: #e8f1dc;
+    stroke-width: .75;
+    stroke-linecap: round;
+    opacity: .72;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: water-ripple 3.8s ease-in-out infinite;
+  }
+  .pond-ripples path:nth-child(2) { animation-delay: -1.9s; }
+  .pond-ripples path:nth-child(3) { animation-delay: -3s; }
+  .intro-art .water-lines path {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: water-ripple 4.4s ease-in-out infinite;
+  }
+  .intro-art .water-lines path:nth-child(even) { animation-delay: -2.2s; }
   .grid-surface { pointer-events: none; }
   .route-bed { stroke: rgba(251, 247, 220, .66); stroke-width: 5.8; stroke-linecap: round; }
   .target-line { stroke: #34594f; stroke-width: 1.25; stroke-dasharray: 1.8 1.5; stroke-linecap: round; }
@@ -1021,10 +1112,45 @@
   .finish-marker > circle:not(.marker-halo) { fill: #f2c95e; }
   .finish-marker > path { fill: none; stroke: #17382f; stroke-width: .8; stroke-linecap: round; stroke-linejoin: round; }
 
-  .completed-line { stroke: #f1bc42; stroke-linecap: round; filter: drop-shadow(0 1px .45px rgba(83, 58, 25, .5)); }
+  .completed-line {
+    stroke: #f1bc42;
+    stroke-linecap: round;
+    filter: drop-shadow(0 1px .45px rgba(83, 58, 25, .5));
+    transform-box: fill-box;
+    transform-origin: left center;
+    animation: trace-horizontal 220ms cubic-bezier(.23, 1, .32, 1) both;
+  }
+  .completed-line.vertical { transform-origin: center bottom; animation-name: trace-vertical; }
   .completed-line.double { stroke: #c95f3f; stroke-dasharray: 3 1.3; }
-  .landing { fill: #fff5c5; stroke: #70462d; stroke-width: .75; }
+  .landing {
+    fill: #fff5c5;
+    stroke: #70462d;
+    stroke-width: .75;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: landing-in 220ms cubic-bezier(.23, 1, .32, 1) both;
+  }
+  .landing-ripple {
+    fill: none;
+    stroke: rgba(255, 247, 201, .9);
+    stroke-width: .75;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: landing-ripple 340ms ease-out both;
+  }
+  .discrepancy line {
+    stroke: #9f4938;
+    stroke-width: 1.4;
+    stroke-dasharray: 1.8 1.2;
+    stroke-linecap: round;
+    animation: discrepancy-in 240ms ease-out both;
+  }
+  .discrepancy rect { fill: rgba(255, 242, 222, .96); stroke: #9f4938; stroke-width: .45; }
+  .discrepancy text { fill: #733528; font-size: 3px; font-weight: 950; text-anchor: middle; }
   .frog { transition: transform 240ms cubic-bezier(.77, 0, .175, 1); }
+  .frog-figure { transform-box: fill-box; transform-origin: center 78%; }
+  .frog-figure.jumping { animation: frog-hop 240ms cubic-bezier(.45, 0, .2, 1) both; }
+  .frog-figure.jumping.double-jump { animation-name: frog-hop-double; }
   .frog-shadow { fill: #1b4c40; opacity: .25; stroke: none; }
   .frog .frog-leg { fill: #2d7658; stroke: #153c32; stroke-width: .65; stroke-linecap: round; stroke-linejoin: round; }
   .frog .frog-body { fill: #47ae79; stroke: #153c32; stroke-width: .7; }
@@ -1033,8 +1159,9 @@
   .frog .eye { fill: #153c32; stroke: none; }
   .frog .frog-cheek { fill: #e9a381; stroke: none; opacity: .75; }
   .frog .frog-mouth { fill: none; stroke: #153c32; stroke-width: .65; stroke-linecap: round; }
-  .frog.short { animation: worried 350ms ease-out 2; }
-  .frog.over { animation: splash 450ms ease-out 1; }
+  .frog-figure.short { animation: worried 350ms ease-out 2; }
+  .frog-figure.over { animation: splash 450ms ease-out 1; }
+  .frog.arrived .frog-figure { animation: arrival-settle 320ms cubic-bezier(.23, 1, .32, 1) both; }
   .obstacle .frog-shadow { fill: #653927; }
   .obstacle .frog-leg { fill: #d36f45; stroke: #673624; stroke-width: .65; }
   .obstacle .frog-body { fill: #e58050; stroke: #673624; stroke-width: .7; }
@@ -1174,7 +1301,14 @@
     box-shadow: 0 10px 0 #b8c6b3, 0 24px 55px rgba(32, 72, 59, .2);
   }
   .success-origin { fill: #fff9e8; stroke: #17382f; stroke-width: 1.4; }
-  .success-finish-halo { fill: rgba(248, 220, 125, .36); stroke: #f8dc7d; stroke-width: 1.1; }
+  .success-finish-halo {
+    fill: rgba(248, 220, 125, .36);
+    stroke: #f8dc7d;
+    stroke-width: 1.1;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: arrival-halo 620ms ease-out both;
+  }
   .success-finish { fill: #f1c552; stroke: #17382f; stroke-width: 1.4; }
 
   .complete {
@@ -1193,8 +1327,31 @@
   .complete h1 { max-width: 640px; font-size: clamp(2.5rem, 7vw, 5rem); }
   .complete > p:not(.kicker, .boundary) { max-width: 560px; margin: 0; color: #446158; font-size: 1.05rem; line-height: 1.6; }
 
-  @keyframes worried { 50% { filter: saturate(.45) brightness(1.16); } }
-  @keyframes splash { 50% { opacity: .5; filter: hue-rotate(18deg); } }
+  @keyframes water-ripple {
+    0%, 100% { opacity: .42; transform: scaleX(.92); }
+    50% { opacity: .8; transform: scaleX(1.06); }
+  }
+  @keyframes trace-horizontal { from { opacity: .25; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
+  @keyframes trace-vertical { from { opacity: .25; transform: scaleY(0); } to { opacity: 1; transform: scaleY(1); } }
+  @keyframes landing-in { from { opacity: .4; transform: scale(.55); } to { opacity: 1; transform: scale(1); } }
+  @keyframes landing-ripple { from { opacity: .85; transform: scale(.45); } to { opacity: 0; transform: scale(1.55); } }
+  @keyframes frog-hop {
+    0% { transform: translateY(0) scale(1.04, .92); }
+    42% { transform: translateY(-3.8px) scale(.96, 1.05); }
+    76% { transform: translateY(-.8px) scale(1.03, .96); }
+    100% { transform: translateY(0) scale(1); }
+  }
+  @keyframes frog-hop-double {
+    0% { transform: translateY(0) scale(1.07, .88); }
+    44% { transform: translateY(-6.2px) scale(.94, 1.08); }
+    78% { transform: translateY(-1px) scale(1.05, .94); }
+    100% { transform: translateY(0) scale(1); }
+  }
+  @keyframes discrepancy-in { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes worried { 50% { transform: translateX(-.7px); filter: saturate(.45) brightness(1.16); } }
+  @keyframes splash { 50% { opacity: .62; transform: translateY(-1.2px) scale(1.05, .94); filter: hue-rotate(18deg); } }
+  @keyframes arrival-settle { from { opacity: .7; transform: translateY(-3px) scale(.96, 1.04); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  @keyframes arrival-halo { from { opacity: .35; transform: scale(.55); } 65% { opacity: 1; transform: scale(1.2); } to { opacity: 1; transform: scale(1); } }
   @keyframes seal-in { from { opacity: 0; transform: scale(.9) rotate(-4deg); } to { opacity: 1; transform: scale(1) rotate(0); } }
 
   @media (hover: hover) and (pointer: fine) {
@@ -1204,8 +1361,12 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .frog, .primary, .secondary, .retry { transition: none; animation: none !important; }
-    .success-seal { animation: none; }
+    .frog, .primary, .secondary, .retry { transition: none; }
+    .frog-figure, .completed-line, .landing, .landing-ripple, .discrepancy line,
+    .pond-ripples path, .intro-art .water-lines path, .success-finish-halo, .success-seal {
+      animation: none !important;
+    }
+    .landing-ripple { display: none; }
   }
 
   @media (max-width: 820px) {
@@ -1223,6 +1384,7 @@
     .intro { width: calc(100% - 16px); padding: 8px 0; }
     .intro-card { gap: 20px; padding: 24px 18px 20px; border-radius: 26px; }
     .intro-card::before { inset: 8px; border-radius: 19px; }
+    .generated-atmosphere { width: 100%; height: 92px; opacity: .18; }
     .intro-copy { gap: 15px; }
     .intro-copy h1 { font-size: clamp(2.8rem, 17vw, 4rem); }
     .intro-art svg { border-width: 5px; border-radius: 20px; }

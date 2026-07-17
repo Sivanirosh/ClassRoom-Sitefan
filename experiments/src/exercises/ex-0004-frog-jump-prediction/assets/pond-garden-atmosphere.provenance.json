@@ -13,5 +13,21 @@
   "thinking": "high",
   "referencePaths": [],
   "savedPath": "/home/sivanirosh/git_repos/ClassRoom-Sitefan/.pi/generated-images/openai-image-2026-07-17T23-19-26-248Z-ig_0f3be804ab20eb0d016a5ab84a4d7c819189890b37e3dc1733.webp",
-  "metadataPath": "/home/sivanirosh/git_repos/ClassRoom-Sitefan/.pi/generated-images/openai-image-2026-07-17T23-19-26-248Z-ig_0f3be804ab20eb0d016a5ab84a4d7c819189890b37e3dc1733.json"
+  "metadataPath": "/home/sivanirosh/git_repos/ClassRoom-Sitefan/.pi/generated-images/openai-image-2026-07-17T23-19-26-248Z-ig_0f3be804ab20eb0d016a5ab84a4d7c819189890b37e3dc1733.json",
+  "integrationReview": {
+    "role": "Replaceable decorative atmosphere behind the intro copy and original foreground illustration only; never part of an active or success board.",
+    "stateBoundary": "The image has empty alt text and aria-hidden=true. It carries no prompt, control, answer, target quantity, endpoint, trace, outcome, or completion state, and deleting it leaves the exercise semantics intact.",
+    "safeCrop": "Prototype.svelte uses object-fit: cover and object-position: center top in a shallow vertically masked strip. Desktop renders the strip at approximately 760.2 x 189.9 CSS pixels with 22% opacity; the 320px viewport renders it at 302 x 92 CSS pixels with 18% opacity. The perspective-tile field is not rendered in the active mathematical corridor because the asset is absent from every active and success SVG.",
+    "noBrandingReview": "Manual pixel review found no readable text, logo, watermark, trademark, title treatment, copied character, branding, or recognizable source composition. Visible content is generic pond, bridge, pavilion, willow, stone, lotus, reed, blossom, and koi atmosphere.",
+    "motionRelationship": "The generated image remains static. Purposeful motion is confined to original SVG frog, trace, landing, discrepancy-entry, arrival, and water-ripple layers; reduced-motion removes those animations without changing state.",
+    "desktopAnd320Review": "Headless visual review at 1440px and 320px found no horizontal overflow, console error, or page error. The crop stays behind intro content and never obscures a playable grid, label, or control.",
+    "technicalEvidence": [
+      "npm --prefix experiments run check: passed with 0 Svelte errors/warnings and catalog validation",
+      "npm --prefix experiments run build: passed",
+      "SMOKE_EXERCISES=EX-0004 npm --prefix experiments run test:smoke: passed all 8 tests",
+      "git diff --check: passed",
+      "Rendered geometry: 65.5px square desktop cells, 24.5px square 320px cells, and 44.1px square 320px tutorial hit target"
+    ],
+    "claimBoundary": "This review records asset role, crop safety, operability, and geometry only. It does not claim learning efficacy, accessibility equivalence, MES-02 approval, or promotion readiness."
+  }
 }

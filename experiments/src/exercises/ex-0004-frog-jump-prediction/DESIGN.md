@@ -19,7 +19,7 @@ Source provenance and adaptation boundaries are recorded in [`mes-01-calm-game-m
 
 ## Pond-board visual rationale
 
-The expanded interface frames the existing lattice as a calm garden pond. A timber surround, celadon water, perimeter stones and reeds, a small arched bridge, a stone lantern, lotus leaves, and a warm sun/moon palette establish an East Asian garden-inspired atmosphere without reproducing a branded character, recognizable game board, or supplied composition. Every illustration is original inline SVG or CSS; the exercise loads no external image, font, or network asset and adds no runtime dependency.
+The expanded interface frames the existing lattice as a calm garden pond. A timber surround, celadon water, perimeter stones and reeds, a small arched bridge, a stone lantern, lotus leaves, and a warm sun/moon palette establish an East Asian garden-inspired atmosphere without reproducing a branded character, recognizable game board, or supplied composition. The mathematical board remains original inline SVG and CSS. One committed generated WebP now supplies replaceable intro atmosphere only; it is bundled locally, hidden from accessibility APIs, absent from every active and success map, and adds no remote/network-service asset, font, or runtime dependency.
 
 The visual hierarchy remains mathematical rather than decorative:
 
@@ -35,7 +35,7 @@ The visual hierarchy remains mathematical rather than decorative:
 - `vectorFor()` remains exactly `{ x: 10, y: 0 }` or `{ x: 0, y: -10 }`; ordinary jumps therefore equal one cell side. The forced obstacle trace remains one 20-unit segment produced by one action.
 - Origins, endpoints, obstacle location, automatic execution, retry behavior, and every deterministic smoke selector remain unchanged.
 - The tutorial control remains the real transparent HTML button over the visible frog. At a 320px viewport its measured hit area is 44.1 by 44.1 CSS pixels.
-- Reduced motion still resolves a prediction immediately and disables new movement/entry transitions without hiding the final trace.
+- Reduced motion still resolves a prediction immediately and disables frog, trace, landing, discrepancy-entry, water, and arrival motion without hiding the final landing, trace, discrepancy label, outcome, focus transition, or completion path.
 
 ## Corrected game model
 
@@ -162,9 +162,36 @@ Completed 2026-07-17:
 - Headless Chrome inspection at 1440px and 320px — no console/page errors and document `scrollWidth` equaled viewport width in both cases.
 - Rendered geometry instrumentation — the desktop map measured `786 × 655` CSS pixels and the mobile map `294 × 245`, producing equal cell width and height (`65.5px` desktop; `24.5px` mobile) from the unchanged 12-by-10 visible grid.
 - Visual-state inspection — intro, tutorial, horizontal success, vertical, obstacle, and final map states retained readable endpoints, unit reference, trace, and perimeter-only scenery; the 320px tutorial frog target measured `44.1 × 44.1` CSS pixels.
-- Source inspection — all pond, frog, bridge, lantern, lotus, mountain, pavilion, and completion art is hand-authored in `Prototype.svelte`; no external asset, copied board shape, new dependency, or network request was introduced.
+- Source inspection — all pond, frog, bridge, lantern, lotus, mountain, pavilion, and completion art in that slice was hand-authored in `Prototype.svelte`; no external asset, copied board shape, new dependency, or network request was introduced.
 
-These checks establish implementation operability and rendered geometry only. Owner replay, pupil reasoning, non-guessing behavior, French comprehension, practical accessibility equivalence, and pupil efficacy remain untested.
+### Final animation and generated-art polish
+
+The committed `assets/pond-garden-atmosphere.webp` is an **optional decorative intro layer**, not a board. `Prototype.svelte` renders it as an empty-alt, `aria-hidden` image behind the intro copy and original foreground illustration. The upper atmospheric strip is cropped with `object-fit: cover` / `object-position: center top`, reduced to 22% opacity on desktop and 18% at 320 px, and faded out with a vertical mask. This crop keeps the bridge, willow, and architecture as framing while the generated perspective-tile field never enters an active mathematical corridor. Removing or replacing the image cannot change a prompt, control, answer, endpoint, trace, target quantity, or outcome.
+
+Manual source-and-image review found no readable text, title treatment, logo, watermark, trademark, copied character, branding, or recognizable source composition in the generated pixels. The local asset depicts only generic pond, bridge, pavilion, plant, stone, and koi forms. Its decorative tile perspective is intentionally excluded from the active and success maps, whose sole playable grid remains the exact orthogonal SVG pattern.
+
+Motion is explanatory feedback rather than a new mechanic:
+
+- state advances immediately on the existing action; a 240 ms visual hop runs inside the frog’s exact translated position, so there is no wind-up gate or timing skill;
+- a one-unit hop uses a low arc, while the one-action two-unit obstacle jump uses a higher arc and retains its wider persimmon dashed segment;
+- each committed segment draws from its origin, each landing leaves its permanent dot and a brief nonessential ripple, and the slow perimeter water ripples never move the grid or route;
+- short/over outcomes retain the frog and trace and add a static labelled discrepancy segment; for accepted extreme overruns, only the exact out-of-view evidence layers may overflow the decorative frame while the root clips page-level horizontal scrolling, preserving the original coordinates, viewBox, grid, and prediction behavior; exact arrival replays the retained trace, endpoint halo, and final frog settle;
+- timeout progression remains the source of truth and carries a generation token invalidated by scene loading, retry, restart, and destruction, so no stale callback can mutate a later scene;
+- `prefers-reduced-motion: reduce` applies all state synchronously and removes every new transform/loop animation while preserving final evidence and focus.
+
+Final-polish review and technical evidence:
+
+- desktop headless review at 1440 px loaded the committed 1536 × 1024 WebP locally in a 760.2 × 189.9 CSS-pixel masked intro crop with no horizontal overflow or console/page errors;
+- 320 px touch review loaded the same static crop at 302 × 92 CSS pixels, retained no horizontal overflow, measured the board at 294 × 245, preserved square 24.5 × 24.5 cells, and kept the tutorial frog hit target at 44.1 × 44.1 CSS pixels;
+- active desktop geometry remained 786 × 655, or square 65.5 × 65.5 cells; the ordinary displacement functions remain 10 units and the obstacle action produced one dashed 20-unit trace from unit 2 to unit 4;
+- visual traversal covered intro, tutorial takeoff/landing, horizontal shortage with retained `écart 2`, vertical transfer, in-flight double jump, obstacle success, and the final exact trace;
+- reduced-motion traversal retained three short-attempt segments plus `écart 2`, then five exact-arrival segments and success focus with computed animation name `none`; additional desktop/320 px reduced-motion probes kept vertical predictions 8/9 and obstacle prediction 9 visible outside the decorative frame at their exact coordinates without page-level horizontal overflow;
+- `npm --prefix experiments run check` — passed with 0 Svelte errors/warnings and a valid five-exercise catalog;
+- `npm --prefix experiments run build` — passed;
+- `SMOKE_EXERCISES=EX-0004 npm --prefix experiments run test:smoke` — passed all 8 tests, including desktop, keyboard reduced-motion, and 320 px touch paths;
+- `git diff --check` — passed.
+
+These checks establish implementation operability and rendered geometry only. Owner replay, pupil reasoning, non-guessing behavior, French comprehension, practical accessibility equivalence, and pupil efficacy remain untested. This polish does not approve MES-02 or promotion.
 
 ## Kill criteria
 
@@ -185,9 +212,9 @@ Reject or revise if:
 
 ## Scope exclusions
 
-- No diagonal move, curved path, turn within a path, direction-changing component, branching route, optional obstacle, capture/removal, timer, lives, score, random events, ruler, conversion, fractions, area, persistence, network activity, teacher UI, generated artwork, or pupil prose.
+- No diagonal move, curved path, turn within a path, direction-changing component, branching route, optional obstacle, capture/removal, timer, lives, score, random events, ruler, conversion, fractions, area, persistence, network activity, runtime image generation, teacher UI, or pupil prose.
 - No claim of learning, fun, French comprehension, accessibility equivalence, efficacy, or promotion readiness.
 
 ## Current disposition
 
-The pond-board loop is implemented, operable, and replayable. On 2026-07-17 the owner replayed the orthogonal-grid revision, validated the mechanic, and clearly approved the bounded UI/art expansion now recorded above. Pupil learning, accessibility equivalence, efficacy, MES-02 contract approval, mechanic expansion, and promotion remain separate later decisions.
+The pond-board loop and bounded final polish are implemented, operable, and replayable. On 2026-07-17 the owner replayed the orthogonal-grid revision, validated the mechanic, and clearly approved the bounded UI/art expansion; the later owner authorization covers only the animation and generated-art treatment recorded above. Pupil learning, accessibility equivalence, efficacy, MES-02 contract approval, mechanic expansion, and promotion remain separate later decisions.
