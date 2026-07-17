@@ -2,7 +2,9 @@
   "id": "ex-0004-pond-ui-art",
   "title": "EX-0004 pond-board UI and art expansion",
   "goal": "Transform the validated EX-0004 orthogonal frog-jump graybox into a polished pond-board interface inspired by the supplied references while preserving the exact square unit grid, established mechanic, accessibility routes, and bridge scope.",
-  "status": "open",
+  "status": "closed",
+  "closed_by_run": "kd-20260717-223325-dc058b17",
+  "closed_at": "2026-07-17T22:56:52.717509935+00:00",
   "areas": [
     "experiments/src/exercises/ex-0004-frog-jump-prediction/"
   ],

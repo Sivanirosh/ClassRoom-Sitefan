@@ -1,0 +1,667 @@
+{
+  "run_id": "kd-20260717-223325-dc058b17",
+  "repo_path": "/home/sivanirosh/git_repos/ClassRoom-Sitefan",
+  "integration_branch": "khazad/kd-20260717-223325-dc058b17/integration",
+  "base_sha": "dc0a2fe27bc06cd141b80fb7cb4c435bd7e36fe3",
+  "worker_profile": {
+    "agent": "pi",
+    "agent_profile": "implementer",
+    "agent_provider": "openai-codex",
+    "agent_model": "gpt-5.6-sol",
+    "agent_reasoning": "xhigh",
+    "agent_mode": "fast",
+    "profile_summary": "implementer: provider=openai-codex model=gpt-5.6-sol reasoning=xhigh mode=fast",
+    "launch_summary": "pi implementer: provider=openai-codex model=gpt-5.6-sol reasoning=xhigh mode=fast",
+    "worker_evidence_kind": "real_pi_worker",
+    "worker_evidence_label": "real Pi worker implementation evidence",
+    "source_attribution": {
+      "agent": "workflow_config",
+      "mode": "resolved_agent_profile",
+      "model": "resolved_agent_profile",
+      "pi_args": "none",
+      "pi_bin": "builtin",
+      "profile": "resolved_agent_profile",
+      "provider": "resolved_agent_profile",
+      "reasoning": "resolved_agent_profile"
+    }
+  },
+  "completed_slices": [
+    {
+      "slice_id": "ex-0004-pond-ui-art",
+      "attempt": 1,
+      "launch_id": 48,
+      "status": "complete",
+      "summary": "Expanded EX-0004 into a polished, original garden-pond experience with inline SVG/CSS scenery, frog art, responsive layouts, preserved square-grid mechanics, and updated design/validation documentation.",
+      "commit_sha": "d9ae1cbae23020bcda67ae9cee51cda1fa92ffc4",
+      "commit_message": "feat(experiments): polish EX-0004 pond board",
+      "changed_files": [
+        "experiments/src/exercises/ex-0004-frog-jump-prediction/Prototype.svelte",
+        "experiments/src/exercises/ex-0004-frog-jump-prediction/DESIGN.md"
+      ],
+      "tests_run": [
+        "npm --prefix experiments run check — passed; 0 Svelte errors/warnings and catalog valid",
+        "npm --prefix experiments run build — passed",
+        "SMOKE_EXERCISES=EX-0004 npm --prefix experiments run test:smoke — 6/6 passed",
+        "git diff --check — passed",
+        "Headless Chrome inspection at 1440px and 320px — no console errors or horizontal overflow; rendered cells remained square and the mobile frog target measured 44.1px"
+      ],
+      "acceptance_status": [
+        {
+          "criterion": "The playfield reads as a coherent East Asian garden-inspired pond board using original SVG/CSS art rather than copied branded characters or layouts.",
+          "status": "satisfied",
+          "evidence": "Prototype.svelte now contains hand-authored pond, pavilion, bridge, lantern, lotus, shoreline, frog, and completion artwork using only inline SVG/CSS. No asset, dependency, or network request was added."
+        },
+        {
+          "criterion": "Every visible movement cell remains a true square and every ordinary horizontal or vertical jump remains exactly one cell side; the obstacle jump remains two unit lengths in one action.",
+          "status": "satisfied",
+          "evidence": "Mechanic functions are unchanged: vectors remain exactly 10 SVG units orthogonally and the obstacle step remains distance 2. Both maps retain 120×100 viewBoxes, 10×10 patterns, and 6:5 rendering. Browser measurements showed equal cell width and height at desktop and 320px."
+        },
+        {
+          "criterion": "Tutorial, horizontal prediction, vertical transfer, and obstacle rounds retain their existing interaction semantics and deterministic smoke hooks.",
+          "status": "satisfied",
+          "evidence": "All data-smoke state, action, control, feedback, and prediction hooks remain present. The EX-0004 smoke suite traversed all rounds, including recoverable error and retry, with 6/6 tests passing."
+        },
+        {
+          "criterion": "The UI remains readable and operable by keyboard, touch at 320px, and reduced-motion users without horizontal overflow.",
+          "status": "satisfied",
+          "evidence": "Smoke tests passed reduced-motion keyboard and 320px touch routes. Headless Chrome reported viewport and document widths of 320px, no console/page errors, square 24.5px mobile cells, and a 44.1×44.1px tutorial touch target."
+        },
+        {
+          "criterion": "EX-0004 DESIGN.md records the visual rationale, preserved mechanic invariants, and validation evidence without claiming MES-02 contract approval or pupil efficacy.",
+          "status": "satisfied",
+          "evidence": "DESIGN.md now records the pond-board rationale, originality boundary, render and interaction invariants, command/browser validation evidence, and explicit exclusions for MES-02 approval, accessibility equivalence, and pupil efficacy."
+        }
+      ],
+      "assumptions": [
+        "The authoritative slice provided the garden-inspired direction but no reference asset paths; the implementation therefore uses an original composition rather than reproducing any reference layout.",
+        "Browser checks establish implementation operability and geometry only, not pupil efficacy or practical accessibility equivalence."
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "slice_id": "ex-0004-pond-ui-art",
+      "status": "passed",
+      "summary": "lightweight checks passed",
+      "tests_run": [
+        "npm --prefix experiments run check",
+        "npm --prefix experiments run build",
+        "SMOKE_EXERCISES=EX-0004 npm --prefix experiments run test:smoke",
+        "git diff --check"
+      ],
+      "verification_commands": [
+        {
+          "command": "npm --prefix experiments run check",
+          "status": "passed",
+          "exit_code": 0,
+          "output": "> classroom-exercise-lab@0.1.0 check\n> svelte-check --config ./svelte.config.js --tsconfig ./tsconfig.json && npm run validate\n\nLoading svelte-check in workspace: /home/sivanirosh/.khazad-doom/worktrees/ce59a95d1277/kd-20260717-223325-dc058b17/ex-0004-pond-ui-art/launch-48/experiments\nGetting Svelte diagnostics...\n\nsvelte-check found 0 errors and 0 warnings\n\n> classroom-exercise-lab@0.1.0 validate\n> node tools/validate-catalog.mjs\n\nCatalog structure valid (5 exercises).\n▲ [WARNING] Cannot find base config file \"./.svelte-kit/tsconfig.json\" [tsconfig.json]\n\n    ../tsconfig.json:2:13:\n      2 │   \"extends\": \"./.svelte-kit/tsconfig.json\",\n        ╵              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+          "cwd": ".",
+          "dedupe_key": "verify-command-v1:762ab9ce936ceee09bc6cb788ad4d6dda1d1fc6a2c3a83cd408e70686ae71136",
+          "duration_ms": 2460,
+          "output_total_bytes": 705,
+          "output_retained_bytes": 705,
+          "output_spill_paths": [
+            "/home/sivanirosh/git_repos/ClassRoom-Sitefan/.workflow/runs/kd-20260717-223325-dc058b17/outputs/command-output/worker_verify-ex-0004-pond-ui-art-attempt-1-verify-command-v.stdout.log",
+            "/home/sivanirosh/git_repos/ClassRoom-Sitefan/.workflow/runs/kd-20260717-223325-dc058b17/outputs/command-output/worker_verify-ex-0004-pond-ui-art-attempt-1-verify-command-v.stderr.log"
+          ]
+        },
+        {
+          "command": "npm --prefix experiments run build",
+          "status": "passed",
+          "exit_code": 0,
+          "output": "> classroom-exercise-lab@0.1.0 build\n> npm run check && vite build --configLoader runner\n\n\n> classroom-exercise-lab@0.1.0 check\n> svelte-check --config ./svelte.config.js --tsconfig ./tsconfig.json && npm run validate\n\nLoading svelte-check in workspace: /home/sivanirosh/.khazad-doom/worktrees/ce59a95d1277/kd-20260717-223325-dc058b17/ex-0004-pond-ui-art/launch-48/experiments\nGetting Svelte diagnostics...\n\nsvelte-check found 0 errors and 0 warnings\n\n> classroom-exercise-lab@0.1.0 validate\n> node tools/validate-catalog.mjs\n\nCatalog structure valid (5 exercises).\nvite v6.4.3 building for production...\ntransforming...\n✓ 157 modules transformed.\nrendering chunks...\ncomputing gzip size...\ndist/runner/index.html                     0.80 kB │ gzip:  0.42 kB\ndist/index.html                            0.87 kB │ gzip:  0.43 kB\ndist/exercise/index.html                   0.99 kB │ gzip:  0.44 kB\ndist/catalog/index.html                    1.15 kB │ gzip:  0.47 kB\ndist/assets/outro-console-cBn1ofUq.jpg   260.65 kB\ndist/assets/item-pallet-CPVd1hiq.png     287.39 kB\ndist/assets/item-piece-BX9ypipD.png      300.87 kB\ndist/assets/intro-console-BgYrc3_7.jpg   302.71 kB\ndist/assets/outro-workshop-BdPk5PYX.jpg  308.15 kB\ndist/assets/intro-workshop-Bc3UwPJI.jpg  343.06 kB\ndist/assets/item-sachet-DvEOf-84.png     348.02 kB\ndist/assets/bip-thinking-D1Hc0UaZ.png    365.23 kB\ndist/assets/item-crate-BEDS2Zu2.png      382.86 kB\ndist/assets/runner--TwnWNXq.css            1.60 kB │ gzip:  0.67 kB\ndist/assets/LabHeader-B4kHyWZ_.css        16.40 kB │ gzip:  4.17 kB\ndist/assets/Prototype-BqvOWDrY.css        18.91 kB │ gzip:  3.84 kB\ndist/assets/Prototype-Dqb5zQX1.css        22.46 kB │ gzip:  5.38 kB\ndist/assets/Prototype-C6OpVFqo.css        23.54 kB │ gzip:  4.80 kB\ndist/assets/Prototype-C2GwTcWh.css        24.62 kB │ gzip:  5.24 kB\ndist/assets/Prototype-Dyu_SVSa.css        24.90 kB │ gzip:  5.07 kB\ndist/assets/svelte-head-C9gWhR1p.js        0.19 kB │ gzip:  0.17 kB\ndist/assets/style-7Fjmm8Ib.js              0.22 kB │ gzip:  0.20 kB\ndist/assets/index-client-CB2MO0E0.js       0.39 kB │ gzip:  0.28 kB\ndist/assets/this-rdECF74l.js               0.47 kB │ gzip:  0.32 kB\ndist/assets/StatusBadge-BTrF4WjM.js        0.52 kB │ gzip:  0.36 kB\ndist/assets/class-CzBV5Y_H.js              0.73 kB │ gzip:  0.48 kB\ndist/assets/input-D1xnmH3r.js              0.78 kB │ gzip:  0.44 kB\ndist/assets/LabHeader-DJvg8mLw.js          1.32 kB │ gzip:  0.75 kB\ndist/assets/runner-BWoKBthe.js             2.14 kB │ gzip:  1.06 kB\ndist/assets/if-D5zp7yI5.js                 2.38 kB │ gzip:  1.07 kB\ndist/assets/exercise-BbImA0o_.js           3.91 kB │ gzip:  1.94 kB\ndist/assets/home-DxSQS9sX.js               4.02 kB │ gzip:  1.84 kB\ndist/assets/each-ysE-f35Z.js               4.24 kB │ gzip:  1.95 kB\ndist/assets/catalog-CBgXjKLf.js            7.06 kB │ gzip:  3.09 kB\ndist/assets/DESIGN-B5fN--wv.js            11.04 kB │ gzip:  4.59 kB\ndist/assets/DESIGN-CEi9sNgV.js            12.16 kB │ gzip:  4.89 kB\ndist/assets/DESIGN-CEFrcbrF.js            12.39 kB │ gzip:  5.05 kB\ndist/assets/DESIGN-BDjSAMZh.js            13.79 kB │ gzip:  5.62 kB\ndist/assets/DESIGN-BlrJQcme.js            21.13 kB │ gzip:  7.97 kB\ndist/assets/Prototype-B8043WiL.js         23.14 kB │ gzip:  8.35 kB\ndist/assets/Prototype-MAthI8Eh.js         23.86 kB │ gzip:  8.26 kB\ndist/assets/Prototype-YUmNRNab.js         26.80 kB │ gzip:  7.94 kB\ndist/assets/Prototype-3UYsNtaC.js         30.86 kB │ gzip:  9.51 kB\ndist/assets/Prototype-D1yGbDJx.js         36.64 kB │ gzip:  9.84 kB\ndist/assets/discovery-Dj65HanW.js         55.48 kB │ gzip: 20.27 kB\n✓ built in 830ms\n▲ [WARNING] Cannot find base config file \"./.svelte-kit/tsconfig.json\" [tsconfig.json]\n\n    ../tsconfig.json:2:13:\n      2 │   \"extends\": \"./.svelte-kit/tsconfig.json\",\n        ╵              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+          "cwd": ".",
+          "dedupe_key": "verify-command-v1:e5bf8e20e5952f670e09456b887d5ef0998c6b60b22b29520b1fa7ac399a3423",
+          "duration_ms": 3665,
+          "output_total_bytes": 3921,
+          "output_retained_bytes": 3921,
+          "output_spill_paths": [
+            "/home/sivanirosh/git_repos/ClassRoom-Sitefan/.workflow/runs/kd-20260717-223325-dc058b17/outputs/command-output/worker_verify-ex-0004-pond-ui-art-attempt-1-verify-command-v.stdout.log",
+            "/home/sivanirosh/git_repos/ClassRoom-Sitefan/.workflow/runs/kd-20260717-223325-dc058b17/outputs/command-output/worker_verify-ex-0004-pond-ui-art-attempt-1-verify-command-v.stderr.log"
+          ]
+        },
+        {
+          "command": "SMOKE_EXERCISES=EX-0004 npm --prefix experiments run test:smoke",
+          "status": "passed",
+          "exit_code": 0,
+          "output": "> classroom-exercise-lab@0.1.0 test:smoke\n> playwright test\n\n\nRunning 6 tests using 1 worker\n\n[1/6] tests/smoke/exercise-smoke.spec.ts:39:1 › SMOKE_EXERCISES accepts any explicit set of distinct discovered prototypes\n[2/6] tests/smoke/exercise-smoke.spec.ts:54:1 › the harness rejects stale, ambiguous, non-tabbable, networked, and auxiliary-realm fixtures\n[3/6] tests/smoke/exercise-smoke.spec.ts:79:1 › the generic contract driver completes its keyboard and touch paths\n[4/6] tests/smoke/exercise-smoke.spec.ts:114:1 › EX-0001 remains loadable and focusable\n[5/6] tests/smoke/exercise-smoke.spec.ts:129:1 › all selected multiple-smoke-programs prototypes complete the keyboard mechanic path\n[6/6] tests/smoke/exercise-smoke.spec.ts:155:1 › all selected multiple-smoke-programs prototypes complete the 320px touch mechanic path\n  6 passed (24.4s)",
+          "cwd": ".",
+          "dedupe_key": "verify-command-v1:9dca022e5fcf41e70b36b6965df023adda1de2f3a74327603b930eca22106367",
+          "duration_ms": 24957,
+          "output_total_bytes": 861,
+          "output_retained_bytes": 861,
+          "output_spill_paths": [
+            "/home/sivanirosh/git_repos/ClassRoom-Sitefan/.workflow/runs/kd-20260717-223325-dc058b17/outputs/command-output/worker_verify-ex-0004-pond-ui-art-attempt-1-verify-command-v.stdout.log",
+            "/home/sivanirosh/git_repos/ClassRoom-Sitefan/.workflow/runs/kd-20260717-223325-dc058b17/outputs/command-output/worker_verify-ex-0004-pond-ui-art-attempt-1-verify-command-v.stderr.log"
+          ]
+        },
+        {
+          "command": "git diff --check",
+          "status": "passed",
+          "exit_code": 0,
+          "cwd": ".",
+          "dedupe_key": "verify-command-v1:0bb3aacd8bfa78c107aed96ef408b5be980d4ac14a214445d69583ec13457a21",
+          "duration_ms": 158,
+          "output_spill_paths": [
+            "/home/sivanirosh/git_repos/ClassRoom-Sitefan/.workflow/runs/kd-20260717-223325-dc058b17/outputs/command-output/worker_verify-ex-0004-pond-ui-art-attempt-1-verify-command-v.stdout.log",
+            "/home/sivanirosh/git_repos/ClassRoom-Sitefan/.workflow/runs/kd-20260717-223325-dc058b17/outputs/command-output/worker_verify-ex-0004-pond-ui-art-attempt-1-verify-command-v.stderr.log"
+          ]
+        }
+      ],
+      "attempt": 1,
+      "worker_head": "d9ae1cbae23020bcda67ae9cee51cda1fa92ffc4",
+      "worktree_clean": true,
+      "commit_found": true
+    }
+  ],
+  "integration_repair": {
+    "status": "skipped",
+    "summary": "integration gate passed; integration_repair=auto skipped repair",
+    "trigger": "gate_passed"
+  },
+  "integration_gate": {
+    "status": "passed",
+    "summary": "integration gate passed",
+    "commands": [
+      {
+        "command": "npm --prefix experiments run check",
+        "status": "passed",
+        "exit_code": 0,
+        "output": "> classroom-exercise-lab@0.1.0 check\n> svelte-check --config ./svelte.config.js --tsconfig ./tsconfig.json && npm run validate\n\nLoading svelte-check in workspace: /home/sivanirosh/.khazad-doom/worktrees/ce59a95d1277/kd-20260717-223325-dc058b17/integration/experiments\nGetting Svelte diagnostics...\n\nsvelte-check found 0 errors and 0 warnings\n\n> classroom-exercise-lab@0.1.0 validate\n> node tools/validate-catalog.mjs\n\nCatalog structure valid (5 exercises).\n▲ [WARNING] Cannot find base config file \"./.svelte-kit/tsconfig.json\" [tsconfig.json]\n\n    ../tsconfig.json:2:13:\n      2 │   \"extends\": \"./.svelte-kit/tsconfig.json\",\n        ╵              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+        "cwd": ".",
+        "dedupe_key": "verify-command-v1:762ab9ce936ceee09bc6cb788ad4d6dda1d1fc6a2c3a83cd408e70686ae71136",
+        "duration_ms": 2562,
+        "output_total_bytes": 687,
+        "output_retained_bytes": 687,
+        "output_spill_paths": [
+          "/home/sivanirosh/git_repos/ClassRoom-Sitefan/.workflow/runs/kd-20260717-223325-dc058b17/outputs/command-output/integration_gate-run-attempt-0-verify-command-v.stdout.log",
+          "/home/sivanirosh/git_repos/ClassRoom-Sitefan/.workflow/runs/kd-20260717-223325-dc058b17/outputs/command-output/integration_gate-run-attempt-0-verify-command-v.stderr.log"
+        ]
+      },
+      {
+        "command": "npm --prefix experiments run build",
+        "status": "passed",
+        "exit_code": 0,
+        "output": "> classroom-exercise-lab@0.1.0 build\n> npm run check && vite build --configLoader runner\n\n\n> classroom-exercise-lab@0.1.0 check\n> svelte-check --config ./svelte.config.js --tsconfig ./tsconfig.json && npm run validate\n\nLoading svelte-check in workspace: /home/sivanirosh/.khazad-doom/worktrees/ce59a95d1277/kd-20260717-223325-dc058b17/integration/experiments\nGetting Svelte diagnostics...\n\nsvelte-check found 0 errors and 0 warnings\n\n> classroom-exercise-lab@0.1.0 validate\n> node tools/validate-catalog.mjs\n\nCatalog structure valid (5 exercises).\nvite v6.4.3 building for production...\ntransforming...\n✓ 157 modules transformed.\nrendering chunks...\ncomputing gzip size...\ndist/runner/index.html                     0.80 kB │ gzip:  0.42 kB\ndist/index.html                            0.87 kB │ gzip:  0.43 kB\ndist/exercise/index.html                   0.99 kB │ gzip:  0.44 kB\ndist/catalog/index.html                    1.15 kB │ gzip:  0.47 kB\ndist/assets/outro-console-cBn1ofUq.jpg   260.65 kB\ndist/assets/item-pallet-CPVd1hiq.png     287.39 kB\ndist/assets/item-piece-BX9ypipD.png      300.87 kB\ndist/assets/intro-console-BgYrc3_7.jpg   302.71 kB\ndist/assets/outro-workshop-BdPk5PYX.jpg  308.15 kB\ndist/assets/intro-workshop-Bc3UwPJI.jpg  343.06 kB\ndist/assets/item-sachet-DvEOf-84.png     348.02 kB\ndist/assets/bip-thinking-D1Hc0UaZ.png    365.23 kB\ndist/assets/item-crate-BEDS2Zu2.png      382.86 kB\ndist/assets/runner--TwnWNXq.css            1.60 kB │ gzip:  0.67 kB\ndist/assets/LabHeader-B4kHyWZ_.css        16.40 kB │ gzip:  4.17 kB\ndist/assets/Prototype-BqvOWDrY.css        18.91 kB │ gzip:  3.84 kB\ndist/assets/Prototype-Dqb5zQX1.css        22.46 kB │ gzip:  5.38 kB\ndist/assets/Prototype-C6OpVFqo.css        23.54 kB │ gzip:  4.80 kB\ndist/assets/Prototype-C2GwTcWh.css        24.62 kB │ gzip:  5.24 kB\ndist/assets/Prototype-Dyu_SVSa.css        24.90 kB │ gzip:  5.07 kB\ndist/assets/svelte-head-C9gWhR1p.js        0.19 kB │ gzip:  0.17 kB\ndist/assets/style-7Fjmm8Ib.js              0.22 kB │ gzip:  0.20 kB\ndist/assets/index-client-CB2MO0E0.js       0.39 kB │ gzip:  0.28 kB\ndist/assets/this-rdECF74l.js               0.47 kB │ gzip:  0.32 kB\ndist/assets/StatusBadge-BTrF4WjM.js        0.52 kB │ gzip:  0.36 kB\ndist/assets/class-CzBV5Y_H.js              0.73 kB │ gzip:  0.48 kB\ndist/assets/input-D1xnmH3r.js              0.78 kB │ gzip:  0.44 kB\ndist/assets/LabHeader-DJvg8mLw.js          1.32 kB │ gzip:  0.75 kB\ndist/assets/runner-BWoKBthe.js             2.14 kB │ gzip:  1.06 kB\ndist/assets/if-D5zp7yI5.js                 2.38 kB │ gzip:  1.07 kB\ndist/assets/exercise-BbImA0o_.js           3.91 kB │ gzip:  1.94 kB\ndist/assets/home-DxSQS9sX.js               4.02 kB │ gzip:  1.84 kB\ndist/assets/each-ysE-f35Z.js               4.24 kB │ gzip:  1.95 kB\ndist/assets/catalog-CBgXjKLf.js            7.06 kB │ gzip:  3.09 kB\ndist/assets/DESIGN-B5fN--wv.js            11.04 kB │ gzip:  4.59 kB\ndist/assets/DESIGN-CEi9sNgV.js            12.16 kB │ gzip:  4.89 kB\ndist/assets/DESIGN-CEFrcbrF.js            12.39 kB │ gzip:  5.05 kB\ndist/assets/DESIGN-BDjSAMZh.js            13.79 kB │ gzip:  5.62 kB\ndist/assets/DESIGN-BlrJQcme.js            21.13 kB │ gzip:  7.97 kB\ndist/assets/Prototype-B8043WiL.js         23.14 kB │ gzip:  8.35 kB\ndist/assets/Prototype-MAthI8Eh.js         23.86 kB │ gzip:  8.26 kB\ndist/assets/Prototype-YUmNRNab.js         26.80 kB │ gzip:  7.94 kB\ndist/assets/Prototype-3UYsNtaC.js         30.86 kB │ gzip:  9.51 kB\ndist/assets/Prototype-D1yGbDJx.js         36.64 kB │ gzip:  9.84 kB\ndist/assets/discovery-Dj65HanW.js         55.48 kB │ gzip: 20.27 kB\n✓ built in 808ms\n▲ [WARNING] Cannot find base config file \"./.svelte-kit/tsconfig.json\" [tsconfig.json]\n\n    ../tsconfig.json:2:13:\n      2 │   \"extends\": \"./.svelte-kit/tsconfig.json\",\n        ╵              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+        "cwd": ".",
+        "dedupe_key": "verify-command-v1:e5bf8e20e5952f670e09456b887d5ef0998c6b60b22b29520b1fa7ac399a3423",
+        "duration_ms": 3664,
+        "output_total_bytes": 3903,
+        "output_retained_bytes": 3903,
+        "output_spill_paths": [
+          "/home/sivanirosh/git_repos/ClassRoom-Sitefan/.workflow/runs/kd-20260717-223325-dc058b17/outputs/command-output/integration_gate-run-attempt-0-verify-command-v.stdout.log",
+          "/home/sivanirosh/git_repos/ClassRoom-Sitefan/.workflow/runs/kd-20260717-223325-dc058b17/outputs/command-output/integration_gate-run-attempt-0-verify-command-v.stderr.log"
+        ]
+      },
+      {
+        "command": "SMOKE_EXERCISES=EX-0004 npm --prefix experiments run test:smoke",
+        "status": "passed",
+        "exit_code": 0,
+        "output": "> classroom-exercise-lab@0.1.0 test:smoke\n> playwright test\n\n\nRunning 6 tests using 1 worker\n\n[1/6] tests/smoke/exercise-smoke.spec.ts:39:1 › SMOKE_EXERCISES accepts any explicit set of distinct discovered prototypes\n[2/6] tests/smoke/exercise-smoke.spec.ts:54:1 › the harness rejects stale, ambiguous, non-tabbable, networked, and auxiliary-realm fixtures\n[3/6] tests/smoke/exercise-smoke.spec.ts:79:1 › the generic contract driver completes its keyboard and touch paths\n[4/6] tests/smoke/exercise-smoke.spec.ts:114:1 › EX-0001 remains loadable and focusable\n[5/6] tests/smoke/exercise-smoke.spec.ts:129:1 › all selected multiple-smoke-programs prototypes complete the keyboard mechanic path\n[6/6] tests/smoke/exercise-smoke.spec.ts:155:1 › all selected multiple-smoke-programs prototypes complete the 320px touch mechanic path\n  6 passed (24.5s)",
+        "cwd": ".",
+        "dedupe_key": "verify-command-v1:9dca022e5fcf41e70b36b6965df023adda1de2f3a74327603b930eca22106367",
+        "duration_ms": 25045,
+        "output_total_bytes": 861,
+        "output_retained_bytes": 861,
+        "output_spill_paths": [
+          "/home/sivanirosh/git_repos/ClassRoom-Sitefan/.workflow/runs/kd-20260717-223325-dc058b17/outputs/command-output/integration_gate-run-attempt-0-verify-command-v.stdout.log",
+          "/home/sivanirosh/git_repos/ClassRoom-Sitefan/.workflow/runs/kd-20260717-223325-dc058b17/outputs/command-output/integration_gate-run-attempt-0-verify-command-v.stderr.log"
+        ]
+      },
+      {
+        "command": "git diff --check",
+        "status": "passed",
+        "exit_code": 0,
+        "cwd": ".",
+        "dedupe_key": "verify-command-v1:0bb3aacd8bfa78c107aed96ef408b5be980d4ac14a214445d69583ec13457a21",
+        "duration_ms": 159,
+        "output_spill_paths": [
+          "/home/sivanirosh/git_repos/ClassRoom-Sitefan/.workflow/runs/kd-20260717-223325-dc058b17/outputs/command-output/integration_gate-run-attempt-0-verify-command-v.stdout.log",
+          "/home/sivanirosh/git_repos/ClassRoom-Sitefan/.workflow/runs/kd-20260717-223325-dc058b17/outputs/command-output/integration_gate-run-attempt-0-verify-command-v.stderr.log"
+        ]
+      }
+    ],
+    "approved_workspace": {
+      "digest": "fdbec8d9adda6c87327a592cf4245c8c682d12bb2995346daf4f1835f5b2da00",
+      "repository_id": "df8f4ce956ab85aa4b7dfd744009f2eaaa0afb40019a3bf8d97a5a70083bbcd0",
+      "worktree_id": "eb1043af5e68ef5de7b60a971203e1148e2e448e9c31908c0703690e6dee1f74",
+      "head_sha": "9992a5c4b4d3ba6bbc744af1eb7aa3592391dc74",
+      "head_attachment": "refs/heads/khazad/kd-20260717-223325-dc058b17/integration",
+      "index_digest": "5568705ec665c7cc272128222b75c6cb97aace88070c5cb2c09c61678d47201b",
+      "tracked_filesystem_digest": "af063e972c5c20558ade3c6b80b478156896ec43084d70e6ff8df525971fd71c",
+      "staged": [],
+      "unstaged": [],
+      "untracked_path_bytes_hex": [],
+      "nonignored_empty_directory_path_bytes_hex": []
+    },
+    "publication_identity": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      20,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      3,
+      2,
+      0,
+      0,
+      0,
+      0,
+      1,
+      228,
+      27,
+      48,
+      0,
+      0,
+      65,
+      253,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      84,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      20,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      3,
+      2,
+      0,
+      0,
+      0,
+      0,
+      1,
+      182,
+      49,
+      144,
+      0,
+      0,
+      65,
+      253,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      20,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      3,
+      2,
+      0,
+      0,
+      0,
+      0,
+      1,
+      124,
+      29,
+      118,
+      0,
+      0,
+      65,
+      253,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      20,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      3,
+      2,
+      0,
+      0,
+      0,
+      0,
+      1,
+      124,
+      29,
+      144,
+      0,
+      0,
+      65,
+      253,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      20,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      3,
+      2,
+      0,
+      0,
+      0,
+      0,
+      1,
+      182,
+      49,
+      149,
+      0,
+      0,
+      129,
+      180
+    ]
+  },
+  "exit_states": {
+    "run": "completed",
+    "handoff": "ready_for_handoff",
+    "evidence": "daemon_attested",
+    "slices": [
+      {
+        "slice_id": "ex-0004-pond-ui-art",
+        "worker": "complete",
+        "daemon": "merged"
+      }
+    ]
+  },
+  "evidence_attestation": {
+    "status": "daemon_attested",
+    "attester": "khazad-doom-daemon",
+    "worker_self_approved": false,
+    "basis": [
+      "worker acceptance_status is treated as an evidence claim, not approval",
+      "daemon required a committed clean worktree before merge",
+      "daemon required slice verification/lightweight checks before merge",
+      "daemon integration gate passed before handoff",
+      "worker evidence kind: real_pi_worker (real Pi worker implementation evidence)"
+    ]
+  },
+  "economics": {
+    "repair_policy": "auto",
+    "gate_fail_fast": true,
+    "worker_max_attempts": 3,
+    "repair_max_attempts": 1,
+    "repair_attempts": 0,
+    "agent_call_count": 1,
+    "command_execution_count": 11,
+    "duplicate_command_count": 0,
+    "cache_hits": 0,
+    "cache_misses": 11,
+    "worker_observation_event_count": 29199,
+    "worker_observation_bytes": 1245742496,
+    "worker_observation_state_write_count": 26708,
+    "supervisor_poll_count": 2640,
+    "economics_checkpoint_count": 14,
+    "agent_calls": [
+      {
+        "phase": "slice_worker",
+        "slice_id": "ex-0004-pond-ui-art",
+        "attempt": 1,
+        "kind": "slice-worker",
+        "runner": "pi",
+        "worker_evidence_kind": "real_pi_worker",
+        "worker_evidence_label": "real Pi worker implementation evidence",
+        "agent_profile": "implementer",
+        "agent_provider": "openai-codex",
+        "agent_model": "gpt-5.6-sol",
+        "agent_reasoning": "xhigh",
+        "agent_mode": "fast",
+        "profile_summary": "implementer: provider=openai-codex model=gpt-5.6-sol reasoning=xhigh mode=fast",
+        "launch_summary": "pi implementer: provider=openai-codex model=gpt-5.6-sol reasoning=xhigh mode=fast",
+        "status": "succeeded",
+        "duration_ms": 1336622,
+        "input_tokens": 2518,
+        "output_tokens": 1482
+      }
+    ],
+    "phase_durations": {
+      "integration_gate:initial": {
+        "phase": "integration_gate:initial",
+        "duration_ms": 33747
+      },
+      "integration_setup": {
+        "phase": "integration_setup",
+        "duration_ms": 45
+      },
+      "worker_layer:ex-0004-pond-ui-art": {
+        "phase": "worker_layer:ex-0004-pond-ui-art",
+        "duration_ms": 1371982
+      },
+      "worktree_setup:ex-0004-pond-ui-art:ex-0004-pond-ui-art.worker.launch-48": {
+        "phase": "worktree_setup:ex-0004-pond-ui-art:ex-0004-pond-ui-art.worker.launch-48",
+        "duration_ms": 796
+      },
+      "worktree_setup:integration": {
+        "phase": "worktree_setup:integration",
+        "duration_ms": 818
+      }
+    },
+    "command_executions": [
+      {
+        "phase": "worktree_setup",
+        "slice_id": "ex-0004-pond-ui-art",
+        "attempt": 1,
+        "command": "npm ci --prefix experiments",
+        "cwd": ".",
+        "status": "passed",
+        "exit_code": 0,
+        "duration_ms": 764,
+        "dedupe_key": "verify-command-v1:85c21227fde44cf074488134fcf8341b9f4c2e4c37df35e3d4037c212edabf82",
+        "tree_sha": "48ec4f92337dd546aaf5a9717f38c3f93b2672c5",
+        "cache_key": "verification-purity-v3:6a363f660277ec7de01ff4e8465a4c264bf82263b5663c4b67da88ebd7c80691",
+        "cache_hit": false
+      },
+      {
+        "phase": "worktree_setup",
+        "slice_id": "ex-0004-pond-ui-art",
+        "attempt": 1,
+        "command": "npm ci --prefix experiments",
+        "cwd": ".",
+        "status": "passed",
+        "exit_code": 0,
+        "duration_ms": 757,
+        "dedupe_key": "verify-command-v1:85c21227fde44cf074488134fcf8341b9f4c2e4c37df35e3d4037c212edabf82",
+        "tree_sha": "9207996036c06d8c3fd8830cbdb687cb3d28cd41",
+        "cache_key": "verification-purity-v3:76d8ae4d69f28b46320cdeccf6251a46a8a62cacb2d4c9325d0033dae82a2b53",
+        "cache_hit": false
+      },
+      {
+        "phase": "worker_verify",
+        "slice_id": "ex-0004-pond-ui-art",
+        "attempt": 1,
+        "command": "npm --prefix experiments run check",
+        "cwd": ".",
+        "status": "passed",
+        "exit_code": 0,
+        "duration_ms": 2460,
+        "dedupe_key": "verify-command-v1:762ab9ce936ceee09bc6cb788ad4d6dda1d1fc6a2c3a83cd408e70686ae71136",
+        "tree_sha": "9207996036c06d8c3fd8830cbdb687cb3d28cd41",
+        "cache_key": "verification-purity-v3:803df1f4db23b59f06c232a5f94ab3ecb64d8dbfb98bf2664419919e4ede7133",
+        "cache_hit": false
+      },
+      {
+        "phase": "worker_verify",
+        "slice_id": "ex-0004-pond-ui-art",
+        "attempt": 1,
+        "command": "npm --prefix experiments run build",
+        "cwd": ".",
+        "status": "passed",
+        "exit_code": 0,
+        "duration_ms": 3665,
+        "dedupe_key": "verify-command-v1:e5bf8e20e5952f670e09456b887d5ef0998c6b60b22b29520b1fa7ac399a3423",
+        "tree_sha": "9207996036c06d8c3fd8830cbdb687cb3d28cd41",
+        "cache_key": "verification-purity-v3:a7480e10a665a3ac18ab3ecc2a3fde3e179227ef421a26882c02fc3b143cc431",
+        "cache_hit": false
+      },
+      {
+        "phase": "worker_verify",
+        "slice_id": "ex-0004-pond-ui-art",
+        "attempt": 1,
+        "command": "SMOKE_EXERCISES=EX-0004 npm --prefix experiments run test:smoke",
+        "cwd": ".",
+        "status": "passed",
+        "exit_code": 0,
+        "duration_ms": 24957,
+        "dedupe_key": "verify-command-v1:9dca022e5fcf41e70b36b6965df023adda1de2f3a74327603b930eca22106367",
+        "tree_sha": "9207996036c06d8c3fd8830cbdb687cb3d28cd41",
+        "cache_key": "verification-purity-v3:3b2c73f35785e68748c8a477fc2ca9fe5770fce47b3bb2ab5e7fd393eed80b00",
+        "cache_hit": false
+      },
+      {
+        "phase": "worker_verify",
+        "slice_id": "ex-0004-pond-ui-art",
+        "attempt": 1,
+        "command": "git diff --check",
+        "cwd": ".",
+        "status": "passed",
+        "exit_code": 0,
+        "duration_ms": 158,
+        "dedupe_key": "verify-command-v1:0bb3aacd8bfa78c107aed96ef408b5be980d4ac14a214445d69583ec13457a21",
+        "tree_sha": "9207996036c06d8c3fd8830cbdb687cb3d28cd41",
+        "cache_key": "verification-purity-v3:8576798d172783d55af01bff86d1ddcb41d6fc47229c1302dff5ad4ee90c9ea6",
+        "cache_hit": false
+      },
+      {
+        "phase": "worktree_setup",
+        "attempt": 0,
+        "command": "npm ci --prefix experiments",
+        "cwd": ".",
+        "status": "passed",
+        "exit_code": 0,
+        "duration_ms": 763,
+        "dedupe_key": "verify-command-v1:85c21227fde44cf074488134fcf8341b9f4c2e4c37df35e3d4037c212edabf82",
+        "tree_sha": "9207996036c06d8c3fd8830cbdb687cb3d28cd41",
+        "cache_key": "verification-purity-v3:8d5d74bcefa947bb0432faa82e02be6651331c3fac373e278e8034ccc69f48bc",
+        "cache_hit": false
+      },
+      {
+        "phase": "integration_gate",
+        "attempt": 0,
+        "command": "npm --prefix experiments run check",
+        "cwd": ".",
+        "status": "passed",
+        "exit_code": 0,
+        "duration_ms": 2562,
+        "dedupe_key": "verify-command-v1:762ab9ce936ceee09bc6cb788ad4d6dda1d1fc6a2c3a83cd408e70686ae71136",
+        "tree_sha": "9207996036c06d8c3fd8830cbdb687cb3d28cd41",
+        "cache_key": "verification-purity-v3:d6fcb70a79785ad388db707dfc950e69f490bbe144111099e0a6c8befa2804d1",
+        "cache_hit": false
+      },
+      {
+        "phase": "integration_gate",
+        "attempt": 0,
+        "command": "npm --prefix experiments run build",
+        "cwd": ".",
+        "status": "passed",
+        "exit_code": 0,
+        "duration_ms": 3664,
+        "dedupe_key": "verify-command-v1:e5bf8e20e5952f670e09456b887d5ef0998c6b60b22b29520b1fa7ac399a3423",
+        "tree_sha": "9207996036c06d8c3fd8830cbdb687cb3d28cd41",
+        "cache_key": "verification-purity-v3:46cca90c767b4bea1af3be65fb7f16c33a0474bd7922f8eef9cb9b3f16bf8e23",
+        "cache_hit": false
+      },
+      {
+        "phase": "integration_gate",
+        "attempt": 0,
+        "command": "SMOKE_EXERCISES=EX-0004 npm --prefix experiments run test:smoke",
+        "cwd": ".",
+        "status": "passed",
+        "exit_code": 0,
+        "duration_ms": 25045,
+        "dedupe_key": "verify-command-v1:9dca022e5fcf41e70b36b6965df023adda1de2f3a74327603b930eca22106367",
+        "tree_sha": "9207996036c06d8c3fd8830cbdb687cb3d28cd41",
+        "cache_key": "verification-purity-v3:784ea553b78fca5fb23159bc2562b8b916772c1a9de331465652ae6f0b3b0799",
+        "cache_hit": false
+      },
+      {
+        "phase": "integration_gate",
+        "attempt": 0,
+        "command": "git diff --check",
+        "cwd": ".",
+        "status": "passed",
+        "exit_code": 0,
+        "duration_ms": 159,
+        "dedupe_key": "verify-command-v1:0bb3aacd8bfa78c107aed96ef408b5be980d4ac14a214445d69583ec13457a21",
+        "tree_sha": "9207996036c06d8c3fd8830cbdb687cb3d28cd41",
+        "cache_key": "verification-purity-v3:6c6e498e155fed5718214908683ffeefe26cd7ac903093be6e042f6bec4dd322",
+        "cache_hit": false
+      }
+    ]
+  },
+  "plan_revisions": {
+    "source_of_truth": "daemon_replan_proposals",
+    "queue_summary": "selected slices: ex-0004-pond-ui-art",
+    "unresolved_pending_blocks_handoff": false,
+    "pending": [],
+    "accepted": [],
+    "rejected": [],
+    "deferred": [],
+    "superseded": []
+  },
+  "worker_attempts": [
+    {
+      "run_id": "kd-20260717-223325-dc058b17",
+      "slice_id": "ex-0004-pond-ui-art",
+      "launch_id": 48,
+      "launch_ordinal": 1,
+      "execution_epoch": 1,
+      "worker_retry_ordinal": 1,
+      "repair_ordinal": 0,
+      "envelope_retry_ordinal": 0,
+      "kind": "slice-worker",
+      "state": "succeeded",
+      "branch": "khazad/kd-20260717-223325-dc058b17/ex-0004-pond-ui-art/launch-48",
+      "worktree": "/home/sivanirosh/.khazad-doom/worktrees/ce59a95d1277/kd-20260717-223325-dc058b17/ex-0004-pond-ui-art/launch-48",
+      "output_stem": "ex-0004-pond-ui-art.worker.launch-48",
+      "created_at": "2026-07-17T22:33:25.960286076Z",
+      "launched_at": "2026-07-17T22:33:26.955964885Z",
+      "finished_at": "2026-07-17T22:56:17.919316726Z",
+      "activity": {
+        "launch_id": 48,
+        "attempt_started_at": "2026-07-17T22:33:26.955964885Z",
+        "pid": 190192,
+        "process_observed_at": "2026-07-17T22:55:40.216454396Z",
+        "last_event_at": "2026-07-17T22:55:43.553406477Z",
+        "last_event_kind": "stdout",
+        "last_semantic_progress_at": "2026-07-17T22:55:19.049316976Z",
+        "last_semantic_progress_summary": "tool bash finished",
+        "attempt_timeout_seconds": 0,
+        "no_output_warning_seconds": 900
+      }
+    }
+  ],
+  "created_at": "2026-07-17T22:56:52.732786463Z"
+}
