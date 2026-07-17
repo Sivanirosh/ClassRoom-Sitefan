@@ -1,0 +1,28 @@
+{
+  "id": "ex-0004-animation-imagegen-polish",
+  "title": "EX-0004 final animation and generated-art polish",
+  "goal": "Finish the owner-approved EX-0004 pond-board exercise with purposeful frog/trace/water motion and the committed generated pond atmosphere while preserving the exact orthogonal unit geometry, interaction loop, accessibility, and unbranded original presentation.",
+  "areas": [
+    "experiments/src/exercises/ex-0004-frog-jump-prediction/"
+  ],
+  "acceptance": [
+    "The committed generated pond image is integrated only as replaceable atmosphere or framing; it carries no required state, answer, target quantity, readable text, logo, trademark, copied character, or branding, and it never introduces a competing perspective grid into the active mathematical corridor.",
+    "Purposeful motion makes frog takeoff, one-unit landing, two-unit obstacle leap, retained trace, discrepancy, and exact arrival easier to read; motion does not add timing skill or delay input unnecessarily.",
+    "Every active movement cell remains a true rendered square; ordinary horizontal and vertical displacement remains exactly one 10-unit cell side and the obstacle leap remains exactly two unit lengths in one action.",
+    "Reduced-motion mode preserves every final landing, trace, discrepancy, outcome label, focus transition, and completion path without required animation; keyboard and 320px touch paths remain equivalent.",
+    "Intro, all four scenes, retry-in-place behavior, success, and completion retain existing deterministic smoke hooks and no stale animation callback can mutate a later scene.",
+    "DESIGN.md and asset provenance record the generated-art role, no-branding review, safe crop, motion rationale, desktop/320px review, and technical evidence without claiming learning efficacy or MES-02 approval."
+  ],
+  "must_ask_if": [
+    "The validated prediction, automatic-resolution, orthogonal-transfer, obstacle arithmetic, retry, or progression semantics would need to change.",
+    "The generated image cannot be integrated without making its perspective grid look like the playable unit grid or obscuring mathematical state.",
+    "A copied branded character, logo, title treatment, trademark, layout, or recognizable source composition would remain visible.",
+    "A runtime dependency, network asset, or file outside the declared EX-0004 directory appears necessary."
+  ],
+  "verify": [
+    "npm --prefix experiments run check",
+    "npm --prefix experiments run build",
+    "SMOKE_EXERCISES=EX-0004 npm --prefix experiments run test:smoke",
+    "git diff --check"
+  ]
+}
