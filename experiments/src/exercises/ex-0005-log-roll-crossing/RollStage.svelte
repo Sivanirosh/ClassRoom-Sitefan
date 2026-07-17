@@ -1,4 +1,5 @@
 <script lang="ts">
+  import terraceAtmosphere from './assets/terrace-atmosphere-safe.webp';
   import {
     WORLD,
     pointAt,
@@ -47,9 +48,15 @@
   class:running
   class:short={outcome === 'short'}
   class:over={outcome === 'over'}
+  class:exact={outcome === 'exact'}
   class={`stage ${scene.setting} ${scene.representation}`}
   data-roll-stage
   data-covered-rolls={coveredRolls}
+  data-trace-intervals={completedRolls.length}
+  data-roller-x={roller.x}
+  data-roller-y={roller.y}
+  data-rotation-turns={coveredRolls * rollDirection}
+  data-roll-phase={calibrating ? 'calibration' : running ? 'added-roll' : 'settled'}
   data-calibration-rolls={scene.mode === 'prediction' ? 1 : 0}
   data-outcome={outcome}
   data-representation={scene.representation}
@@ -71,6 +78,15 @@
       </pattern>
     </defs>
 
+    <image
+      class="terrace-atmosphere"
+      href={terraceAtmosphere}
+      width={WORLD.width}
+      height={WORLD.height}
+      preserveAspectRatio="xMidYMid slice"
+      aria-hidden="true"
+      data-decorative-atmosphere="stage"
+    ></image>
     <rect class="sky" width={WORLD.width} height={WORLD.height} fill={`url(#sky-${scene.id})`}></rect>
     <g class="landscape" aria-hidden="true">
       <path class="distance" d="M0 54 C25 40 44 48 65 39 C90 29 116 43 138 34 C155 27 169 34 180 30 V74 H0 Z"></path>
@@ -101,10 +117,14 @@
     {#each completedRolls as rollIndex}
       {@const from = pointAt(variant, rollIndex)}
       {@const to = pointAt(variant, rollIndex + 1)}
-      <g class:calibration-mark={scene.mode === 'prediction' && rollIndex === 0} class="roll-mark">
-        <line x1={from.x} y1={from.y} x2={to.x} y2={to.y}></line>
-        <circle cx={from.x} cy={from.y} r="1.35"></circle>
-        <circle cx={to.x} cy={to.y} r="1.35"></circle>
+      <g
+        class:calibration-mark={scene.mode === 'prediction' && rollIndex === 0}
+        class="roll-mark"
+        data-roll-interval={rollIndex + 1}
+      >
+        <line x1={from.x} y1={from.y} x2={to.x} y2={to.y} pathLength="1"></line>
+        <circle class="start-contact" cx={from.x} cy={from.y} r="1.35"></circle>
+        <circle class="end-contact" cx={to.x} cy={to.y} r="1.35"></circle>
       </g>
     {/each}
 
@@ -115,10 +135,14 @@
         y1={discrepancyStart.y}
         x2={discrepancyEnd.x}
         y2={discrepancyEnd.y}
+        pathLength="1"
         stroke={`url(#hatch-${scene.id})`}
       ></line>
     {/if}
 
+    {#if outcome === 'exact'}
+      <circle class="exact-halo" cx={finish.x} cy={finish.y} r="5.4" aria-hidden="true"></circle>
+    {/if}
     <g
       class="roller"
       transform={`translate(${roller.x} ${roller.y - 7}) rotate(${coveredRolls * 360 * rollDirection + pathAngle})`}
@@ -130,12 +154,14 @@
       <circle class="hub" r="1.2"></circle>
       <line class="rotation-mark" x1="0" y1="-5" x2="0" y2="5"></line>
     </g>
-    <circle class="contact" cx={roller.x} cy={roller.y} r="1.8" aria-hidden="true"></circle>
+    <g class="roller-contact" transform={`translate(${roller.x} ${roller.y})`} aria-hidden="true">
+      <circle class="contact" r="1.8"></circle>
+    </g>
   </svg>
 
   <span class="world-label origin-label" style={labelStyle(origin, 9)}>Départ</span>
   <span class="world-label finish-label" style={labelStyle(finish, 9)}>Arrivée</span>
-  {#if scene.mode === 'prediction' && coveredRolls >= 1}
+  {#if scene.mode === 'prediction' && coveredRolls >= 1 && !calibrating}
     <span class="unit-label" style={labelStyle(midpoint(origin, pointAt(variant, 1)), -15)}>1 tour observé</span>
   {/if}
   {#if outcome === 'short' || outcome === 'over'}
@@ -148,30 +174,36 @@
 <style>
   .stage { position: relative; width: min(900px, 100%); margin-inline: auto; overflow: hidden; border: 2px solid #5b6e65; border-radius: 26px; background: #b7dce4; box-shadow: 0 10px 0 rgba(37,63,58,.18), 0 24px 60px rgba(26,48,48,.18); isolation: isolate; }
   svg { display: block; width: 100%; aspect-ratio: 18 / 11; }
-  .sky { opacity: .98; }
-  .distance { fill: #76a990; opacity: .72; }
-  .mist { fill: #dcebdc; opacity: .86; }
-  .cliff { opacity: .92; }
-  .foliage { fill: #174e43; opacity: .95; }
+  .terrace-atmosphere { opacity: .5; filter: saturate(.82) contrast(.88); pointer-events: none; }
+  .sky { opacity: .52; }
+  .distance { fill: #76a990; opacity: .68; }
+  .mist { fill: #dcebdc; opacity: .8; }
+  .cliff { opacity: .86; }
+  .foliage { fill: #174e43; opacity: .92; }
   .mist .distance { fill: #77a4a4; }
   .canopy .distance { fill: #5c9073; }
   .summit .distance { fill: #739ca9; }
   .canopy .foliage { fill: #0e4638; }
-  .summit .mist { opacity: .94; }
-  .path-underlay { stroke: rgba(249,239,207,.94); stroke-width: 4; stroke-linecap: round; }
-  .path-underlay.wide-path { stroke: #b98a5a; stroke-width: 14; }
+  .summit .mist { opacity: .92; }
+  .path-underlay { stroke: rgba(255,247,221,.98); stroke-width: 4; stroke-linecap: round; }
+  .path-underlay.wide-path { stroke: #bd8a58; stroke-width: 14; }
   .target-path { stroke: #173e43; stroke-width: 1.35; stroke-linecap: round; }
   .world-marker line { stroke: #183d43; stroke-width: 1.4; }
   .world-marker path { fill: #f2b84b; stroke: #75462e; stroke-width: .6; }
   .world-marker circle { fill: #fff9ec; stroke: #183d43; stroke-width: 1.2; }
   .finish-marker path { fill: #d96345; }
-  .roll-mark line { stroke: #e6a43d; stroke-width: 5.4; stroke-linecap: round; opacity: .8; }
+  .roll-mark line { stroke: #e6a43d; stroke-width: 5.4; stroke-linecap: round; opacity: .8; stroke-dasharray: 1; stroke-dashoffset: 0; animation: interval-draw 290ms linear both; }
   .line .roll-mark line { stroke-width: 3.4; }
   .roll-mark circle { fill: #fff5c9; stroke: #70482f; stroke-width: .7; }
+  .roll-mark .end-contact { animation: contact-settle 290ms linear both; }
   .roll-mark.calibration-mark line { stroke: #f8d465; stroke-width: 6.7; opacity: 1; }
   .line .roll-mark.calibration-mark line { stroke-width: 4.6; }
-  .discrepancy { stroke-width: 7; stroke-linecap: round; opacity: .86; }
-  .roller { transition: transform 300ms ease; }
+  .stage.calibrating .roll-mark.calibration-mark line, .stage.calibrating .roll-mark.calibration-mark .end-contact { animation-duration: 420ms; }
+  .stage.exact .roll-mark line, .stage.exact .roll-mark .end-contact { animation: none; }
+  .discrepancy { stroke-width: 7; stroke-linecap: round; opacity: .86; stroke-dasharray: 1; stroke-dashoffset: 0; animation: discrepancy-reveal 260ms cubic-bezier(.23, 1, .32, 1) both; }
+  .roller, .roller-contact { transition-property: transform; transition-duration: 0ms; transition-timing-function: cubic-bezier(.77, 0, .175, 1); }
+  .stage.running .roller, .stage.running .roller-contact { transition-duration: 290ms; will-change: transform; }
+  .stage.calibrating .roller, .stage.calibrating .roller-contact { transition-duration: 420ms; will-change: transform; }
   .roller .bark { fill: #6a4026; stroke: #44281c; stroke-width: 1.5; }
   .roller .wood { fill: #cf8e4f; stroke: #814d2b; stroke-width: 1; }
   .roller .ring { fill: none; stroke: #a5673a; stroke-width: .8; }
@@ -179,19 +211,23 @@
   .rotation-mark { stroke: #5b3522; stroke-width: 1; stroke-linecap: round; }
   .contact { fill: #fff; stroke: #173e43; stroke-width: 1; }
   .stage.short .contact, .stage.over .contact { fill: #f1b39f; stroke: #8a392c; }
-  .world-label, .unit-label, .discrepancy-label { position: absolute; z-index: 3; transform: translate(-50%, -50%); padding: 3px 7px; border-radius: 999px; color: #173e43; background: rgba(255,249,236,.92); box-shadow: 0 1px 0 rgba(23,62,67,.2); font-size: clamp(.72rem, 1.6vw, .88rem); font-weight: 900; line-height: 1.2; white-space: nowrap; pointer-events: none; }
-  .unit-label { color: #75431f; background: rgba(255,239,181,.96); }
-  .discrepancy-label { color: #782f22; background: rgba(255,234,224,.96); }
-  .stage.calibrating .contact { animation: calibration-pulse .36s ease; }
-  .stage.short .discrepancy-label, .stage.over .discrepancy-label { animation: discrepancy-pulse .45s ease; }
-  @keyframes calibration-pulse { 50% { r: 2.5; } }
+  .exact-halo { fill: rgba(248,212,101,.32); stroke: #1a735e; stroke-width: 1.2; animation: exact-settle 320ms cubic-bezier(.23, 1, .32, 1) both; }
+  .world-label, .unit-label, .discrepancy-label { position: absolute; z-index: 3; transform: translate(-50%, -50%); padding: 3px 7px; border-radius: 999px; color: #173e43; background: rgba(255,249,236,.94); box-shadow: 0 1px 0 rgba(23,62,67,.2); font-size: clamp(.72rem, 1.6vw, .88rem); font-weight: 900; line-height: 1.2; white-space: nowrap; pointer-events: none; }
+  .unit-label { color: #75431f; background: rgba(255,239,181,.97); }
+  .discrepancy-label { color: #782f22; background: rgba(255,234,224,.97); }
+  .stage.short .discrepancy-label, .stage.over .discrepancy-label { animation: discrepancy-pulse 360ms cubic-bezier(.23, 1, .32, 1); }
+  @keyframes interval-draw { from { stroke-dashoffset: 1; } }
+  @keyframes contact-settle { 0%, 82% { opacity: 0; } 100% { opacity: 1; } }
+  @keyframes discrepancy-reveal { from { stroke-dashoffset: 1; } }
   @keyframes discrepancy-pulse { 50% { transform: translate(-50%, -50%) scale(1.04); } }
+  @keyframes exact-settle { from { opacity: 0; } }
   @media (prefers-reduced-motion: reduce) {
-    .roller { transition: none; }
-    .stage.calibrating .contact, .stage.short .discrepancy-label, .stage.over .discrepancy-label { animation: none; }
+    .roller, .roller-contact { transition: none; }
+    .roll-mark line, .roll-mark .end-contact, .discrepancy, .exact-halo, .stage.short .discrepancy-label, .stage.over .discrepancy-label { animation: none; }
   }
   @media (max-width: 520px) {
     .stage { border-radius: 18px; }
+    .terrace-atmosphere { opacity: .38; }
     .foliage { display: none; }
     .world-label, .unit-label, .discrepancy-label { padding: 2px 5px; font-size: .68rem; }
   }

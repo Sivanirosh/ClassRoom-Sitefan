@@ -1,19 +1,57 @@
 {
-  "id": "ig_0db6ec5266477149016a5ab7f7894c8191b1206653d43e5136",
-  "status": "completed",
-  "revisedPrompt": "Edit the provided artwork into a polished final rendered illustration. Preserve the same square composition, lush fantasy canyon environment, towering coral-red cliffs, many turquoise-white waterfalls, mist and clouds filling the chasm, tropical foreground foliage, tiny distant temple/tower, warm sunlit blue sky, and vibrant hand-painted animated-feature aesthetic. Refine the shapes, lighting, atmospheric depth, foliage, water, mist, and color harmony with premium animation-background and image-generation polish while retaining the original scene and inviting adventurous mood. Remove ALL branding and typography from the image, including the large title at the top, publisher/developer names and logos at the bottom, and any other written marks. Fill those areas seamlessly with matching sky, clouds, vegetation, canyon, and foreground art. Final image must contain no text, no logos, no trademarks, no signatures, and no watermarks—only the artwork.",
-  "mimeType": "image/webp",
-  "prompt": "Both Ex-0004 and 0005 are good now. go on and finish them with the animation and imagegen polish. Don't use any branding on the final rendered image. only the art style",
-  "responseModel": "gpt-5.6-sol",
-  "imageModel": "gpt-image-2",
-  "size": "1536x1024",
-  "quality": "high",
-  "background": "opaque",
-  "outputFormat": "webp",
-  "thinking": "high",
-  "referencePaths": [
-    "/home/sivanirosh/git_repos/ClassRoom-Sitefan/.pi/tmp/image-references/ex-0005-style.png"
-  ],
-  "savedPath": "/home/sivanirosh/git_repos/ClassRoom-Sitefan/.pi/generated-images/openai-image-2026-07-17T23-18-13-456Z-ig_0db6ec5266477149016a5ab7f7894c8191b1206653d43e5136.webp",
-  "metadataPath": "/home/sivanirosh/git_repos/ClassRoom-Sitefan/.pi/generated-images/openai-image-2026-07-17T23-18-13-456Z-ig_0db6ec5266477149016a5ab7f7894c8191b1206653d43e5136.json"
+  "sourceGeneration": {
+    "id": "ig_0db6ec5266477149016a5ab7f7894c8191b1206653d43e5136",
+    "status": "completed",
+    "generatedAt": "2026-07-17",
+    "prompt": "Both Ex-0004 and 0005 are good now. go on and finish them with the animation and imagegen polish. Don't use any branding on the final rendered image. only the art style",
+    "revisedPrompt": "Edit the provided artwork into a polished final rendered illustration. Preserve the same square composition, lush fantasy canyon environment, towering coral-red cliffs, many turquoise-white waterfalls, mist and clouds filling the chasm, tropical foreground foliage, tiny distant temple/tower, warm sunlit blue sky, and vibrant hand-painted animated-feature aesthetic. Refine the shapes, lighting, atmospheric depth, foliage, water, mist, and color harmony with premium animation-background and image-generation polish while retaining the original scene and inviting adventurous mood. Remove ALL branding and typography from the image, including the large title at the top, publisher/developer names and logos at the bottom, and any other written marks. Fill those areas seamlessly with matching sky, clouds, vegetation, canyon, and foreground art. Final image must contain no text, no logos, no trademarks, no signatures, and no watermarks—only the artwork.",
+    "responseModel": "gpt-5.6-sol",
+    "imageModel": "gpt-image-2",
+    "requestedSize": "1536x1024",
+    "committedSourceDimensions": "1254x1254",
+    "quality": "high",
+    "background": "opaque",
+    "outputFormat": "webp",
+    "thinking": "high",
+    "referencePaths": [
+      "/home/sivanirosh/git_repos/ClassRoom-Sitefan/.pi/tmp/image-references/ex-0005-style.png"
+    ],
+    "referenceProvenance": "Owner-supplied visual reference; not committed. It authorizes general painterly terrace atmosphere only, not its branding, landmarks, characters, title treatment, or composition.",
+    "savedPath": "/home/sivanirosh/git_repos/ClassRoom-Sitefan/.pi/generated-images/openai-image-2026-07-17T23-18-13-456Z-ig_0db6ec5266477149016a5ab7f7894c8191b1206653d43e5136.webp",
+    "metadataPath": "/home/sivanirosh/git_repos/ClassRoom-Sitefan/.pi/generated-images/openai-image-2026-07-17T23-18-13-456Z-ig_0db6ec5266477149016a5ab7f7894c8191b1206653d43e5136.json",
+    "committedSource": "terrace-atmosphere.webp",
+    "runtimeUse": false,
+    "reasonNotPresentedDirectly": "The full generated source retained a central landmark, figures, and too much of the supplied reference composition. It remains provenance source only and is not requested by the built exercise."
+  },
+  "runtimeDerivative": {
+    "path": "terrace-atmosphere-safe.webp",
+    "role": "Replaceable aria-hidden background atmosphere only",
+    "sourceCropPixels": {
+      "x": 0,
+      "y": 250,
+      "width": 530,
+      "height": 324
+    },
+    "dimensions": "1060x648",
+    "manualEdits": "Crop only; Lanczos resize from 530x324 to 1060x648.",
+    "export": "Pillow WebP quality 88, method 6, opaque RGB",
+    "safeCrop": "Fixed 1060x648 crop retains generic sky, clouds, distant water, foliage edge, and coral terrace atmosphere while excluding the central tower, buildings, animals, foreground focal composition, and all source landmarks.",
+    "forbiddenContentReview": {
+      "readableText": false,
+      "logosOrTrademarks": false,
+      "copiedTitleTreatment": false,
+      "recognizableCharacters": false,
+      "recognizableLandmarks": false,
+      "requiredStateOrAnswer": false,
+      "pathOrTargetGeometry": false,
+      "quantityOrSubdivisions": false
+    },
+    "integration": "Imported locally by Prototype.svelte and RollStage.svelte. The authored SVG sky wash, landscape, path, markers, traces, contact points, and labels render above it; no content or geometry reads from the raster.",
+    "responsiveReview": {
+      "desktop": "Pass: fixed crop remains atmospheric behind the complete authored stage.",
+      "width320": "Pass: identical fixed crop remains behind the uncropped SVG world; decorative foliage hides independently.",
+      "network": "Local bundled asset only; no runtime request to an external origin."
+    },
+    "evidenceBoundary": "Visual and technical review only; no claim of learning efficacy, pupil comprehension, accessibility equivalence, or MES-02 approval."
+  }
 }
