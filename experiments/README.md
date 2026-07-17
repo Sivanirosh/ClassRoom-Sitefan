@@ -73,7 +73,7 @@ Four digits support a large catalog while preserving readable, immutable IDs. Ex
 4. **Established-task and mechanics research** — start from known classroom problem/task families, then search existing `PRE-*`, `MEC-*`, and `APP-*` records and research only gaps.
 5. **Semantic-fit rationales** — present only candidates with a causal learning-operation → player-action → system-evidence mapping. There is no fixed candidate count.
 6. **Catalog grayboxes** — implement every owner-approved candidate directly as its own stable three-scene, low-fi catalog exercise. Skip standalone comparison prototypes.
-7. **Owner mechanic gate** — revise/reject each catalog exercise, or record its sequence/checkpoint/exercise scope and exact phrase `mechanic approved for expansion`.
+7. **Owner mechanic decision** — revise/reject each catalog exercise, or record a clear natural-language approval to continue in the active sequence/checkpoint/exercise scope. No fixed phrase is required.
 8. **Exercise expansion** — write the full exercise progression and complete it through the flexible learning grammar.
 9. **Handoff, interaction, and optional polish** — verify the sequence handoff, build one coherent surface, and add motion/art only for a named purpose.
 10. **Final validation and memory write-back** — after all polish, run the technical suite, synchronize `DESIGN.md`, append an `APP-*` outcome, then promote, retain, or archive honestly.
@@ -114,7 +114,7 @@ Inside the exercise folder:
 mv Prototype.example.svelte Prototype.svelte
 ```
 
-Change the status from `planned` to `prototyping` in the same change. Implement only the approved candidate’s three-scene catalog graybox first. The runner will then become available; full exercise expansion remains blocked until the owner records this catalog exercise, sequence, and checkpoint scope and `mechanic approved for expansion`.
+Change the status from `planned` to `prototyping` in the same change. Implement only the approved candidate’s three-scene catalog graybox first. The runner will then become available; expand it after the owner clearly approves continuing in the active catalog exercise, sequence, and checkpoint context. Use a bounded Khazad-Doom Issue Slice to authorize implementation paths and acceptance evidence when the next phase needs a hard execution fence.
 
 ## Isolation contract
 

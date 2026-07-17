@@ -2,12 +2,12 @@
 sequence: SEQ-M1
 sequence_scope: bounded-pair-MES-01-to-MES-02
 checkpoint: MES-01
-status: semantic-fit-candidates-approved-for-catalog-grayboxes
-revision: r0-two-credible-candidates
-owner_candidate_gate: approved-with-named-graybox-constraints-per-candidate
-owner_gate_recorded_on: 2026-07-16
-pre_record_digest: sha256:81409988ab623d12ed27837ea63dcd20604a5d7dfaeb4a298ebd7e41ca1bd057
-catalog_graybox_authority: two-distinct-MES-01-low-fi-exercises-only
+status: game-first-reset-two-replacement-grayboxes-approved
+revision: r2-frog-prediction-bridge
+owner_candidate_gate: ex0004-and-ex0005-disposable-replacements-approved
+owner_gate_recorded_on: 2026-07-17
+historical_pre_record_digest: sha256:81409988ab623d12ed27837ea63dcd20604a5d7dfaeb4a298ebd7e41ca1bd057
+catalog_graybox_authority: ex0004-frog-prediction-and-ex0005-log-roll-only
 mechanic_authority: none
 ---
 
@@ -16,18 +16,57 @@ mechanic_authority: none
 ## Active scope
 
 - **Learning brief:** [`LEARNING-BRIEF.md`](./LEARNING-BRIEF.md)
-- **Approved learning-contract disposition / revision:** `approve learning contract`; `r0-unit-iteration-contract`; pre-record `sha256:61b3d070afcc9a41fdb7422434b41f7cb640207aa0c16a3a5d414392531fad14`
+- **Approved learning-contract disposition / revision:** original `approve learning contract`, `r0-unit-iteration-contract`, pre-record `sha256:61b3d070afcc9a41fdb7422434b41f7cb640207aa0c16a3a5d414392531fad14`; evidence refinement `approve behavioral-only evidence refinement`, `r1-behavioral-evidence`
 - **Sequence spine:** [`../SEQUENCE-SPINE.md`](../SEQUENCE-SPINE.md)
 - **Sequence-spine disposition / revision:** `approve bounded pair spine`; `r0-bounded-measurement-pair`; pre-record `sha256:6cb3e93488cadc89df7a3ff28792432ca46c12a87600340fb8cfedb226597df1`
-- **Active checkpoint exercise:** none. No catalog ID exists or is implied.
+- **Active replacement grayboxes:** EX-0005 `MES01-FIT-B2-log-roll-crossing` and EX-0004 `MES01-FIT-A3-frog-jump-prediction`. EX-0004’s direct-tap tutorial is MES-01-facing; its integer-prediction rounds are explicitly a bounded `MES-01 → MES-02` bridge hypothesis rather than an approved MES-02 contract.
 - **Core learning:** measuring a length with a shorter unit means repeating the same invariant unit from the length’s origin to its endpoint, placing each repetition exactly at the previous endpoint without gaps or overlaps; the repetition count expresses the length in that unit.
 - **Successful-pupil statement:** **« J’ai gardé le même pavé de 50 cm. Je l’ai répété depuis le début du chemin, chaque fois juste au bout du précédent, sans trou ni chevauchement. Le pavé tient 6 fois : le chemin mesure 6 longueurs de pavé. »**
-- **Expected cognitive process:** identify the longitudinal magnitude → establish one invariant unit → anchor the origin → iterate endpoint-to-endpoint while counting → inspect and repair → coordinate number and unit → explain reproducibility → transfer to a new straight whole-unit path.
-- **Required representation/evidence:** path origin and endpoint; one invariant along-path unit; ordered placement trace; continuity state; one count event per completed interval; repair history; stated measure with unit; independent transfer case in which area cues are absent or non-informative.
-- **Downstream handoff:** retain unit identity, valid trace, repetition count, support/reveal history, and repair evidence for `MES-02`; do not infer mental projection before the `MES-02` entry probe.
-- **Gate boundary:** each owner-approved rationale authorizes one distinct low-fi catalog graybox only. It does not authorize full expansion, polish, the other candidate, `MES-02`, or any unrelated scope.
+- **Expected cognitive process:** identify the longitudinal magnitude → establish one invariant unit → anchor the origin → iterate endpoint-to-endpoint → inspect and repair → let the system derive number plus unit from play → demonstrate reproducibility behaviorally in a fresh straight whole-unit path.
+- **Required MES-01 representation/evidence:** path origin and endpoint; one invariant along-path unit; inspectable continuity state; one completed game action/state interval per unit; repair history; system-derived measure with unit; independent transfer case in which area cues are absent or non-informative. No pupil report, declaration, citation, explanation, or answer entry is permitted as MES-01 evidence.
+- **Scoped EX-0004 bridge exception:** after a direct-action tutorial, the pupil enters one integer prediction before an automatic jump chain resolves. This is a game hypothesis for the handoff to MES-02, not a revision of MES-01’s behavioral-only contract or approval of MES-02 curriculum authority.
+- **Downstream handoff:** retain unit identity, valid trace, repetition count, support/reveal history, and repair evidence for `MES-02`; do not infer mental projection from tutorial completion alone.
+- **Gate boundary:** the 2026-07-17 owner selections authorize only the two replacement low-fi grayboxes. They do not authorize full expansion, polish, a MES-02 learning contract, or unrelated scope.
 
-## Established-task and mechanics-memory search
+## 2026-07-17 game-first reset
+
+Owner replay found both implemented adaptations bad/broken in game feel. The reset adds these non-negotiable experience invariants:
+
+- adapt a concrete, named video-game or board-game core loop rather than cite a broad mechanic abstraction;
+- one primary verb and a goal readable in approximately two seconds;
+- mathematical cognition expressed through play state and world consequences;
+- no pupil writing, spoken report, answer field, declaration, ledger, audit, citation, or explanation UI;
+- short calm attempts, fair visible failure, cheap retry, and no timer/motor-precision proxy;
+- technical success cannot establish game feel, learning, French comprehension, or accessibility equivalence.
+
+The old Endpoint relay and Trace debugger sections below remain historical rationale records. They no longer define current replacement implementation authority and grant no expansion authority.
+
+### Replacement candidate B2 — Push/roll crossing
+
+- **Candidate ID / target:** `MES01-FIT-B2-log-roll-crossing` → stable catalog identity `EX-0005`.
+- **Named source loop:** *A Monster’s Expedition* — push/roll logs to create traversable paths between islands. First-party provenance and adaptation boundaries: [`mes-01-calm-game-mechanic-precedents.md`](../../../../curriculum/research/mes-01-calm-game-mechanic-precedents.md).
+- **Source-backed boundary:** Draknek documents pushing trees/logs to make paths and reach islands. It does not document or validate one-input/one-unit measurement learning.
+- **Local adaptation:** one visible reusable roller begins at a named origin on an unsegmented straight whole-unit span. One activation produces one complete invariant displacement and one consequence mark. Exact endpoint contact opens a calm crossing; the game derives `n tours de rouleau` from completed marks.
+- **Primary verb / loop:** push/roll → see one same-length world mark → repeat or undo → exact endpoint resolves.
+- **Fair non-success:** a backward first roll visibly begins before the origin; one-step undo removes the displacement and mark together.
+- **Behavioral transfer:** complete a fresh visually changed straight line with the same action/unit relationship.
+- **Forbidden substitution:** no prospective cells/slots, target numeral, ruler marks, timing/aim/swipe-distance input, report, explanation, or separate counting control.
+- **Kill criteria:** reject if pupils spam until completion without connecting rolls to the unit-bearing count; if rolling reads only as transport; if consequence marks/post-hoc label teach the answer; or if animation/motor precision predicts success.
+
+### Replacement candidate A3 — Frog jump prediction bridge
+
+- **Candidate ID / target:** `MES01-FIT-A3-frog-jump-prediction` → stable catalog identity `EX-0004`.
+- **Named source relationship:** *Chinese Checkers* adjacent movement and jump-over-an-adjacent-piece into the position beyond; publisher provenance and adaptation boundaries: [`mes-01-calm-game-mechanic-precedents.md`](../../../../curriculum/research/mes-01-calm-game-mechanic-precedents.md).
+- **Tutorial:** tapping the frog immediately produces one invariant one-unit jump and consequence segment. This teaches the world rule but is not independent evidence.
+- **Challenge loop:** inspect the true square unit grid and straight origin-to-endpoint span → enter one integer → automatically execute exactly that many actions → inspect a spatial shortage, exact landing, or overshoot → retry.
+- **Unit-grid escalation:** a true square grid uses one cell side as one unit-saut. Horizontal prediction precedes vertical orthogonal transfer; diagonal movement is deferred because a square diagonal has length `√2` relative to its side.
+- **Later obstacle escalation:** a visible stationary frog forces one two-unit jump in one action. A six-unit path then requires five physical actions. This tests additive composition and must not be treated as MES-01 evidence.
+- **Forbidden substitution:** the explicit unit grid may expose square boundaries, but no target number, action queue, separate launch control, timer, drag, pupil prose, or administrative error dialog may replace the prediction-and-resolution loop.
+- **Kill criteria:** reject if play becomes sequential higher/lower guessing, if animation hides the spatial discrepancy, if pupils confuse action count with unit-length measure, or if orientation/motor skill predicts success.
+- **Owner implementation response:** exact wording `implement the graybox now`; normalized `approve disposable bridge graybox`; recorded 2026-07-17.
+- **Owner replay/expansion response:** after replaying the orthogonal-grid revision, the owner said “Perfect, I think the game mechanic can be validated now, let's go to the next phase” and then “I approve and go on with it.” Recorded 2026-07-17 as clear natural-language approval for EX-0004 UI/art expansion in this active bridge scope. The owner explicitly rejected prescribed approval wording; use a bounded Khazad-Doom Issue Slice when execution needs a hard fence.
+
+## Historical established-task and mechanics-memory search
 
 - **Classroom task/problem queries:** single-unit length iteration; leapfrogging one unit; endpoint placeholders and marks; intentional gap/overlap examples; changed-size versus changed-colour units; erroneous measurement diagnosis; constructing interval traces; displaced-origin errors.
 - **Established task families retained:**
@@ -187,17 +226,33 @@ Record one independent disposition per candidate. Allowed dispositions are `appr
 
 | Date | Candidate | Disposition | Rationale / constraints | Catalog exercise authority |
 |---|---|---|---|---|
-| 2026-07-16 | `MES01-FIT-A-endpoint-relay` | `approve with named graybox constraints` | Keep the count action independent; no automatic snapping or counting; require line-only transfer and equivalent relation controls. | one distinct `MES-01` low-fi catalog exercise only |
-| 2026-07-16 | `MES01-FIT-B-trace-debugger` | `approve with named graybox constraints` | Require direct state edits, no prepared answer list, exactly one focal fault before transfer, mandatory blank-plan transfer, and non-motion step mode. | one distinct `MES-01` low-fi catalog exercise only |
+| 2026-07-16 | `MES01-FIT-A-endpoint-relay` | `approve with named graybox constraints` | Historical approval; later owner replay found the implemented adaptation bad/broken. | historical graybox only; no replacement or expansion authority |
+| 2026-07-16 | `MES01-FIT-B-trace-debugger` | `approve with named graybox constraints` | Historical approval; replaced after owner found the implemented adaptation bad/broken. | superseded for EX-0005; no expansion authority |
+| 2026-07-17 | `MES01-FIT-A2-minecraft-attachment` | `revise rationale/card`, then superseded | Construction/adjacency tested the wrong skill; the owner later rejected that direction. | none |
+| 2026-07-17 | `MES01-FIT-B2-log-roll-crossing` | `approve replacement for catalog graybox` | One discrete fixed-distance push/roll; no prospective slots/count; behavioral-only evidence; visible world consequence and cheap undo. | replacement EX-0005 low-fi catalog graybox only |
+| 2026-07-17 | `MES01-FIT-A3-frog-jump-prediction` | `approve disposable bridge graybox` | Direct-tap tutorial; then integer prediction with automatic short/exact/over resolution; true square unit grid; horizontal/vertical transfer; later mandatory two-unit obstacle jump. Diagonal and direction-change mechanics remain deferred. | replacement EX-0004 low-fi bridge graybox only |
 
 ### Recorded owner responses
+
+#### Historical 2026-07-16 responses
 
 - **Candidate A exact response:** `Approve + constraints (Recommended)`
 - **Candidate A normalized disposition:** `approve with named graybox constraints`
 - **Candidate B exact response:** `Approve + constraints (Recommended)`
 - **Candidate B normalized disposition:** `approve with named graybox constraints`
 - **Shared pre-record artifact digest:** `sha256:81409988ab623d12ed27837ea63dcd20604a5d7dfaeb4a298ebd7e41ca1bd057`
-- **Recorded by / role:** repository owner acting as product, classroom, and curriculum owner
-- **Recorded at:** 2026-07-16
 
-Each approval authorizes one distinct low-fi catalog exercise for its named candidate and `MES-01` only. Neither grants `mechanic approved for expansion`, authorizes polish/full storyboarding, or propagates to `MES-02` or any unrelated scope.
+#### 2026-07-17 replacement responses
+
+- **Historical EX-0004 Minecraft-card exact response:** `Revise the card`
+- **Historical EX-0004 normalized disposition:** `revise rationale/card`; later superseded and rejected for weak mathematical fit.
+- **EX-0005 replacement-card exact response:** `Build graybox (Recommended)`
+- **EX-0005 normalized disposition:** `approve replacement for catalog graybox`.
+- **Evidence-mode exact response:** `Behavioral only (Recommended)`
+- **Evidence-mode normalized disposition:** `behavioral-only`.
+- **EX-0004 revised-graybox exact response:** `implement the graybox now`.
+- **EX-0004 normalized disposition:** `approve disposable bridge graybox`; integer prediction is scoped to the bridge hypothesis and does not approve the MES-02 learning contract.
+- **Recorded by / role:** repository owner acting as product, classroom, and curriculum owner.
+- **Recorded at:** 2026-07-17.
+
+`MES01-FIT-A3-frog-jump-prediction` now has clear owner authority for UI/art expansion of EX-0004 in the active bridge scope. `MES01-FIT-B2-log-roll-crossing` retains replacement-graybox authority only and still needs its own replay/go-ahead. Neither decision approves the MES-02 learning contract, establishes efficacy, authorizes promotion, or propagates to unrelated scope.

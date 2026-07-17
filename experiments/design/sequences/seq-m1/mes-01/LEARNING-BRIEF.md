@@ -3,8 +3,8 @@ sequence: SEQ-M1
 sequence_scope: bounded-pair-MES-01-to-MES-02
 checkpoint: MES-01
 status: owner-approved-learning-contract
-revision: r0-unit-iteration-contract
-owner_learning_contract_gate: approved
+revision: r1-behavioral-evidence
+owner_learning_contract_gate: approved-with-behavioral-evidence-refinement
 mechanic_authority: none
 ---
 
@@ -16,8 +16,11 @@ mechanic_authority: none
 - **Roadmap checkpoint:** `MES-01 — Construire et répéter une unité`.
 - **Curriculum basis:** PER MSN 24 `P24.02` and `P24.06`.
 - **Active pilot decision:** the owner designated `MES-01 → MES-02` as the bounded workflow pilot on 2026-07-16.
-- **Current authority:** this learning contract is owner-approved. A separate 2026-07-16 semantic-fit gate now authorizes one constrained low-fi `MES-01` catalog exercise for each of `MES01-FIT-A-endpoint-relay` and `MES01-FIT-B-trace-debugger`.
-- **Not authorized:** `mechanic approved for expansion`, polish/full storyboarding, the `MES-02` contract, full `SEQ-M1`, or unrelated implementation.
+- **Current authority:** the mathematical relation remains owner-approved. On 2026-07-17 the owner selected `Behavioral only (Recommended)`, normalized to `behavioral-only`: the game derives the unit-bearing result from successful play, and a fresh successful case is the reproducibility evidence. No pupil writing, spoken report, declaration, ledger, citation, or explanation UI is required.
+- **Current graybox authority:** EX-0005 may replace its old trace-debugger adaptation with `MES01-FIT-B2-log-roll-crossing`. On 2026-07-17 the owner also authorized the disposable `MES01-FIT-A3-frog-jump-prediction` replacement for EX-0004 with the exact response `implement the graybox now`.
+- **Scoped bridge boundary:** EX-0004’s direct-tap tutorial may embody MES-01, but its integer-prediction rounds are a `MES-01 → MES-02` bridge hypothesis. They do not revise MES-01’s behavioral-only evidence contract or constitute approval of the MES-02 learning contract.
+- **EX-0004 expansion authority:** on 2026-07-17 the owner said “I approve and go on with it” after replay and supplied pond-board art references. This authorizes UI/art expansion of EX-0004 in the active `SEQ-M1` / `MES-01 → MES-02` bridge context. No prescribed approval phrase is required; bounded implementation should use a Khazad-Doom Issue Slice when a hard fence is useful.
+- **Still not authorized:** the `MES-02` learning contract, full `SEQ-M1`, EX-0005 expansion, efficacy claims, promotion, or unrelated implementation.
 
 ## Approved learning contract
 
@@ -29,7 +32,7 @@ mechanic_authority: none
 
 > **« J’ai gardé le même pavé de 50 cm. Je l’ai répété depuis le début du chemin, chaque fois juste au bout du précédent, sans trou ni chevauchement. Le pavé tient 6 fois : le chemin mesure 6 longueurs de pavé. »**
 
-The values and paver context may change later; the statement’s mathematical relations may not.
+The values and paver context may change later; the statement’s mathematical relations may not. Under the owner-selected `behavioral-only` mode, this sentence is a designer/teacher interpretation target. It must not be presented as generated pupil speech or required as pupil-facing written/spoken output.
 
 ### Expected cognitive process — approved
 
@@ -38,8 +41,8 @@ The values and paver context may change later; the statement’s mathematical re
 3. **Anchor the origin.** Align the unit’s beginning with the path’s beginning.
 4. **Iterate with continuity.** Place each new unit beginning at the previous unit’s endpoint while counting one placement once.
 5. **Inspect and repair.** Detect any gap, overlap, changed unit, skipped/doubled count, or displaced origin; repair the trace rather than guessing a new answer.
-6. **Coordinate number and unit.** State `n paver-lengths` (and `n × 50 cm` when that notation is supplied) as the measure.
-7. **Explain reproducibility.** Justify that another pupil using the same unit and continuity rules should obtain the same measure.
+6. **Coordinate number and unit.** Produce a play state from which the system can derive and display `n paver-lengths` (and `n × 50 cm` when that notation is supplied) as the measure.
+7. **Demonstrate reproducibility behaviorally.** Complete a fresh equivalent case using the same unit/continuity relation; no pupil report or explanation UI is required.
 8. **Transfer.** Repeat the process on a new straight path whose position or appearance changes but whose length is still a whole number of units.
 
 ## Why this is one checkpoint
@@ -78,17 +81,17 @@ These are diagnostic signals, not approved extra lessons. If absent, pause and r
 
 ## Observable evidence contract
 
-Independent success requires all of the following in a new case:
+Independent success requires all of the following in a fresh case:
 
 1. starts at the specified origin;
 2. uses one invariant unit throughout;
-3. constructs or validates an endpoint-to-endpoint trace;
+3. constructs or validates an endpoint-to-endpoint trace through play;
 4. leaves no gap or overlap;
-5. counts placements consistently;
-6. states the result with its unit;
-7. explains at least one reason the procedure is reproducible.
+5. produces one completed action/interval per repeated unit;
+6. reaches a state from which the system derives and displays the result with its unit;
+7. completes a visually changed equivalent case as behavioral evidence of reproducibility.
 
-A final number alone is insufficient. At least one independent case must expose only the longitudinal start–end interval and unit endpoints, or otherwise make width and covered surface non-informative, so an area-covering strategy cannot satisfy the evidence contract. Completion after an answer-revealing hint remains supported completion and requires a fresh structurally equivalent case before independent closure.
+A final number alone is insufficient, and the pupil must never be asked to type, select, declare, cite, or explain it as a completion gate. At least one independent case must expose only the longitudinal start–end interval and unit endpoints, or otherwise make width and covered surface non-informative, so an area-covering strategy cannot satisfy the evidence contract. Completion after an answer-revealing hint remains supported completion and requires a fresh structurally equivalent case before independent closure.
 
 ## Error families and diagnostic hypotheses
 
@@ -100,7 +103,7 @@ A final number alone is insufficient. At least one independent case must expose 
 | Overlap | Part of the path is measured twice | Pupil counts placements without conserving covered length | Highlight the double-measured interval and require repair before recounting. |
 | Unit mutation | Unit is resized/rotated into a different along-path length | Pupil treats each placement as an arbitrary chunk | Compare unit traces and restore one invariant reference. |
 | Count/trace mismatch | Spatial trace is valid but count skips or duplicates a placement | One-to-one coordination is fragile | Let the pupil traverse ordered endpoints and reconcile count with trace. |
-| Unitless answer | Gives only `6` or only `300` | Pupil has not linked numerical measure to chosen unit | Ask “6 quoi ?” and make unit naming necessary for another measurer to reproduce it. |
+| Unitless result | The play state or system result exposes only `6` or only `300` | The mechanic has not linked numerical measure to the chosen unit | Derive and display the count together with the unit from completed play; do not require pupil answer entry. |
 | Arithmetic detour | Computes from the displayed `50 cm` while the spatial trace is invalid | Symbolic multiplication is masking invalid measurement | Keep arithmetic unavailable until the iteration trace passes continuity checks. |
 
 ## Content and representation boundaries
@@ -113,7 +116,8 @@ A final number alone is insufficient. At least one independent case must expose 
 - explicit start/end and unit endpoints;
 - valid, gap, overlap, wrong-origin, and changed-unit states;
 - orientation/position changes that preserve the one-dimensional task;
-- exact French wording needed to understand and repair measurement.
+- exact French wording needed to understand the action and world-state consequence;
+- behavioral evidence derived from play, with no pupil report or answer entry.
 
 ### Excluded from this checkpoint
 
@@ -136,9 +140,9 @@ Any candidate must preserve these causal mappings:
 | Establish invariant unit | Select/accept one fixed paver-length and keep it unchanged | Every trace segment has the same along-path length. |
 | Anchor measurement | Align first unit with named origin | No leading interval is omitted or added. |
 | Iterate continuously | Place/validate each start at the prior endpoint | Adjacency can be inspected; gaps and overlaps have exact locations. |
-| Coordinate count and trace | Count each completed unit interval once | Count equals number of valid intervals, not clicks or loose objects. |
-| State measure | Join number to named unit | Result is represented as `n` paver-lengths / supplied equivalent. |
-| Repair reasoning | Modify the faulty relation, not merely retry a number | Before/after trace shows which measurement condition was restored. |
+| Coordinate count and trace | Produce one completed game action/state interval per repeated unit | Derived count equals the number of valid unit intervals, not arbitrary clicks or loose objects. |
+| Produce measure | Complete the measurable world state | The system derives and displays `n` named units from the play state; no pupil report is required. |
+| Repair reasoning | Modify the faulty world relation, not merely retry a number | Before/after state shows which measurement condition was restored. |
 
 Reject a future candidate if a generic number field, interval slider, multiple-choice card, or cosmetic drag can replace these actions without changing the pupil’s reasoning.
 
@@ -146,7 +150,7 @@ Reject a future candidate if a generic number field, interval slider, multiple-c
 
 - Dragging cannot be the only route. Keyboard and touch must allow the same origin, adjacency, and repair decisions.
 - Unit endpoints, gaps, and overlaps require shape/label/state cues beyond colour.
-- Text or structured trace alternatives must preserve ordered placement and continuity; they may not reduce the task to typing the final count.
+- Text alternatives may describe state and consequence, but must not become a pupil-operated trace, report, explanation, or typed final count.
 - Focus order must follow the measurement direction.
 - Reduced motion may remove animation but not the state transition or consequence.
 - French copy must keep `début`, `bout`, `même pavé`, `sans trou`, and `sans chevauchement` stable.
@@ -174,19 +178,29 @@ The retained handoff must include:
 
 ## Owner learning-contract gate
 
-The owner judged the three contract elements together: the core-learning sentence, successful-pupil statement, and expected cognitive process. Approval locks those elements, the representation/evidence boundaries, and the `MES-01 → MES-02` handoff for semantic-fit work. Material changes return to this gate.
+The owner originally judged the three contract elements together: the core-learning sentence, successful-pupil statement, and expected cognitive process. The 2026-07-17 refinement changes only the evidence modality: it removes required pupil output and uses system-derived results plus fresh-case behavior. The mathematical relation and statement remain interpretation targets.
 
-Approval authorizes established-task/mechanics-memory research and one or more semantic-fit rationales only. It does not approve the paver scenario as a mechanic, any semantic-fit candidate, catalog implementation, mechanic, or expansion.
+Approval authorizes established-task/mechanics-memory research and separately selected low-fi grayboxes only. It does not approve the paver scenario as a mechanic, expansion, polish, or learning claims.
+
+### Original approval
 
 - **Owner response:** `Approve contract (Recommended)`
 - **Normalized disposition:** `approve learning contract`
-- **Required changes:** none
 - **Revision/digest judged:** `r0-unit-iteration-contract`; pre-record `sha256:61b3d070afcc9a41fdb7422434b41f7cb640207aa0c16a3a5d414392531fad14`
 - **Recorded by / role:** repository owner acting as product/curriculum owner
 - **Recorded at:** 2026-07-16
 
+### Behavioral-evidence refinement
+
+- **Owner response:** `Behavioral only (Recommended)`
+- **Normalized disposition:** `approve behavioral-only evidence refinement`
+- **Revision:** `r1-behavioral-evidence`
+- **Required change:** derive the unit-bearing result from play and use a fresh successful round as reproducibility evidence; prohibit pupil writing/report/declaration interfaces.
+- **Recorded by / role:** repository owner acting as product/curriculum owner
+- **Recorded at:** 2026-07-17
+
 ## Current semantic-fit artifact
 
-[`MECHANIC-FIT.md`](./MECHANIC-FIT.md) revision `r0-two-credible-candidates` records the established-task/mechanics search and two independently credible rationales. On 2026-07-16 the owner separately gave both `approve with named graybox constraints`, against pre-record `sha256:81409988ab623d12ed27837ea63dcd20604a5d7dfaeb4a298ebd7e41ca1bd057`.
+[`MECHANIC-FIT.md`](./MECHANIC-FIT.md) preserves the two 2026-07-16 rationales and records the 2026-07-17 reset. EX-0005 has graybox-only authority for `MES01-FIT-B2-log-roll-crossing`; EX-0004 now has separately granted disposable-graybox authority for `MES01-FIT-A3-frog-jump-prediction`.
 
-Current authority permits one distinct low-fi `MES-01` catalog exercise for each named candidate under its recorded constraints. It does not permit expansion, polish, `MES-02`, or unrelated implementation.
+Current authority permits only those two bounded replacement grayboxes. EX-0004’s prediction rounds remain a bridge hypothesis rather than an approved MES-02 contract. Nothing here permits expansion, polish, `MES-02` curriculum authority, or unrelated work.

@@ -17,6 +17,6 @@ Then:
 7. Keep `status: 'planned'` and `Prototype.example.svelte` until implementation of the approved candidate begins.
 8. Rename the component to `Prototype.svelte` and set `status: 'prototyping'` when implementation begins.
 9. Build only the approved three-scene low-fi mechanic test first. Do not create a separate throwaway comparison page.
-10. Do not expand until the owner records `mechanic approved for expansion` for this exact exercise, sequence, and checkpoint.
+10. Do not expand until the owner clearly approves continuing in the active exercise, sequence, and checkpoint context. No prescribed phrase is required; use a validated Khazad-Doom Issue Slice when a hard implementation fence is needed.
 
 Do not import classroom application code into the experiment.

@@ -14,7 +14,7 @@
 - **Application record (`APP-*`):** create/update after owner replay
 - **Owner expansion gate:** pending
 
-Follow [`../../design/prototype-production-workflow.md`](../../design/prototype-production-workflow.md). Full expansion requires the exact owner phrase `mechanic approved for expansion`.
+Follow [`../../design/prototype-production-workflow.md`](../../design/prototype-production-workflow.md). Full expansion requires a clear owner go-ahead in the active scope; no prescribed phrase is required. Use a validated Khazad-Doom Issue Slice when implementation needs a hard boundary.
 
 ## Decision summary
 
@@ -110,7 +110,7 @@ Allowed dispositions:
 - return to the semantic-fit rationale or learning contract;
 - reject/archive this candidate;
 - keep it for comparison without expansion;
-- record `mechanic approved for expansion` for this exact exercise, sequence, and checkpoint.
+- record the owner’s clear natural-language approval to continue for this exercise in the active sequence/checkpoint context.
 
 **Current gate:** pending
 

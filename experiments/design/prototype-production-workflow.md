@@ -27,10 +27,11 @@ Approval of this workflow does **not** approve a discipline roadmap, sequence sp
 | `r1-approved` | 2026-07-15 | Approved | Formalized the revised workflow from the first `SEQ-N1` owner-playtest retrospective | User and coding assistant |
 | `r2-sequence-spine` | 2026-07-16 | Approved | Kept the sequence as the coherence unit while making one checkpoint exercise the mechanic-prototyping and expansion unit | User and coding assistant |
 | `r3-learning-contract-semantic-fit` | 2026-07-16 | Approved | After the rejected `NUM-02` A/B/C set, moved owner approval of a precise learning contract before ideation; required established classroom-task grounding and explicit cognitive/semantic fit; removed the fixed quota of three pitches and throwaway comparison prototypes; allowed one or more approved candidates to proceed directly as low-fi catalog grayboxes | User and coding assistant |
+| `r4-natural-language-approval` | 2026-07-17 | Approved | Removed the exact-phrase expansion incantation. A clear owner statement such as “I approve; go on with it” now authorizes the next phase in the active conversational scope; clarify only genuinely ambiguous scope. | User and coding assistant |
 
 ## Executive intent
 
-Produce concept-native, playable learning exercises by settling the educational meaning before implementation. Each approved sequence first defines a coherent spine. For each active checkpoint, the owner then approves one precise core-learning sentence, a successful-pupil statement, and the expected cognitive process. Mechanic proposals must begin from established classroom problem/task families, then explain exactly how player actions and system consequences trigger that cognition. One or more owner-approved candidates may proceed directly to low-fi grayboxes in the exercise catalog. Only owner replay and the scoped phrase `mechanic approved for expansion` authorize continued development and polish.
+Produce concept-native, playable learning exercises by settling the educational meaning before implementation. Each approved sequence first defines a coherent spine. For each active checkpoint, the owner then approves one precise core-learning sentence, a successful-pupil statement, and the expected cognitive process. Mechanic proposals must begin from established classroom problem/task families, then explain exactly how player actions and system consequences trigger that cognition. One or more owner-approved candidates may proceed directly to low-fi grayboxes in the exercise catalog. Owner replay plus any clear natural-language approval to continue authorizes development and polish in the active scope; no prescribed phrase is required.
 
 The workflow does not reward quotas of ideas. It rewards traceable learning-task-mechanic pairs.
 
@@ -63,8 +64,8 @@ Build each approved candidate directly as a low-fi catalog graybox
         ↓
 Owner replay
    ├─ reject/revise/archive
-   └─ select one or more + record scoped
-      “mechanic approved for expansion”
+   └─ select one or more + clearly approve continuing
+      in the active exercise/checkpoint scope
         ↓
 Expand and validate each approved checkpoint exercise
         ↓
@@ -275,9 +276,9 @@ Advisory replay prompts:
 - **Revise the same graybox.**
 - **Reject/archive this candidate.**
 - **Keep for comparison without expansion.**
-- **Approve:** record the exact phrase **`mechanic approved for expansion`** for the catalog exercise, sequence, and checkpoint.
+- **Approve:** record any clear natural-language go-ahead for the catalog exercise in the active sequence/checkpoint context, for example “I approve; go on with it.”
 
-The owner may approve one or more catalog grayboxes. Each approval is scoped separately. Positive comments, continued implementation, technical success, or silence do not imply approval.
+The owner may approve one or more catalog grayboxes. Each approval is scoped separately. No prescribed wording is required. Praise alone, technical success, or silence does not imply approval; ask about scope only when the active context is genuinely ambiguous.
 
 ## Phase 6 — Full exercise design and expansion
 

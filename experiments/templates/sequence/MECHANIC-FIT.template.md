@@ -106,4 +106,4 @@ Record one row per candidate.
 |---|---|---|---|---|
 | | | approve for catalog graybox / approve with named graybox constraints / revise rationale / reject candidate / park checkpoint | | none until explicitly approved |
 
-An approval authorizes one low-fi catalog exercise for the named candidate and checkpoint. It does not grant `mechanic approved for expansion`.
+An approval authorizes one low-fi catalog exercise for the named candidate and checkpoint. Full expansion still needs a later clear owner go-ahead in the active scope, but no prescribed wording. Use a validated Khazad-Doom Issue Slice when that work needs a hard path/evidence boundary.

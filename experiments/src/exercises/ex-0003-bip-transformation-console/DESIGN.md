@@ -10,7 +10,7 @@
 - **Learning brief / pitch comparison / graybox script:** not created; this historical pilot predates the approved templates
 - **Owner mechanic gate:** `revise-same-mechanic`
 
-On 2026-07-15 the owner replayed the current prototype, said the interface direction was correct but too information-dense, and requested a coherent simplification that preserves the procedural loop. The exact phrase `mechanic approved for expansion` has not been granted for EX-0003.
+On 2026-07-15 the owner replayed the current prototype, said the interface direction was correct but too information-dense, and requested a coherent simplification that preserves the procedural loop. EX-0003 has not received a clear owner go-ahead for expansion. No prescribed phrase is required under the current workflow.
 
 ## Decision summary
 

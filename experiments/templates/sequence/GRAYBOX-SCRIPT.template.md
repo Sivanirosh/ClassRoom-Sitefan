@@ -101,7 +101,7 @@ Approval cannot be inferred or propagated. Record one disposition:
 - revise same graybox;
 - reject/archive candidate;
 - keep for comparison without expansion;
-- `mechanic approved for expansion`.
+- a recorded clear natural-language owner approval to continue in the active scope.
 
 - **Gate scope (catalog exercise + sequence + checkpoint):**
 - **Owner disposition:**

@@ -20,4 +20,4 @@ Optional implementation:
 
 The `id` and `slug` in metadata must exactly match the folder name. Duplicate IDs, orphan documents, missing design files, invalid metadata, and lifecycle/prototype mismatches stop the catalog.
 
-Start from `../../templates/exercise/`; do not add records directly from memory. A new low-fi catalog graybox requires a recorded owner-approved sequence spine, checkpoint learning contract, and semantic-fit candidate. Each approved candidate receives its own stable exercise folder; full expansion still requires `mechanic approved for expansion` for that exact scope.
+Start from `../../templates/exercise/`; do not add records directly from memory. A new low-fi catalog graybox requires a recorded owner-approved sequence spine, checkpoint learning contract, and semantic-fit candidate. Each approved candidate receives its own stable exercise folder; full expansion requires a clear owner go-ahead in the active scope, not prescribed wording. When implementation needs a hard boundary, encode it as a validated Khazad-Doom Issue Slice rather than making the owner recite an approval formula.
