@@ -153,6 +153,11 @@ async function focusByTab(page: Page, control: Locator, label: string): Promise<
 
 async function keyboardActivate(page: Page, control: Locator, label: string): Promise<void> {
   await focusByTab(page, control, label);
+  const inputValue = await control.getAttribute('data-smoke-input-value');
+  if (inputValue !== null) {
+    await control.fill(inputValue);
+    return;
+  }
   await page.keyboard.press('Enter');
 }
 
@@ -352,7 +357,9 @@ export async function runTouchContract(
   const activateTouch: Activate = async (control, label) => {
     await prepareTouchTarget(control, label, viewport);
     await assertNoHorizontalOverflow(page);
+    const inputValue = await control.getAttribute('data-smoke-input-value');
     await control.tap();
+    if (inputValue !== null) await control.fill(inputValue);
   };
   const afterTouchAction = async (): Promise<void> => {
     await assertNoHorizontalOverflow(page);

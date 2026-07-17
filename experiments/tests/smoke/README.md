@@ -66,7 +66,9 @@ Each token resolves to exactly one visible enabled real control at the moment it
 <button data-smoke-control="group-units">Assembler</button>
 ```
 
-Plans are deterministic test metadata, not alternate behavior. Smoke-only bypass controls are forbidden. Clicking a plan token must exercise the same event handler and state transition available to a pupil.
+Plans are deterministic test metadata, not alternate behavior. Smoke-only bypass controls are forbidden. Activating a plan token must exercise the same control, input event, and state transition available to a pupil.
+
+A real text input or textarea may carry `data-smoke-input-value` alongside its `data-smoke-control` token. The keyboard path reaches it by Tab and fills it; the touch path taps and fills the same control. The value is only deterministic test content—it must pass the prototype's ordinary pupil-facing validation and must not unlock a smoke-only branch.
 
 No error feedback may be present before the harness runs the probe. A recoverable probe keeps the prototype in `active` and creates one visible element with both:
 
@@ -82,7 +84,7 @@ Error and success feedback must each contain at least 20 non-whitespace characte
 
 ### Reduced-motion keyboard path
 
-- uses Tab plus Enter only;
+- uses Tab plus Enter for buttons and Tab plus ordinary text entry for declared text controls;
 - proves every planned control is reachable, visible, unique, and enabled;
 - completes every authored scene;
 - executes at least one meaningful recoverable-error path;
