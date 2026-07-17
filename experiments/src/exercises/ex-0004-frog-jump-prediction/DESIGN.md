@@ -7,7 +7,7 @@
 - **Replacement candidate:** `MES01-FIT-A3-frog-jump-prediction`.
 - **Owner design direction:** tutorial taps followed by integer prediction and automatic resolution; a true square unit grid; horizontal then vertical orthogonal transfer; and a mandatory two-unit obstacle leap.
 - **Owner implementation response:** exact wording `implement the graybox now`; normalized disposition `approve disposable bridge graybox`; recorded 2026-07-17.
-- **Current authority:** this replacement low-fi catalog graybox only. It does not approve a MES-02 learning contract, expansion, polish, efficacy claims, or unrelated scope.
+- **Current authority:** the validated replacement mechanic plus the bounded pond-board UI/art expansion authorized by Issue Slice `ex-0004-pond-ui-art`. This does not approve a MES-02 learning contract, mechanic expansion, efficacy claims, promotion, or unrelated scope.
 
 The integer prediction is a deliberately scoped bridge hypothesis. It is not retroactively added to MES-01’s behavioral-only evidence contract.
 
@@ -16,6 +16,26 @@ The integer prediction is a deliberately scoped bridge hypothesis. It is not ret
 Chinese Checkers rules permit an adjacent move and a jump over an adjacent piece to the empty position beyond; jumped pieces remain and jumps may chain. EX-0004 retains the abstract unit lattice, one-unit move / two-unit jump-over relationship, and chained movement. It does not copy the source board shape, holes, pieces, layouts, artwork, scoring, or branded presentation.
 
 Source provenance and adaptation boundaries are recorded in [`mes-01-calm-game-mechanic-precedents.md`](../../../curriculum/research/mes-01-calm-game-mechanic-precedents.md).
+
+## Pond-board visual rationale
+
+The expanded interface frames the existing lattice as a calm garden pond. A timber surround, celadon water, perimeter stones and reeds, a small arched bridge, a stone lantern, lotus leaves, and a warm sun/moon palette establish an East Asian garden-inspired atmosphere without reproducing a branded character, recognizable game board, or supplied composition. Every illustration is original inline SVG or CSS; the exercise loads no external image, font, or network asset and adds no runtime dependency.
+
+The visual hierarchy remains mathematical rather than decorative:
+
+- the square lattice is drawn above the organic scenery and remains the dominant repeatable measure;
+- garden details stay around the perimeter, away from the horizontal and vertical movement corridors;
+- cream route beds, named endpoints, retained landing marks, and an adjacent HTML measure statement preserve legibility when the SVG label is small;
+- jade identifies the player frog, while shape, text, position, and a dashed trace—not color alone—identify the stationary orange obstacle and its two-unit jump;
+- the active and success maps use the same pond, 10-by-10 grid pattern, route geometry, trace, obstacle, and frog vocabulary so success does not replace the evidence state with a decorative celebration.
+
+### Preserved render and interaction invariants
+
+- Both maps retain a `120 × 100` viewBox, a `10 × 10` pattern, and a rendered `6 / 5` aspect ratio. No perspective or non-uniform transform is applied to the grid or mechanic layer.
+- `vectorFor()` remains exactly `{ x: 10, y: 0 }` or `{ x: 0, y: -10 }`; ordinary jumps therefore equal one cell side. The forced obstacle trace remains one 20-unit segment produced by one action.
+- Origins, endpoints, obstacle location, automatic execution, retry behavior, and every deterministic smoke selector remain unchanged.
+- The tutorial control remains the real transparent HTML button over the visible frog. At a 320px viewport its measured hit area is 44.1 by 44.1 CSS pixels.
+- Reduced motion still resolves a prediction immediately and disables new movement/entry transitions without hiding the final trace.
 
 ## Corrected game model
 
@@ -116,6 +136,8 @@ Runner states remain `ready → active → success → complete`.
 
 ## Technical validation record
 
+### Validated mechanic baseline
+
 Completed 2026-07-17:
 
 - `npm --prefix experiments run check` — 0 Svelte errors/warnings; catalog valid with 5 exercises.
@@ -128,7 +150,20 @@ Completed 2026-07-17:
 
 A first smoke run exposed `Cannot read properties of undefined (reading 'chapter')` after continuing; the next scene index is now captured before scene loading. Independent review then found that a separate tutorial button weakened direct action and that success removed the exact trace. The tutorial control now overlays the visible world frog, and every success view retains the completed trace, endpoint, frog, and obstacle where applicable. The full smoke suite passed again after both repairs.
 
-These checks establish operability only. Owner replay, pupil reasoning, non-guessing behavior, French comprehension, and practical accessibility remain untested.
+### Pond-board UI/art slice validation
+
+Completed 2026-07-17:
+
+- `npm --prefix experiments run check` — 0 Svelte errors/warnings; catalog valid with 5 exercises.
+- `npm --prefix experiments run build` — production build passed after compiling the expanded inline SVG/CSS art.
+- `SMOKE_EXERCISES=EX-0004 npm --prefix experiments run test:smoke` — 6/6 passed; tutorial, recoverable horizontal error, horizontal success, vertical transfer, obstacle round, reduced-motion keyboard, and 320px touch routes retained their deterministic hooks and behavior.
+- `git diff --check` — passed.
+- Headless Chrome inspection at 1440px and 320px — no console/page errors and document `scrollWidth` equaled viewport width in both cases.
+- Rendered geometry instrumentation — the desktop map measured `786 × 655` CSS pixels and the mobile map `294 × 245`, producing equal cell width and height (`65.5px` desktop; `24.5px` mobile) from the unchanged 12-by-10 visible grid.
+- Visual-state inspection — intro, tutorial, horizontal success, vertical, obstacle, and final map states retained readable endpoints, unit reference, trace, and perimeter-only scenery; the 320px tutorial frog target measured `44.1 × 44.1` CSS pixels.
+- Source inspection — all pond, frog, bridge, lantern, lotus, mountain, pavilion, and completion art is hand-authored in `Prototype.svelte`; no external asset, copied board shape, new dependency, or network request was introduced.
+
+These checks establish implementation operability and rendered geometry only. Owner replay, pupil reasoning, non-guessing behavior, French comprehension, practical accessibility equivalence, and pupil efficacy remain untested.
 
 ## Kill criteria
 
@@ -154,4 +189,4 @@ Reject or revise if:
 
 ## Current disposition
 
-The disposable loop is operable and replayable. On 2026-07-17 the owner replayed the orthogonal-grid revision, validated the mechanic, and clearly approved continuing into UI/art expansion. That natural-language approval is sufficient; no prescribed phrase is required. The implementation phase is bounded by a Khazad-Doom Issue Slice. Pupil learning, accessibility equivalence, efficacy, MES-02 contract approval, and promotion remain separate later decisions.
+The pond-board loop is implemented, operable, and replayable. On 2026-07-17 the owner replayed the orthogonal-grid revision, validated the mechanic, and clearly approved the bounded UI/art expansion now recorded above. Pupil learning, accessibility equivalence, efficacy, MES-02 contract approval, mechanic expansion, and promotion remain separate later decisions.
