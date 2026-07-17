@@ -2,6 +2,9 @@
   "id": "ex-0004-animation-imagegen-polish",
   "title": "EX-0004 final animation and generated-art polish",
   "goal": "Finish the owner-approved EX-0004 pond-board exercise with purposeful frog/trace/water motion and the committed generated pond atmosphere while preserving the exact orthogonal unit geometry, interaction loop, accessibility, and unbranded original presentation.",
+  "status": "closed",
+  "closed_by_run": "kd-20260717-232518-2e742c35",
+  "closed_at": "2026-07-17T23:53:25.896177094+00:00",
   "areas": [
     "experiments/src/exercises/ex-0004-frog-jump-prediction/"
   ],

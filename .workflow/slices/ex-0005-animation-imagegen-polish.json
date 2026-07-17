@@ -2,6 +2,9 @@
   "id": "ex-0005-animation-imagegen-polish",
   "title": "EX-0005 final animation and generated-art polish",
   "goal": "Finish the owner-approved EX-0005 log-roll exercise with purposeful rolling/calibration/trace motion and the committed generated terrace atmosphere while preserving invariant-roll measurement, retry-from-calibration, accessibility, and an unbranded original presentation.",
+  "status": "closed",
+  "closed_by_run": "kd-20260717-232518-2e742c35",
+  "closed_at": "2026-07-17T23:53:25.896177094+00:00",
   "areas": [
     "experiments/src/exercises/ex-0005-log-roll-crossing/",
     "experiments/tests/smoke/ex-0005-log-roll.spec.ts"
