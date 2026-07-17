@@ -229,7 +229,8 @@ Record one independent disposition per candidate. Allowed dispositions are `appr
 | 2026-07-16 | `MES01-FIT-A-endpoint-relay` | `approve with named graybox constraints` | Historical approval; later owner replay found the implemented adaptation bad/broken. | historical graybox only; no replacement or expansion authority |
 | 2026-07-16 | `MES01-FIT-B-trace-debugger` | `approve with named graybox constraints` | Historical approval; replaced after owner found the implemented adaptation bad/broken. | superseded for EX-0005; no expansion authority |
 | 2026-07-17 | `MES01-FIT-A2-minecraft-attachment` | `revise rationale/card`, then superseded | Construction/adjacency tested the wrong skill; the owner later rejected that direction. | none |
-| 2026-07-17 | `MES01-FIT-B2-log-roll-crossing` | `approve replacement for catalog graybox` | One discrete fixed-distance push/roll; no prospective slots/count; behavioral-only evidence; visible world consequence and cheap undo. | replacement EX-0005 low-fi catalog graybox only |
+| 2026-07-17 | `MES01-FIT-B2-log-roll-crossing` | `approve replacement for catalog graybox` | One discrete fixed-distance push/roll; no prospective slots/count; behavioral-only evidence; visible world consequence and cheap undo. | replacement EX-0005 low-fi catalog graybox |
+| 2026-07-18 | `MES01-FIT-B2-log-roll-crossing` | `approve mechanic expansion` | Replay approval includes the retained-calibration prediction bridge; the owner explicitly withheld approval of any `MES-02` learning contract. | EX-0005 full progression, interaction, motion, and art-direction work only |
 | 2026-07-17 | `MES01-FIT-A3-frog-jump-prediction` | `approve disposable bridge graybox` | Direct-tap tutorial; then integer prediction with automatic short/exact/over resolution; true square unit grid; horizontal/vertical transfer; later mandatory two-unit obstacle jump. Diagonal and direction-change mechanics remain deferred. | replacement EX-0004 low-fi bridge graybox only |
 
 ### Recorded owner responses
@@ -252,7 +253,8 @@ Record one independent disposition per candidate. Allowed dispositions are `appr
 - **Evidence-mode normalized disposition:** `behavioral-only`.
 - **EX-0004 revised-graybox exact response:** `implement the graybox now`.
 - **EX-0004 normalized disposition:** `approve disposable bridge graybox`; integer prediction is scoped to the bridge hypothesis and does not approve the MES-02 learning contract.
+- **EX-0005 replay disposition (2026-07-18):** `approve mechanic expansion`; retained-calibration prediction remains a bounded bridge hypothesis and does not approve the `MES-02` learning contract.
 - **Recorded by / role:** repository owner acting as product, classroom, and curriculum owner.
-- **Recorded at:** 2026-07-17.
+- **Recorded at:** 2026-07-18.
 
 `MES01-FIT-A3-frog-jump-prediction` now has clear owner authority for UI/art expansion of EX-0004 in the active bridge scope. `MES01-FIT-B2-log-roll-crossing` retains replacement-graybox authority only and still needs its own replay/go-ahead. Neither decision approves the MES-02 learning contract, establishes efficacy, authorizes promotion, or propagates to unrelated scope.

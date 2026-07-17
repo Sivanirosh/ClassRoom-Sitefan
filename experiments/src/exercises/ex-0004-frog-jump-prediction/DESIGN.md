@@ -7,7 +7,7 @@
 - **Replacement candidate:** `MES01-FIT-A3-frog-jump-prediction`.
 - **Owner design direction:** tutorial taps followed by integer prediction and automatic resolution; a true square unit grid; horizontal then vertical orthogonal transfer; and a mandatory two-unit obstacle leap.
 - **Owner implementation response:** exact wording `implement the graybox now`; normalized disposition `approve disposable bridge graybox`; recorded 2026-07-17.
-- **Current authority:** the validated replacement mechanic plus the bounded pond-board UI/art expansion authorized by Issue Slice `ex-0004-pond-ui-art`. This does not approve a MES-02 learning contract, mechanic expansion, efficacy claims, promotion, or unrelated scope.
+- **Current authority:** the validated replacement mechanic plus the pond-board UI/art expansion authorized by Issue Slice `ex-0004-pond-ui-art`; after replay, the owner confirmed on 2026-07-18 that EX-0004 is good and authorized final animation and image-generation polish. This does not approve a MES-02 learning contract, mechanic expansion, efficacy claims, promotion, or unrelated scope.
 
 The integer prediction is a deliberately scoped bridge hypothesis. It is not retroactively added to MES-01’s behavioral-only evidence contract.
 
