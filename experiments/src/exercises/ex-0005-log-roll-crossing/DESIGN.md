@@ -169,12 +169,15 @@ Controls are visually connected to the stage. Native focus order follows scene c
 
 | Motion | Purpose | Ordinary motion | Reduced motion |
 |---|---|---:|---|
-| Calibration roll | Establish the displacement and endpoint of `U` | 440 ms | Immediate complete interval and announcement |
-| Added rolls | Make `P` executable repetitions visible | 310 ms each | Synchronous complete trace and final text |
-| Discrepancy emphasis | Direct attention to shortage/overshoot | One subtle pulse | Static hatch, geometry, and label |
+| Calibration roll | Establish the displacement and endpoint of `U` | 420 ms coupled roll/trace; 440 ms state gate | Immediate complete interval, contact, and announcement |
+| Added rolls | Make `P` executable repetitions visible | 290 ms coupled roll/trace inside each 310 ms step | Synchronous complete trace, contacts, and final text |
+| Short / over discrepancy | Direct attention to shortage/overshoot after execution | 260 ms one-shot hatch reveal and subtle label emphasis | Static hatch, geometry, label, and written outcome |
+| Exact landing | Confirm coincidence without obscuring retained evidence | 320 ms one-shot endpoint halo | Static halo and exact geometry |
 | Scene change | Signal a new challenge | Focus change; no camera motion | Same |
 
-Timers carry a scene/run epoch so stale callbacks cannot mutate a later scene. Reject parallax, looping particles, camera shake, bouncing controls, or motion that obscures endpoint relations.
+Each state increment changes the log by exactly `U` and its rotation by exactly one signed `360°` turn. The log translation, rotation, moving contact, and newly drawn interval share one state transition; added rolls are serialized, and the tutorial control is unavailable only while its already-requested complete roll settles. The final tutorial roll settles before the success stage is mounted. Retry is not animated as reverse rolling: trial intervals disappear and the retained calibration endpoint is restored immediately.
+
+Timers carry a scene/run epoch so stale callbacks cannot mutate a later scene. Reduced motion bypasses every wait while retaining the same completed interval nodes and landing state. Reject parallax, looping particles, camera shake, bouncing controls, or motion that obscures endpoint relations.
 
 ## Art direction
 
@@ -190,15 +193,11 @@ The supplied reference authorizes general qualities only:
 
 Do not copy its title treatment, logo, named world, central tower, exact canyon composition, landmarks, characters, or protected assets. The clipboard image is not committed.
 
-The current authored visual study uses original high-terrace shapes and CSS/SVG scenery. Decorative imagery must never carry the path, unit, endpoints, target count, answer, trace, discrepancy, labels, or controls. Removing all decoration must leave the complete mechanic understandable.
+The authored CSS/SVG layer owns every exact quantity and interaction surface. Decorative imagery must never carry the path, unit, endpoints, target count, answer, trace, discrepancy, labels, or controls. Removing all decoration leaves the complete mechanic understandable.
 
-Any later generated raster asset must:
+The committed generated source is not presented directly because its full composition retained a central tower, figures, and too much of the supplied reference composition. `assets/terrace-atmosphere-safe.webp` is the only runtime raster. It is a fixed crop from the source’s generic far-left atmosphere and excludes the central landmark, buildings, animals, foreground focal composition, and all branded/title areas. The crop contains no readable text, number, arrow, flag, ruler, tick, repeated stepping object, subdivision, answer, path, or exact state.
 
-- remain a background/character layer only;
-- contain no text, numbers, arrows, flags, rulers, ticks, repeated stepping objects, subdivisions, or exact mathematical state;
-- preserve a quiet comparison corridor around every possible landing;
-- include prompt/provenance metadata and safe-crop notes;
-- be reviewed at desktop and 320 px before integration.
+The safe crop is imported locally, marked `aria-hidden`, and rendered behind a translucent SVG sky wash and every authored mathematical layer. The same 1060 × 648 derivative is used at desktop and 320 px, so responsive layout cannot expose excluded source regions. Prompt, reference provenance, crop coordinates, manual export settings, no-branding review, and responsive review are recorded in [`assets/terrace-atmosphere.provenance.json`](assets/terrace-atmosphere.provenance.json) and [`assets/README.md`](assets/README.md).
 
 ## Accessibility and responsive behavior
 
@@ -209,7 +208,11 @@ Any later generated raster asset must:
 - Colour is paired with retained geometry, patterns, labels, and written feedback.
 - The SVG world is uncropped and contains the maximum accepted landing plus a safety margin.
 - At 320 px decorative foliage hides before it can cover mathematical state; controls stack and no horizontal page panning is required.
-- Reduced motion preserves all intervals, contact points, discrepancy labels, and final state.
+- Reduced motion preserves all intervals, contact points, discrepancy labels, focus transitions, completion controls, and final state.
+
+### Final presentation review
+
+Desktop and 320 px inspection confirm that the fixed generated crop stays atmospheric, the authored straight-vector layer remains visually dominant, all labels and controls stay inside the page, and no excluded source landmark or branding is exposed. The 320 px route uses the same native controls and reaches all six scene outcomes and completion without horizontal page overflow. This is technical implementation evidence only; it does not claim pupil comprehension, accessibility equivalence, learning efficacy, or MES-02 approval.
 
 ## Smoke and regression contract
 
@@ -220,7 +223,7 @@ Generic states remain `ready → active → success → complete`.
 - Every prediction success fills the ordinary pupil input using the current scene-derived remaining count.
 - Success retains the exact stage and only then exposes `continue`.
 - Keyboard reduced-motion and 320 px touch paths traverse all six scenes.
-- Focused regression checks should verify calibration retention, short/over geometry, retry baseline `coveredRolls = 1`, line-only representation, and lack of accessible target-count leakage.
+- Focused regression checks verify calibration retention, short/over geometry, retry baseline `coveredRolls = 1`, one interval and one signed turn per state increment, line-only representation, first-prediction distinction, fixed variant identity through retry, reduced-motion completion, keyboard focus, 320 px touch traversal, and no horizontal overflow.
 
 ## Scope exclusions
 
@@ -245,4 +248,4 @@ Reject or revise if:
 
 ## Current disposition
 
-Mechanic expansion is approved for the exact scope recorded above. The implementation remains `prototyping`. Final technical validation can establish replay and testing readiness only; pupil and owner review of the expanded exercise remain required before any later lifecycle change.
+Mechanic expansion is approved for the exact scope recorded above. The implementation remains `prototyping`. Final technical validation can establish replay and testing readiness only. It does not establish pupil learning, accessibility equivalence, MES-02 approval, or any later lifecycle change.

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onDestroy, tick } from 'svelte';
+  import terraceAtmosphere from './assets/terrace-atmosphere-safe.webp';
   import RollStage from './RollStage.svelte';
   import {
     WORLD,
@@ -33,6 +34,9 @@
   let rootElement: HTMLElement;
   let timer: ReturnType<typeof setTimeout> | undefined;
   let runEpoch = 0;
+
+  const CALIBRATION_MOTION_MS = 440;
+  const ROLL_MOTION_MS = 310;
 
   $: scene = scenes[sceneIndex];
   $: remainingRolls = requiredRemaining(variant);
@@ -99,22 +103,23 @@
     messageKind = 'instruction';
     errorProbeCompleted = false;
     view = 'active';
-
-    if (nextScene.mode === 'prediction') void demonstrateUnitRoll(runEpoch);
   }
 
   async function demonstrateUnitRoll(epoch: number): Promise<void> {
     calibrating = true;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reducedMotion) {
+      if (epoch !== runEpoch || view !== 'active') return;
+      coveredRolls = 1;
+      finishCalibration(epoch);
+      return;
+    }
+
     await tick();
     await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
     if (epoch !== runEpoch || view !== 'active') return;
     coveredRolls = 1;
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reducedMotion) {
-      finishCalibration(epoch);
-      return;
-    }
-    timer = setTimeout(() => finishCalibration(epoch), 440);
+    timer = setTimeout(() => finishCalibration(epoch), CALIBRATION_MOTION_MS);
   }
 
   function finishCalibration(epoch: number): void {
@@ -138,11 +143,32 @@
 
   async function tutorialRoll(): Promise<void> {
     if (running || calibrating || scene.mode !== 'tutorial') return;
+    const epoch = runEpoch;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    running = true;
+
+    if (!reducedMotion) {
+      await tick();
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+      if (epoch !== runEpoch || view !== 'active') return;
+    }
+
     coveredRolls += 1;
     message = `Tour ${coveredRolls} : le rouleau avance encore d’une même distance.`;
     messageKind = 'action';
     announcement = message;
 
+    if (!reducedMotion) {
+      await new Promise<void>((resolve) => {
+        timer = setTimeout(() => {
+          timer = undefined;
+          resolve();
+        }, ROLL_MOTION_MS);
+      });
+      if (epoch !== runEpoch || view !== 'active') return;
+    }
+
+    running = false;
     if (coveredRolls === variant.totalRolls) {
       outcome = 'exact';
       message = scene.success;
@@ -202,7 +228,7 @@
     }
     coveredRolls += 1;
     announcement = `Tour automatique ${coveredRolls - 1} sur ${prediction}.`;
-    timer = setTimeout(() => runAnimatedRoll(remaining - 1, epoch), 310);
+    timer = setTimeout(() => runAnimatedRoll(remaining - 1, epoch), ROLL_MOTION_MS);
   }
 
   async function resolvePrediction(epoch: number): Promise<void> {
@@ -260,6 +286,7 @@
     const nextIndex = sceneIndex + 1;
     loadScene(nextIndex);
     announcement = `${scenes[nextIndex].chapter}. Nouveau passage chargé.`;
+    if (scenes[nextIndex].mode === 'prediction') void demonstrateUnitRoll(runEpoch);
     await focus('#scene-title');
   }
 
@@ -288,6 +315,7 @@
   data-smoke-root
   data-smoke-exercise="EX-0005"
   data-smoke-program="pilot-seq-m1"
+  data-smoke-scene={scene.id}
   data-smoke-state={smokeState}
   data-smoke-success-plan={smokeSuccessPlan}
   data-smoke-error-plan={smokeErrorPlan}
@@ -298,8 +326,10 @@
 
   {#if view === 'intro'}
     <section class="intro" aria-labelledby="intro-title">
-      <div class="hero-art" aria-hidden="true">
-        <span class="sun"></span><span class="far-terrace"></span><span class="near-terrace"></span><i class="waterfall"></i><b class="hero-log"></b>
+      <div class="hero-art" aria-hidden="true" data-decorative-atmosphere="intro">
+        <img src={terraceAtmosphere} alt="" />
+        <span class="hero-wash"></span>
+        <b class="hero-log"></b>
       </div>
       <div class="intro-copy">
         <p class="kicker">Mission des Hautes-Cascades</p>
@@ -327,8 +357,8 @@
 
         {#if scene.mode === 'tutorial'}
           <div class="control-dock tutorial-dock">
-            <button type="button" data-smoke-control="roll" onclick={tutorialRoll} disabled={coveredRolls >= variant.totalRolls}>
-              <span aria-hidden="true">↻</span><strong>Faire un tour complet</strong><small>{coveredRolls} tour{coveredRolls === 1 ? '' : 's'} observé{coveredRolls === 1 ? '' : 's'}</small>
+            <button type="button" data-smoke-control="roll" onclick={tutorialRoll} disabled={running || coveredRolls >= variant.totalRolls}>
+              <span aria-hidden="true">↻</span><strong>{running ? 'Tour complet en cours…' : 'Faire un tour complet'}</strong><small>{coveredRolls} tour{coveredRolls === 1 ? '' : 's'} observé{coveredRolls === 1 ? '' : 's'}</small>
             </button>
             <p>Chaque activation déplace le même rouleau d’une distance identique.</p>
           </div>
@@ -407,24 +437,23 @@
 
 <style>
   :global(*) { box-sizing: border-box; }
-  :global(body) { margin: 0; background: #e9f1e4; color: #17333a; font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
+  :global(html) { min-width: 0; background: #e9f1e4; }
+  :global(body) { min-width: 0; margin: 0; background: #e9f1e4; color: #17333a; font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
   :global(button), :global(input) { font: inherit; }
   :global(button:focus-visible), :global(input:focus-visible), [tabindex="-1"]:focus-visible { outline: 3px solid #f2b84b; outline-offset: 3px; }
   .prototype-root { min-height: 100vh; overflow-x: clip; background: radial-gradient(circle at 76% 0%, #fff1b9 0, transparent 30%), #e9f1e4; }
   .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
   .intro { position: relative; display: grid; width: min(1080px, calc(100% - 32px)); min-height: 100vh; grid-template-columns: minmax(0, .82fr) minmax(360px, 1.18fr); align-items: center; gap: clamp(24px, 5vw, 68px); margin: auto; padding: 48px 0; }
   .intro-copy { position: relative; z-index: 2; grid-column: 1; grid-row: 1; }
-  .hero-art { position: relative; grid-column: 2; grid-row: 1; height: min(680px, 78vh); overflow: hidden; border-radius: 48% 48% 28% 36% / 24% 30% 44% 44%; background: linear-gradient(#8bcce7 0 42%, #cfe5d2 42% 58%, #d76f58 58%); box-shadow: 0 24px 80px rgba(25,64,63,.24); }
-  .hero-art .sun { position: absolute; top: 10%; right: 12%; width: 120px; aspect-ratio: 1; border-radius: 50%; background: #fff0ac; box-shadow: 0 0 70px #fff6d2; }
-  .far-terrace, .near-terrace { position: absolute; right: -8%; bottom: 16%; left: 20%; height: 44%; background: #b44e4c; clip-path: polygon(0 22%,25% 8%,36% 24%,58% 0,100% 17%,100% 100%,0 100%); }
-  .near-terrace { right: 28%; bottom: -4%; left: -12%; height: 53%; background: #733746; clip-path: polygon(0 18%,31% 0,57% 14%,76% 4%,100% 29%,100% 100%,0 100%); }
-  .waterfall { position: absolute; top: 46%; right: 29%; width: 13%; height: 46%; border-radius: 55% 40% 0 0; background: linear-gradient(90deg,#d9f5ee,#fff,#bde6e5); opacity: .88; transform: rotate(4deg); }
-  .hero-log { position: absolute; right: 17%; bottom: 17%; width: 78px; aspect-ratio: 1; border: 10px solid #5b3724; border-radius: 50%; background: radial-gradient(circle,#7c4b2d 0 8%,#d39350 9% 54%,#9f633b 55%); box-shadow: 0 12px 0 rgba(38,50,45,.2); }
+  .hero-art { position: relative; grid-column: 2; grid-row: 1; height: min(680px, 78vh); overflow: hidden; border-radius: 48% 48% 28% 36% / 24% 30% 44% 44%; background: #8bcce7; box-shadow: 0 24px 80px rgba(25,64,63,.24); }
+  .hero-art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 48% center; filter: saturate(.88) contrast(.92); pointer-events: none; }
+  .hero-wash { position: absolute; inset: 0; background: linear-gradient(155deg, rgba(255,246,208,.06) 12%, transparent 48%, rgba(24,72,63,.24)); }
+  .hero-log { position: absolute; right: 14%; bottom: 15%; width: 78px; aspect-ratio: 1; border: 10px solid #5b3724; border-radius: 50%; background: radial-gradient(circle,#7c4b2d 0 8%,#d39350 9% 54%,#9f633b 55%); box-shadow: 0 12px 0 rgba(38,50,45,.2), 0 0 0 3px rgba(255,249,236,.38); }
   .kicker { margin: 0 0 10px; color: #a64f35; font-size: .74rem; font-weight: 950; letter-spacing: .15em; text-transform: uppercase; }
   h1 { max-width: 800px; margin: 0; font-family: ui-rounded, "Arial Rounded MT Bold", Inter, sans-serif; font-size: clamp(2.4rem, 7vw, 5.4rem); letter-spacing: -.065em; line-height: .92; }
   h1 em { color: #1a735e; font-family: Georgia, serif; font-weight: 500; }
   .lead { max-width: 650px; margin: 24px 0; color: #486067; font-size: clamp(1rem, 2vw, 1.24rem); line-height: 1.65; }
-  .primary, .secondary, .retry { min-height: 48px; padding: 13px 20px; border-radius: 999px; font-weight: 900; cursor: pointer; }
+  .primary, .secondary, .retry { min-height: 48px; max-width: 100%; padding: 13px 20px; border-radius: 999px; font-weight: 900; line-height: 1.25; cursor: pointer; }
   .primary { border: 0; color: white; background: #173e43; box-shadow: 0 7px 0 #bdcdbb; }
   .secondary, .retry { border: 2px solid #173e43; color: #173e43; background: #fff9ec; }
   .boundary { margin: 14px 0 0; color: #64777a; font-size: .82rem; }
@@ -439,7 +468,8 @@
   .scene-copy h1 { font-size: clamp(2rem, 5vw, 4rem); }
   .scene-copy > p:last-child { margin: 0; color: #4c6268; line-height: 1.5; }
   .control-dock { display: grid; justify-items: center; gap: 12px; width: min(680px, calc(100% - 24px)); margin: -8px auto 0; padding: 20px; border: 1px solid #c7d0bd; border-radius: 0 0 24px 24px; background: linear-gradient(rgba(255,249,236,.98),rgba(250,242,219,.98)); box-shadow: 0 8px 0 rgba(67,82,69,.12); }
-  .tutorial-dock button { display: grid; min-height: 66px; grid-template-columns: auto 1fr; align-items: center; gap: 0 10px; padding: 10px 18px; border: 0; border-radius: 16px; color: white; background: #173e43; cursor: pointer; }
+  .tutorial-dock button { display: grid; min-width: 0; min-height: 66px; max-width: 100%; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 0 10px; padding: 10px 18px; border: 0; border-radius: 16px; color: white; background: #173e43; cursor: pointer; }
+  .tutorial-dock button:disabled { cursor: wait; opacity: .82; }
   .tutorial-dock button > span { grid-row: 1 / 3; font-size: 1.5rem; }
   .tutorial-dock button strong, .tutorial-dock button small { display: block; }
   .tutorial-dock button small { opacity: .8; }
@@ -481,6 +511,7 @@
     .hero-art { display: none; }
     .control-dock { width: calc(100% - 12px); padding: 14px 10px; }
     .calibration-status { align-items: flex-start; }
+    .prediction-entry { max-width: 100%; flex-wrap: wrap; justify-content: center; }
     .world-message { grid-template-columns: 28px minmax(0, 1fr); }
   }
 </style>

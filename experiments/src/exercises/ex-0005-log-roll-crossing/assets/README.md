@@ -1,35 +1,33 @@
-# EX-0005 asset boundary
+# EX-0005 generated-art boundary
 
-No raster asset is currently required by the prototype. The implemented visual study uses authored CSS and semantic SVG so the mathematical path remains exact, responsive, and inspectable.
+## Runtime asset
 
-## Approved visual direction
+`terrace-atmosphere-safe.webp` is the only generated raster loaded by EX-0005. It is replaceable background atmosphere in the intro and behind the authored SVG stage. Removing it leaves the path, endpoints, invariant intervals, contact points, discrepancy geometry, labels, controls, and all state logic intact.
 
-Reference supplied by the owner on 2026-07-17:
+The runtime asset contains no required state, answer, target quantity, path, ruler, subdivisions, readable text, logo, trademark, title treatment, or branding. It is marked `aria-hidden` and receives no pointer events.
 
-`/tmp/herdr-clipboard-images-1000/client-2-clipboard-1784327218595458004-0.png`
+## Source and safe crop
 
-The reference is ephemeral and is **not** copied into the repository. It authorizes general qualities only: stylized painterly 2D adventure scenery, coral terraces, pale waterfalls and mist, lush teal foliage, atmospheric blue depth, warm accents, and foreground framing. It does not authorize copying text, logo, landmarks, characters, or composition.
+`terrace-atmosphere.webp` is the committed generation source and is not loaded at runtime. The generation retained too much of the supplied reference composition for direct presentation, including a central tower and foreground figures. The runtime derivative therefore uses only this generic atmospheric fragment:
 
-## Optional future generated assets
+- source crop: `x=0, y=250, width=530, height=324` from the 1254 × 1254 source;
+- export: 1060 × 648 WebP, Lanczos resize, quality 88, method 6;
+- retained content: sky, clouds, distant water, foliage edge, and non-countable coral terrace atmosphere;
+- excluded content: central tower/landmark, buildings, animals, foreground framing composition, and all source focal elements;
+- safe corridor: the center remains quiet; the authored stage adds a translucent sky wash before drawing the exact mathematical layer.
 
-| Asset | Role | Safe crop | Forbidden content |
-|---|---|---|---|
-| `terrace-atmosphere.webp` | Non-countable background atmosphere behind horizontal scenes | 16:10 master; center 70% quiet | Text, numbers, flags, paths, logs, repeated objects, marks, endpoints |
-| `mist-ramp-atmosphere.webp` | Background atmosphere behind diagonal scenes | 16:10 master; center diagonal corridor quiet | Ramps, arrows, route choices, stepping stones, subdivisions |
-| `canopy-frame.webp` | Edge-only foliage framing | Must tolerate 16:10 and 18:11 crops; transparent center | Central landmarks or anything that can obscure the path |
+The same fixed 1060 × 648 crop is used at desktop and 320 px, so responsive `cover` behavior cannot reveal excluded source content.
 
-Generated decoration must remain replaceable without changing `content.ts`, `RollStage.svelte`, controls, copy, or outcome logic.
+## Presentation review
 
-## Required provenance for any committed generation
+| Check | Desktop | 320 px |
+|---|---|---|
+| Generated art stays behind the mathematical layer | Pass | Pass |
+| Path, endpoints, intervals, contact, and discrepancy remain authored SVG | Pass | Pass |
+| No text, logo, trademark, copied title treatment, character, or recognizable landmark is visible | Pass | Pass |
+| Crop does not imply a route, count, answer, or state | Pass | Pass |
+| Removing the raster leaves the exercise operable and understandable | Pass | Pass |
 
-Record beside each generated file:
+These are visual and technical implementation checks only. They do not establish accessibility equivalence, learning efficacy, pupil comprehension, or MES-02 approval.
 
-- model and generation date;
-- exact prompt;
-- reference-image provenance;
-- dimensions and crop variants;
-- manual edits and export settings;
-- review outcome at desktop and 320 px;
-- confirmation that the image encodes no quantity, answer, path geometry, or state.
-
-Do not integrate a generated asset until it passes the mathematical-state and crop checks in [`../DESIGN.md`](../DESIGN.md).
+Full generation and export metadata is recorded in `terrace-atmosphere.provenance.json`.
