@@ -129,7 +129,7 @@ Runner states remain `ready → active → success → complete`.
 
 - Tutorial success: four real `jump` activations.
 - First prediction recoverable error: fill the real prediction input with an under-target integer.
-- Recovery: activate the real `retry` control.
+- Recovery: activate the real `retry` control; it clears only the failed attempt and preserves the current `sceneIndex`, so the same passage restarts instead of returning to the tutorial or intro.
 - Prediction success: fill the same input with the ordinary pupil-facing correct integer.
 - Vertical and obstacle rounds use the same prediction control.
 - Reduced-motion and 320px touch paths traverse all four rounds.
@@ -143,6 +143,7 @@ Completed 2026-07-17:
 - `npm --prefix experiments run check` — 0 Svelte errors/warnings; catalog valid with 5 exercises.
 - `npm --prefix experiments run build` — production build passed.
 - `SMOKE_EXERCISES=EX-0004 npm --prefix experiments run test:smoke` — 6/6 passed, including reduced-motion keyboard and 320px touch paths.
+- `npx playwright test tests/smoke/ex-0004-round-retry.spec.ts` — a failed prediction resets in the same round with an empty enabled input; the scene identity does not return to the tutorial.
 - root `npm run check` — 0 errors/warnings.
 - `git diff --check` — passed.
 - manual desktop and 320px browser traversal — no console/page errors or horizontal overflow; tutorial, shortage, horizontal/vertical grid, and obstacle states inspected.

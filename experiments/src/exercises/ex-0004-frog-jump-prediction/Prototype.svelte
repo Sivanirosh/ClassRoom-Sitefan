@@ -297,9 +297,9 @@
     predictionText = '';
     trace = [];
     outcome = 'idle';
-    message = 'La trace est retirée. Observe encore l’unité et la longueur, puis engage une nouvelle prédiction.';
+    message = `Le passage ${sceneIndex + 1} recommence ici. Observe encore l’unité et la longueur, puis engage une nouvelle prédiction.`;
     messageKind = 'instruction';
-    announcement = message;
+    announcement = `${scene.chapter}. ${message}`;
     await focus('[data-smoke-control="prediction"]');
   }
 
@@ -337,6 +337,7 @@
   data-smoke-root
   data-smoke-exercise="EX-0004"
   data-smoke-program="pilot-seq-m1"
+  data-smoke-scene={scene.id}
   data-smoke-state={smokeState}
   data-smoke-success-plan={smokeSuccessPlan}
   data-smoke-error-plan={smokeErrorPlan}
@@ -600,7 +601,7 @@
         </div>
 
         {#if outcome === 'short' || outcome === 'over'}
-          <button class="retry" type="button" data-smoke-control="retry" onclick={retry}>Réessayer avec un autre nombre</button>
+          <button class="retry" type="button" data-smoke-control="retry" onclick={retry}>Rejouer ce passage</button>
         {/if}
       </section>
     </div>
