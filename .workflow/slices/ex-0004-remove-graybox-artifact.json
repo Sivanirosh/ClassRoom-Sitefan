@@ -1,0 +1,33 @@
+{
+  "id": "ex-0004-remove-graybox-artifact",
+  "title": "EX-0004 remove graybox presentation and ship cohesive pond game",
+  "goal": "Replace the visibly layered graybox/poster treatment in EX-0004 with one cohesive, polished pond-game presentation. The generated pond artwork must become visibly meaningful atmosphere rather than a dark hidden backing layer, while the exact orthographic square-unit mechanic remains mathematically unambiguous.",
+  "areas": [
+    "experiments/src/exercises/ex-0004-frog-jump-prediction/",
+    "experiments/tests/smoke/ex-0004-round-retry.spec.ts",
+    "experiments/tests/smoke/ex-0004-visual-polish.spec.ts"
+  ],
+  "acceptance": [
+    "The intro no longer looks like a graybox embedded in a marketing card: remove the duplicate flat inline-SVG poster, internal EX-0004 identifier, diagnostic boundary copy, unit-key badge, and heavy dark masking; use the unbranded generated pond art as the dominant bright hero image with readable integrated copy.",
+    "The active experience reads as the same pond world rather than a separate prototype: replace the crude perimeter SVG props, thick brown frame, frame plaque, boxed equation label, and bottom legend with a restrained game HUD and painterly pond treatment. Generated art may be blurred/cropped/masked decoratively so its perspective lines cannot compete with the exact playable lattice.",
+    "The playable lattice remains orthographic, 120 by 100 viewBox units with 10 by 10 true square cells, but grid styling is subtle and game-like rather than spreadsheet-like. The one-cell unit relation stays visible through one elegant in-world cue plus accessible text, not repeated debug labels.",
+    "The frog, endpoints, traces, discrepancy, obstacle, and exact landing receive a coherent dimensional visual treatment. The frog remains the direct tutorial control and every purposeful motion/reduced-motion invariant from the prior slice remains intact.",
+    "The hierarchy fits one desktop viewport and a 320px touch viewport without the title, board, controls, or feedback feeling like stacked graybox panels; no horizontal overflow or hidden required control occurs.",
+    "No logo, trademark, copied title treatment, recognizable branded character, source-game board layout, watermark, or external network asset appears. Generated art remains decorative and all mathematical state remains authored in inspectable HTML/SVG.",
+    "A dedicated Playwright visual-structure regression goes red on the current layered graybox treatment and proves the removed artifacts do not return; ordinary, reduced-motion, keyboard, retry-in-place, and 320px smoke paths remain green.",
+    "DESIGN.md records why the previous polish still looked like a graybox, the replacement hierarchy, generated-art role, preserved geometry, visual review evidence, and the unchanged efficacy boundary."
+  ],
+  "must_ask_if": [
+    "The validated prediction, automatic resolution, scene count, orthogonal transfer, obstacle arithmetic, retry-in-place behavior, or evidence semantics would need to change.",
+    "The exact square lattice would need perspective distortion, non-uniform scaling, or replacement by artwork-encoded geometry.",
+    "A branded/reference character, copied composition, external dependency, network request, or file outside the declared areas appears necessary.",
+    "The generated image cannot be made visually prominent without exposing its own perspective grid as a second mathematical grid."
+  ],
+  "verify": [
+    "npm --prefix experiments run check",
+    "npm --prefix experiments run build",
+    "cd experiments && npx playwright test tests/smoke/ex-0004-visual-polish.spec.ts tests/smoke/ex-0004-round-retry.spec.ts",
+    "SMOKE_EXERCISES=EX-0004 npm --prefix experiments run test:smoke",
+    "git diff --check"
+  ]
+}
