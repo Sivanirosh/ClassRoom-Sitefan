@@ -96,8 +96,8 @@
     y: unitReferenceStart.y + vectorFor(scene).y
   };
   $: unitReferenceLabel = scene.orientation === 'horizontal'
-    ? { x: unitReferenceStart.x + 5, y: unitReferenceStart.y - 5 }
-    : { x: unitReferenceStart.x - 13, y: unitReferenceStart.y - 4 };
+    ? { x: unitReferenceStart.x + 5, y: unitReferenceStart.y - 4 }
+    : { x: unitReferenceStart.x - 8, y: unitReferenceStart.y - 4 };
   $: frogPoint = pointAt(coveredUnits, scene);
   $: discrepancyUnits = Math.abs(scene.targetUnits - coveredUnits);
   $: discrepancyStart = outcome === 'over' ? finishPoint : frogPoint;
@@ -175,12 +175,12 @@
 
   function baseMessage(current: Scene): string {
     if (current.mode === 'tutorial') {
-      return 'Chaque côté de carré vaut une unité-saut. Touche la grenouille pour voir cette unité se répéter sur la grille.';
+      return 'Touche la grenouille pour voir son bond se répéter exactement jusqu’à l’Arrivée.';
     }
     if (current.obstacleUnits.length > 0) {
       return 'Entre le nombre d’actions. Un saut ordinaire couvre une unité; le saut au-dessus de la grenouille orange en couvre deux.';
     }
-    return 'Chaque côté de carré vaut une unité-saut. Projette les sauts jusqu’à l’Arrivée, puis entre un nombre entier.';
+    return 'Projette les bonds jusqu’à l’Arrivée, puis entre un nombre entier.';
   }
 
   function loadScene(index: number): void {
@@ -385,83 +385,21 @@
   <p class="sr-only" aria-live="polite">{announcement}</p>
 
   {#if view === 'intro'}
-    <section class="intro" aria-labelledby="intro-title">
-      <div class="intro-card">
-        <img class="generated-atmosphere" src={pondAtmosphere} alt="" aria-hidden="true" />
-        <div class="intro-copy">
-          <p class="kicker">Le jardin des unités · EX-0004</p>
-          <h1 id="intro-title" tabindex="-1">Le saut<br /><em>juste</em></h1>
-          <p class="lead">Au bord de l’étang, chaque carré donne le rythme. Découvre la longueur d’un saut, puis prévois le nombre d’actions qui mènera la grenouille exactement sur l’autre rive.</p>
-          <button class="primary" type="button" data-smoke-action="start" onclick={start}>Entrer dans le jardin <span aria-hidden="true">→</span></button>
-          <p class="boundary">4 passages calmes · aucun chronomètre · réponses locales</p>
-        </div>
-
-        <div class="intro-art" aria-hidden="true">
-          <svg viewBox="0 0 560 520">
-            <defs>
-              <linearGradient id="intro-sky" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stop-color="#f5e8c7"></stop>
-                <stop offset="1" stop-color="#d7e4cf"></stop>
-              </linearGradient>
-              <linearGradient id="intro-water" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stop-color="#8fc6b6"></stop>
-                <stop offset="1" stop-color="#4e8f82"></stop>
-              </linearGradient>
-              <filter id="intro-shadow" x="-30%" y="-30%" width="160%" height="180%">
-                <feDropShadow dx="0" dy="10" stdDeviation="8" flood-color="#17382f" flood-opacity=".2"></feDropShadow>
-              </filter>
-            </defs>
-            <rect width="560" height="520" rx="36" fill="url(#intro-sky)"></rect>
-            <circle cx="408" cy="112" r="68" fill="#f7d879" opacity=".9"></circle>
-            <path d="M0 214 C84 148 142 164 214 218 C284 145 376 148 438 214 C488 177 525 184 560 215 V330 H0Z" fill="#8ea792" opacity=".65"></path>
-            <path d="M0 263 C76 211 145 218 218 268 C301 202 391 217 455 271 C496 244 530 246 560 266 V354 H0Z" fill="#547c6e" opacity=".75"></path>
-            <g class="pavilion" transform="translate(82 185)">
-              <path d="M-18 38 Q58 -9 134 38 Q112 31 97 32 H20 Q2 31 -18 38Z" fill="#713f33"></path>
-              <path d="M0 42 H116 L104 52 H12Z" fill="#bd5a40"></path>
-              <path d="M22 52 V135 M94 52 V135" stroke="#4a332b" stroke-width="10"></path>
-              <path d="M12 136 H104" stroke="#4a332b" stroke-width="12" stroke-linecap="round"></path>
-              <rect x="42" y="61" width="32" height="44" rx="4" fill="#f2d899" opacity=".9"></rect>
-            </g>
-            <path d="M0 322 C115 286 196 340 286 315 C376 290 448 308 560 277 V520 H0Z" fill="url(#intro-water)"></path>
-            <path d="M311 360 C352 301 445 301 489 360" fill="none" stroke="#6c4537" stroke-width="18" stroke-linecap="round"></path>
-            <path d="M312 361 C352 319 447 318 488 361" fill="none" stroke="#d5724f" stroke-width="10" stroke-linecap="round"></path>
-            <path d="M303 367 H497" stroke="#5b4034" stroke-width="8" stroke-linecap="round"></path>
-            <g class="water-lines" fill="none" stroke="#dcebdd" stroke-width="5" stroke-linecap="round" opacity=".7">
-              <path d="M24 383 Q94 367 163 384"></path><path d="M66 426 Q151 408 230 429"></path>
-              <path d="M325 424 Q409 407 525 425"></path><path d="M208 474 Q303 455 394 475"></path>
-            </g>
-            <g transform="translate(132 395)">
-              <ellipse rx="48" ry="17" fill="#2f7765" transform="rotate(-8)"></ellipse>
-              <path d="M0 0 L28 -22" stroke="#23584d" stroke-width="5"></path>
-              <circle cx="23" cy="-29" r="16" fill="#f1c9b2"></circle>
-              <circle cx="12" cy="-31" r="13" fill="#f6ddd0"></circle><circle cx="34" cy="-31" r="13" fill="#f6ddd0"></circle>
-              <circle cx="23" cy="-40" r="13" fill="#fff2e4"></circle><circle cx="23" cy="-28" r="7" fill="#d8a13c"></circle>
-            </g>
-            <g class="intro-frog" transform="translate(250 407)" filter="url(#intro-shadow)">
-              <ellipse cy="27" rx="45" ry="12" fill="#214b40" opacity=".25"></ellipse>
-              <path d="M-35 8 Q-60 17 -63 35 Q-42 28 -24 21 M35 8 Q60 17 63 35 Q42 28 24 21" fill="#337f60" stroke="#183c33" stroke-width="5" stroke-linecap="round"></path>
-              <ellipse rx="45" ry="36" fill="#43a877" stroke="#183c33" stroke-width="5"></ellipse>
-              <circle cx="-20" cy="-30" r="16" fill="#5bbf87" stroke="#183c33" stroke-width="5"></circle><circle cx="20" cy="-30" r="16" fill="#5bbf87" stroke="#183c33" stroke-width="5"></circle>
-              <circle cx="-20" cy="-31" r="6" fill="#183c33"></circle><circle cx="20" cy="-31" r="6" fill="#183c33"></circle>
-              <path d="M-15 10 Q0 23 15 10" fill="none" stroke="#183c33" stroke-width="5" stroke-linecap="round"></path>
-            </g>
-            <g class="reeds" fill="none" stroke="#315f50" stroke-width="6" stroke-linecap="round">
-              <path d="M18 390 Q24 332 15 290 M35 394 Q43 338 55 309 M51 400 Q60 362 79 341"></path>
-            </g>
-            <rect x="24" y="24" width="72" height="72" rx="14" fill="#b84d3a"></rect>
-            <path d="M42 43 H78 M42 60 H78 M42 77 H63 M59 43 V77" stroke="#f8e9d0" stroke-width="7" stroke-linecap="round" opacity=".9"></path>
-          </svg>
-          <p><span></span> 1 carré = 1 unité-saut</p>
-        </div>
+    <section class="intro" aria-labelledby="intro-title" data-visual-intro>
+      <img class="generated-atmosphere" data-visual-role="pond-hero" src={pondAtmosphere} alt="" aria-hidden="true" />
+      <div class="intro-light" aria-hidden="true"></div>
+      <div class="intro-copy">
+        <p class="kicker">Prédire · bondir · atteindre</p>
+        <h1 id="intro-title" tabindex="-1">Le saut<br /><em>juste</em></h1>
+        <p class="lead">Au bord de l’étang, chaque carré donne le rythme. Découvre la longueur d’un saut, puis prévois le nombre d’actions qui mènera la grenouille exactement sur l’autre rive.</p>
+        <button class="primary" type="button" data-smoke-action="start" onclick={start}>Commencer la traversée <span aria-hidden="true">→</span></button>
       </div>
     </section>
   {:else if view === 'active'}
     <div class="game-shell">
-      <header class="topbar">
-        <div class="brand">
-          <span class="brand-mark" aria-hidden="true"><i></i></span>
-          <p><small>Le jardin des unités</small><strong>Le saut juste</strong></p>
-        </div>
+      <img class="world-atmosphere" src={pondAtmosphere} alt="" aria-hidden="true" />
+      <header class="game-hud" data-game-hud>
+        <p><strong>Le saut juste</strong><small>{scene.chapter}</small></p>
         <div class="round-progress" aria-label={`Passage ${sceneIndex + 1} sur ${scenes.length} : ${scene.chapter}`}>
           {#each scenes as _progressScene, progressIndex}
             <span class:done={progressIndex < sceneIndex} class:current={progressIndex === sceneIndex}>{progressIndex + 1}</span>
@@ -470,17 +408,14 @@
       </header>
 
       <section class="scene" aria-labelledby="scene-title">
-        <div class="scene-heading">
-          <span class="chapter-number" aria-hidden="true">0{sceneIndex + 1}</span>
-          <header class="scene-copy">
-            <p class="kicker">{scene.chapter}</p>
-            <h1 id="scene-title" tabindex="-1">{scene.title}</h1>
-            <p>{scene.prompt}</p>
-          </header>
-        </div>
+        <header class="scene-heading">
+          <p class="passage-label"><span>Passage 0{sceneIndex + 1}</span> {scene.chapter}</p>
+          <h1 id="scene-title" tabindex="-1">{scene.title}</h1>
+          <p>{scene.prompt}</p>
+        </header>
 
-        <div class="pond-frame">
-          <div class="frame-plaque" aria-hidden="true"><span></span> Jardin de l’étang <span></span></div>
+        <div class:overflow-evidence={showOverflowEvidence} class="pond-stage" data-visual-board data-pond-stage>
+          <img class="board-atmosphere" data-decorative-atmosphere="stage" src={pondAtmosphere} alt="" aria-hidden="true" />
           <section class:overflow-evidence={showOverflowEvidence} class="playfield" aria-label={`Grille unitaire, trajet ${scene.orientation === 'vertical' ? 'vertical' : 'horizontal'} : ${coveredUnits} unités parcourues`}>
             <svg viewBox="0 0 120 100" role="img" aria-labelledby="path-title path-desc">
               <title id="path-title">Trajet de la grenouille dans le jardin-étang</title>
@@ -497,51 +432,21 @@
                   <stop offset="1" stop-color="#dce9d8" stop-opacity="0"></stop>
                 </radialGradient>
                 <pattern id={`unit-grid-${scene.id}`} width="10" height="10" patternUnits="userSpaceOnUse">
-                  <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#2f6f65" stroke-opacity=".5" stroke-width=".72"></path>
+                  <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#2f6f65" stroke-opacity=".22" stroke-width=".72"></path>
                 </pattern>
               </defs>
 
               <rect class="pond-water" width="120" height="100" fill={`url(#pond-water-${scene.id})`}></rect>
               <rect class="pond-light" width="120" height="100" fill={`url(#pond-light-${scene.id})`}></rect>
-              <g class="garden-scenery" aria-hidden="true">
-                <path class="far-bank" d="M0 0 H120 V9 C110 7 104 12 95 10 C85 8 80 4 69 8 C56 13 47 6 36 8 C24 11 13 7 0 13Z"></path>
-                <path class="near-bank" d="M0 100 H120 V94 C112 90 104 94 94 92 C84 89 77 96 65 93 C52 89 43 96 30 93 C18 90 9 95 0 91Z"></path>
-                <g class="garden-stones">
-                  <ellipse cx="5" cy="14" rx="7" ry="3.8"></ellipse><ellipse cx="13" cy="9" rx="5" ry="3"></ellipse>
-                  <ellipse cx="109" cy="94" rx="8" ry="3.5"></ellipse><ellipse cx="118" cy="88" rx="6" ry="4"></ellipse>
-                </g>
-                <g class="garden-bridge" transform="translate(91 14)">
-                  <path d="M-10 2 Q2 -11 14 2"></path><path d="M-11 3 H15"></path>
-                  <path d="M-7 -1 V4 M-2 -6 V4 M4 -7 V4 M10 -3 V4"></path>
-                </g>
-                <g class="stone-lantern" transform="translate(108 31)">
-                  <path d="M-4 -4 H4 L6 -1 H-6Z"></path><rect x="-3.8" y="-1" width="7.6" height="6" rx="1"></rect>
-                  <path d="M-5 5 H5 M-2 5 V11 M-5 11 H5"></path><circle cy="2" r="1.2"></circle>
-                </g>
-                <g class="lotus lotus-one" transform="translate(102 76)">
-                  <ellipse rx="8" ry="3.5" transform="rotate(-9)"></ellipse><path d="M0 0 L5 -4"></path>
-                  <circle class="petal" cx="5" cy="-5.4" r="2.2"></circle><circle class="petal" cx="2.8" cy="-5" r="1.8"></circle><circle class="petal" cx="7" cy="-4.7" r="1.8"></circle>
-                </g>
-                <g class="lotus lotus-two" transform="translate(13 79)"><ellipse rx="6.5" ry="3" transform="rotate(8)"></ellipse><path d="M0 0 L-4 -3"></path></g>
-                <g class="garden-reeds">
-                  <path d="M3 54 Q4 43 2 35 M7 56 Q8 44 12 38 M113 64 Q114 53 112 47 M117 66 Q117 56 120 51"></path>
-                </g>
-                <g class="pond-ripples">
-                  <path d="M5 25 Q13 22 21 25 M7 28 Q13 26 19 28"></path>
-                  <path d="M94 48 Q104 45 114 48 M98 51 Q104 49 111 51"></path>
-                  <path d="M4 70 Q10 67 17 70 M106 87 Q112 84 119 87"></path>
-                </g>
-              </g>
               <rect class="grid-surface" width="120" height="100" fill={`url(#unit-grid-${scene.id})`}></rect>
               <line class="route-bed" x1={originPoint.x} y1={originPoint.y} x2={finishPoint.x} y2={finishPoint.y}></line>
               <line class="target-line" x1={originPoint.x} y1={originPoint.y} x2={finishPoint.x} y2={finishPoint.y}></line>
 
-              <g class="unit-reference" aria-label="Un côté de carré vaut une unité-saut">
-                <rect x={unitReferenceLabel.x - 16} y={unitReferenceLabel.y - 4.1} width="32" height="6" rx="2"></rect>
+              <g class="unit-reference" role="img" aria-label="Un côté de carré vaut une unité-saut">
                 <line x1={unitReferenceStart.x} y1={unitReferenceStart.y} x2={unitReferenceEnd.x} y2={unitReferenceEnd.y}></line>
-                <circle cx={unitReferenceStart.x} cy={unitReferenceStart.y} r="1.5"></circle>
-                <circle cx={unitReferenceEnd.x} cy={unitReferenceEnd.y} r="1.5"></circle>
-                <text x={unitReferenceLabel.x} y={unitReferenceLabel.y}>1 carré = 1 unité-saut</text>
+                <circle cx={unitReferenceStart.x} cy={unitReferenceStart.y} r="1.25"></circle>
+                <circle cx={unitReferenceEnd.x} cy={unitReferenceEnd.y} r="1.25"></circle>
+                <text x={unitReferenceLabel.x} y={unitReferenceLabel.y}>1 saut</text>
               </g>
 
               <g class="marker origin-marker">
@@ -581,7 +486,7 @@
                   <circle class="frog-eye-bump" cx="-2.3" cy="-3.5" r="1.65"></circle><circle class="frog-eye-bump" cx="2.3" cy="-3.5" r="1.65"></circle>
                   <circle class="eye" cx="-2.3" cy="-3.6" r=".55"></circle><circle class="eye" cx="2.3" cy="-3.6" r=".55"></circle>
                   <path class="frog-mouth" d="M-1.8 1 Q0 2.3 1.8 1"></path>
-                  <text y="11">saut de 2 unités</text>
+                  <text y="11">bond ×2</text>
                 </g>
               {/each}
 
@@ -606,7 +511,6 @@
               </g>
             </svg>
           </section>
-          <p class="board-measure"><span aria-hidden="true"></span> Chaque côté de carré garde exactement la longueur d’un saut ordinaire.</p>
         </div>
 
         {#if scene.mode === 'tutorial'}
@@ -659,6 +563,7 @@
     </div>
   {:else if view === 'success'}
     <section class="success" aria-labelledby="success-title">
+      <img class="world-atmosphere" src={pondAtmosphere} alt="" aria-hidden="true" />
       <div class="success-seal" aria-hidden="true">✓</div>
       <div class="success-copy">
         <p class="kicker">Arrivée exacte</p>
@@ -673,27 +578,17 @@
       </div>
 
       <div class="success-map" aria-label={`Trace finale : ${executedActions} actions pour ${scene.targetUnits} unités`}>
+        <img class="board-atmosphere" src={pondAtmosphere} alt="" aria-hidden="true" />
         <svg viewBox="0 0 120 100" role="img" aria-label="La trace complète sur la grille carrée se termine exactement à l’Arrivée">
           <defs>
             <linearGradient id={`success-water-${scene.id}`} x1="0" y1="0" x2="1" y2="1">
               <stop offset="0" stop-color="#c4dfcd"></stop><stop offset="1" stop-color="#75ad9f"></stop>
             </linearGradient>
             <pattern id={`success-grid-${scene.id}`} width="10" height="10" patternUnits="userSpaceOnUse">
-              <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#2f6f65" stroke-opacity=".5" stroke-width=".72"></path>
+              <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#2f6f65" stroke-opacity=".22" stroke-width=".72"></path>
             </pattern>
           </defs>
           <rect class="pond-water" width="120" height="100" fill={`url(#success-water-${scene.id})`}></rect>
-          <g class="garden-scenery" aria-hidden="true">
-            <path class="far-bank" d="M0 0 H120 V9 C109 7 103 12 94 10 C84 8 79 4 68 8 C55 13 46 6 35 8 C23 11 12 7 0 13Z"></path>
-            <path class="near-bank" d="M0 100 H120 V94 C110 90 103 94 93 92 C82 89 75 96 64 93 C51 89 42 96 29 93 C17 90 8 95 0 91Z"></path>
-            <g class="garden-stones"><ellipse cx="5" cy="14" rx="7" ry="3.8"></ellipse><ellipse cx="110" cy="94" rx="8" ry="3.5"></ellipse></g>
-            <g class="garden-bridge" transform="translate(91 14)"><path d="M-10 2 Q2 -11 14 2"></path><path d="M-11 3 H15"></path><path d="M-7 -1 V4 M-2 -6 V4 M4 -7 V4 M10 -3 V4"></path></g>
-            <g class="stone-lantern" transform="translate(108 31)"><path d="M-4 -4 H4 L6 -1 H-6Z"></path><rect x="-3.8" y="-1" width="7.6" height="6" rx="1"></rect><path d="M-5 5 H5 M-2 5 V11 M-5 11 H5"></path><circle cy="2" r="1.2"></circle></g>
-            <g class="lotus lotus-one" transform="translate(102 76)"><ellipse rx="8" ry="3.5" transform="rotate(-9)"></ellipse><path d="M0 0 L5 -4"></path><circle class="petal" cx="5" cy="-5.4" r="2.2"></circle><circle class="petal" cx="2.8" cy="-5" r="1.8"></circle><circle class="petal" cx="7" cy="-4.7" r="1.8"></circle></g>
-            <g class="lotus lotus-two" transform="translate(13 79)"><ellipse rx="6.5" ry="3" transform="rotate(8)"></ellipse><path d="M0 0 L-4 -3"></path></g>
-            <g class="garden-reeds"><path d="M3 54 Q4 43 2 35 M7 56 Q8 44 12 38 M113 64 Q114 53 112 47 M117 66 Q117 56 120 51"></path></g>
-            <g class="pond-ripples"><path d="M5 25 Q13 22 21 25 M7 28 Q13 26 19 28"></path><path d="M94 48 Q104 45 114 48 M98 51 Q104 49 111 51"></path></g>
-          </g>
           <rect class="grid-surface" width="120" height="100" fill={`url(#success-grid-${scene.id})`}></rect>
           <line class="route-bed" x1={originPoint.x} y1={originPoint.y} x2={finishPoint.x} y2={finishPoint.y}></line>
           <line class="target-line" x1={originPoint.x} y1={originPoint.y} x2={finishPoint.x} y2={finishPoint.y}></line>
@@ -733,19 +628,11 @@
     </section>
   {:else}
     <section class="complete" aria-labelledby="complete-title" tabindex="-1" data-smoke-completion>
-      <div class="completion-art" aria-hidden="true">
-        <svg viewBox="0 0 260 150">
-          <path d="M8 116 Q130 72 252 116 V150 H8Z" fill="#87b7a6"></path>
-          <circle cx="205" cy="42" r="30" fill="#e7bd5c"></circle>
-          <path d="M58 104 Q88 58 118 104 M52 105 H124" fill="none" stroke="#a95842" stroke-width="8" stroke-linecap="round"></path>
-          <g transform="translate(158 100)"><ellipse cy="12" rx="28" ry="7" fill="#325f53" opacity=".25"></ellipse><ellipse rx="25" ry="20" fill="#45a979" stroke="#183c33" stroke-width="3"></ellipse><circle cx="-11" cy="-17" r="9" fill="#58bc87" stroke="#183c33" stroke-width="3"></circle><circle cx="11" cy="-17" r="9" fill="#58bc87" stroke="#183c33" stroke-width="3"></circle><circle cx="-11" cy="-18" r="3" fill="#183c33"></circle><circle cx="11" cy="-18" r="3" fill="#183c33"></circle><path d="M-8 5 Q0 12 8 5" fill="none" stroke="#183c33" stroke-width="3" stroke-linecap="round"></path></g>
-        </svg>
-      </div>
+      <img class="world-atmosphere" src={pondAtmosphere} alt="" aria-hidden="true" />
       <p class="kicker">Traversée terminée</p>
       <h1 id="complete-title">Les quatre rives sont reliées.</h1>
       <p>Tu as observé l’unité, prévu des sauts dans deux directions, puis composé un passage avec un saut double.</p>
       <button class="secondary" type="button" onclick={restart}>Recommencer la traversée</button>
-      <p class="boundary">Ce prototype ne conserve ni n’envoie aucune réponse.</p>
     </section>
   {/if}
 </main>
@@ -822,8 +709,6 @@
     font-size: clamp(1rem, 2vw, 1.22rem);
     line-height: 1.65;
   }
-  .boundary { margin: 0; color: #5e7069; font-size: .82rem; line-height: 1.5; }
-
   .primary, .secondary, .retry {
     min-height: 50px;
     max-width: 100%;
@@ -849,121 +734,6 @@
   }
   .primary:active, .secondary:active, .retry:active { transform: translateY(2px) scale(.98); box-shadow: 0 2px 0 #a9b9a6; }
 
-  .intro {
-    width: min(1120px, calc(100% - 32px));
-    min-height: 100vh;
-    display: grid;
-    align-items: center;
-    margin: auto;
-    padding: 34px 0;
-  }
-  .intro-card {
-    position: relative;
-    display: grid;
-    grid-template-columns: minmax(0, .92fr) minmax(360px, 1.08fr);
-    align-items: center;
-    gap: clamp(24px, 5vw, 68px);
-    overflow: hidden;
-    padding: clamp(28px, 5vw, 70px);
-    border: 1px solid rgba(54, 87, 72, .22);
-    border-radius: 38px;
-    background:
-      linear-gradient(90deg, rgba(184, 77, 58, .06) 1px, transparent 1px) 0 0 / 34px 34px,
-      linear-gradient(rgba(184, 77, 58, .05) 1px, transparent 1px) 0 0 / 34px 34px,
-      rgba(250, 246, 232, .94);
-    box-shadow: 0 24px 70px rgba(35, 74, 61, .18), 0 5px 0 rgba(61, 95, 79, .18);
-  }
-  .intro-card::before {
-    content: "";
-    position: absolute;
-    z-index: 2;
-    inset: 16px;
-    border: 1px solid rgba(157, 72, 54, .15);
-    border-radius: 27px;
-    pointer-events: none;
-  }
-  .generated-atmosphere {
-    position: absolute;
-    z-index: 0;
-    top: 0;
-    right: 0;
-    width: 68%;
-    height: 31%;
-    object-fit: cover;
-    object-position: center top;
-    opacity: .22;
-    filter: saturate(.72) contrast(.92);
-    -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, .7) 42%, transparent 100%);
-    mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, .7) 42%, transparent 100%);
-    pointer-events: none;
-  }
-  .intro-copy { position: relative; z-index: 3; display: grid; justify-items: start; gap: 20px; }
-  .intro-copy .primary { margin-top: 6px; }
-  .intro-art {
-    position: relative;
-    z-index: 1;
-    min-width: 0;
-    filter: drop-shadow(0 16px 18px rgba(30, 66, 55, .15));
-  }
-  .intro-art svg { border: 9px solid #f7edd4; border-radius: 32px; box-shadow: 0 0 0 1px #a8b9a4; }
-  .intro-art > p {
-    position: absolute;
-    right: 18px;
-    bottom: 17px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin: 0;
-    padding: 8px 11px;
-    border: 1px solid rgba(24, 60, 51, .18);
-    border-radius: 999px;
-    background: rgba(255, 251, 235, .92);
-    color: #244c41;
-    font-size: .75rem;
-    font-weight: 850;
-    box-shadow: 0 5px 12px rgba(23, 56, 47, .12);
-  }
-  .intro-art > p span { width: 18px; height: 18px; border: 2px solid var(--persimmon); background: rgba(184, 77, 58, .08); }
-
-  .game-shell { min-height: 100vh; }
-  .topbar {
-    min-height: 74px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 18px;
-    padding: 11px clamp(16px, 4vw, 52px);
-    border-bottom: 1px solid rgba(38, 79, 65, .18);
-    background: rgba(249, 246, 232, .88);
-    box-shadow: 0 3px 18px rgba(35, 74, 61, .08);
-    backdrop-filter: blur(14px);
-  }
-  .brand { min-width: 0; display: flex; align-items: center; gap: 11px; }
-  .brand-mark {
-    position: relative;
-    flex: 0 0 auto;
-    width: 38px;
-    height: 38px;
-    display: grid;
-    place-items: center;
-    border-radius: 13px 13px 18px 18px;
-    background: var(--jade);
-    box-shadow: inset 0 -4px 0 rgba(15, 55, 45, .23);
-  }
-  .brand-mark::before, .brand-mark::after, .brand-mark i {
-    content: "";
-    width: 13px;
-    height: 16px;
-    border-radius: 100% 0 100% 0;
-    background: #f7e6ad;
-    transform: rotate(-45deg) translate(2px, 1px);
-  }
-  .brand-mark::before { position: absolute; transform: rotate(-78deg) translate(-2px, -2px); opacity: .85; }
-  .brand-mark::after { position: absolute; transform: rotate(-12deg) translate(2px, -2px); opacity: .85; }
-  .brand-mark i { position: relative; z-index: 1; display: block; }
-  .brand p { min-width: 0; display: grid; gap: 1px; margin: 0; }
-  .brand small { color: #78887f; font-size: .64rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
-  .brand strong { overflow: hidden; color: var(--ink); font-family: Georgia, serif; font-size: 1.05rem; text-overflow: ellipsis; white-space: nowrap; }
   .round-progress { display: flex; align-items: center; gap: 7px; }
   .round-progress span {
     width: 28px;
@@ -980,120 +750,13 @@
   .round-progress span.done { border-color: var(--jade); background: #cce2d5; color: var(--jade-dark); }
   .round-progress span.current { border: 2px solid var(--persimmon); background: var(--persimmon); color: #fff; box-shadow: 0 0 0 4px rgba(184, 77, 58, .13); }
 
-  .scene { width: min(1040px, calc(100% - 32px)); margin: auto; padding: 34px 0 62px; }
-  .scene-heading {
-    width: min(820px, 100%);
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    align-items: start;
-    gap: 17px;
-    margin: 0 auto 20px;
-  }
-  .chapter-number {
-    width: 58px;
-    height: 58px;
-    display: grid;
-    place-items: center;
-    border: 1px solid rgba(39, 91, 73, .25);
-    border-radius: 50%;
-    background: #faf5e6;
-    color: var(--jade);
-    font-family: Georgia, serif;
-    font-size: 1.15rem;
-    font-weight: 700;
-    box-shadow: inset 0 0 0 5px #e5eadb;
-  }
-  .scene-copy { display: grid; gap: 7px; }
-  .scene-copy h1 { font-size: clamp(2rem, 5vw, 3.8rem); }
-  .scene-copy > p:last-child { max-width: 47rem; margin: 0; color: #49645a; font-size: 1rem; line-height: 1.5; }
-
-  .pond-frame {
-    position: relative;
-    width: min(820px, 100%);
-    margin: 30px auto 0;
-    padding: 9px;
-    border: 7px solid #6c4836;
-    border-radius: 30px;
-    background: linear-gradient(145deg, #d69a5f, #9a5d3d 58%, #74432f);
-    box-shadow: inset 0 0 0 2px rgba(255, 232, 187, .3), 0 12px 0 #b8c6b3, 0 24px 48px rgba(34, 73, 60, .19);
-  }
-  .frame-plaque {
-    position: absolute;
-    z-index: 2;
-    top: -24px;
-    left: 50%;
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    transform: translateX(-50%);
-    padding: 7px 14px;
-    border: 1px solid #60402f;
-    border-radius: 999px;
-    background: #f6e8c6;
-    color: #583c2e;
-    font-size: .71rem;
-    font-weight: 900;
-    letter-spacing: .06em;
-    text-transform: uppercase;
-    white-space: nowrap;
-    box-shadow: 0 4px 0 rgba(91, 61, 45, .25);
-  }
-  .frame-plaque span { width: 5px; height: 5px; border-radius: 50%; background: var(--persimmon); }
   .playfield { width: 100%; overflow: hidden; border: 1px solid rgba(18, 57, 48, .62); border-radius: 18px; background: #91c2b3; }
   .playfield.overflow-evidence, .playfield.overflow-evidence svg { overflow: visible; }
   .playfield svg, .success-map svg { aspect-ratio: 6 / 5; }
-  .board-measure {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 9px;
-    margin: 8px 0 0;
-    padding: 8px 10px 4px;
-    color: #fff7e5;
-    font-size: .78rem;
-    font-weight: 750;
-    line-height: 1.35;
-    text-align: center;
-  }
-  .board-measure span { flex: 0 0 auto; width: 15px; height: 15px; border: 2px solid #f0d27b; background: rgba(255, 255, 255, .08); }
-
-  .garden-scenery { pointer-events: none; }
-  .far-bank { fill: #78947d; }
-  .near-bank { fill: #587b68; }
-  .garden-stones ellipse { fill: #d7d1bb; stroke: #65766c; stroke-width: .55; }
-  .garden-bridge path { fill: none; stroke: #9f4e3d; stroke-width: 1.4; stroke-linecap: round; }
-  .garden-bridge path:nth-child(2) { stroke: #684235; stroke-width: 1.8; }
-  .garden-bridge path:nth-child(3) { stroke-width: .7; }
-  .stone-lantern path, .stone-lantern rect { fill: #d6d0ba; stroke: #53675f; stroke-width: .55; }
-  .stone-lantern circle { fill: #f1c85c; stroke: #725f34; stroke-width: .45; }
-  .lotus ellipse { fill: #397967; stroke: #24594d; stroke-width: .55; }
-  .lotus path { fill: none; stroke: #24594d; stroke-width: .55; }
-  .lotus .petal { fill: #f0c0b1; stroke: #9d594f; stroke-width: .38; }
-  .lotus-two { opacity: .78; }
-  .garden-reeds path { fill: none; stroke: #2d6352; stroke-width: 1.1; stroke-linecap: round; }
-  .pond-ripples path {
-    fill: none;
-    stroke: #e8f1dc;
-    stroke-width: .75;
-    stroke-linecap: round;
-    opacity: .72;
-    transform-box: fill-box;
-    transform-origin: center;
-    animation: water-ripple 3.8s ease-in-out infinite;
-  }
-  .pond-ripples path:nth-child(2) { animation-delay: -1.9s; }
-  .pond-ripples path:nth-child(3) { animation-delay: -3s; }
-  .intro-art .water-lines path {
-    transform-box: fill-box;
-    transform-origin: center;
-    animation: water-ripple 4.4s ease-in-out infinite;
-  }
-  .intro-art .water-lines path:nth-child(even) { animation-delay: -2.2s; }
   .grid-surface { pointer-events: none; }
   .route-bed { stroke: rgba(251, 247, 220, .66); stroke-width: 5.8; stroke-linecap: round; }
   .target-line { stroke: #34594f; stroke-width: 1.25; stroke-dasharray: 1.8 1.5; stroke-linecap: round; }
 
-  .unit-reference rect { fill: rgba(255, 249, 229, .94); stroke: rgba(101, 68, 47, .32); stroke-width: .35; }
   .unit-reference line { stroke: #a34d38; stroke-width: 1.35; stroke-dasharray: 2 1; }
   .unit-reference circle { fill: #f8ead0; stroke: #a34d38; stroke-width: .7; }
   .unit-reference text { fill: #743b2e; font-size: 3.2px; font-weight: 900; text-anchor: middle; }
@@ -1322,15 +985,9 @@
     padding: 42px 0;
     text-align: center;
   }
-  .completion-art { width: min(310px, 76vw); margin-bottom: -6px; }
-  .completion-art svg { filter: drop-shadow(0 12px 16px rgba(32, 72, 59, .16)); }
   .complete h1 { max-width: 640px; font-size: clamp(2.5rem, 7vw, 5rem); }
-  .complete > p:not(.kicker, .boundary) { max-width: 560px; margin: 0; color: #446158; font-size: 1.05rem; line-height: 1.6; }
+  .complete > p:not(.kicker) { max-width: 560px; margin: 0; color: #446158; font-size: 1.05rem; line-height: 1.6; }
 
-  @keyframes water-ripple {
-    0%, 100% { opacity: .42; transform: scaleX(.92); }
-    50% { opacity: .8; transform: scaleX(1.06); }
-  }
   @keyframes trace-horizontal { from { opacity: .25; transform: scaleX(0); } to { opacity: 1; transform: scaleX(1); } }
   @keyframes trace-vertical { from { opacity: .25; transform: scaleY(0); } to { opacity: 1; transform: scaleY(1); } }
   @keyframes landing-in { from { opacity: .4; transform: scale(.55); } to { opacity: 1; transform: scale(1); } }
@@ -1363,71 +1020,392 @@
   @media (prefers-reduced-motion: reduce) {
     .frog, .primary, .secondary, .retry { transition: none; }
     .frog-figure, .completed-line, .landing, .landing-ripple, .discrepancy line,
-    .pond-ripples path, .intro-art .water-lines path, .success-finish-halo, .success-seal {
+    .success-finish-halo, .success-seal {
       animation: none !important;
     }
     .landing-ripple { display: none; }
   }
 
+  /* Cohesive pond composition: generated atmosphere frames, never defines, the exact lattice. */
+  .prototype-root {
+    min-height: 100svh;
+    overflow-x: clip;
+    background: #eaf1e4;
+  }
+
+  .intro {
+    position: relative;
+    isolation: isolate;
+    width: 100%;
+    min-height: 100svh;
+    overflow: hidden;
+    display: grid;
+    align-items: center;
+    margin: 0;
+    padding: clamp(28px, 5vw, 76px) max(24px, calc((100vw - 1180px) / 2));
+  }
+  .generated-atmosphere {
+    position: absolute;
+    z-index: -2;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 46%;
+    opacity: 1;
+    filter: saturate(.98) contrast(.94) brightness(1.08);
+    -webkit-mask-image: none;
+    mask-image: none;
+    pointer-events: none;
+  }
+  .intro-light {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background:
+      linear-gradient(90deg, rgba(250, 248, 226, .98) 0%, rgba(250, 248, 226, .9) 31%, rgba(250, 248, 226, .54) 48%, rgba(250, 248, 226, .08) 70%),
+      linear-gradient(0deg, rgba(231, 241, 224, .32), transparent 40%);
+    pointer-events: none;
+  }
+  .intro-copy {
+    position: relative;
+    z-index: 1;
+    width: min(500px, 45vw);
+    display: grid;
+    justify-items: start;
+    gap: clamp(15px, 2.3vh, 24px);
+  }
+  .intro-copy h1 { font-size: clamp(4rem, 8vw, 7rem); text-shadow: 0 2px 24px rgba(250, 248, 226, .58); }
+  .intro-copy .lead { color: #294a40; font-size: clamp(1rem, 1.5vw, 1.2rem); line-height: 1.58; }
+  .intro-copy .primary { margin-top: 3px; }
+
+  .game-shell {
+    position: relative;
+    isolation: isolate;
+    min-height: 100svh;
+    overflow: hidden;
+    background: rgba(239, 245, 232, .8);
+  }
+  .game-shell::after, .success::after, .complete::after {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    background: linear-gradient(125deg, rgba(242, 247, 235, .93), rgba(235, 243, 228, .78) 46%, rgba(233, 242, 226, .66));
+    pointer-events: none;
+  }
+  .world-atmosphere {
+    position: absolute;
+    z-index: 0;
+    inset: -24px;
+    width: calc(100% + 48px);
+    height: calc(100% + 48px);
+    object-fit: cover;
+    object-position: center 36%;
+    opacity: .44;
+    filter: blur(12px) saturate(.72) brightness(1.18);
+    transform: scale(1.03);
+    pointer-events: none;
+  }
+  .game-hud {
+    position: relative;
+    z-index: 2;
+    width: min(1180px, calc(100% - 32px));
+    min-height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin: auto;
+    border-bottom: 1px solid rgba(35, 83, 67, .2);
+  }
+  .game-hud p { display: flex; align-items: baseline; gap: 10px; margin: 0; }
+  .game-hud strong { font-family: Georgia, serif; font-size: 1rem; }
+  .game-hud small { color: #63786e; font-size: .68rem; font-weight: 850; letter-spacing: .12em; text-transform: uppercase; }
+  .round-progress span {
+    width: 26px;
+    height: 26px;
+    border-color: rgba(51, 94, 77, .3);
+    background: rgba(250, 248, 232, .64);
+    color: #587066;
+    box-shadow: none;
+  }
+  .round-progress span.done { border-color: #43806d; background: rgba(194, 222, 207, .75); }
+  .round-progress span.current { border: 0; background: var(--persimmon); box-shadow: 0 0 0 4px rgba(184, 77, 58, .12); }
+
+  .scene {
+    position: relative;
+    z-index: 1;
+    width: min(1180px, calc(100% - 32px));
+    min-height: calc(100svh - 58px);
+    display: grid;
+    grid-template-columns: minmax(270px, .7fr) minmax(500px, 1.3fr);
+    grid-template-areas:
+      "heading pond"
+      "control pond"
+      "message pond"
+      "retry pond";
+    grid-template-rows: auto auto auto minmax(0, 1fr);
+    align-content: center;
+    align-items: start;
+    column-gap: clamp(28px, 4vw, 58px);
+    row-gap: 15px;
+    margin: auto;
+    padding: 22px 0 28px;
+  }
+  .scene-heading {
+    grid-area: heading;
+    width: 100%;
+    display: grid;
+    gap: 9px;
+    margin: 0;
+    padding: 0;
+  }
+  .passage-label {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    color: #8c493a;
+    font-size: .7rem;
+    font-weight: 900;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+  .passage-label span {
+    padding: 5px 8px;
+    border-radius: 999px;
+    background: rgba(184, 77, 58, .1);
+  }
+  .scene-heading h1 { font-size: clamp(2.65rem, 5.4vw, 4.8rem); }
+  .scene-heading > p:last-child { max-width: 31rem; margin: 0; color: #3d5d52; font-size: .98rem; line-height: 1.5; }
+
+  .pond-stage {
+    position: relative;
+    isolation: isolate;
+    grid-area: pond;
+    width: 100%;
+    overflow: hidden;
+    align-self: center;
+    padding: 8px;
+    border: 1px solid rgba(255, 255, 244, .82);
+    border-radius: 28px;
+    background: rgba(219, 235, 218, .52);
+    box-shadow: 0 26px 64px rgba(25, 66, 52, .2), 0 2px 0 rgba(255, 255, 244, .86) inset;
+  }
+  .board-atmosphere {
+    position: absolute;
+    z-index: 0;
+    inset: -28px;
+    width: calc(100% + 56px);
+    height: calc(100% + 56px);
+    object-fit: cover;
+    object-position: center 8%;
+    opacity: .9;
+    filter: blur(9px) saturate(.86) brightness(1.16);
+    transform: scale(1.09);
+    pointer-events: none;
+  }
+  .pond-stage.overflow-evidence { overflow: visible; }
+  .pond-stage::after {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    background: rgba(228, 240, 224, .1);
+    pointer-events: none;
+  }
+  .playfield {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    overflow: hidden;
+    border: 1px solid rgba(247, 248, 224, .82);
+    border-radius: 20px;
+    background: transparent;
+    box-shadow: 0 12px 36px rgba(18, 67, 57, .2);
+  }
+  .playfield svg, .success-map svg { aspect-ratio: 6 / 5; }
+  .pond-water { opacity: .6; }
+  .pond-light { opacity: .52; }
+  .grid-surface { opacity: .46; }
+  .route-bed { stroke: rgba(250, 245, 211, .42); stroke-width: 5; }
+  .target-line { stroke: rgba(31, 76, 65, .72); stroke-width: 1; stroke-dasharray: 1.5 1.7; }
+  .unit-reference line { stroke: #b4553d; stroke-width: 1.15; stroke-dasharray: none; }
+  .unit-reference circle { fill: #f7d97d; stroke: #8f4435; stroke-width: .55; }
+  .unit-reference text {
+    fill: #74382d;
+    font-size: 3.15px;
+    font-weight: 950;
+    paint-order: stroke;
+    stroke: rgba(243, 245, 217, .92);
+    stroke-width: 1.35px;
+    text-anchor: middle;
+  }
+  .frog-figure, .obstacle { filter: drop-shadow(0 1.2px .9px rgba(20, 56, 47, .28)); }
+  .completed-line { filter: drop-shadow(0 1.2px .65px rgba(65, 46, 22, .54)); }
+  .landing-ripple { stroke-width: 1; }
+  .marker .marker-halo { fill: rgba(255, 250, 217, .44); stroke: rgba(255, 250, 217, .88); }
+
+  .tutorial-control, .prediction-panel {
+    grid-area: control;
+    width: 100%;
+    display: grid;
+    justify-items: start;
+    gap: 7px;
+    margin: 0;
+    padding: 14px 0 0;
+    border: 0;
+    border-top: 1px solid rgba(37, 83, 67, .22);
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+  .tutorial-control::before, .prediction-panel::before { display: none; }
+  .tutorial-control strong, .prediction-panel label { text-align: left; }
+  .tutorial-control p, .prediction-panel p { color: #556c62; }
+  .prediction-panel label { font-size: clamp(1.18rem, 2vw, 1.45rem); }
+  .prediction-entry input {
+    width: 72px;
+    min-height: 58px;
+    border: 2px solid var(--jade);
+    border-radius: 16px;
+    background: rgba(255, 254, 245, .88);
+    box-shadow: 0 7px 18px rgba(31, 77, 63, .1);
+  }
+  .world-message {
+    grid-area: message;
+    width: 100%;
+    min-height: 0;
+    grid-template-columns: 29px minmax(0, 1fr);
+    gap: 9px;
+    margin: 0;
+    padding: 11px 0 0;
+    border: 0;
+    border-top: 1px solid rgba(37, 83, 67, .18);
+    border-radius: 0;
+    background: transparent;
+    font-size: .9rem;
+  }
+  .world-message > span { width: 27px; height: 27px; }
+  .world-message.error { border-color: rgba(166, 79, 56, .45); background: transparent; }
+  .retry { grid-area: retry; justify-self: start; margin: 0; }
+
+  .success, .complete {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+  }
+  .success {
+    width: 100%;
+    min-height: 100svh;
+    grid-template-columns: minmax(280px, .72fr) minmax(460px, 1.28fr);
+    gap: clamp(32px, 5vw, 68px);
+    padding: 58px max(24px, calc((100vw - 1120px) / 2));
+  }
+  .success > :not(.world-atmosphere) { position: relative; z-index: 1; }
+  .success::after { background: linear-gradient(105deg, rgba(241, 246, 231, .97), rgba(235, 242, 226, .81)); }
+  .success-seal { top: 28px; left: max(24px, calc((100vw - 1120px) / 2)); }
+  .success-map {
+    position: relative;
+    isolation: isolate;
+    width: 100%;
+    overflow: hidden;
+    border: 1px solid rgba(255, 252, 227, .9);
+    border-radius: 26px;
+    background: rgba(122, 180, 164, .76);
+    box-shadow: 0 24px 58px rgba(26, 67, 54, .22);
+  }
+  .success-map svg { position: relative; z-index: 1; }
+  .success-feedback {
+    padding: 13px 0 13px 16px;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+  .complete {
+    width: 100%;
+    padding-inline: max(24px, calc((100vw - 720px) / 2));
+  }
+  .complete > :not(.world-atmosphere) { position: relative; z-index: 1; }
+  .complete::after { background: linear-gradient(90deg, rgba(243, 247, 231, .96), rgba(239, 245, 231, .72), rgba(239, 245, 231, .86)); }
+  .complete .world-atmosphere { opacity: .58; filter: saturate(.82) brightness(1.14); }
+
   @media (max-width: 820px) {
-    .intro-card { grid-template-columns: 1fr; width: min(660px, 100%); margin: auto; }
-    .intro-copy { justify-items: center; text-align: center; }
-    .intro-art { width: min(500px, 100%); justify-self: center; }
-    .success { grid-template-columns: 1fr; width: min(680px, calc(100% - 32px)); justify-items: center; gap: 30px; text-align: center; }
+    .intro {
+      min-height: calc(100svh - 43px);
+      align-items: end;
+      padding: 44svh 16px 28px;
+    }
+    .generated-atmosphere { height: 58%; object-position: center 30%; }
+    .intro-light {
+      background: linear-gradient(0deg, rgba(248, 247, 228, 1) 0%, rgba(248, 247, 228, .98) 42%, rgba(248, 247, 228, .55) 58%, transparent 79%);
+    }
+    .intro-copy { width: min(560px, 100%); gap: 14px; }
+    .intro-copy h1 { font-size: clamp(3.5rem, 15vw, 5rem); }
+    .intro-copy .lead { font-size: .96rem; line-height: 1.5; }
+
+    .game-hud { width: calc(100% - 20px); min-height: 52px; }
+    .game-hud p { display: grid; gap: 0; }
+    .game-hud strong { font-size: .9rem; }
+    .game-hud small { font-size: .58rem; }
+    .scene {
+      width: calc(100% - 12px);
+      min-height: calc(100svh - 52px);
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas: "heading" "pond" "control" "message" "retry";
+      grid-template-rows: auto;
+      align-content: start;
+      gap: 11px;
+      padding: 10px 0 24px;
+    }
+    .scene-heading { gap: 5px; padding-inline: 4px; }
+    .passage-label { gap: 5px; font-size: .62rem; }
+    .passage-label span { padding: 3px 6px; }
+    .scene-heading h1 { font-size: clamp(2rem, 10vw, 2.7rem); line-height: .98; }
+    .scene-heading > p:last-child { font-size: .86rem; line-height: 1.38; }
+    .pond-stage { padding: 4px; border-radius: 18px; box-shadow: 0 12px 30px rgba(25, 66, 52, .17); }
+    .playfield { border-radius: 14px; }
+    .board-atmosphere { opacity: .82; filter: blur(9px) saturate(.78) brightness(1.18); }
+    .unit-reference text { font-size: 3.65px; stroke-width: 1.65px; }
+    .marker text { font-size: 4px; stroke-width: 2px; }
+    .obstacle text { font-size: 3.4px; }
+    .tutorial-control, .prediction-panel { gap: 5px; padding: 10px 4px 0; }
+    .tutorial-control p, .prediction-panel p { font-size: .78rem; }
+    .tutorial-control strong { font-size: .9rem; }
+    .prediction-panel label { font-size: 1.06rem; }
+    .prediction-entry { gap: 8px; }
+    .prediction-entry input { width: 64px; min-height: 52px; border-radius: 14px; font-size: 1.95rem; }
+    .world-message { width: 100%; min-height: 0; padding: 9px 4px 0; font-size: .8rem; }
+    .world-message p { line-height: 1.35; }
+    .retry { min-height: 46px; margin-left: 4px; }
+
+    .success {
+      width: 100%;
+      grid-template-columns: 1fr;
+      gap: 22px;
+      padding: 28px 16px 36px;
+      text-align: center;
+    }
     .success-seal { position: static; }
     .success-copy { justify-items: center; }
     .success-map { width: min(600px, 100%); }
-    .success-feedback { border-left: 1px solid rgba(44, 91, 74, .2); border-top: 4px solid var(--jade); border-radius: 16px; }
+    .success-feedback { padding: 12px 0; border-left: 0; border-top: 3px solid var(--jade); }
   }
 
-  @media (max-width: 520px) {
-    .intro { width: calc(100% - 16px); padding: 8px 0; }
-    .intro-card { gap: 20px; padding: 24px 18px 20px; border-radius: 26px; }
-    .intro-card::before { inset: 8px; border-radius: 19px; }
-    .generated-atmosphere { width: 100%; height: 92px; opacity: .18; }
-    .intro-copy { gap: 15px; }
-    .intro-copy h1 { font-size: clamp(2.8rem, 17vw, 4rem); }
-    .intro-art svg { border-width: 5px; border-radius: 20px; }
-    .intro-art > p { right: 9px; bottom: 9px; padding: 6px 8px; font-size: .66rem; }
-    .intro-art > p span { width: 14px; height: 14px; }
-    .primary, .secondary, .retry { min-height: 48px; padding: 12px 17px; }
-
-    .topbar { min-height: 64px; gap: 10px; padding: 9px 10px; }
-    .brand { gap: 7px; }
-    .brand-mark { width: 32px; height: 32px; border-radius: 10px 10px 14px 14px; }
-    .brand-mark::before, .brand-mark::after, .brand-mark i { width: 10px; height: 13px; }
-    .brand small { display: none; }
-    .brand strong { font-size: .9rem; }
-    .round-progress { gap: 4px; }
-    .round-progress span { width: 25px; height: 25px; font-size: .66rem; }
-
-    .scene { width: calc(100% - 12px); padding: 22px 0 44px; }
-    .scene-heading { gap: 10px; margin-bottom: 16px; padding-inline: 6px; }
-    .chapter-number { width: 45px; height: 45px; box-shadow: inset 0 0 0 3px #e5eadb; font-size: .92rem; }
-    .scene-copy { gap: 5px; }
-    .scene-copy h1 { font-size: clamp(1.8rem, 10vw, 2.5rem); line-height: 1; }
-    .scene-copy > p:last-child { font-size: .9rem; line-height: 1.42; }
-
-    .pond-frame { margin-top: 25px; padding: 3px; border-width: 3px; border-radius: 18px; box-shadow: inset 0 0 0 1px rgba(255, 232, 187, .3), 0 7px 0 #b8c6b3, 0 14px 28px rgba(34, 73, 60, .15); }
-    .frame-plaque { top: -20px; padding: 5px 10px; font-size: .62rem; box-shadow: 0 3px 0 rgba(91, 61, 45, .22); }
-    .playfield { border-radius: 13px; }
-    .unit-reference text { font-size: 3.75px; }
-    .marker text { font-size: 4.25px; stroke-width: 2.1px; }
-    .obstacle text { font-size: 3.45px; stroke-width: 1.9px; }
-    .board-measure { margin-top: 5px; padding: 7px 6px 4px; font-size: .72rem; }
-    .board-measure span { width: 13px; height: 13px; }
-
-    .tutorial-control, .prediction-panel { width: calc(100% - 10px); margin-top: 19px; padding: 15px 10px; border-radius: 18px; }
-    .prediction-panel label { font-size: 1.22rem; }
-    .prediction-entry input { width: 78px; min-height: 59px; font-size: 2.1rem; }
-    .world-message { width: calc(100% - 10px); min-height: 61px; grid-template-columns: 30px minmax(0, 1fr); gap: 8px; padding: 11px 12px; font-size: .88rem; }
-    .world-message > span { width: 28px; height: 28px; }
-
-    .success { width: calc(100% - 16px); gap: 22px; padding: 28px 0 38px; }
-    .success-copy { gap: 14px; }
-    .success h1 { font-size: clamp(2.3rem, 13vw, 3.4rem); }
-    .success-feedback { padding: 13px; font-size: .92rem; }
-    .success-map { border-width: 5px; border-radius: 18px; box-shadow: 0 7px 0 #b8c6b3, 0 16px 30px rgba(32, 72, 59, .16); }
-    .complete { width: calc(100% - 24px); padding: 32px 0; }
+  @media (max-width: 360px) {
+    .intro { padding-top: 40svh; }
+    .generated-atmosphere { height: 53%; }
+    .intro-copy h1 { font-size: 3.25rem; }
+    .intro-copy .lead { font-size: .9rem; }
+    .game-hud { min-height: 48px; }
+    .round-progress { gap: 3px; }
+    .round-progress span { width: 23px; height: 23px; font-size: .62rem; }
+    .scene { min-height: calc(100svh - 48px); gap: 8px; padding-top: 8px; }
+    .scene-heading h1 { font-size: 1.92rem; }
+    .scene-heading > p:last-child { font-size: .8rem; }
+    .tutorial-control, .prediction-panel { padding-top: 8px; }
+    .world-message { padding-top: 7px; }
   }
 </style>

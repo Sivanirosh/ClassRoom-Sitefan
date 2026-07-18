@@ -7,7 +7,7 @@
 - **Replacement candidate:** `MES01-FIT-A3-frog-jump-prediction`.
 - **Owner design direction:** tutorial taps followed by integer prediction and automatic resolution; a true square unit grid; horizontal then vertical orthogonal transfer; and a mandatory two-unit obstacle leap.
 - **Owner implementation response:** exact wording `implement the graybox now`; normalized disposition `approve disposable bridge graybox`; recorded 2026-07-17.
-- **Current authority:** the validated replacement mechanic plus the pond-board UI/art expansion authorized by Issue Slice `ex-0004-pond-ui-art`; after replay, the owner confirmed on 2026-07-18 that EX-0004 is good and authorized final animation and image-generation polish. This does not approve a MES-02 learning contract, mechanic expansion, efficacy claims, promotion, or unrelated scope.
+- **Current authority:** the validated replacement mechanic plus the pond-board UI/art expansion and final animation/image-generation polish, followed by Issue Slice `ex-0004-remove-graybox-artifact` authorizing a presentation-only replacement of the remaining layered graybox. This does not approve a MES-02 learning contract, mechanic expansion, efficacy claims, promotion, or unrelated scope.
 
 The integer prediction is a deliberately scoped bridge hypothesis. It is not retroactively added to MES-01’s behavioral-only evidence contract.
 
@@ -17,25 +17,33 @@ Chinese Checkers rules permit an adjacent move and a jump over an adjacent piece
 
 Source provenance and adaptation boundaries are recorded in [`mes-01-calm-game-mechanic-precedents.md`](../../../curriculum/research/mes-01-calm-game-mechanic-precedents.md).
 
-## Pond-board visual rationale
+## Cohesive pond-game replacement
 
-The expanded interface frames the existing lattice as a calm garden pond. A timber surround, celadon water, perimeter stones and reeds, a small arched bridge, a stone lantern, lotus leaves, and a warm sun/moon palette establish an East Asian garden-inspired atmosphere without reproducing a branded character, recognizable game board, or supplied composition. The mathematical board remains original inline SVG and CSS. One committed generated WebP now supplies replaceable intro atmosphere only; it is bundled locally, hidden from accessibility APIs, absent from every active and success map, and adds no remote/network-service asset, font, or runtime dependency.
+### Why the previous polish still read as a graybox
 
-The visual hierarchy remains mathematical rather than decorative:
+The prior pass added polish in layers without replacing the original prototype hierarchy. The generated WebP was reduced to a 22%-opacity masked strip behind a bordered marketing card, while a second flat inline-SVG pond poster carried another frame and a unit-key badge. The intro also exposed the internal `EX-0004` identifier and diagnostic boundary copy. Entering the activity then switched to a thick brown timber frame, plaque, perimeter clip-art props, boxed unit equation, bottom legend, and separate shadowed control/status panels. The result looked like a graybox board embedded inside a themed shell rather than one pond game; the generated image was technically present but visually incidental.
 
-- the square lattice is drawn above the organic scenery and remains the dominant repeatable measure;
-- garden details stay around the perimeter, away from the horizontal and vertical movement corridors;
-- cream route beds, named endpoints, retained landing marks, and an adjacent HTML measure statement preserve legibility when the SVG label is small;
-- jade identifies the player frog, while shape, text, position, and a dashed trace—not color alone—identify the stationary orange obstacle and its two-unit jump;
-- the active and success maps use the same pond, 10-by-10 grid pattern, route geometry, trace, obstacle, and frog vocabulary so success does not replace the evidence state with a decorative celebration.
+### Replacement hierarchy and generated-art role
+
+The replacement uses one continuous atmosphere while keeping authored mathematics sovereign:
+
+- the intro is a full-bleed, bright rendering of the committed unbranded pond WebP with the title, explanation, and start action integrated through a light cream readability gradient; there is no duplicate poster, internal identifier, diagnostic copy, unit badge, dark mask, logo, or title treatment copied from a source;
+- the active state uses a restrained text HUD and a desktop two-column composition, collapsing to one compact flow at narrow widths; title, board, direct frog control or prediction input, status, and retry are no longer independent graybox cards;
+- the same local WebP supplies blurred, cropped color and texture behind the page and exact board. The active board layer uses a 9px blur, celadon wash, and top-biased crop, so koi/foliage/water color reads as painterly atmosphere while the image’s perspective tile lines cannot function as a second mathematical grid;
+- the success map uses the same decorative backing and the complete state reuses the same pond atmosphere, so feedback does not switch to a separate prototype or flat poster;
+- the only playable geometry remains inspectable HTML/SVG. The decorative image has empty alt text, `aria-hidden="true"`, no controls or state, and deleting it cannot alter a prompt, answer, endpoint, trace, discrepancy, obstacle, outcome, or completion;
+- a single in-world 10-unit bracket labelled `1 saut` provides the visible unit cue. Its accessible label states that one square side equals one unit-jump; the former boxed equation and repeated bottom legend are gone;
+- jade dimensional frog forms, warm dimensional endpoints, retained landing rings, gold ordinary traces, a wider dashed persimmon double trace, labelled discrepancy, and the stationary orange obstacle preserve redundant non-color meaning.
+
+The generated asset remains bundled locally. No remote request, external dependency, copied board shape, branded/reference character, recognizable source composition, logo, trademark, watermark, or image-authored mathematical state was introduced.
 
 ### Preserved render and interaction invariants
 
 - Both maps retain a `120 × 100` viewBox, a `10 × 10` pattern, and a rendered `6 / 5` aspect ratio. No perspective or non-uniform transform is applied to the grid or mechanic layer.
 - `vectorFor()` remains exactly `{ x: 10, y: 0 }` or `{ x: 0, y: -10 }`; ordinary jumps therefore equal one cell side. The forced obstacle trace remains one 20-unit segment produced by one action.
 - Origins, endpoints, obstacle location, automatic execution, retry behavior, and every deterministic smoke selector remain unchanged.
-- The tutorial control remains the real transparent HTML button over the visible frog. At a 320px viewport its measured hit area is 44.1 by 44.1 CSS pixels.
-- Reduced motion still resolves a prediction immediately and disables frog, trace, landing, discrepancy-entry, water, and arrival motion without hiding the final landing, trace, discrepancy label, outcome, focus transition, or completion path.
+- The tutorial control remains the real transparent HTML button over the visible frog. At a 320px viewport its measured hit area is 44.4 by 44.4 CSS pixels.
+- Reduced motion still resolves a prediction immediately and disables frog, trace, landing, discrepancy-entry, and arrival motion without hiding the final landing, trace, discrepancy label, outcome, focus transition, or completion path. The generated atmosphere is static in every motion mode.
 
 ## Corrected game model
 
@@ -151,7 +159,7 @@ Completed 2026-07-17:
 
 A first smoke run exposed `Cannot read properties of undefined (reading 'chapter')` after continuing; the next scene index is now captured before scene loading. Independent review then found that a separate tutorial button weakened direct action and that success removed the exact trace. The tutorial control now overlays the visible world frog, and every success view retains the completed trace, endpoint, frog, and obstacle where applicable. The full smoke suite passed again after both repairs.
 
-### Pond-board UI/art slice validation
+### Historical pond-board UI/art validation (superseded presentation)
 
 Completed 2026-07-17:
 
@@ -164,11 +172,13 @@ Completed 2026-07-17:
 - Visual-state inspection — intro, tutorial, horizontal success, vertical, obstacle, and final map states retained readable endpoints, unit reference, trace, and perimeter-only scenery; the 320px tutorial frog target measured `44.1 × 44.1` CSS pixels.
 - Source inspection — all pond, frog, bridge, lantern, lotus, mountain, pavilion, and completion art in that slice was hand-authored in `Prototype.svelte`; no external asset, copied board shape, new dependency, or network request was introduced.
 
-### Final animation and generated-art polish
+### Previous animation and generated-art integration (superseded presentation)
 
-The committed `assets/pond-garden-atmosphere.webp` is an **optional decorative intro layer**, not a board. `Prototype.svelte` renders it as an empty-alt, `aria-hidden` image behind the intro copy and original foreground illustration. The upper atmospheric strip is cropped with `object-fit: cover` / `object-position: center top`, reduced to 22% opacity on desktop and 18% at 320 px, and faded out with a vertical mask. This crop keeps the bridge, willow, and architecture as framing while the generated perspective-tile field never enters an active mathematical corridor. Removing or replacing the image cannot change a prompt, control, answer, endpoint, trace, target quantity, or outcome.
+The following record describes the pre-replacement treatment retained for implementation history. The image is no longer intro-only in the current presentation.
 
-Manual source-and-image review found no readable text, title treatment, logo, watermark, trademark, copied character, branding, or recognizable source composition in the generated pixels. The local asset depicts only generic pond, bridge, pavilion, plant, stone, and koi forms. Its decorative tile perspective is intentionally excluded from the active and success maps, whose sole playable grid remains the exact orthogonal SVG pattern.
+The committed `assets/pond-garden-atmosphere.webp` was an **optional decorative intro layer**, not a board. `Prototype.svelte` rendered it as an empty-alt, `aria-hidden` image behind the intro copy and original foreground illustration. The upper atmospheric strip was cropped with `object-fit: cover` / `object-position: center top`, reduced to 22% opacity on desktop and 18% at 320 px, and faded out with a vertical mask. That crop kept the bridge, willow, and architecture as framing while the generated perspective-tile field did not enter an active mathematical corridor. Removing or replacing the image could not change a prompt, control, answer, endpoint, trace, target quantity, or outcome.
+
+Manual source-and-image review found no readable text, title treatment, logo, watermark, trademark, copied character, branding, or recognizable source composition in the generated pixels. The local asset depicted only generic pond, bridge, pavilion, plant, stone, and koi forms. Its decorative tile perspective was excluded from the active and success maps in that superseded presentation, whose sole playable grid remained the exact orthogonal SVG pattern.
 
 Motion is explanatory feedback rather than a new mechanic:
 
@@ -192,6 +202,23 @@ Final-polish review and technical evidence:
 - `git diff --check` — passed.
 
 These checks establish implementation operability and rendered geometry only. Owner replay, pupil reasoning, non-guessing behavior, French comprehension, practical accessibility equivalence, and pupil efficacy remain untested. This polish does not approve MES-02 or promotion.
+
+### Cohesive replacement validation
+
+Completed for Issue Slice `ex-0004-remove-graybox-artifact`:
+
+- `npm --prefix experiments run check` — passed with 0 Svelte errors/warnings and a valid five-exercise catalog;
+- `npm --prefix experiments run build` — passed;
+- `npx playwright test tests/smoke/ex-0004-visual-polish.spec.ts tests/smoke/ex-0004-round-retry.spec.ts` — passed the dedicated removed-artifact/hero/HUD/geometry/desktop/320/reduced-motion structure checks and same-round retry check;
+- `SMOKE_EXERCISES=EX-0004 npm --prefix experiments run test:smoke` — passed the ordinary traversal, reduced-motion keyboard path, recoverable discrepancy, retry-in-place, exact success, all four scenes, and 320px touch path with guarded local-only networking;
+- `git diff --check` — passed;
+- headless visual review at 1280 × 800 showed the full-bleed bright hero, integrated readable copy, two-column active hierarchy, restrained HUD, one subtle exact lattice, one in-world unit bracket, painterly board color, dimensional frog/endpoints/traces, and no former poster/frame/plaque/legend/panel stack;
+- the desktop active SVG measured `713.7 × 594.8` CSS pixels, yielding effectively equal `59.48 × 59.48` square cells; the title, board, direct control, tutorial instruction, and feedback all ended above y=`776.4` in the 800px viewport;
+- at 320 × 800 the document `scrollWidth` remained exactly 320; the full-bleed hero remained dominant and the intro title, lead, and start action (ending at y=`772`) were fully visible; the active SVG measured `296 × 246.7`, cells remained effectively square at `24.67 × 24.67`, the direct frog control measured `44.4 × 44.4`, and all required active elements ended above y=`574.7`;
+- source and rendered-structure review found no visible internal identifier inside the prototype, duplicate intro SVG, diagnostic boundary copy, unit badge, thick brown frame, plaque, bottom legend, perimeter clip-art, logo, trademark, watermark, external asset, network request, or image-authored mechanic state;
+- both active and success SVGs retain `viewBox="0 0 120 100"`, a `10 × 10` authored pattern, orthogonal 10-unit ordinary vectors, one 20-unit obstacle trace, inspectable endpoints/traces/discrepancy/obstacle/frog state, and the original reduced-motion/focus behavior.
+
+This visual review verifies the replacement hierarchy and operability, not pupil efficacy. The efficacy boundary remains unchanged.
 
 ## Kill criteria
 
@@ -217,4 +244,4 @@ Reject or revise if:
 
 ## Current disposition
 
-The pond-board loop and bounded final polish are implemented, operable, and replayable. On 2026-07-17 the owner replayed the orthogonal-grid revision, validated the mechanic, and clearly approved the bounded UI/art expansion; the later owner authorization covers only the animation and generated-art treatment recorded above. Pupil learning, accessibility equivalence, efficacy, MES-02 contract approval, mechanic expansion, and promotion remain separate later decisions.
+The cohesive pond-game presentation is implemented without changing the validated loop, authored evidence, square lattice, or motion semantics. The presentation evidence establishes structure, operability, responsive fit, and rendered geometry only. It does not establish pupil reasoning, non-guessing behavior, French comprehension, practical accessibility equivalence, learning efficacy, MES-02 contract approval, or promotion readiness; those remain separate later decisions.
