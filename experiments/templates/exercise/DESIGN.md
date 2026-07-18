@@ -127,7 +127,7 @@ Document omissions/reordering instead of forcing every stage.
 
 ## Full storyboard
 
-After approval, specify exact French copy, pupil actions, system states, feedback, recovery, transitions, and completion conditions for every scene.
+After approval, specify exact French copy, pupil actions, system states, feedback, recovery, transitions, and completion conditions for every scene. Include the narrative lifecycle `intro → active play → recoverable failure → success → outro`; generated intro/outro art must belong to the same world and consequence arc as the mechanic.
 
 ## Feedback and scaffolding
 
@@ -145,9 +145,44 @@ List states and transitions using the mechanic's actual lifecycle—for example 
 
 Cover keyboard and touch alternatives, target size, non-color cues, text alternatives for exact quantities, readable motion, reduced-motion behavior, language clarity, and narrow-screen state legibility.
 
-## Motion and artwork decisions
+## Production-polish decisions
 
-Both are late and optional. For each selected addition, record its explanatory, usability, or narrative purpose. Keep values, controls, and assessed state in accessible DOM/CSS rather than generated imagery.
+Complete only after owner approval to continue. Follow the validated EX-0002/EX-0003 track: generated narrative bookends, a fully authored production interaction surface, and restrained purposeful motion. Production polish must replace the graybox's pupil-facing surfaces rather than decorate them.
+
+### Graybox teardown
+
+| Visible graybox artifact | Replace or delete | Production treatment | Evidence |
+|---|---|---|---|
+| | | | |
+
+Explicitly inspect for internal IDs, smoke/test copy, diagnostic badges, boxed equations, repeated legends, crude placeholder art, debug-like grids, heavy frame plaques, stacked generic panels, and any active mechanic that still looks like the graybox over a new background.
+
+### ImageGen intro/outro bookends
+
+| Asset | Narrative job | Character/world continuity | Prompt + provenance | Desktop/320px review |
+|---|---|---|---|---|
+| Intro | Establish place, character, goal, and action fantasy | | | |
+| Outro | Show completion consequence and close the same story | | | |
+
+Generated assets must be original and unbranded: no copied logos, title treatments, watermarks, characters, or recognizable source compositions. Keep exact values, routes, controls, diagrams, traces, and assessed state in accessible authored HTML/CSS/SVG. Store prompts, metadata, references, crops, and edits beside the assets.
+
+### Active-surface coherence
+
+Explain how the board/workbench/console, controls, feedback, success state, and completion screen inherit the bookends' palette, depth, materials, typography, spacing, and world language without baking mathematical truth into raster art. Removing the generated background must not break the mechanic; the rendered active surface must no longer reveal the old graybox composition.
+
+### Emil design-engineering motion audit
+
+Run the `emil-design-eng` skill after visual hierarchy is coherent. Record selected opportunities using its required review format:
+
+| Before | After | Why |
+|---|---|---|
+| | | |
+
+Name the purpose of each motion—feedback, spatial consistency, state explanation, or preventing a jarring transition. Keep repeated controls immediate, use short purposeful easing, and preserve every final state, trace, label, focus move, and consequence under reduced motion.
+
+### Polish acceptance captures
+
+Capture desktop and 320px states for intro, active play, one failure, success, and outro. Confirm that all five read as one product/world, generated assets are visible at useful scale, no old graybox surface remains, and exact state stays inspectable and accessible.
 
 ## Final validation evidence
 

@@ -1,8 +1,8 @@
 ---
 title: Roadmap prototype production workflow
 status: approved
-revision: r3-learning-contract-semantic-fit
-approved_on: 2026-07-16
+revision: r5-production-polish-reference-track
+approved_on: 2026-07-18
 readiness: ready_for_design_package
 owners:
   - repository owner acting as product, classroom, curriculum, and technical owner
@@ -17,6 +17,7 @@ owners:
 | User (chat approver) | Repository owner acting in product, classroom, curriculum, and technical roles | Prototype workflow, mechanic-memory model, owner gates, concurrency, polish, and validation timing | `r1-approved` | 2026-07-15T22:31:37+02:00 | Approved |
 | User (chat approver) | Repository owner acting in product, classroom, curriculum, and technical roles | Sequence-spine planning with checkpoint-scoped mechanic prototyping and expansion | `r2-sequence-spine` | 2026-07-16T08:59:48+02:00 | Approved refinement |
 | User (chat approver) | Repository owner acting in product, classroom, curriculum, and technical roles | Learning-contract gate, established-task grounding, semantic-fit rationales, one-or-more catalog grayboxes, and removal of the fixed three-pitch/throwaway-prototype phase | `r3-learning-contract-semantic-fit` | 2026-07-16 | Approved refinement |
+| User (chat approver) | Repository owner acting in product, classroom, curriculum, and technical roles | Production-polish round as a full pupil-facing surface replacement, with coherent ImageGen intro/outro bookends and an Emil design-engineering motion pass, grounded in the validated EX-0002/EX-0003 track | `r5-production-polish-reference-track` | 2026-07-18 | Approved empirical correction |
 
 Approval of this workflow does **not** approve a discipline roadmap, sequence spine, learning goal, mechanic rationale, catalog graybox, or prototype expansion. Record each authority separately.
 
@@ -28,6 +29,7 @@ Approval of this workflow does **not** approve a discipline roadmap, sequence sp
 | `r2-sequence-spine` | 2026-07-16 | Approved | Kept the sequence as the coherence unit while making one checkpoint exercise the mechanic-prototyping and expansion unit | User and coding assistant |
 | `r3-learning-contract-semantic-fit` | 2026-07-16 | Approved | After the rejected `NUM-02` A/B/C set, moved owner approval of a precise learning contract before ideation; required established classroom-task grounding and explicit cognitive/semantic fit; removed the fixed quota of three pitches and throwaway comparison prototypes; allowed one or more approved candidates to proceed directly as low-fi catalog grayboxes | User and coding assistant |
 | `r4-natural-language-approval` | 2026-07-17 | Approved | Removed the exact-phrase expansion incantation. A clear owner statement such as “I approve; go on with it” now authorizes the next phase in the active conversational scope; clarify only genuinely ambiguous scope. | User and coding assistant |
+| `r5-production-polish-reference-track` | 2026-07-18 | Approved | Corrected the polish phase after EX-0004 technically passed while still presenting visible graybox surfaces. A production-polish round now replaces every pupil-facing placeholder surface, requires coherent generated intro/outro narrative art, and applies an Emil design-engineering motion audit. EX-0002 and EX-0003 are the validated implementation track: generated narrative bookends, authored inspectable mechanic state, and restrained purposeful motion. | User and coding assistant |
 
 ## Executive intent
 
@@ -67,7 +69,11 @@ Owner replay
    └─ select one or more + clearly approve continuing
       in the active exercise/checkpoint scope
         ↓
-Expand and validate each approved checkpoint exercise
+Expand the approved mechanic and replace every graybox surface
+→ generate coherent intro/outro narrative bookends
+→ integrate authored mechanic art and pupil-facing hierarchy
+→ run the Emil design-engineering motion pass
+→ validate the complete polished exercise
         ↓
 Check the handoff against the sequence spine
         ↓
@@ -85,7 +91,7 @@ After all checkpoints: sequence integration review
 | Learning-contract drafting | One active checkpoint at a time by default | No mechanic rationale may be approved until the checkpoint’s core learning and successful-pupil statement are approved. |
 | Semantic-fit rationales | Research may overlap; disposition remains owner-led | Each candidate is judged independently. There is no required candidate count. |
 | Owner-approved catalog grayboxes | One at a time by default; multiple only when explicitly approved and independently mutable | Approval to graybox is not mechanic approval or polish authority. |
-| Expansion of approved mechanics | Yes, when mutation areas are independent | Every catalog exercise carries its own recorded gate scope and exact expansion phrase. |
+| Expansion of approved mechanics | Yes, when mutation areas are independent | Every catalog exercise carries its own recorded gate scope and clear natural-language owner approval. |
 | Final validation | Per finished exercise, then per assembled sequence | A technical pass cannot grant mechanic or pedagogical approval. |
 
 No autonomous batch may implement unapproved rationales or expand unapproved mechanics. Approval for one checkpoint never propagates to another.
@@ -328,13 +334,74 @@ Before decorative polish, verify that:
 - the experience feels like one coherent system rather than disconnected cards;
 - precise mathematical state remains inspectable rather than baked into decorative imagery.
 
-## Phase 8 — Optional motion and asset passes
+## Phase 8 — Production-polish round
 
-Motion and generated artwork are late and optional. Each addition must name an explanatory, usability, or narrative purpose.
+This phase begins only after owner replay and approval to continue. Once authorized, it is **not** an optional layer of decoration over the graybox. The graybox locks the mechanic; it does not define the final visual surfaces. Production polish replaces every pupil-facing placeholder surface while preserving the approved actions, state transitions, mathematical invariants, recovery, and evidence semantics.
 
-Appropriate motion includes press feedback, source/destination explanation, meaningful state transitions, scene transitions, and rare completion moments. Reject movement that makes quantities or intermediate states harder to inspect. Preserve reduced-motion behavior.
+### Validated implementation track: EX-0002 and EX-0003
 
-Generated assets may support characters, inventory illustration, intro/outro scenes, or decorative world art. Keep exact quantities, numbers, mathematical diagrams, controls, state indicators, and precision-dependent animation out of generated images. Preserve prompts/metadata, verify counts, and test actual rendered size.
+Use EX-0002 and EX-0003 as the repository reference track unless the owner approves another direction:
+
+- ImageGen supplies distinct, coherent intro and outro narrative scenes in the exercise's world;
+- those bookends share character, palette, materials, atmosphere, and story consequence with the active mechanic;
+- the active mechanic is fully redrawn as a production interaction surface rather than a graybox inside a decorative shell;
+- exact quantities, controls, mathematical diagrams, traces, and assessed state remain authored and inspectable in HTML/CSS/SVG;
+- generated character and object assets may support recognition, but never become the sole carrier of exact mathematical truth;
+- motion is restrained, purposeful, and secondary to immediate interaction.
+
+This is a pattern, not a layout to copy. Do not reskin EX-0002 or EX-0003; reproduce their separation of responsibilities and level of finish.
+
+### 8.1 — Graybox teardown
+
+Before adding art, inventory every visible graybox artifact and assign a replacement or deletion. The final pupil path must not expose:
+
+- internal exercise IDs, smoke terminology, test instructions, or implementation-boundary copy;
+- placeholder panels, diagnostic badges, boxed equations, duplicated legends, or labels that exist only to explain the prototype to reviewers;
+- crude stand-in SVG illustrations, debug-like grids, heavy frame plaques, or a card around every subsystem;
+- a low-fi interaction surface merely placed on top of a polished background;
+- separate visual languages for intro, active play, success, and completion.
+
+Hidden deterministic smoke attributes remain allowed. Required mathematical cues remain visible, but must be integrated into the world and hierarchy rather than presented as prototype annotation.
+
+### 8.2 — ImageGen narrative and art-direction pass
+
+Generate a proper **intro** and **outro** for every production-polished prototype. They are narrative bookends, not interchangeable wallpaper:
+
+- intro: establishes character, place, goal, and the action fantasy before play;
+- outro: shows the consequence of completion and closes the same visual story;
+- both use one coherent art direction and recognizable original character/world continuity;
+- final rendered images contain no copied branding, logos, title treatments, watermarks, or recognizable source-game characters/compositions;
+- prompts, model metadata, reference provenance, crops, edits, and rendered-size review are stored beside the assets.
+
+Generated art may also provide characters, inventory illustration, or decorative world layers when useful. It must not encode answers, exact counts, routes, controls, diagrams, or state that the application cannot independently represent and announce. Test crops at desktop and 320 px; reject art that becomes muddy, misleading, or compositionally unrelated at actual size.
+
+### 8.3 — Active-surface production design
+
+Rebuild every active surface so it belongs to the intro/outro world. Preserve the mechanic model, not the graybox composition. Use authored CSS/SVG/HTML for exact state, but bring its palette, depth, materials, silhouettes, typography, spacing, feedback, and controls to the same finish as the generated bookends. Removing the generated background must not break the mechanic; removing the active-surface art direction must no longer leave the old graybox presentation intact.
+
+Review the complete lifecycle together: intro → active play → recoverable failure → success → outro. A polished first screen does not compensate for an unfinished board, control dock, feedback strip, success state, or completion screen.
+
+### 8.4 — Emil design-engineering motion pass
+
+Use the `emil-design-eng` skill after the visual hierarchy is coherent. Audit animation opportunities across every state and record a Before/After/Why table. For each selected motion, state its purpose: feedback, spatial consistency, state explanation, or preventing a jarring transition.
+
+Appropriate motion includes responsive press states, source/destination explanation, direct manipulation consequences, meaningful scene/state transitions, and a rare completion moment. Do not animate merely to signal polish. Keep frequent controls immediate; use strong purposeful easing and short durations; never let timing, animation completion, or motor precision become the winning skill. Provide a reduced-motion path that preserves every final state, trace, label, focus move, and consequence.
+
+### 8.5 — Polish acceptance review
+
+Before final technical validation, capture and review desktop and 320 px states for intro, active play, one failure, success, and outro. The reviewer must answer all of the following:
+
+1. Does any screen still visibly read as the old graybox with decoration added around it?
+2. Are intro, active play, success, and outro unmistakably one product and one world?
+3. Are all generated assets visible at useful scale and performing a narrative or recognition job?
+4. Are exact mathematical state and controls still authored, inspectable, and accessible?
+5. Does motion improve comprehension or feedback without delaying repeated actions?
+
+Any “yes” to question 1 or “no” to questions 2–5 returns the exercise to this phase. Build a visual-structure regression for the specific stale artifact when a stable DOM seam exists.
+
+### Empirical correction recorded from EX-0004
+
+EX-0004 demonstrated that passing checks, generating a high-quality image, and adding purposeful animation do not establish production polish. Its first polish slice constrained the generated pond art to a dark intro backing layer and retained the graybox's flat SVG poster, framed board, boxed unit label, repeated legend, and prototype-like grid. The result improved every component locally while preserving the old composition globally. The corrected rule is: **polish replaces the graybox's pupil-facing surface architecture; it does not improve each graybox surface in place.**
 
 ## Phase 9 — Final technical validation
 
@@ -381,6 +448,8 @@ The next checkpoint—and later sequence—starts by searching this accumulated 
 - Mechanic expansion approval is scoped to one recorded catalog exercise, sequence, and checkpoint.
 - Source inspiration never authorizes copied wording, branding, artwork, tasks, values, or recognizable screens.
 - Generated imagery never carries unverified exact mathematical information.
+- An authorized production-polish round replaces every pupil-facing graybox surface and includes coherent generated intro/outro narrative bookends; it is not satisfied by adding art and animation around the old composition.
+- The active mechanic remains authored and inspectable while matching the bookends' world, hierarchy, and finish.
 - Technical checks cannot approve mechanics or claim pupil learning.
 - No owner gate can be inferred.
 
@@ -393,7 +462,7 @@ The next checkpoint—and later sequence—starts by searching this accumulated 
 - Autonomous bulk prototype generation.
 - An exhaustive catalog of games, tasks, or platforms.
 - A vault maturity/certification bureaucracy.
-- Mandatory motion or generated artwork.
+- Motion or generated artwork before mechanic approval, or decorative motion without a named purpose. Production-polish rounds are the scoped exception: they require ImageGen intro/outro bookends and an Emil motion audit after owner authorization.
 - Pupil-validation or mastery claims from owner or automated testing alone.
 
 ## Success and review evidence
@@ -405,7 +474,9 @@ The workflow is functioning when:
 - the learning-operation → player-action → system-evidence mapping is concrete and falsifiable;
 - rejected catalog grayboxes remain honest catalog/application records rather than disappearing or acquiring false approval;
 - one or more candidates may be tested without a quota driving weak alternatives;
-- no catalog exercise expands before its scoped recorded owner phrase;
+- no catalog exercise expands before scoped natural-language owner approval;
+- a production-polished exercise no longer exposes its prior graybox surface architecture;
+- intro, active play, failure, success, and outro read as one coherent world, with EX-0002/EX-0003 as the validated reference track;
 - later work reuses research and application records instead of repeating it;
 - completed exercises pass final technical validation;
 - owner review no longer discovers only after implementation that the game teaches different mathematics from the brief.
