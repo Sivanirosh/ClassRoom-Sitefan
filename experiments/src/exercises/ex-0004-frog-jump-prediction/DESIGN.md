@@ -8,6 +8,7 @@
 - **Owner design direction:** tutorial taps followed by integer prediction and automatic resolution; a true square unit grid; horizontal then vertical orthogonal transfer; and a mandatory two-unit obstacle leap.
 - **Owner implementation response:** exact wording `implement the graybox now`; normalized disposition `approve disposable bridge graybox`; recorded 2026-07-17.
 - **Current authority:** the validated replacement mechanic plus the pond-board UI/art expansion and final animation/image-generation polish, followed by Issue Slice `ex-0004-remove-graybox-artifact` authorizing a presentation-only replacement of the remaining layered graybox. This does not approve a MES-02 learning contract, mechanic expansion, efficacy claims, promotion, or unrelated scope.
+- **Locked intro image:** owner approved `assets/pond-garden-intro.webp` as perfect and locked it on 2026-07-18. Source digest: `sha256:49db4ae90b24ff78b6c5e3c0361615af5735477548c67f4979211116cd857e85`. Do not regenerate, replace, or alter its pixels without a new explicit owner decision; the adjacent provenance record carries the complete change rule.
 
 The integer prediction is a deliberately scoped bridge hypothesis. It is not retroactively added to MES-01’s behavioral-only evidence contract.
 
@@ -27,15 +28,37 @@ The prior pass added polish in layers without replacing the original prototype h
 
 The replacement uses one continuous atmosphere while keeping authored mathematics sovereign:
 
-- the intro is a full-bleed, bright rendering of the committed unbranded pond WebP with the title, explanation, and start action integrated through a light cream readability gradient; there is no duplicate poster, internal identifier, diagnostic copy, unit badge, dark mask, logo, or title treatment copied from a source;
+- the intro is a full-bleed, bright rendering of the dedicated unbranded `pond-garden-intro.webp` bookend with the title, explanation, and start action integrated through a light cream readability gradient; there is no duplicate poster, internal identifier, diagnostic copy, unit badge, dark mask, logo, or title treatment copied from a source;
 - the active state uses a restrained text HUD and a desktop two-column composition, collapsing to one compact flow at narrow widths; title, board, direct frog control or prediction input, status, and retry are no longer independent graybox cards;
 - the same local WebP supplies blurred, cropped color and texture behind the page and exact board. The active board layer uses a 9px blur, celadon wash, and top-biased crop, so koi/foliage/water color reads as painterly atmosphere while the image’s perspective tile lines cannot function as a second mathematical grid;
-- the success map uses the same decorative backing and the complete state reuses the same pond atmosphere, so feedback does not switch to a separate prototype or flat poster;
+- per-round success keeps the same decorative active-world backing and exact authored trace; final completion changes to the distinct unbranded `pond-garden-outro.webp` bookend, preserving the same garden journey while providing real narrative closure rather than reusing the intro image;
 - the only playable geometry remains inspectable HTML/SVG. The decorative image has empty alt text, `aria-hidden="true"`, no controls or state, and deleting it cannot alter a prompt, answer, endpoint, trace, discrepancy, obstacle, outcome, or completion;
 - a single in-world 10-unit bracket labelled `1 saut` provides the visible unit cue. Its accessible label states that one square side equals one unit-jump; the former boxed equation and repeated bottom legend are gone;
 - jade dimensional frog forms, warm dimensional endpoints, retained landing rings, gold ordinary traces, a wider dashed persimmon double trace, labelled discrepancy, and the stationary orange obstacle preserve redundant non-color meaning.
 
-The generated asset remains bundled locally. No remote request, external dependency, copied board shape, branded/reference character, recognizable source composition, logo, trademark, watermark, or image-authored mathematical state was introduced.
+All generated assets remain bundled locally with adjacent provenance records. No remote request, external dependency, copied board shape, branded/reference character, recognizable source composition, logo, trademark, watermark, or image-authored mathematical state was introduced.
+
+### Reference-track production-polish correction
+
+The successful EX-0002/EX-0003 track is used as a division of responsibilities, not as an art style or layout to copy:
+
+1. generated art owns a coherent, replaceable narrative intro and outro;
+2. HTML/CSS/SVG own every title, control, prompt, quantity, endpoint, trace, outcome, and exact mathematical relation;
+3. the active surface is designed as the same world rather than a preserved graybox placed over a poster;
+4. motion explains action, consequence, and state changes without becoming an input skill.
+
+The first replacement slice corrected the active hierarchy but still reused one atmosphere for both bookends. ImageGen assets `ig_05319fa5252b745a016a5ac3bc7f5c8191ad4856fd89c427b5` and `ig_0a2ceff730b7c824016a5ac45fd0208191afed2a73c2b9621b` now provide distinct intro and completion scenes. The image pixels remain decorative and hidden from assistive technology; they cannot answer, validate, or execute a round.
+
+### Emil design-engineering audit
+
+| Before | After | Why |
+| --- | --- | --- |
+| One generated atmosphere reused as intro, active backing, and final completion | Dedicated intro and outro narrative bookends; the active board retains a separate blurred decorative atmosphere beneath exact SVG | State transitions now have spatial and narrative purpose instead of feeling like one static poster with copy changes |
+| Final view washed the reused image to near-white | Distinct warm completion art remains visible through a localized radial readability field | Preserve legibility without erasing the world or making completion feel unfinished |
+| Pupil-facing graybox frame/card hierarchy survived under added motion | One HUD, one active pond stage, unboxed control/status flow, and no duplicate poster/plaque/legend | Cohesion matters more than adding animated details to old surfaces |
+| Button feedback depended mainly on shadow/vertical movement | Existing targeted 150 ms transform, shadow, and color transitions plus a subtle `scale(.98)` press state are retained | Immediate tactile feedback; no `transition: all`, no sluggish easing, and no new input skill |
+| Frog/trace feedback risked decorative flourish | One-unit and forced two-unit hops differ in arc; traces, landing dots, discrepancy, and final state persist after motion | Motion explains distance, causality, and outcome rather than merely decorating the board |
+| Motion could compete with repeated play or reduced-motion preference | UI transitions remain under 300 ms; longer effects are rare explanatory feedback; reduced motion removes transforms/ripples while retaining authored evidence | Match frequency and purpose, and preserve equivalent state without timing dependence |
 
 ### Preserved render and interaction invariants
 

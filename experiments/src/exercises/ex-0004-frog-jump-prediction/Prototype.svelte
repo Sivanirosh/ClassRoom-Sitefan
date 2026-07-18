@@ -1,6 +1,8 @@
 <script lang="ts">
   import { onDestroy, tick } from 'svelte';
   import pondAtmosphere from './assets/pond-garden-atmosphere.webp';
+  import pondIntro from './assets/pond-garden-intro.webp';
+  import pondOutro from './assets/pond-garden-outro.webp';
 
   type View = 'intro' | 'active' | 'success' | 'complete';
   type Mode = 'tutorial' | 'prediction';
@@ -386,7 +388,7 @@
 
   {#if view === 'intro'}
     <section class="intro" aria-labelledby="intro-title" data-visual-intro>
-      <img class="generated-atmosphere" data-visual-role="pond-hero" src={pondAtmosphere} alt="" aria-hidden="true" />
+      <img class="generated-atmosphere" data-visual-role="pond-hero" src={pondIntro} alt="" aria-hidden="true" />
       <div class="intro-light" aria-hidden="true"></div>
       <div class="intro-copy">
         <p class="kicker">Prédire · bondir · atteindre</p>
@@ -431,6 +433,28 @@
                   <stop offset="0" stop-color="#edf3d8" stop-opacity=".52"></stop>
                   <stop offset="1" stop-color="#dce9d8" stop-opacity="0"></stop>
                 </radialGradient>
+                <linearGradient id={`rock-${scene.id}`} x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#bdc4ae"></stop>
+                  <stop offset=".55" stop-color="#718679"></stop>
+                  <stop offset="1" stop-color="#405f54"></stop>
+                </linearGradient>
+                <radialGradient id={`lily-${scene.id}`} cx="35%" cy="28%" r="78%">
+                  <stop offset="0" stop-color="#80a96e"></stop>
+                  <stop offset="1" stop-color="#3c745e"></stop>
+                </radialGradient>
+                <linearGradient id={`frog-green-${scene.id}`} x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#8ad98e"></stop>
+                  <stop offset=".52" stop-color="#45a968"></stop>
+                  <stop offset="1" stop-color="#237052"></stop>
+                </linearGradient>
+                <linearGradient id={`frog-orange-${scene.id}`} x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#ffc175"></stop>
+                  <stop offset=".5" stop-color="#e97946"></stop>
+                  <stop offset="1" stop-color="#a9442f"></stop>
+                </linearGradient>
+                <filter id={`pond-depth-${scene.id}`} x="-40%" y="-40%" width="180%" height="180%">
+                  <feDropShadow dx="0" dy="1.1" stdDeviation=".8" flood-color="#173f35" flood-opacity=".32"></feDropShadow>
+                </filter>
                 <pattern id={`unit-grid-${scene.id}`} width="10" height="10" patternUnits="userSpaceOnUse">
                   <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#2f6f65" stroke-opacity=".22" stroke-width=".72"></path>
                 </pattern>
@@ -438,6 +462,81 @@
 
               <rect class="pond-water" width="120" height="100" fill={`url(#pond-water-${scene.id})`}></rect>
               <rect class="pond-light" width="120" height="100" fill={`url(#pond-light-${scene.id})`}></rect>
+
+              <g class="pond-life" data-pond-decor aria-hidden="true">
+                <g class="koi-school">
+                  <g transform="translate(7 16)">
+                    <g class="koi-fish koi-a">
+                      <path class="koi-tail" d="M-4.4 0 C-7.4 -3 -8.5 -2.4 -7.1 0 C-8.5 2.4 -7.4 3 -4.4 0Z"></path>
+                      <ellipse class="koi-body" rx="4.8" ry="2.05"></ellipse>
+                      <path class="koi-patch" d="M-2.8-1.5 C-1-.4-.9.7.3 1.7 C1.8 1.1 2.5-.1 2.2-1.5 C.4-2-1.4-2-2.8-1.5Z"></path>
+                      <path class="koi-fin" d="M-.5 1.5 Q1.2 3 2.3 1.2 M-.8-1.5 Q.6-3 1.8-1.4"></path>
+                      <circle class="koi-eye" cx="3.2" cy="-.75" r=".32"></circle>
+                    </g>
+                  </g>
+                  <g transform="translate(98 37)">
+                    <g class="koi-fish koi-b">
+                      <g transform="scale(-1 1)">
+                        <path class="koi-tail" d="M-4.4 0 C-7.4 -3 -8.5 -2.4 -7.1 0 C-8.5 2.4 -7.4 3 -4.4 0Z"></path>
+                        <ellipse class="koi-body" rx="4.8" ry="2.05"></ellipse>
+                        <path class="koi-patch koi-patch-gold" d="M-2.8-1.5 C-1-.4-.9.7.3 1.7 C1.8 1.1 2.5-.1 2.2-1.5 C.4-2-1.4-2-2.8-1.5Z"></path>
+                        <path class="koi-fin" d="M-.5 1.5 Q1.2 3 2.3 1.2 M-.8-1.5 Q.6-3 1.8-1.4"></path>
+                        <circle class="koi-eye" cx="3.2" cy="-.75" r=".32"></circle>
+                      </g>
+                    </g>
+                  </g>
+                  <g transform="translate(22 89)">
+                    <g class="koi-fish koi-c">
+                      <path class="koi-tail" d="M-4.4 0 C-7.4 -3 -8.5 -2.4 -7.1 0 C-8.5 2.4 -7.4 3 -4.4 0Z"></path>
+                      <ellipse class="koi-body koi-body-gold" rx="4.8" ry="2.05"></ellipse>
+                      <path class="koi-patch koi-patch-cream" d="M-2.8-1.5 C-1-.4-.9.7.3 1.7 C1.8 1.1 2.5-.1 2.2-1.5 C.4-2-1.4-2-2.8-1.5Z"></path>
+                      <path class="koi-fin" d="M-.5 1.5 Q1.2 3 2.3 1.2 M-.8-1.5 Q.6-3 1.8-1.4"></path>
+                      <circle class="koi-eye" cx="3.2" cy="-.75" r=".32"></circle>
+                    </g>
+                  </g>
+                </g>
+
+                <g class="rock-cluster rocks-north" filter={`url(#pond-depth-${scene.id})`}>
+                  <ellipse cx="2.5" cy="5" rx="6.8" ry="5" fill={`url(#rock-${scene.id})`}></ellipse>
+                  <ellipse cx="10" cy="2.4" rx="7" ry="4.6" fill={`url(#rock-${scene.id})`}></ellipse>
+                  <path class="rock-highlight" d="M4 2 Q8-1 13 1"></path>
+                  <circle class="moss" cx="7.6" cy="2" r="1.6"></circle>
+                </g>
+                <g class="rock-cluster rocks-south" filter={`url(#pond-depth-${scene.id})`}>
+                  <ellipse cx="113" cy="97" rx="8.5" ry="5.5" fill={`url(#rock-${scene.id})`}></ellipse>
+                  <ellipse cx="120" cy="91" rx="6.7" ry="7.5" fill={`url(#rock-${scene.id})`}></ellipse>
+                  <path class="rock-highlight" d="M108 95 Q113 91 118 94"></path>
+                  <circle class="moss" cx="116" cy="92.5" r="1.8"></circle>
+                </g>
+
+                <g class="lily-cluster lily-south">
+                  <path class="lily-pad" fill={`url(#lily-${scene.id})`} d="M1 87 C1 80 8 77 14 81 C19 85 17 92 11 94 C5 96 1 92 1 87Z"></path>
+                  <path class="lily-cut" d="M9 86 L15 80"></path>
+                  <ellipse class="lily-pad small" cx="20" cy="94" rx="6" ry="3.7" fill={`url(#lily-${scene.id})`}></ellipse>
+                  <g class="lotus" transform="translate(8 82)">
+                    <path d="M0 2 C-4 0-3-3 0-1 C-1-5 2-5 2-1 C5-4 7-1 3 2 C2 4 1 4 0 2Z"></path>
+                    <circle r=".8"></circle>
+                  </g>
+                </g>
+                <g class="lily-cluster lily-north">
+                  <ellipse class="lily-pad" cx="112" cy="10" rx="8" ry="4.8" fill={`url(#lily-${scene.id})`}></ellipse>
+                  <path class="lily-cut" d="M112 10 L119 7"></path>
+                  <ellipse class="lily-pad small" cx="102" cy="5" rx="5.6" ry="3.2" fill={`url(#lily-${scene.id})`}></ellipse>
+                  <g class="lotus" transform="translate(111 8)">
+                    <path d="M0 2 C-4 0-3-3 0-1 C-1-5 2-5 2-1 C5-4 7-1 3 2 C2 4 1 4 0 2Z"></path>
+                    <circle r=".8"></circle>
+                  </g>
+                </g>
+
+                <g class="reeds" transform="translate(113 69)">
+                  <path d="M0 16 Q-2 6-1-2 M2 16 Q5 5 4-5 M4 16 Q9 8 10 0 M-2 16 Q-7 8-5 1"></path>
+                  <path class="reed-head" d="M-1-2 Q-2-5 0-7 Q2-5-1-2Z M4-5 Q3-8 5-10 Q7-7 4-5Z M10 0 Q10-3 12-4 Q13-1 10 0Z"></path>
+                </g>
+                <g class="floating-petals">
+                  <path d="M38 12 q3-2 4 1 q-2 3-4-1Z M87 84 q3-2 4 1 q-2 3-4-1Z M107 55 q2-2 3 0 q-1 3-3 0Z"></path>
+                </g>
+              </g>
+
               <rect class="grid-surface" width="120" height="100" fill={`url(#unit-grid-${scene.id})`}></rect>
               <line class="route-bed" x1={originPoint.x} y1={originPoint.y} x2={finishPoint.x} y2={finishPoint.y}></line>
               <line class="target-line" x1={originPoint.x} y1={originPoint.y} x2={finishPoint.x} y2={finishPoint.y}></line>
@@ -628,7 +727,7 @@
     </section>
   {:else}
     <section class="complete" aria-labelledby="complete-title" tabindex="-1" data-smoke-completion>
-      <img class="world-atmosphere" src={pondAtmosphere} alt="" aria-hidden="true" />
+      <img class="world-atmosphere outro-atmosphere" data-visual-role="pond-outro" src={pondOutro} alt="" aria-hidden="true" />
       <p class="kicker">Traversée terminée</p>
       <h1 id="complete-title">Les quatre rives sont reliées.</h1>
       <p>Tu as observé l’unité, prévu des sauts dans deux directions, puis composé un passage avec un saut double.</p>
@@ -1329,8 +1428,20 @@
     padding-inline: max(24px, calc((100vw - 720px) / 2));
   }
   .complete > :not(.world-atmosphere) { position: relative; z-index: 1; }
-  .complete::after { background: linear-gradient(90deg, rgba(243, 247, 231, .96), rgba(239, 245, 231, .72), rgba(239, 245, 231, .86)); }
-  .complete .world-atmosphere { opacity: .58; filter: saturate(.82) brightness(1.14); }
+  .complete::after {
+    background:
+      radial-gradient(circle at center, rgba(244, 247, 228, .93) 0 18%, rgba(241, 245, 226, .72) 40%, rgba(235, 241, 222, .22) 72%),
+      linear-gradient(0deg, rgba(232, 239, 220, .54), transparent 42%);
+  }
+  .complete .outro-atmosphere {
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-position: center 48%;
+    opacity: 1;
+    filter: saturate(.92) contrast(.96) brightness(1.02);
+    transform: none;
+  }
 
   @media (max-width: 820px) {
     .intro {

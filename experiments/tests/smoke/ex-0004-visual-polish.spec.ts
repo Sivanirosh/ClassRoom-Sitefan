@@ -1,5 +1,13 @@
+import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { expect, test, type Locator, type TestInfo } from '@playwright/test';
 import { createGuardedPage } from './guard';
+
+const lockedIntroPath = fileURLToPath(
+  new URL('../../src/exercises/ex-0004-frog-jump-prediction/assets/pond-garden-intro.webp', import.meta.url)
+);
+const lockedIntroSha256 = '49db4ae90b24ff78b6c5e3c0361615af5735477548c67f4979211116cd857e85';
 
 function baseUrlFor(testInfo: TestInfo): string {
   const baseUrl = testInfo.project.use.baseURL;
@@ -15,6 +23,11 @@ async function expectInsideViewport(locator: Locator, width: number, height: num
   expect(box!.x + box!.width).toBeLessThanOrEqual(width);
   expect(box!.y + box!.height).toBeLessThanOrEqual(height);
 }
+
+test('EX-0004 keeps the owner-locked intro artwork pixels', () => {
+  const digest = createHash('sha256').update(readFileSync(lockedIntroPath)).digest('hex');
+  expect(digest).toBe(lockedIntroSha256);
+});
 
 test('EX-0004 uses generated pond art as a cohesive hero and exact game world', async ({
   browser
@@ -54,6 +67,8 @@ test('EX-0004 uses generated pond art as a cohesive hero and exact game world', 
     expect(heroPresentation.opacity).toBeGreaterThanOrEqual(0.9);
     expect(heroPresentation.maskImage).toBe('none');
     expect(heroPresentation.naturalWidth).toBeGreaterThan(0);
+    const introSource = await hero.getAttribute('src');
+    expect(introSource).toContain('pond-garden-intro');
 
     await root.locator('[data-smoke-action="start"]').click();
 
@@ -119,6 +134,24 @@ test('EX-0004 uses generated pond art as a cohesive hero and exact game world', 
     await expect(successMap.locator('.completed-line')).toHaveCount(4);
     await expect(successMap.locator('.frog.arrived')).toBeVisible();
     await expect(successMap.locator('.garden-scenery')).toHaveCount(0);
+
+    await root.locator('[data-smoke-action="continue"]').click();
+    for (const prediction of ['5', '6', '5']) {
+      const input = root.locator('[data-smoke-input-value]');
+      await input.fill(prediction);
+      await input.press('Enter');
+      await expect(root).toHaveAttribute('data-smoke-state', 'success');
+      await root.locator('[data-smoke-action="continue"]').click();
+    }
+    const completion = root.locator('[data-smoke-completion]');
+    await expect(completion).toBeVisible();
+    const outro = completion.locator('[data-visual-role="pond-outro"]');
+    await expect(outro).toBeVisible();
+    await expect(outro).toHaveAttribute('alt', '');
+    await expect(outro).toHaveAttribute('aria-hidden', 'true');
+    const outroSource = await outro.getAttribute('src');
+    expect(outroSource).toContain('pond-garden-outro');
+    expect(outroSource).not.toBe(introSource);
     await guarded.assertClean();
   } finally {
     await guarded.close();
