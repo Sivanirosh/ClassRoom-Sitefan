@@ -1,0 +1,1258 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Brouillon structurel d’une feuille de route de mathématiques 8H dans le système HarmoS, alignée sur le PER Cycle 2.">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#172019">
+  <title>Mathématiques 8H · Feuille de route HarmoS</title>
+  <style>
+    :root {
+      --ink: #172019;
+      --ink-soft: #38433c;
+      --paper: #f4f1e8;
+      --paper-2: #ebe7db;
+      --white: #fffef9;
+      --line: #c9c5b8;
+      --line-dark: #7d837d;
+      --acid: #c9f24c;
+      --blue: #3157dc;
+      --coral: #e8664b;
+      --gold: #e4ad35;
+      --violet: #8268c9;
+      --teal: #178779;
+      --muted: #6c746e;
+      --numbers: #3157dc;
+      --operations: #e8664b;
+      --measurement: #d39a21;
+      --space: #8268c9;
+      --modeling: #178779;
+      --shadow: 0 22px 60px rgba(23, 32, 25, .12);
+      --radius: 16px;
+      --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      --sans: "Segoe UI Variable", "Segoe UI", Aptos, Arial, sans-serif;
+      --serif: Georgia, "Times New Roman", serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+    }
+    button, input { font: inherit; }
+    button { color: inherit; }
+    a { color: inherit; }
+    ::selection { background: var(--acid); color: var(--ink); }
+
+    .skip-link {
+      position: fixed;
+      z-index: 1000;
+      left: 16px;
+      top: 12px;
+      transform: translateY(-160%);
+      padding: 10px 14px;
+      background: var(--acid);
+      color: var(--ink);
+      border-radius: 6px;
+      font-weight: 800;
+    }
+    .skip-link:focus { transform: translateY(0); }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .hero {
+      position: relative;
+      min-height: 680px;
+      overflow: hidden;
+      background: var(--ink);
+      color: var(--white);
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: .24;
+      background-image:
+        linear-gradient(rgba(255,255,255,.09) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.09) 1px, transparent 1px);
+      background-size: 72px 72px;
+      mask-image: linear-gradient(to bottom, black, transparent 92%);
+    }
+    .hero-orbit {
+      position: absolute;
+      width: 590px;
+      height: 590px;
+      right: -120px;
+      top: 50px;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 50%;
+    }
+    .hero-orbit::before,
+    .hero-orbit::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.15);
+    }
+    .hero-orbit::before { inset: 95px; }
+    .hero-orbit::after { inset: 205px; background: var(--acid); border: 0; }
+    .orbit-dot {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      top: 82px;
+      left: 95px;
+      background: var(--coral);
+      border: 5px solid var(--ink);
+      box-shadow: 0 0 0 1px rgba(255,255,255,.55);
+      border-radius: 50%;
+    }
+    .orbit-label {
+      position: absolute;
+      right: 92px;
+      top: 318px;
+      width: 120px;
+      color: var(--ink);
+      text-align: center;
+      font-family: var(--mono);
+      font-size: 10px;
+      line-height: 1.4;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      transform: rotate(-8deg);
+    }
+
+    .topbar,
+    .hero-inner,
+    main,
+    .footer-inner {
+      width: min(1500px, calc(100% - 64px));
+      margin-inline: auto;
+    }
+    .topbar {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 88px;
+      border-bottom: 1px solid rgba(255,255,255,.18);
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 850;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .brand-mark {
+      display: grid;
+      grid-template-columns: repeat(2, 8px);
+      gap: 3px;
+      padding: 8px;
+      border: 1px solid rgba(255,255,255,.45);
+      border-radius: 50%;
+    }
+    .brand-mark i { width: 8px; height: 8px; border-radius: 50%; background: var(--acid); }
+    .brand-mark i:nth-child(2) { background: var(--coral); }
+    .brand-mark i:nth-child(3) { background: var(--violet); }
+    .brand-mark i:nth-child(4) { background: var(--blue); }
+    .top-actions { display: flex; align-items: center; gap: 10px; }
+    .snapshot {
+      padding: 9px 12px;
+      border: 1px solid rgba(255,255,255,.28);
+      border-radius: 999px;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .icon-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 40px;
+      padding: 0 14px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--white);
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .icon-button:hover { background: var(--acid); }
+    .icon-button svg { width: 16px; height: 16px; }
+
+    .hero-inner { position: relative; z-index: 1; padding: 92px 0 44px; }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(320px, .65fr);
+      gap: clamp(48px, 8vw, 130px);
+      align-items: end;
+    }
+    .kicker,
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+    .kicker::before,
+    .eyebrow::before { content: ""; width: 34px; height: 2px; background: currentColor; }
+    .kicker { color: var(--acid); }
+    h1 {
+      max-width: 920px;
+      margin: 24px 0 24px;
+      font-family: var(--serif);
+      font-size: clamp(54px, 6.5vw, 104px);
+      font-weight: 400;
+      letter-spacing: -.055em;
+      line-height: .92;
+    }
+    h1 em { color: var(--acid); font-style: italic; }
+    .hero-lede {
+      max-width: 690px;
+      margin: 0;
+      color: rgba(255,255,255,.72);
+      font-size: clamp(16px, 1.6vw, 20px);
+      line-height: 1.6;
+    }
+    .hero-links { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 30px; }
+    .hero-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border: 1px solid rgba(255,255,255,.28);
+      border-radius: 999px;
+      color: var(--white);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .hero-link:hover { border-color: var(--acid); color: var(--acid); }
+    .hero-link span { font-size: 16px; }
+
+    .current-card {
+      position: relative;
+      overflow: hidden;
+      padding: 26px;
+      background: var(--white);
+      color: var(--ink);
+      border-radius: 22px;
+      box-shadow: 0 24px 70px rgba(0,0,0,.22);
+    }
+    .current-card::after {
+      content: "02";
+      position: absolute;
+      right: -8px;
+      bottom: -32px;
+      color: rgba(23,32,25,.06);
+      font-family: var(--serif);
+      font-size: 158px;
+      line-height: 1;
+    }
+    .current-top { display: flex; justify-content: space-between; gap: 20px; align-items: flex-start; }
+    .current-label { font-family: var(--mono); font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 10px;
+      background: #fff3cf;
+      border: 1px solid #d9b55a;
+      border-radius: 999px;
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .status-badge::before { content: ""; width: 7px; height: 7px; background: var(--gold); border-radius: 50%; }
+    .current-card h2 { position: relative; z-index: 1; margin: 32px 0 12px; font-size: 27px; line-height: 1.12; letter-spacing: -.025em; }
+    .current-card p { position: relative; z-index: 1; margin: 0; color: var(--ink-soft); line-height: 1.55; }
+    .current-next {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+    }
+    .current-next strong { font-size: 13px; }
+    .pilot-token { padding: 9px 11px; background: var(--acid); border-radius: 6px; font-family: var(--mono); font-size: 11px; font-weight: 900; }
+
+    .hero-metrics {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      margin-top: 78px;
+      border-top: 1px solid rgba(255,255,255,.18);
+      border-left: 1px solid rgba(255,255,255,.18);
+    }
+    .hero-metric { min-height: 112px; padding: 20px; border-right: 1px solid rgba(255,255,255,.18); }
+    .hero-metric b { display: block; color: var(--acid); font-family: var(--serif); font-size: 36px; font-weight: 400; line-height: 1; }
+    .hero-metric span { display: block; margin-top: 9px; color: rgba(255,255,255,.62); font-family: var(--mono); font-size: 9px; font-weight: 800; letter-spacing: .09em; line-height: 1.4; text-transform: uppercase; }
+
+    .section-nav {
+      position: sticky;
+      z-index: 20;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 62px;
+      margin: 0 calc(50% - 50vw);
+      padding: 0 max(32px, calc((100vw - 1500px) / 2));
+      background: rgba(244,241,232,.94);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(14px);
+    }
+    .section-nav strong { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
+    .section-nav-links { display: flex; align-items: center; gap: 24px; }
+    .section-nav a { text-decoration: none; color: var(--ink-soft); font-size: 12px; font-weight: 750; }
+    .section-nav a:hover { color: var(--blue); }
+
+    section { scroll-margin-top: 84px; padding: 108px 0; border-bottom: 1px solid var(--line); }
+    .section-heading {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, 430px);
+      gap: 70px;
+      align-items: end;
+      margin-bottom: 48px;
+    }
+    .eyebrow { color: var(--blue); margin-bottom: 16px; }
+    .section-heading h2 {
+      max-width: 880px;
+      margin: 0;
+      font-family: var(--serif);
+      font-size: clamp(40px, 5vw, 70px);
+      font-weight: 400;
+      letter-spacing: -.045em;
+      line-height: .98;
+    }
+    .section-heading > p { margin: 0; color: var(--ink-soft); font-size: 16px; line-height: 1.65; }
+
+    .runway-wrap { overflow-x: auto; padding: 20px 0 32px; scrollbar-color: var(--ink) var(--paper-2); }
+    .runway {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(8, minmax(210px, 1fr));
+      gap: 12px;
+      min-width: 1780px;
+      padding-top: 28px;
+    }
+    .runway::before { content: ""; position: absolute; top: 14px; left: 24px; right: 24px; height: 2px; background: var(--line-dark); }
+    .stage {
+      position: relative;
+      min-height: 250px;
+      padding: 24px 20px 20px;
+      background: rgba(255,254,249,.58);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+    .stage::before { content: ""; position: absolute; top: -21px; left: 20px; width: 13px; height: 13px; background: var(--paper); border: 3px solid var(--line-dark); border-radius: 50%; }
+    .stage[data-status="done"] { background: #e7f0e7; border-color: #a9c3ab; }
+    .stage[data-status="done"]::before { background: var(--teal); border-color: var(--teal); }
+    .stage[data-status="current"] { background: var(--ink); color: var(--white); border-color: var(--ink); transform: translateY(-12px); box-shadow: var(--shadow); }
+    .stage[data-status="current"]::before { top: -9px; background: var(--acid); border-color: var(--acid); box-shadow: 0 0 0 7px var(--paper); }
+    .stage[data-status="locked"] { background: var(--paper-2); color: #656b66; }
+    .stage-number { display: flex; justify-content: space-between; align-items: center; font-family: var(--mono); font-size: 11px; font-weight: 900; letter-spacing: .1em; }
+    .stage-state { padding: 5px 7px; border: 1px solid currentColor; border-radius: 999px; font-size: 8px; text-transform: uppercase; opacity: .72; }
+    .stage[data-status="current"] .stage-state { color: var(--acid); opacity: 1; }
+    .stage h3 { margin: 32px 0 12px; font-size: 21px; letter-spacing: -.025em; line-height: 1.12; }
+    .stage p { margin: 0; font-size: 13px; line-height: 1.55; opacity: .78; }
+    .stage-output { position: absolute; left: 20px; right: 20px; bottom: 18px; padding-top: 12px; border-top: 1px solid currentColor; font-family: var(--mono); font-size: 9px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; opacity: .58; }
+
+    .decision-memory {
+      display: grid;
+      grid-template-columns: 180px minmax(0, 1fr) minmax(280px, .65fr);
+      gap: 32px;
+      align-items: start;
+      margin-top: 34px;
+      padding: 28px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-left: 7px solid var(--coral);
+      border-radius: 4px var(--radius) var(--radius) 4px;
+    }
+    .decision-memory .label { font-family: var(--mono); font-size: 10px; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; color: var(--coral); }
+    .decision-memory strong { font-family: var(--serif); font-size: 24px; font-weight: 400; line-height: 1.25; }
+    .decision-memory p { margin: 0; color: var(--ink-soft); font-size: 13px; line-height: 1.6; }
+
+    #map { padding-bottom: 82px; }
+    .map-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-bottom: 22px;
+      padding: 12px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+    }
+    .filters { display: flex; gap: 7px; flex-wrap: wrap; }
+    .filter-button {
+      min-height: 38px;
+      padding: 0 13px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: transparent;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 800;
+    }
+    .filter-button::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 7px; background: var(--filter-color, var(--ink)); border-radius: 50%; }
+    .filter-button:hover { border-color: var(--ink); }
+    .filter-button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--white); }
+    .search-wrap { position: relative; display: flex; align-items: center; min-width: min(100%, 310px); }
+    .search-wrap svg { position: absolute; left: 13px; width: 16px; height: 16px; color: var(--muted); pointer-events: none; }
+    .search-wrap input { width: 100%; min-height: 40px; padding: 0 16px 0 40px; background: var(--paper); border: 1px solid var(--line); border-radius: 9px; color: var(--ink); outline: none; }
+    .search-wrap input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(49,87,220,.14); }
+    .map-meta { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin: 0 2px 16px; color: var(--muted); font-family: var(--mono); font-size: 10px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+    .map-meta .hint { text-transform: none; letter-spacing: 0; font-family: var(--sans); font-weight: 650; }
+
+    .roadmap-frame { position: relative; overflow: hidden; background: var(--white); border: 1px solid var(--line-dark); border-radius: 18px; box-shadow: 0 14px 40px rgba(23,32,25,.08); }
+    .roadmap-scroll { overflow-x: auto; scrollbar-color: var(--ink) var(--paper-2); }
+    .timeline-grid { display: grid; grid-template-columns: 178px repeat(5, minmax(205px, 1fr)); min-width: 1240px; }
+    .corner-cell,
+    .phase-head {
+      position: sticky;
+      top: 0;
+      z-index: 4;
+      min-height: 112px;
+      padding: 17px;
+      background: var(--ink);
+      color: var(--white);
+      border-right: 1px solid rgba(255,255,255,.17);
+    }
+    .corner-cell { left: 0; z-index: 6; display: flex; flex-direction: column; justify-content: space-between; }
+    .corner-cell span { font-family: var(--mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--acid); }
+    .corner-cell strong { max-width: 100px; font-size: 16px; line-height: 1.12; }
+    .phase-head b { display: block; color: var(--acid); font-family: var(--mono); font-size: 11px; letter-spacing: .1em; }
+    .phase-head strong { display: block; margin: 9px 0 7px; font-size: 15px; line-height: 1.15; }
+    .phase-head span { color: rgba(255,255,255,.55); font-size: 10px; }
+    .track-label {
+      position: sticky;
+      z-index: 3;
+      left: 0;
+      min-height: 166px;
+      padding: 18px 16px;
+      background: #eeeadf;
+      border-top: 1px solid var(--line);
+      border-right: 1px solid var(--line-dark);
+    }
+    .track-label::before { content: ""; display: block; width: 29px; height: 5px; margin-bottom: 17px; background: var(--track-color, var(--ink)); border-radius: 999px; }
+    .track-label b { display: block; font-size: 14px; line-height: 1.2; }
+    .track-label span { display: block; margin-top: 9px; color: var(--muted); font-family: var(--mono); font-size: 9px; line-height: 1.4; }
+    .phase-cell { min-height: 166px; padding: 10px; background: rgba(255,254,249,.72); border-top: 1px solid var(--line); border-right: 1px dashed var(--line); }
+    .phase-cell:nth-child(odd) { background: rgba(235,231,219,.42); }
+    .sequence-stack { display: grid; gap: 8px; }
+    .sequence-card {
+      position: relative;
+      width: 100%;
+      min-height: 116px;
+      padding: 13px;
+      overflow: hidden;
+      text-align: left;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-top: 5px solid var(--strand-color);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+    .sequence-card:hover { transform: translateY(-2px); border-color: var(--strand-color); box-shadow: 0 9px 20px rgba(23,32,25,.12); }
+    .sequence-card:focus-visible { outline: 3px solid var(--acid); outline-offset: 2px; }
+    .sequence-card.is-pilot { background: var(--ink); color: var(--white); border-color: var(--ink); border-top-color: var(--acid); }
+    .sequence-card.is-pilot::after { content: "PILOT"; position: absolute; right: -24px; top: 12px; width: 86px; padding: 3px 0; background: var(--acid); color: var(--ink); text-align: center; font-family: var(--mono); font-size: 8px; font-weight: 900; letter-spacing: .08em; transform: rotate(42deg); }
+    .sequence-top { display: flex; justify-content: space-between; gap: 18px; margin-bottom: 10px; color: var(--muted); font-family: var(--mono); font-size: 9px; font-weight: 900; letter-spacing: .06em; }
+    .is-pilot .sequence-top { color: rgba(255,255,255,.58); }
+    .sequence-card strong { display: block; max-width: 90%; font-size: 14px; line-height: 1.18; }
+    .sequence-card small { display: block; margin-top: 10px; color: var(--muted); font-size: 10px; }
+    .is-pilot small { color: var(--acid); }
+    .sequence-unit { display: grid; gap: 7px; }
+    .prototype-links { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+    .prototype-link {
+      display: flex;
+      min-height: 38px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      padding: 7px 8px;
+      border: 1px solid var(--ink);
+      border-radius: 7px;
+      color: var(--ink);
+      background: var(--acid);
+      font-size: 9px;
+      font-weight: 900;
+      line-height: 1.2;
+      text-decoration: none;
+    }
+    .prototype-link:last-child { color: var(--white); background: var(--blue); border-color: var(--blue); }
+    .prototype-link:hover { transform: translateY(-1px); box-shadow: 0 4px 0 rgba(23,32,25,.16); }
+    .baseline-card { height: 100%; min-height: 142px; padding: 13px; background: #e9edda; border: 1px solid #b8c19b; border-radius: 10px; }
+    .baseline-card > span { display: block; margin-bottom: 10px; font-family: var(--mono); font-size: 9px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; color: #68724a; }
+    .probe-list { display: flex; flex-wrap: wrap; gap: 6px; }
+    .probe { padding: 7px 8px; background: var(--white); border: 1px solid #c7ceb2; border-radius: 7px; font-size: 10px; font-weight: 800; }
+    .empty-cell { display: flex; align-items: center; justify-content: center; height: 100%; min-height: 142px; color: #afb2ad; font-family: var(--mono); font-size: 9px; text-transform: uppercase; }
+    .transverse { display: flex; height: 100%; min-height: 142px; align-items: center; color: var(--modeling); font-family: var(--mono); font-size: 9px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+    .transverse::before { content: ""; flex: 1; height: 2px; margin-right: 9px; background: repeating-linear-gradient(90deg, var(--modeling) 0 8px, transparent 8px 13px); }
+    .convergence-card { min-height: 104px; padding: 12px; background: #edf5f2; border: 1px solid #aecdc5; border-radius: 10px; }
+    .convergence-card span { font-family: var(--mono); font-size: 9px; font-weight: 900; color: var(--teal); }
+    .convergence-card strong { display: block; margin: 8px 0; font-size: 13px; line-height: 1.2; }
+    .convergence-card small { color: var(--muted); font-size: 9px; line-height: 1.3; }
+    .no-results { display: none; padding: 70px 30px; text-align: center; }
+    .no-results strong { display: block; font-family: var(--serif); font-size: 28px; font-weight: 400; }
+    .no-results span { display: block; margin-top: 10px; color: var(--muted); }
+    .map-footnote { display: flex; justify-content: space-between; gap: 28px; margin-top: 18px; color: var(--muted); font-size: 12px; line-height: 1.55; }
+    .map-footnote strong { color: var(--ink); }
+
+    .gate-grid { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line-dark); border-left: 1px solid var(--line-dark); }
+    .gate-card { min-height: 330px; padding: 26px; background: rgba(255,254,249,.55); border-right: 1px solid var(--line-dark); border-bottom: 1px solid var(--line-dark); }
+    .gate-card:nth-child(2), .gate-card:nth-child(4) { background: var(--white); }
+    .gate-index { display: flex; align-items: center; justify-content: space-between; font-family: var(--mono); font-size: 10px; font-weight: 900; letter-spacing: .1em; }
+    .gate-symbol { display: grid; place-items: center; width: 42px; height: 42px; background: var(--gate-color); border-radius: 50%; color: var(--white); font-family: var(--serif); font-size: 24px; }
+    .gate-card h3 { margin: 62px 0 14px; font-family: var(--serif); font-size: 29px; font-weight: 400; letter-spacing: -.025em; line-height: 1.05; }
+    .gate-card p { margin: 0; color: var(--ink-soft); font-size: 13px; line-height: 1.65; }
+    .gate-card .not { display: block; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-family: var(--mono); font-size: 9px; line-height: 1.5; text-transform: uppercase; }
+
+    .inventory-grid { display: grid; grid-template-columns: .85fr 1.15fr; gap: 20px; }
+    .inventory-panel { padding: 32px; background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); }
+    .inventory-panel.dark { background: var(--ink); color: var(--white); border-color: var(--ink); }
+    .panel-kicker { font-family: var(--mono); font-size: 10px; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; color: var(--blue); }
+    .dark .panel-kicker { color: var(--acid); }
+    .inventory-panel h3 { margin: 18px 0 8px; font-family: var(--serif); font-size: 34px; font-weight: 400; letter-spacing: -.03em; }
+    .inventory-panel > p { color: var(--muted); line-height: 1.6; }
+    .dark > p { color: rgba(255,255,255,.62); }
+    .inventory-list { display: grid; margin-top: 28px; border-top: 1px solid var(--line); }
+    .dark .inventory-list { border-color: rgba(255,255,255,.19); }
+    .inventory-row { display: grid; grid-template-columns: 78px 1fr; gap: 18px; padding: 17px 0; border-bottom: 1px solid var(--line); }
+    .dark .inventory-row { border-color: rgba(255,255,255,.19); }
+    .inventory-row b { font-family: var(--serif); font-size: 27px; font-weight: 400; color: var(--blue); }
+    .dark .inventory-row b { color: var(--acid); }
+    .inventory-row strong { display: block; font-size: 13px; }
+    .inventory-row span { display: block; margin-top: 5px; color: var(--muted); font-size: 11px; line-height: 1.45; }
+    .dark .inventory-row span { color: rgba(255,255,255,.54); }
+    .prototype-ticket { margin-top: 24px; padding: 18px; background: var(--acid); color: var(--ink); border-radius: 10px; }
+    .prototype-ticket + .prototype-ticket { margin-top: 10px; }
+    .prototype-ticket.pilot-a { background: #f7c95b; }
+    .prototype-ticket.pilot-b { color: var(--white); background: var(--blue); }
+    .prototype-ticket.pilot-b p { color: rgba(255,255,255,.7); }
+    .ticket-top { display: flex; justify-content: space-between; gap: 16px; font-family: var(--mono); font-size: 9px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+    .prototype-ticket h4 { margin: 15px 0 6px; font-size: 18px; }
+    .prototype-ticket p { margin: 0; color: #46511f; font-size: 11px; line-height: 1.5; }
+
+    footer { padding: 54px 0 70px; background: var(--paper-2); }
+    .footer-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: end; }
+    .footer-title { font-family: var(--serif); font-size: 26px; }
+    .source-links { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 18px; }
+    .source-links a { padding: 8px 10px; background: var(--white); border: 1px solid var(--line); border-radius: 7px; text-decoration: none; font-family: var(--mono); font-size: 9px; font-weight: 800; }
+    .source-links a:hover { border-color: var(--blue); color: var(--blue); }
+    .footer-note { color: var(--muted); font-size: 12px; line-height: 1.6; }
+    .footer-note strong { color: var(--ink); }
+
+    dialog {
+      width: min(720px, calc(100% - 32px));
+      max-height: min(880px, calc(100vh - 32px));
+      margin: 16px 16px 16px auto;
+      padding: 0;
+      overflow: hidden;
+      background: var(--paper);
+      border: 1px solid var(--ink);
+      border-radius: 20px;
+      box-shadow: -24px 0 80px rgba(23,32,25,.25);
+    }
+    dialog::backdrop { background: rgba(23,32,25,.58); backdrop-filter: blur(4px); }
+    dialog[open] { animation: slide-in .24s ease-out; }
+    @keyframes slide-in { from { opacity: 0; transform: translateX(24px); } }
+    .dialog-head { position: sticky; z-index: 2; top: 0; padding: 26px 72px 26px 28px; background: var(--ink); color: var(--white); }
+    .dialog-id { font-family: var(--mono); font-size: 10px; font-weight: 900; letter-spacing: .1em; color: var(--acid); }
+    .dialog-head h2 { margin: 10px 0 10px; font-family: var(--serif); font-size: 38px; font-weight: 400; letter-spacing: -.035em; line-height: 1; }
+    .dialog-head p { margin: 0; color: rgba(255,255,255,.65); font-size: 13px; line-height: 1.55; }
+    .dialog-close { position: absolute; right: 22px; top: 22px; display: grid; place-items: center; width: 38px; height: 38px; padding: 0; background: transparent; color: var(--white); border: 1px solid rgba(255,255,255,.32); border-radius: 50%; cursor: pointer; font-size: 21px; }
+    .dialog-close:hover { background: var(--acid); border-color: var(--acid); color: var(--ink); }
+    .dialog-body { max-height: calc(100vh - 205px); overflow-y: auto; padding: 26px 28px 42px; }
+    .dialog-facts { display: grid; grid-template-columns: repeat(3, 1fr); margin-bottom: 24px; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+    .dialog-fact { padding: 14px; background: var(--white); border-right: 1px solid var(--line); }
+    .dialog-fact:last-child { border: 0; }
+    .dialog-fact span { display: block; color: var(--muted); font-family: var(--mono); font-size: 8px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .dialog-fact strong { display: block; margin-top: 7px; font-size: 12px; }
+    .node-list { display: grid; gap: 10px; }
+    .node-list details { background: var(--white); border: 1px solid var(--line); border-radius: 11px; overflow: hidden; }
+    .node-list details[open] { border-color: var(--node-color, var(--blue)); }
+    .node-list summary { display: grid; grid-template-columns: 82px 1fr auto; gap: 12px; align-items: center; padding: 16px; cursor: pointer; list-style: none; }
+    .node-list summary::-webkit-details-marker { display: none; }
+    .node-id { font-family: var(--mono); font-size: 10px; font-weight: 900; color: var(--node-color, var(--blue)); }
+    .node-title { font-size: 13px; font-weight: 800; }
+    .node-toggle { font-size: 18px; transition: transform .18s; }
+    details[open] .node-toggle { transform: rotate(45deg); }
+    .node-content { padding: 0 16px 18px 110px; }
+    .node-content h4 { margin: 15px 0 5px; color: var(--muted); font-family: var(--mono); font-size: 8px; letter-spacing: .09em; text-transform: uppercase; }
+    .node-content p { margin: 0; color: var(--ink-soft); font-size: 12px; line-height: 1.6; }
+    .dependency-list { display: flex; gap: 6px; flex-wrap: wrap; }
+    .dependency-list span { padding: 5px 7px; background: var(--paper-2); border-radius: 5px; font-family: var(--mono); font-size: 9px; font-weight: 800; }
+    .endpoint-mark { padding: 4px 7px; background: #e9edda; border-radius: 999px; color: #5f692f; font-family: var(--mono); font-size: 8px; font-weight: 900; white-space: nowrap; }
+    .pilot-callout { display: flex; gap: 14px; margin-top: 22px; padding: 17px; background: var(--acid); border-radius: 10px; }
+    .pilot-callout b { font-family: var(--mono); font-size: 11px; }
+    .pilot-callout p { margin: 0; font-size: 12px; line-height: 1.5; }
+
+    @media (max-width: 1050px) {
+      .hero { min-height: auto; }
+      .hero-grid { grid-template-columns: 1fr; }
+      .current-card { max-width: 620px; }
+      .hero-orbit { opacity: .4; }
+      .hero-metrics { grid-template-columns: repeat(3, 1fr); }
+      .section-heading { grid-template-columns: 1fr; gap: 22px; }
+      .gate-grid { grid-template-columns: repeat(2, 1fr); }
+      .inventory-grid { grid-template-columns: 1fr; }
+      .decision-memory { grid-template-columns: 130px 1fr; }
+      .decision-memory p { grid-column: 2; }
+    }
+    @media (max-width: 720px) {
+      .topbar, .hero-inner, main, .footer-inner { width: min(100% - 32px, 1500px); }
+      .topbar { min-height: 72px; }
+      .brand span:last-child { display: none; }
+      .snapshot { display: none; }
+      .icon-button span { display: none; }
+      .hero-inner { padding-top: 64px; }
+      h1 { font-size: clamp(49px, 15vw, 72px); }
+      .hero-metrics { grid-template-columns: repeat(2, 1fr); margin-top: 52px; }
+      .hero-metric:last-child { grid-column: span 2; }
+      .section-nav { padding-inline: 16px; overflow-x: auto; }
+      .section-nav strong { display: none; }
+      .section-nav-links { min-width: max-content; }
+      section { padding: 78px 0; }
+      .section-heading h2 { font-size: 43px; }
+      .map-toolbar { align-items: stretch; }
+      .search-wrap { min-width: 100%; }
+      .map-meta { align-items: flex-start; }
+      .map-meta .hint { display: none; }
+      .map-footnote { display: block; }
+      .gate-grid { grid-template-columns: 1fr; }
+      .gate-card { min-height: 270px; }
+      .gate-card h3 { margin-top: 38px; }
+      .decision-memory { grid-template-columns: 1fr; }
+      .decision-memory p { grid-column: auto; }
+      .footer-inner { grid-template-columns: 1fr; gap: 32px; }
+      dialog { margin: 8px; width: calc(100% - 16px); max-height: calc(100vh - 16px); }
+      .dialog-head { padding-left: 20px; }
+      .dialog-body { padding: 20px; }
+      .dialog-facts { grid-template-columns: 1fr; }
+      .dialog-fact { border-right: 0; border-bottom: 1px solid var(--line); }
+      .node-list summary { grid-template-columns: 68px 1fr auto; }
+      .node-content { padding-left: 16px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation: none !important; transition: none !important; }
+    }
+    @media print {
+      @page { size: landscape; margin: 10mm; }
+      body { background: white; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .hero { min-height: auto; }
+      .hero-inner { padding: 45px 0 25px; }
+      .topbar, .section-nav, .hero-links, .icon-button, .map-toolbar, dialog { display: none !important; }
+      .hero-orbit { display: none; }
+      .hero-metrics { margin-top: 35px; }
+      main, .hero-inner, .footer-inner { width: 100%; }
+      section { padding: 36px 0; break-inside: avoid; }
+      .section-heading h2 { font-size: 42px; }
+      .runway-wrap, .roadmap-scroll { overflow: visible; }
+      .runway { min-width: 0; grid-template-columns: repeat(4, 1fr); }
+      .runway::before, .stage::before { display: none; }
+      .stage { min-height: 195px; transform: none !important; }
+      .timeline-grid { min-width: 0; grid-template-columns: 120px repeat(5, 1fr); }
+      .phase-head, .corner-cell, .track-label { position: static; }
+      .sequence-card { min-height: 92px; }
+      .gate-card { min-height: 250px; }
+      footer { padding: 30px 0; }
+    }
+
+
+    /* 8H roadmap additions */
+    .current-card::after { content: "8H"; right: -26px; bottom: -26px; font-size: 132px; }
+    .status-badge { background: #eee9ff; border-color: #a99ad8; }
+    .status-badge::before { background: var(--violet); }
+    .evidence-legend { display: flex; flex-wrap: wrap; gap: 7px; }
+    .evidence-chip { display: inline-flex; align-items: center; gap: 7px; min-height: 32px; padding: 0 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); color: var(--ink-soft); font-family: var(--mono); font-size: 8px; font-weight: 900; letter-spacing: .04em; text-transform: uppercase; }
+    .evidence-chip::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--chip, var(--muted)); }
+    .sequence-card[data-e8="true"]::before { content: "8H"; position: absolute; right: 10px; bottom: 10px; color: var(--strand-color); font-family: var(--mono); font-size: 9px; font-weight: 900; letter-spacing: .08em; }
+    .evidence-line { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .evidence-label { padding: 5px 7px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); background: var(--paper); font-family: var(--mono); font-size: 8px; font-weight: 900; }
+    .evidence-label.explicit { color: #4936a0; background: #eee9ff; border-color: #c4b8eb; }
+    .draft-note { margin: 18px 0 0; padding: 16px 18px; background: #fff3cf; border: 1px solid #d9b55a; border-radius: 10px; color: #66521e; font-size: 12px; line-height: 1.55; }
+    .source-card { margin-top: 24px; padding: 18px; background: var(--acid); color: var(--ink); border-radius: 10px; }
+    .source-card strong { display: block; font-size: 15px; }
+    .source-card span { display: block; margin-top: 7px; font-size: 11px; line-height: 1.5; }
+
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Aller à la feuille de route</a>
+
+  <header class="hero" id="top">
+    <div class="hero-orbit" aria-hidden="true">
+      <span class="orbit-dot"></span>
+      <span class="orbit-label">fin du cycle 2<br>sans raccourci</span>
+    </div>
+
+    <nav class="topbar" aria-label="Utilitaires de la feuille de route">
+      <a class="brand" href="#top" aria-label="Accueil de la feuille de route 8H">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span>Exercise Lab / Feuille de route 8H</span>
+      </a>
+      <div class="top-actions">
+        <span class="snapshot">Brouillon structurel · juillet 2026</span>
+        <button class="icon-button" id="printButton" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v7H6z"/><path d="M18 12h.01"/></svg>
+          <span>Imprimer</span>
+        </button>
+      </div>
+    </nav>
+
+    <div class="hero-inner">
+      <div class="hero-grid">
+        <div>
+          <div class="kicker">Mathématiques 8H · système HarmoS · PER Cycle 2</div>
+          <h1>Terminer le Cycle 2<br><em>avec des liens solides.</em></h1>
+          <p class="hero-lede">Une proposition de progression pour la dernière année du Cycle 2 : nombres rationnels, opérations, mesures, géométrie et modélisation sont organisés en dépendances observables plutôt qu’en chapitres isolés.</p>
+          <div class="hero-links">
+            <a class="hero-link" href="#runway">Statut du brouillon <span aria-hidden="true">↓</span></a>
+            <a class="hero-link" href="#map">Explorer la carte 8H <span aria-hidden="true">↘</span></a>
+          </div>
+        </div>
+
+        <aside class="current-card" aria-label="Statut actuel de la feuille de route">
+          <div class="current-top">
+            <span class="current-label">Gate actuel / architecture</span>
+            <span class="status-badge">À faire approuver</span>
+          </div>
+          <h2>Passer de la colonne officielle 7H–8H à une hypothèse annuelle auditable.</h2>
+          <p>Le PER fixe les progressions communes et les attentes de fin de cycle. Leur classification checkpoint par checkpoint et la distribution en cinq phases restent à auditer et à approuver.</p>
+          <div class="current-next">
+            <strong>Prochaine décision</strong>
+            <span class="pilot-token">valider les 15 séquences</span>
+          </div>
+        </aside>
+      </div>
+
+      <div class="hero-metrics" aria-label="Résumé de la feuille de route">
+        <div class="hero-metric"><b>15</b><span>séquences proposées</span></div>
+        <div class="hero-metric"><b>47</b><span>checkpoints observables</span></div>
+        <div class="hero-metric"><b>5</b><span>strands mathématiques</span></div>
+        <div class="hero-metric"><b>9</b><span>attentes 8e repérées · audit ouvert</span></div>
+        <div class="hero-metric"><b>0</b><span>prototype 8H autorisé</span></div>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <nav class="section-nav" aria-label="Sections de la feuille de route">
+      <strong>Mathématiques 8H · HarmoS</strong>
+      <div class="section-nav-links">
+        <a href="#runway">Statut</a>
+        <a href="#map">Carte</a>
+        <a href="#gates">Gates</a>
+        <a href="#inventory">Sources</a>
+      </div>
+    </nav>
+
+    <section id="runway">
+      <div class="section-heading">
+        <div>
+          <div class="eyebrow">01 / Statut du brouillon</div>
+          <h2>La source est officielle. L’ordre annuel ne l’est pas.</h2>
+        </div>
+        <p>Le PER v3.0 publie une colonne commune « 7e–8e années » et des attentes fondamentales à atteindre au plus tard à la fin du cycle. Cette page transforme ces éléments en architecture de travail, sans présenter ses phases comme une prescription.</p>
+      </div>
+
+      <div class="runway-wrap" tabindex="0" aria-label="Étapes horizontales de production de la feuille de route">
+        <div class="runway">
+          <article class="stage" data-status="done">
+            <div class="stage-number"><span>01</span><span class="stage-state">Établi</span></div>
+            <h3>Autorité</h3>
+            <p>CIIP, Plan d’études romand Cycle 2, version 3.0 d’août 2024.</p>
+            <div class="stage-output">Source · MSN 21–25</div>
+          </article>
+          <article class="stage" data-status="done">
+            <div class="stage-number"><span>02</span><span class="stage-state">Établi</span></div>
+            <h3>Frontière 8H</h3>
+            <p>8H clôt le Cycle 2; les attentes non millésimées sont donc des attentes de fin de cycle.</p>
+            <div class="stage-output">Règle · fin Cycle 2</div>
+          </article>
+          <article class="stage" data-status="current">
+            <div class="stage-number"><span>03</span><span class="stage-state">Maintenant</span></div>
+            <h3>Audit et architecture</h3>
+            <p>Auditer les classifications PER, puis vérifier les 15 séquences, 47 checkpoints, liens et convergences.</p>
+            <div class="stage-output">Livrable · carte à auditer</div>
+          </article>
+          <article class="stage" data-status="locked">
+            <div class="stage-number"><span>04</span><span class="stage-state">Gate</span></div>
+            <h3>Revue propriétaire</h3>
+            <p>Accepter, déplacer, fusionner ou retirer chaque séquence avant toute production.</p>
+            <div class="stage-output">Décision · structure</div>
+          </article>
+          <article class="stage" data-status="locked">
+            <div class="stage-number"><span>05</span><span class="stage-state">Après</span></div>
+            <h3>Spine de séquence</h3>
+            <p>Choisir une seule séquence et préciser ses handoffs, prérequis et routes de reprise.</p>
+            <div class="stage-output">Artifact · sequence spine</div>
+          </article>
+          <article class="stage" data-status="locked">
+            <div class="stage-number"><span>06</span><span class="stage-state">Après</span></div>
+            <h3>Contrat d’apprentissage</h3>
+            <p>Énoncer le cœur cognitif, la preuve de réussite et les limites du checkpoint actif.</p>
+            <div class="stage-output">Gate · apprentissage</div>
+          </article>
+          <article class="stage" data-status="locked">
+            <div class="stage-number"><span>07</span><span class="stage-state">Plus tard</span></div>
+            <h3>Fit sémantique</h3>
+            <p>Relier tâche établie, action du joueur et preuve système avant de choisir une mécanique.</p>
+            <div class="stage-output">Décision · candidat</div>
+          </article>
+          <article class="stage" data-status="locked">
+            <div class="stage-number"><span>08</span><span class="stage-state">Futur</span></div>
+            <h3>Graybox catalogue</h3>
+            <p>Un prototype distinct seulement après l’approbation bornée d’un candidat nommé.</p>
+            <div class="stage-output">Statut · non autorisé</div>
+          </article>
+        </div>
+      </div>
+
+      <aside class="decision-memory">
+        <span class="label">Frontière d’évidence</span>
+        <strong>« 7H–8H » décrit une bande de progression; « fin du cycle » décrit la destination 8H.</strong>
+        <p>Neuf attentes comportant un marqueur « (8e année) » ont été repérées dans le PDF et reliées provisoirement; un audit local au niveau des énoncés reste à produire. Elles ne sont pas les seules attentes pertinentes en 8H : les attentes non millésimées valent aussi pour la fin du Cycle 2. L’ordre par semaines reste hypothétique.</p>
+      </aside>
+    </section>
+
+    <section id="map">
+      <div class="section-heading">
+        <div>
+          <div class="eyebrow">02 / Carte conceptuelle 8H</div>
+          <h2>Cinq strands. Une année de convergence.</h2>
+        </div>
+        <p>Filtrez par strand ou cherchez un concept. Chaque carte ouvre des checkpoints, leurs liens d’acquis ou de coordination, un statut d’évidence provisoire et une piste d’activité non approuvée.</p>
+      </div>
+
+      <div class="map-toolbar" aria-label="Contrôles de la carte">
+        <div class="filters" role="group" aria-label="Filtrer par strand">
+          <button class="filter-button" type="button" data-filter="all" aria-pressed="true">Tous</button>
+          <button class="filter-button" type="button" data-filter="numbers" aria-pressed="false" style="--filter-color:var(--numbers)">Nombres</button>
+          <button class="filter-button" type="button" data-filter="operations" aria-pressed="false" style="--filter-color:var(--operations)">Opérations</button>
+          <button class="filter-button" type="button" data-filter="measurement" aria-pressed="false" style="--filter-color:var(--measurement)">Mesures</button>
+          <button class="filter-button" type="button" data-filter="space" aria-pressed="false" style="--filter-color:var(--space)">Espace</button>
+          <button class="filter-button" type="button" data-filter="modeling" aria-pressed="false" style="--filter-color:var(--modeling)">Modélisation</button>
+        </div>
+        <label class="search-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+          <span class="sr-only">Rechercher une séquence</span>
+          <input id="sequenceSearch" type="search" placeholder="Chercher une séquence ou un checkpoint…" autocomplete="off">
+        </label>
+      </div>
+
+      <div class="map-toolbar" aria-label="Légende des preuves">
+        <div class="evidence-legend">
+          <span class="evidence-chip" style="--chip:var(--violet)">marqueur explicite 8e</span>
+          <span class="evidence-chip" style="--chip:var(--blue)">progression 7H–8H</span>
+          <span class="evidence-chip" style="--chip:var(--teal)">attente de fin de cycle</span>
+          <span class="evidence-chip" style="--chip:var(--gold)">ordre de design</span>
+        </div>
+      </div>
+
+      <div class="map-meta">
+        <span id="resultCount" aria-live="polite">15 séquences affichées</span>
+        <span class="hint">Conseil : ouvrez une carte pour inspecter ses checkpoints</span>
+      </div>
+
+      <div class="roadmap-frame">
+        <div class="roadmap-scroll" id="roadmapScroll" tabindex="0" aria-label="Feuille de route mathématique horizontale">
+          <div class="timeline-grid" id="timelineGrid"></div>
+        </div>
+        <div class="no-results" id="noResults">
+          <strong>Aucune séquence ne correspond.</strong>
+          <span>Essayez un autre strand ou effacez la recherche.</span>
+        </div>
+      </div>
+
+      <div class="map-footnote">
+        <p><strong>Entrée 8H = diagnostic.</strong> Les sondes vérifient les acquis nécessaires issus de 7H; elles ne constituent pas une liste officielle de fin 7H.</p>
+        <p><strong>Pacing = proposition.</strong> Le PER ne prescrit pas les cinq phases ni leur ordre hebdomadaire. Un lien au sein d’une même phase signale une co-construction possible, pas un ordre strict.</p>
+      </div>
+    </section>
+
+    <section id="gates">
+      <div class="section-heading">
+        <div>
+          <div class="eyebrow">03 / Gates de qualité</div>
+          <h2>Ce que la carte doit prouver avant un prototype.</h2>
+        </div>
+        <p>Une belle visualisation ne suffit pas. Chaque décision doit rester traçable, observable, dépendante des acquis réels et honnête sur son autorité.</p>
+      </div>
+
+      <div class="gate-grid">
+        <article class="gate-card" style="--gate-color:var(--blue)">
+          <div class="gate-index"><span>GATE A</span><span class="gate-symbol" aria-hidden="true">§</span></div>
+          <h3>Traçabilité PER</h3>
+          <p>Chaque checkpoint indique sa zone source : progression 7H–8H, attente fondamentale de fin de cycle ou marqueur explicite 8e.</p>
+          <span class="not">Refusé · simple thème sans ancrage</span>
+        </article>
+        <article class="gate-card" style="--gate-color:var(--coral)">
+          <div class="gate-index"><span>GATE B</span><span class="gate-symbol" aria-hidden="true">◎</span></div>
+          <h3>Preuve observable</h3>
+          <p>Le checkpoint décrit ce que l’élève fait, explique, construit ou vérifie; pas seulement ce que l’activité « couvre ».</p>
+          <span class="not">Refusé · verbe vague « comprendre »</span>
+        </article>
+        <article class="gate-card" style="--gate-color:var(--teal)">
+          <div class="gate-index"><span>GATE C</span><span class="gate-symbol" aria-hidden="true">→</span></div>
+          <h3>Relations explicites</h3>
+          <p>Les liens distinguent acquis antérieurs, co-construction dans une phase et handoffs vers une phase suivante.</p>
+          <span class="not">Refusé · ordre décoratif ou lien ambigu</span>
+        </article>
+        <article class="gate-card" style="--gate-color:var(--violet)">
+          <div class="gate-index"><span>GATE D</span><span class="gate-symbol" aria-hidden="true">8</span></div>
+          <h3>Honnêteté annuelle</h3>
+          <p>La bande 7H–8H, les attentes de fin de cycle et les neuf marqueurs explicites 8e restent visibles et distincts.</p>
+          <span class="not">Refusé · transformer une hypothèse en prescription</span>
+        </article>
+      </div>
+    </section>
+
+    <section id="inventory">
+      <div class="section-heading">
+        <div>
+          <div class="eyebrow">04 / Source et réalité du dépôt</div>
+          <h2>Un brouillon substantiel, pas encore un record canonique.</h2>
+        </div>
+        <p>Cette page s’appuie sur le PER officiel et propose une architecture complète. Le dépôt ne contient toutefois pas encore de matrice de couverture ni de JSON canonique dédiés à la 8H.</p>
+      </div>
+
+      <div class="inventory-grid">
+        <article class="inventory-panel dark">
+          <div class="panel-kicker">Autorité normative</div>
+          <h3>PER Cycle 2 v3.0 · MSN 21–25.</h3>
+          <p>Mathématiques, pages imprimées 14–29 : Espace, Nombres, Opérations, Grandeurs et mesures, avec MSN 25 intégré comme modélisation.</p>
+          <div class="source-card">
+            <strong>CIIP · août 2024</strong>
+            <span>Version 3.0, basée sur une décision du 18 mars 2021. La colonne pertinente est « 7e–8e années ».</span>
+          </div>
+          <p class="draft-note"><strong>Copyright :</strong> cette page paraphrase et référence le PER. Elle ne reproduit pas ses tableaux ni de longs extraits.</p>
+        </article>
+
+        <article class="inventory-panel">
+          <div class="panel-kicker">État de travail</div>
+          <h3>Ce qui est établi, proposé et absent.</h3>
+          <div class="inventory-list">
+            <div class="inventory-row"><b>✓</b><div><strong>Source officielle identifiée</strong><span>Le document CIIP fixe les progressions 7H–8H et les attentes fondamentales du Cycle 2.</span></div></div>
+            <div class="inventory-row"><b>9</b><div><strong>Attentes 8e repérées, audit ouvert</strong><span>Elles concernent surtout les décimaux, la résolution de problèmes, les suites et les algorithmes; une matrice locale reste à produire.</span></div></div>
+            <div class="inventory-row"><b>?</b><div><strong>Architecture à approuver</strong><span>Les 15 séquences et leurs fenêtres sont des hypothèses de conception à discuter.</span></div></div>
+            <div class="inventory-row"><b>0</b><div><strong>Production autorisée</strong><span>Aucune spine, aucun contrat d’apprentissage et aucun prototype 8H ne sont approuvés par cette page.</span></div></div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <div class="footer-title">Piste de sources</div>
+        <div class="source-links">
+          <a href="https://per.ciip.ch/api/files/275">PER Cycle 2 v3.0 · PDF officiel</a>
+          <a href="curriculum/sources/src-per-0001.md">Audit local MSN 22</a>
+          <a href="curriculum/notes/msn-22-decimal-ordering-7h-8h.md">Note décimaux 7H–8H</a>
+          <a href="roadmap.html">Feuille de route 6H existante</a>
+          <a href="README.md">Exercise Lab README</a>
+        </div>
+      </div>
+      <p class="footer-note"><strong>Vue de planification, pas approbation.</strong> Cette page autonome date de juillet 2026. Elle propose une allocation 8H dans le cadre HarmoS/PER; la source normative reste le document CIIP lié ci-dessus.</p>
+    </div>
+  </footer>
+
+  <dialog id="sequenceDialog" aria-labelledby="dialogTitle">
+    <div class="dialog-head">
+      <span class="dialog-id" id="dialogId"></span>
+      <h2 id="dialogTitle"></h2>
+      <p id="dialogArc"></p>
+      <form method="dialog"><button class="dialog-close" type="submit" aria-label="Fermer le détail de la séquence">×</button></form>
+    </div>
+    <div class="dialog-body" id="dialogBody"></div>
+  </dialog>
+
+  <script>
+    const ROADMAP = {
+      phases: [
+        { id:'P0', label:'Diagnostic et reprises', weeks:'semaines 1–3', purpose:'Observer les acquis de 7H nécessaires sans transformer la sonde en seuil officiel.' },
+        { id:'P1', label:'Structures rationnelles', weeks:'semaines 4–10', purpose:'Stabiliser écritures, opérations, constructions et mesure avant les procédures complexes.' },
+        { id:'P2', label:'Relations et stratégies', weeks:'semaines 11–18', purpose:'Relier fractions, décimaux, divisibilité, calcul réfléchi et modélisation.' },
+        { id:'P3', label:'Procédures et invariants', weeks:'semaines 19–27', purpose:'Mettre en réseau algorithmes, grandeurs, solides et transformations.' },
+        { id:'P4', label:'Convergences de cycle', weeks:'semaines 28–36', purpose:'Mobiliser les strands dans des problèmes composites et consolider les attentes de fin du Cycle 2.' }
+      ],
+      strands: [
+        { id:'numbers', label:'Nombres rationnels', codes:'MSN 22 · MSN 25' },
+        { id:'operations', label:'Opérations et relations', codes:'MSN 23 · MSN 25' },
+        { id:'measurement', label:'Grandeurs et mesures', codes:'MSN 24 · MSN 25' },
+        { id:'space', label:'Espace et géométrie', codes:'MSN 21 · MSN 25' },
+        { id:'modeling', label:'Modélisation transversale', codes:'MSN 25 · MSN 21–24' }
+      ],
+      entry: [
+        {id:'EB8-N',label:'Valeur de position'}, {id:'EB8-O',label:'Sens des opérations'}, {id:'EB8-F',label:'Fractions simples'}, {id:'EB8-M',label:'Mesurer et estimer'}, {id:'EB8-G',label:'Propriétés géométriques'}, {id:'EB8-R',label:'Expliquer et vérifier'}
+      ],
+      sequences: [
+        { id:'SEQ-8N1', title:'Écritures et ordre des décimaux', strand:'numbers', phase:'P1', phaseLabel:'P1', arc:'Coordonner mot-nombre, écriture de position, décomposition, ordre et droite graduée.', nodes:[
+          {id:'N8-01',title:'Lire, écrire, décomposer et extraire',checkpoint:'Lit et écrit des naturels et des décimaux, décompose la partie décimale en dixièmes et centièmes, puis extrait le nombre entier de milliers, centaines ou dizaines.',deps:[],idea:'Tableau de position réversible : reconstruire un nombre depuis plusieurs écritures et détecter une position incohérente.',e8:3,evidence:'PER pp. 18–21',basis:'Marqueurs explicites 8e'},
+          {id:'N8-02',title:'Comparer et intercaler des décimaux',checkpoint:'Compare, ordonne, encadre et intercale des décimaux en justifiant le premier rang décisif.',deps:['N8-01'],idea:'Intervalle sous tension : fabriquer un nombre entre deux bornes malgré des zéros et longueurs d’écriture trompeurs.',e8:1,evidence:'PER pp. 18–19',basis:'Marqueur explicite 8e'},
+          {id:'N8-03',title:'Lire une droite graduée',checkpoint:'Place et lit des nombres ayant au plus une décimale sur une droite numérique graduée.',deps:['N8-02'],idea:'Zoom gradué : sélectionner l’intervalle et la subdivision nécessaires avant de poser le point.',e8:0,evidence:'PER pp. 18–19',basis:'Attente de fin de cycle · non millésimée'}
+        ]},
+        { id:'SEQ-8N2', title:'Fractions, décimaux et équivalences', strand:'numbers', phase:'P2', phaseLabel:'P2', arc:'Passer de la part d’une quantité à plusieurs écritures du même nombre.', nodes:[
+          {id:'N8-04',title:'Construire des écritures équivalentes',checkpoint:'Relie une fraction simple, une écriture décimale et une décomposition sans changer la quantité.',deps:['N8-01'],idea:'Ponts d’écriture : compléter seulement les transformations qui conservent exactement la valeur.',e8:0,evidence:'PER pp. 18–21',basis:'Progression 7H–8H · fin de cycle'},
+          {id:'N8-05',title:'Comparer des fractions accessibles',checkpoint:'Compare des fractions unitaires ou de même dénominateur à l’aide d’un modèle et d’une droite.',deps:['N8-03','N8-04'],idea:'Course des parts : choisir une représentation qui rend la comparaison décisive, puis argumenter.',e8:0,evidence:'PER pp. 18–19',basis:'Progression 7H–8H'},
+          {id:'N8-06',title:'Prendre une fraction d’une quantité',checkpoint:'Détermine moitié, tiers, quart, trois quarts ou dixième d’une quantité et contrôle la recomposition.',deps:['N8-04','O8-03'],idea:'Atelier de lots : partager, sélectionner puis recomposer pour prouver que la part et le tout sont cohérents.',e8:0,evidence:'PER pp. 20–21',basis:'Progression 7H–8H'}
+        ]},
+        { id:'SEQ-8N3', title:'Relatifs, puissances et échelles', strand:'numbers', phase:'P2', phaseLabel:'P2', arc:'Étendre les repères familiers vers le négatif, l’infiniment petit et l’infiniment grand.', nodes:[
+          {id:'N8-07',title:'Explorer les entiers relatifs',checkpoint:'Compare et représente des entiers relatifs dans des contextes de température, niveau, perte ou chronologie.',deps:['N8-03'],idea:'Ascenseur de repères : changer le zéro de référence et prévoir ce qui reste invariant dans l’ordre.',e8:0,evidence:'PER pp. 18–19',basis:'Progression 7H–8H'},
+          {id:'N8-08',title:'Lire des puissances comme structure',checkpoint:'Interprète une puissance simple comme produit répété et l’utilise pour décrire une suite ou une échelle.',deps:['O8-05'],idea:'Échelle multiplicative : reconstruire la loi de croissance et écrire les étapes sous forme de puissances.',e8:0,evidence:'PER pp. 20–21 et 24–25',basis:'Progression 7H–8H'}
+        ]},
+
+        { id:'SEQ-8O1', title:'Problèmes, division et proportionnalité', strand:'operations', phase:'P1', phaseLabel:'P1', arc:'Choisir les données et l’opération à partir des relations, puis contrôler le modèle.', nodes:[
+          {id:'O8-01',title:'Organiser données et question',checkpoint:'Sépare données utiles, superflues et manquantes; choisit une représentation qui rend la relation visible.',deps:[],idea:'Dossier incomplet : décider quelle information permet réellement de résoudre et laquelle détourne.',e8:0,evidence:'PER pp. 22–23',basis:'Progression 7H–8H · fin de cycle'},
+          {id:'O8-02',title:'Lire et construire tableaux et graphiques',checkpoint:'Lit, utilise puis élabore un tableau de valeurs et relie ses variations à une représentation graphique.',deps:['O8-01'],idea:'Tableau vivant : modifier une ligne et prévoir la trace correspondante avant l’affichage du graphe.',e8:0,evidence:'PER pp. 22–23',basis:'Progression 7H–8H'},
+          {id:'O8-03',title:'Modéliser multiplication et division',checkpoint:'Reconnaît produit, partage, groupement et proportionnalité; résout notamment des problèmes divisifs.',deps:['O8-01'],idea:'Scènes jumelles : conserver les nombres mais changer la relation pour forcer un autre modèle opératoire.',e8:1,evidence:'PER pp. 22–23',basis:'Marqueur explicite 8e'},
+          {id:'O8-04',title:'Traduire avec parenthèses si nécessaire',checkpoint:'Traduit un problème en écriture additive, soustractive, multiplicative ou divisive et explique l’ordre des opérations.',deps:['O8-01','O8-03'],idea:'Assembleur d’expression : placer opérations et parenthèses, puis rejouer chaque sous-relation dans la scène.',e8:1,evidence:'PER pp. 22–23',basis:'Marqueur explicite 8e'}
+        ]},
+        { id:'SEQ-8O2', title:'Divisibilité et lois de suites', strand:'operations', phase:'P2', phaseLabel:'P2', arc:'Passer de régularités observées à des propriétés formulées et testées.', nodes:[
+          {id:'O8-05',title:'Relier multiples et diviseurs',checkpoint:'Établit des listes de multiples et diviseurs et décide si une relation de divisibilité est vraie.',deps:['O8-03'],idea:'Réseau de facteurs : connecter les nombres compatibles et expliquer chaque lien dans les deux sens.',e8:0,evidence:'PER pp. 24–25',basis:'Progression 7H–8H · fin de cycle'},
+          {id:'O8-06',title:'Utiliser des critères de divisibilité',checkpoint:'Utilise et justifie des critères pour 2, 3, 5, 9, 10 et 100 dans des cas choisis.',deps:['O8-05','N8-01'],idea:'Laboratoire du dernier chiffre et de la somme : chercher le plus petit indice qui décide.',e8:0,evidence:'PER pp. 24–25',basis:'Progression 7H–8H'},
+          {id:'O8-07',title:'Exprimer une loi de formation',checkpoint:'Reconnaît, complète et décrit une suite numérique, y compris avec termes décimaux ou puissances.',deps:['O8-05','N8-02'],idea:'Suite sous enquête : choisir les indices qui départagent deux lois possibles puis écrire la règle.',e8:1,evidence:'PER pp. 24–25',basis:'Marqueur explicite 8e'}
+        ]},
+        { id:'SEQ-8O3', title:'Calcul réfléchi et ordre des opérations', strand:'operations', phase:'P2', phaseLabel:'P2', arc:'Transformer les calculs par propriétés sans perdre la valeur ni le contrôle du résultat.', nodes:[
+          {id:'O8-08',title:'Mobiliser la distributivité',checkpoint:'Utilise commutativité, associativité et distributivité pour réorganiser un calcul efficacement.',deps:['O8-04','O8-05'],idea:'Même valeur, chemin plus court : n’autoriser que les transformations justifiées par une propriété.',e8:0,evidence:'PER pp. 24–25',basis:'Progression 7H–8H'},
+          {id:'O8-09',title:'Calculer avec des rationnels positifs',checkpoint:'Choisit une procédure réfléchie adaptée pour additionner, soustraire, multiplier ou diviser.',deps:['N8-01','O8-08'],idea:'Sélecteur de stratégie : comparer mental, écrit et calculatrice selon la structure plutôt que la taille seule.',e8:0,evidence:'PER pp. 24–25',basis:'Progression 7H–8H · fin de cycle'},
+          {id:'O8-10',title:'Respecter un ordre indiqué',checkpoint:'Effectue une suite d’opérations dont l’ordre est donné par des parenthèses sans imbrication.',deps:['O8-04','O8-09'],idea:'Circuit d’opérations : exécuter les blocs dans l’ordre et diagnostiquer le premier embranchement illégal.',e8:0,evidence:'PER pp. 24–25',basis:'Attente de fin de cycle'},
+          {id:'O8-11',title:'Estimer et refuser l’impossible',checkpoint:'Anticipe un ordre de grandeur puis accepte ou refuse un résultat en explicitant son contrôle.',deps:['O8-09'],idea:'Zone de verdict : poser d’abord une fourchette, puis enquêter sur l’affichage ou l’algorithme.',e8:0,evidence:'PER pp. 22–25',basis:'Progression 7H–8H · fin de cycle'}
+        ]},
+        { id:'SEQ-8O4', title:'Algorithmes et calculatrice sous contrôle', strand:'operations', phase:'P3', phaseLabel:'P3', arc:'Relier procédures écrites, valeur de position, estimation et choix d’outil.', nodes:[
+          {id:'O8-12',title:'Additionner et soustraire des décimaux',checkpoint:'Utilise un algorithme en alignant les rangs et relie chaque retenue ou échange à la valeur de position.',deps:['N8-01','O8-09'],idea:'Radiographie de colonnes : réparer le premier échange qui ne conserve pas la valeur.',e8:1,evidence:'PER pp. 24–25',basis:'Marqueur explicite 8e'},
+          {id:'O8-13',title:'Multiplier et diviser avec sens',checkpoint:'Utilise les algorithmes de multiplication décimale et de division dans les domaines indiqués, puis contrôle le quotient ou produit.',deps:['O8-03','O8-11','O8-12'],idea:'Atelier des produits partiels : rendre visibles les facteurs d’échelle et tester par opération inverse.',e8:1,evidence:'PER pp. 24–25',basis:'Marqueur explicite 8e · fin de cycle'},
+          {id:'O8-14',title:'Piloter la calculatrice',checkpoint:'Utilise fonctions de base et parenthèses, prévoit l’ordre d’exécution et juge l’affichage.',deps:['O8-10','O8-11'],idea:'Console contradictoire : prévoir l’affichage, exécuter, puis attribuer l’écart à la saisie, à l’ordre ou au modèle.',e8:0,evidence:'PER pp. 22–23',basis:'Progression 7H–8H · fin de cycle'}
+        ]},
+
+        { id:'SEQ-8M1', title:'Mesurer, estimer et instrumenter', strand:'measurement', phase:'P1', phaseLabel:'P1', arc:'Organiser un mesurage avant de lire un instrument ou d’annoncer une précision.', nodes:[
+          {id:'M8-01',title:'Organiser un mesurage',checkpoint:'Choisit grandeur, unité, instrument et procédure adaptés, puis communique le résultat avec son unité.',deps:[],idea:'Mission métrologue : choisir parmi plusieurs instruments et défendre la précision réellement obtenue.',e8:0,evidence:'PER pp. 26–27',basis:'Progression 7H–8H · fin de cycle'},
+          {id:'M8-02',title:'Estimer avant de mesurer',checkpoint:'Formule une estimation à partir d’un repère de longueur, aire, volume, masse ou temps, puis interprète l’écart.',deps:['M8-01'],idea:'Ancre puis révèle : verrouiller repère et intervalle avant que l’instrument devienne disponible.',e8:0,evidence:'PER pp. 26–27',basis:'Progression 7H–8H'},
+          {id:'M8-03',title:'Mesurer et comparer des angles',checkpoint:'Compare des angles, utilise le rapporteur depuis le bon zéro et communique une mesure ou un encadrement.',deps:['M8-01','S8-03'],idea:'Rapporteur à pièges : choisir l’échelle cohérente avec l’estimation et diagnostiquer un sommet mal aligné.',e8:0,evidence:'PER pp. 26–27',basis:'Progression 7H–8H'}
+        ]},
+        { id:'SEQ-8M2', title:'Périmètres, aires et volumes', strand:'measurement', phase:'P3', phaseLabel:'P3', arc:'Construire les calculs de grandeurs depuis les unités et les décompositions.', nodes:[
+          {id:'M8-04',title:'Calculer trajet et périmètre',checkpoint:'Sélectionne les longueurs utiles et calcule une ligne brisée ou le périmètre d’un polygone.',deps:['M8-01','S8-01'],idea:'Frontière variable : transformer une figure et prévoir séparément l’effet sur le contour et la surface.',e8:0,evidence:'PER pp. 28–29',basis:'Attente de fin de cycle'},
+          {id:'M8-05',title:'Construire l’aire par décomposition',checkpoint:'Détermine l’aire du carré, rectangle, triangle rectangle ou parallélogramme par comptage, découpage et recomposition.',deps:['S8-04','M8-01'],idea:'Atelier de conservation : déplacer les mêmes morceaux jusqu’à une figure dont l’aire est calculable.',e8:0,evidence:'PER pp. 28–29',basis:'Progression 7H–8H · fin de cycle'},
+          {id:'M8-06',title:'Construire le volume',checkpoint:'Calcule le volume d’un cube ou parallélépipède rectangle en coordonnant couches et unités cubiques.',deps:['S8-05','M8-05'],idea:'Scanner de couches : prévoir le nombre de cubes depuis une couche, puis vérifier sans recompter un à un.',e8:0,evidence:'PER pp. 28–29',basis:'Progression 7H–8H'}
+        ]},
+        { id:'SEQ-8M3', title:'Unités et équivalences', strand:'measurement', phase:'P3', phaseLabel:'P3', arc:'Changer d’unité sans changer la grandeur, en s’appuyant sur les relations d’échelle.', nodes:[
+          {id:'M8-07',title:'Choisir une unité cohérente',checkpoint:'Choisit une unité conventionnelle adaptée pour longueur, aire, volume, angle, masse ou temps.',deps:['M8-01','M8-02'],idea:'Échelle plausible : refuser les couples valeur-unité impossibles avant tout calcul.',e8:0,evidence:'PER pp. 28–29',basis:'Progression 7H–8H · fin de cycle'},
+          {id:'M8-08',title:'Exprimer une même grandeur autrement',checkpoint:'Convertit entre unités liées et justifie le facteur sans déplacer mécaniquement une virgule.',deps:['N8-01','M8-07'],idea:'Ponts d’unités : assembler des équivalences avant d’autoriser la conversion numérique.',e8:0,evidence:'PER pp. 28–29',basis:'Progression 7H–8H · fin de cycle'}
+        ]},
+
+        { id:'SEQ-8S1', title:'Figures et constructions contraintes', strand:'space', phase:'P1', phaseLabel:'P1', arc:'Passer du nom visuel à des propriétés qui permettent de décrire et construire.', nodes:[
+          {id:'S8-01',title:'Classer par propriétés',checkpoint:'Reconnaît et décrit triangles, quadrilatères et cercle par côtés, angles, parallélisme et symétries.',deps:[],idea:'Portrait-robot : identifier une figure avec le minimum de questions portant uniquement sur des propriétés.',e8:0,evidence:'PER pp. 14–15',basis:'Progression 7H–8H · fin de cycle'},
+          {id:'S8-02',title:'Construire une figure courante',checkpoint:'Construit triangle équilatéral, carré ou rectangle avec règle, équerre, compas ou rapporteur et vérifie ses contraintes.',deps:['S8-01','M8-01'],idea:'Plan sous contraintes : choisir les instruments et l’ordre de construction qui rendent la figure inévitable.',e8:0,evidence:'PER pp. 14–15',basis:'Progression 7H–8H · fin de cycle'},
+          {id:'S8-03',title:'Construire parallèle et perpendiculaire',checkpoint:'Construit et vérifie des droites parallèles ou perpendiculaires, quelle que soit leur orientation.',deps:['S8-01'],idea:'Rails obliques : prolonger, construire et tester sans s’appuyer sur les bords de l’écran.',e8:0,evidence:'PER pp. 14–15',basis:'Progression 7H–8H · fin de cycle'},
+          {id:'S8-04',title:'Décomposer et recomposer une surface',checkpoint:'Décompose une figure en surfaces élémentaires et la recompose en conservant l’aire.',deps:['S8-01'],idea:'Chirurgie de formes : atteindre une cible avec exactement les mêmes pièces et expliquer l’invariant.',e8:0,evidence:'PER pp. 14–15',basis:'Progression 7H–8H'}
+        ]},
+        { id:'SEQ-8S2', title:'Solides, développements et perspectives', strand:'space', phase:'P3', phaseLabel:'P3', arc:'Coordonner objet, faces, développement et représentation en perspective.', nodes:[
+          {id:'S8-05',title:'Décrire et vérifier un solide',checkpoint:'Reconnaît cube, pavé droit ou pyramide par faces, arêtes et sommets, puis vérifie une propriété annoncée.',deps:[],idea:'Scanner de solide : collecter juste assez d’indices pour exclure les autres familles.',e8:0,evidence:'PER pp. 14–15',basis:'Progression 7H–8H'},
+          {id:'S8-06',title:'Dessiner et tester un développement',checkpoint:'Prédit les faces qui se rejoignent et réalise un développement valide du cube ou du pavé droit.',deps:['S8-04','S8-05'],idea:'Pliage prédit : marquer les arêtes de contact avant de déclencher la simulation.',e8:0,evidence:'PER pp. 14–15',basis:'Progression 7H–8H'},
+          {id:'S8-07',title:'Interpréter une perspective',checkpoint:'Relie une ébauche de perspective à la structure d’un solide ou assemblage et produit une représentation contrôlable.',deps:['S8-05'],idea:'Points de vue concurrents : tourner l’assemblage mentalement puis choisir la perspective compatible.',e8:0,evidence:'PER pp. 14–15',basis:'Progression 7H–8H'}
+        ]},
+        { id:'SEQ-8S3', title:'Isométries et changements d’échelle', strand:'space', phase:'P3', phaseLabel:'P3', arc:'Identifier transformation et invariants avant de construire l’image.', nodes:[
+          {id:'S8-08',title:'Nommer les isométries',checkpoint:'Reconnaît et décrit translation, symétrie axiale et rotation par leurs effets et invariants.',deps:['S8-01'],idea:'Quel moteur ? : observer quelques couples source-image et éliminer les transformations impossibles.',e8:0,evidence:'PER pp. 16–17',basis:'Progression 7H–8H · fin de cycle'},
+          {id:'S8-09',title:'Anticiper puis reproduire une image',checkpoint:'Anticipe forme et position après une ou plusieurs isométries et reproduit l’image avec matériel ou instruments.',deps:['S8-08'],idea:'Machine à copier : programmer le mouvement, prévoir trois points témoins puis construire.',e8:0,evidence:'PER pp. 16–17',basis:'Progression 7H–8H · fin de cycle'},
+          {id:'S8-10',title:'Construire des axes de symétrie',checkpoint:'Teste et construit les axes de symétrie, y compris obliques, en vérifiant les distances à l’axe.',deps:['S8-08','S8-03'],idea:'Miroir oblique : déplacer l’axe jusqu’à satisfaire simultanément plusieurs paires de points.',e8:0,evidence:'PER pp. 16–17',basis:'Progression 7H–8H · fin de cycle'},
+          {id:'S8-11',title:'Agrandir et réduire sur réseau',checkpoint:'Agrandit ou réduit une figure sur papier à réseau en conservant forme et relations de proportion.',deps:['S8-04','O8-03'],idea:'Projecteur d’échelle : choisir le facteur puis repérer la première longueur qui rompt la proportion.',e8:0,evidence:'PER pp. 16–17',basis:'Progression 7H–8H'}
+        ]},
+        { id:'SEQ-8S4', title:'Repérage et orientation', strand:'space', phase:'P1', phaseLabel:'P1', arc:'Utiliser des systèmes conventionnels pour communiquer une position ou un itinéraire.', nodes:[
+          {id:'S8-12',title:'Placer dans un repère orthonormé',checkpoint:'Place un point ou communique sa position dans un système d’axes orthonormé.',deps:['N8-03'],idea:'Balise à coordonnées : envoyer le minimum d’informations permettant une localisation sans ambiguïté.',e8:0,evidence:'PER pp. 16–17',basis:'Attente de fin de cycle'},
+          {id:'S8-13',title:'Orienter un plan et coder un trajet',checkpoint:'Oriente un support depuis des repères choisis et communique positions ou itinéraires avec un système partagé.',deps:[],idea:'Plan désorienté : choisir les repères qui suffisent à remettre la carte en cohérence avant le trajet.',e8:0,evidence:'PER pp. 16–17',basis:'Progression 7H–8H'}
+        ]},
+
+        { id:'SEQ-8T1', title:'Habitudes de modélisation', strand:'modeling', phase:'P0', phaseLabel:'P0–P4', arc:'Des pratiques transversales répétées dans chaque strand, jamais un chapitre isolé.', nodes:[
+          {id:'T8-01',title:'Représenter et réduire la complexité',checkpoint:'Trie les informations et choisit liste, tableau, schéma, croquis ou cas simplifié pour rendre le problème traitable.',deps:[],idea:'Atelier de représentation : comparer ce que chaque support rend visible ou masque.',e8:0,evidence:'PER pp. 14–29 · MSN 25',basis:'Progressions et attentes de fin de cycle'},
+          {id:'T8-02',title:'Conjecturer et chercher un cas décisif',checkpoint:'Formule une conjecture, sélectionne un essai informatif et la valide ou réfute.',deps:['T8-01'],idea:'Duel d’hypothèses : choisir le cas qui donne deux prédictions différentes avant de tester.',e8:0,evidence:'PER pp. 14–29 · MSN 25',basis:'Progressions et attentes de fin de cycle'},
+          {id:'T8-03',title:'Contrôler par une autre voie',checkpoint:'Vérifie un résultat par ordre de grandeur, opération inverse, contrainte géométrique ou confrontation au réel.',deps:['T8-01'],idea:'Inspecteur de résultats : choisir le contrôle le moins coûteux capable de démasquer l’erreur.',e8:0,evidence:'PER pp. 14–29 · MSN 25',basis:'Progressions et attentes de fin de cycle'},
+          {id:'T8-04',title:'Communiquer une démarche vérifiable',checkpoint:'Présente données, étapes, représentations et conclusion avec vocabulaire et symboles adéquats.',deps:['T8-01','T8-03'],idea:'Montage de preuve : ordonner les traces utiles et retirer toute étape qui ne soutient pas la conclusion.',e8:0,evidence:'PER pp. 14–29 · MSN 25',basis:'Progressions et attentes de fin de cycle'}
+        ]}
+      ],
+      convergence: [
+        {id:'C8-1',phase:'P2',title:'Fraction ↔ décimal ↔ opération',requires:['SEQ-8N1','SEQ-8N2','SEQ-8O1']},
+        {id:'C8-2',phase:'P3',title:'Géométrie ↔ mesure ↔ proportion',requires:['SEQ-8S1','SEQ-8S3','SEQ-8M2']},
+        {id:'C8-3',phase:'P4',title:'Choix d’outil et validation',requires:['SEQ-8O3','SEQ-8O4','SEQ-8T1']},
+        {id:'C8-4',phase:'P4',title:'Problème composite de fin de cycle',requires:['SEQ-8N2','SEQ-8O1','SEQ-8M3','SEQ-8S4']}
+      ]
+    };
+
+    const COLORS = {
+      numbers:'var(--numbers)', operations:'var(--operations)', measurement:'var(--measurement)', space:'var(--space)', modeling:'var(--modeling)'
+    };
+
+    const timelineGrid = document.querySelector('#timelineGrid');
+    const noResults = document.querySelector('#noResults');
+    const resultCount = document.querySelector('#resultCount');
+    const searchInput = document.querySelector('#sequenceSearch');
+    const sequenceDialog = document.querySelector('#sequenceDialog');
+    let activeFilter = 'all';
+    let query = '';
+
+    const escapeHTML = value => String(value).replace(/[&<>'"]/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[character]));
+    const fold = value => String(value).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('fr');
+
+    function sequenceMatches(sequence) {
+      if (activeFilter !== 'all' && sequence.strand !== activeFilter) return false;
+      if (!query) return true;
+      const haystack = [sequence.id, sequence.title, sequence.arc, ...sequence.nodes.flatMap(node => [node.id, node.title, node.checkpoint, node.evidence, node.basis])].join(' ');
+      return fold(haystack).includes(query);
+    }
+
+    function phaseHeader(phase) {
+      return `<div class="phase-head"><b>${phase.id}</b><strong>${escapeHTML(phase.label)}</strong><span>${escapeHTML(phase.weeks)}</span></div>`;
+    }
+
+    function sequenceCard(sequence) {
+      const hasExplicit8H = sequence.nodes.some(node => node.e8 > 0);
+      return `<button class="sequence-card" type="button" data-sequence="${sequence.id}" data-e8="${hasExplicit8H}" style="--strand-color:${COLORS[sequence.strand]}" aria-label="Ouvrir ${escapeHTML(sequence.id)}, ${escapeHTML(sequence.title)}">
+        <span class="sequence-top"><span>${sequence.id}</span><span>${sequence.nodes.length} checkpoint${sequence.nodes.length === 1 ? '' : 's'}</span></span>
+        <strong>${escapeHTML(sequence.title)}</strong>
+        <small>${escapeHTML(sequence.phaseLabel)} · inspecter ↗</small>
+      </button>`;
+    }
+
+    function renderMap() {
+      const visible = ROADMAP.sequences.filter(sequenceMatches);
+      resultCount.textContent = `${visible.length} séquence${visible.length === 1 ? '' : 's'} affichée${visible.length === 1 ? '' : 's'}`;
+      noResults.style.display = visible.length ? 'none' : 'block';
+      document.querySelector('#roadmapScroll').style.display = visible.length ? 'block' : 'none';
+
+      let html = `<div class="corner-cell"><span>Pacing proposé</span><strong>Strand × phase</strong></div>${ROADMAP.phases.map(phaseHeader).join('')}`;
+
+      if (activeFilter === 'all' && !query) {
+        html += `<div class="track-label" style="--track-color:var(--acid)"><b>Sondes d’entrée</b><span>6 hypothèses diagnostiques</span></div>`;
+        html += `<div class="phase-cell"><div class="baseline-card"><span>Diagnostic de début 8H, non normatif</span><div class="probe-list">${ROADMAP.entry.map(item => `<span class="probe" title="${item.id}">${escapeHTML(item.label)}</span>`).join('')}</div></div></div>`;
+        for (let index = 1; index < 5; index++) html += `<div class="phase-cell"><div class="empty-cell">ouvre une reprise ciblée</div></div>`;
+      }
+
+      ROADMAP.strands.forEach(strand => {
+        if (activeFilter !== 'all' && activeFilter !== strand.id) return;
+        const strandVisible = visible.filter(sequence => sequence.strand === strand.id);
+        if (query && strandVisible.length === 0) return;
+        html += `<div class="track-label" style="--track-color:${COLORS[strand.id]}"><b>${escapeHTML(strand.label)}</b><span>${escapeHTML(strand.codes)}</span></div>`;
+        ROADMAP.phases.forEach(phase => {
+          const inCell = strandVisible.filter(sequence => sequence.phase === phase.id);
+          let content = inCell.length ? `<div class="sequence-stack">${inCell.map(sequenceCard).join('')}</div>` : `<div class="empty-cell">—</div>`;
+          if (strand.id === 'modeling' && phase.id !== 'P0' && strandVisible.length) content = `<div class="transverse">pratique transversale</div>`;
+          html += `<div class="phase-cell">${content}</div>`;
+        });
+      });
+
+      if (activeFilter === 'all' && !query) {
+        html += `<div class="track-label" style="--track-color:var(--teal)"><b>Convergences</b><span>4 preuves d’intégration</span></div>`;
+        ROADMAP.phases.forEach(phase => {
+          const items = ROADMAP.convergence.filter(item => item.phase === phase.id);
+          html += `<div class="phase-cell">${items.length ? `<div class="sequence-stack">${items.map(item => `<div class="convergence-card"><span>${item.id} · ${item.phase}</span><strong>${escapeHTML(item.title)}</strong><small>Prérequis ${item.requires.join(' · ')}</small></div>`).join('')}</div>` : `<div class="empty-cell">—</div>`}</div>`;
+        });
+      }
+
+      timelineGrid.innerHTML = html;
+    }
+
+    function openSequence(sequenceId) {
+      const sequence = ROADMAP.sequences.find(item => item.id === sequenceId);
+      if (!sequence) return;
+      const strand = ROADMAP.strands.find(item => item.id === sequence.strand);
+      const e8Count = sequence.nodes.reduce((sum, node) => sum + node.e8, 0);
+      document.querySelector('#dialogId').textContent = `${sequence.id} · ${strand.label}`;
+      document.querySelector('#dialogTitle').textContent = sequence.title;
+      document.querySelector('#dialogArc').textContent = sequence.arc;
+      document.querySelector('#dialogBody').innerHTML = `
+        <div class="dialog-facts">
+          <div class="dialog-fact"><span>Phase proposée</span><strong>${escapeHTML(sequence.phaseLabel)}</strong></div>
+          <div class="dialog-fact"><span>Checkpoints</span><strong>${sequence.nodes.length}</strong></div>
+          <div class="dialog-fact"><span>Liens explicites 8e</span><strong>${e8Count}</strong></div>
+        </div>
+        <div class="node-list" style="--node-color:${COLORS[sequence.strand]}">
+          ${sequence.nodes.map((node, index) => `<details${index === 0 ? ' open' : ''}>
+            <summary>
+              <span class="node-id">${node.id}</span>
+              <span class="node-title">${escapeHTML(node.title)}</span>
+              ${node.e8 ? `<span class="endpoint-mark">${node.e8} × 8e</span>` : '<span class="node-toggle" aria-hidden="true">+</span>'}
+            </summary>
+            <div class="node-content">
+              <h4>Checkpoint observable</h4>
+              <p>${escapeHTML(node.checkpoint)}</p>
+              <h4>Acquis ou coordination</h4>
+              <div class="dependency-list">${node.deps.length ? node.deps.map(dep => `<span>${dep}</span>`).join('') : '<span>Entrée</span>'}</div>
+              <h4>Piste d’activité non approuvée</h4>
+              <p>${escapeHTML(node.idea)}</p>
+              <h4>Statut d’évidence</h4>
+              <div class="evidence-line"><span class="evidence-label${node.e8 ? ' explicit' : ''}">${escapeHTML(node.basis)}</span><span class="evidence-label">${escapeHTML(node.evidence)}</span></div>
+            </div>
+          </details>`).join('')}
+        </div>
+        <div class="draft-note"><strong>Gate ouvert :</strong> cette séquence n’autorise ni spine détaillée, ni mécanique, ni prototype. Elle doit d’abord être revue comme structure annuelle.</div>
+      `;
+      if (typeof sequenceDialog.showModal === 'function') sequenceDialog.showModal();
+      else sequenceDialog.setAttribute('open', '');
+    }
+
+    document.querySelector('.filters').addEventListener('click', event => {
+      const button = event.target.closest('[data-filter]');
+      if (!button) return;
+      activeFilter = button.dataset.filter;
+      document.querySelectorAll('[data-filter]').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+      renderMap();
+    });
+
+    searchInput.addEventListener('input', () => {
+      query = fold(searchInput.value.trim());
+      renderMap();
+    });
+
+    timelineGrid.addEventListener('click', event => {
+      const card = event.target.closest('[data-sequence]');
+      if (card) openSequence(card.dataset.sequence);
+    });
+
+    sequenceDialog.addEventListener('click', event => {
+      if (event.target === sequenceDialog) sequenceDialog.close();
+    });
+
+    document.querySelector('#printButton').addEventListener('click', () => window.print());
+
+    renderMap();
+  </script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+{
+  "generation": {
+    "id": "ig_09ed28accef80639016a5b4c255f7c8191a39cd7bcca1b9340",
+    "status": "completed",
+    "responseModel": "gpt-5.6-sol",
+    "imageModel": "gpt-image-2",
+    "requestedSize": "1536x1024",
+    "actualDimensions": [1024, 1536],
+    "quality": "high",
+    "outputFormat": "png",
+    "backgroundRequested": "opaque",
+    "prompt": "in EX-0004, now that the water shader has been implemented. should we add component like rocks, flower ? They should be top-view asset that we can generate using imagegen, the frog as well, the nenuphar and so on. all top-view strictly.\n\nThe assets are bad, remove them and start again, t should looks more like this : a real top-view: /tmp/herdr-clipboard-images-1000/client-2-clipboard-1784368017572439963-0.png",
+    "revisedPrompt": "Create a polished 2D game-art pond environment viewed from a perfectly vertical 90-degree top-down orthographic camera. This is a complete restart of all decorative assets: every object must be drawn as a true overhead asset with absolutely no side view, tilt, horizon, or perspective. Show luminous turquoise/aqua water with a beautiful stylized water-shader look: broad translucent currents, soft caustic patches, gentle ripples, and subtle layered color variation. Populate the pond naturally with cohesive top-view assets: many round green lily pads (nenuphars) in varied sizes, some with notches, several vivid pink/red water-lily flowers seen directly from above, smooth partially submerged rocks seen directly from above, tiny floating petals, small clusters of aquatic leaves, and a cute green frog seen strictly from directly overhead sitting on a lily pad, with its full body silhouette readable from above. Add a few small koi fish beneath the water, also strictly overhead. Arrange the scene with open navigable water in the center and decorative clusters around the edges, suitable for a top-down game level. Whimsical hand-painted illustration, warm coral accents, soft irregular outlines, clean cohesive shapes, vibrant but harmonious palette, charming high-quality mobile/indie game aesthetic inspired by a colorful storybook koi pond. No boat, no characters other than the frog and fish, no text, no UI, no shadows implying an angled camera, no isometric elements. Portrait composition, highly detailed, production-ready environment concept."
+  },
+  "reference": {
+    "role": "Owner-supplied visual direction for a genuine top-down pond read; not bundled with production assets.",
+    "sha256": "47357f57da35fcea5b0c22c77a48237c02a517cb418e8bd770bdde63d1cc3c98"
+  },
+  "source": {
+    "file": "source-sheet.png",
+    "sha256": "abc1741ce7d425af8ed04487e427010e7277071472c291badd21063410634499",
+    "usage": "Extraction source only. The full generated pond scene and its baked water are never rendered by PondBoard.svelte."
+  },
+  "processing": {
+    "script": "extract-assets.py",
+    "scriptSha256": "bbc6a8f9e480549b4e147b141af369faf372b2dbc9e8c6e26a49d01a9999b472",
+    "method": "Deterministic local crop and mask processing. Turquoise boundary-connected water is removed from pads and rocks; color-seeded masks isolate flowers; a manually bounded GrabCut mask isolates the frog from its pad; alpha edges borrow nearest solid object color to prevent cyan fringe.",
+    "sourceCropBoxes": {
+      "frog-green.png": [745, 885, 900, 1030],
+      "lily-pad.png": [820, 1080, 935, 1205],
+      "lily-pad-flowering.png": [205, 1085, 395, 1285],
+      "lotus-coral.png": [180, 105, 325, 240],
+      "lotus-red.png": [865, 290, 995, 420],
+      "rock-round.png": [635, 355, 785, 505],
+      "rock-light.png": [495, 845, 650, 985],
+      "rock-cluster.png": [690, 530, 900, 720]
+    },
+    "derivedAssets": {
+      "frog-orange.png": "Hue-derived from frog-green.png while preserving the generated overhead silhouette, ink, eyes, lighting, texture, and alpha."
+    },
+    "rejectedSourceContent": "Koi, tiny petals, full-scene water, and edge foliage were not integrated because they are unnecessary to the mechanic or would add visual noise."
+  },
+  "assets": {
+    "frog-green.png": "895e2000ce2d85ca0b6d90978f1223b92a81535e0bb58e2868c74c9cd599c75b",
+    "frog-orange.png": "ee624be68796717111e51a843e73147ab99055c68a1a84d78705469b46a0c60a",
+    "lily-pad.png": "fa85dd6f26b0d2350a3149d904291751bb0ac0a33fa413d5df0f0221e69d20b6",
+    "lily-pad-flowering.png": "e8acf98c84126037b6673128debd3486fe84c972cb3db2833e439c3b4786fd47",
+    "lotus-coral.png": "44ffebfb327efe227c37007a9a0fcb9db0096aff26751ac300e2d7833edf09e9",
+    "lotus-red.png": "4456f8e0a32415917dfa120c82e814f66a831408c6d7c26109de59a3f773edeb",
+    "rock-round.png": "927cb76914f181b81d3fba64d5a40494b9538697b4b23f5bd290d9cfe5205e42",
+    "rock-light.png": "11271b71c723441deb918339cf3e18ca5c1ca1afd52775d1d77820f088ff7ce6",
+    "rock-cluster.png": "a001fb5b877769df176e23d5278dc11beea2a93c64c4394f2a68fc964c0b2df1"
+  },
+  "integrationReview": {
+    "viewpoint": "Every production silhouette reads from a direct 90-degree overhead camera. No horizon, isometric object, side-profile plant, upright prop, or foreshortened scenery is integrated.",
+    "stateBoundary": "Raster assets encode no unit grid, route, target quantity, label, hit target, trace, discrepancy, prediction, or outcome.",
+    "motionBoundary": "All generated assets are static. Existing isolated water caustics and the short landing response remain the only motion.",
+    "branding": "Production crops contain no readable text, logo, watermark, trademark, or branded character."
+  }
+}

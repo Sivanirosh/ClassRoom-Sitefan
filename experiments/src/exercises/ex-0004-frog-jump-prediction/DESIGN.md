@@ -1,270 +1,243 @@
 # EX-0004 — Le saut juste
 
-## Authority and gate boundary
+## Status
 
-- **Bounded spine:** `SEQ-M1 / MES-01 → MES-02`, revision `r0-bounded-measurement-pair`.
-- **MES-01 contract:** mathematical relation remains approved; its `behavioral-only` evidence rule is unchanged.
-- **Replacement candidate:** `MES01-FIT-A3-frog-jump-prediction`.
-- **Owner design direction:** tutorial taps followed by integer prediction and automatic resolution; a true square unit grid; horizontal then vertical orthogonal transfer; and a mandatory two-unit obstacle leap.
-- **Owner implementation response:** exact wording `implement the graybox now`; normalized disposition `approve disposable bridge graybox`; recorded 2026-07-17.
-- **Current authority:** the validated replacement mechanic plus the pond-board UI/art expansion and final animation/image-generation polish, followed by Issue Slice `ex-0004-remove-graybox-artifact` authorizing a presentation-only replacement of the remaining layered graybox. This does not approve a MES-02 learning contract, mechanic expansion, efficacy claims, promotion, or unrelated scope.
-- **Locked intro image:** owner approved `assets/pond-garden-intro.webp` as perfect and locked it on 2026-07-18. Source digest: `sha256:49db4ae90b24ff78b6c5e3c0361615af5735477548c67f4979211116cd857e85`. Do not regenerate, replace, or alter its pixels without a new explicit owner decision; the adjacent provenance record carries the complete change rule.
+Playable four-scene graybox for the Mathematics sequence **Se repérer dans l’espace**.
 
-The integer prediction is a deliberately scoped bridge hypothesis. It is not retroactively added to MES-01’s behavioral-only evidence contract.
+The owner approved this mechanic for UI/art expansion in the active `SEQ-M1` / `MES-01 → MES-02` bridge. That approval does **not** approve the MES-02 learning contract, pupil efficacy, promotion, or unrelated scope. Responsive and accessibility validation establish technical readiness only.
 
-## Recognizable source relationship
+This file is the current implementation contract. Superseded visual experiments and asset-generation notes are intentionally omitted.
 
-Chinese Checkers rules permit an adjacent move and a jump over an adjacent piece to the empty position beyond; jumped pieces remain and jumps may chain. EX-0004 retains the abstract unit lattice, one-unit move / two-unit jump-over relationship, and chained movement. It does not copy the source board shape, holes, pieces, layouts, artwork, scoring, or branded presentation.
+## Learning objective
 
-Source provenance and adaptation boundaries are recorded in [`mes-01-calm-game-mechanic-precedents.md`](../../../curriculum/research/mes-01-calm-game-mechanic-precedents.md).
+The pupil uses a visible square unit to:
 
-## Cohesive pond-game replacement
+1. observe one repeated jump;
+2. predict how many equal jumps reach a target;
+3. transfer the same reasoning from horizontal to vertical movement;
+4. distinguish distance travelled from number of actions when one action covers two units.
 
-### Why the previous polish still read as a graybox
+The exercise is about **prediction before resolution**, not reaction speed.
 
-The prior pass added polish in layers without replacing the original prototype hierarchy. The generated WebP was reduced to a 22%-opacity masked strip behind a bordered marketing card, while a second flat inline-SVG pond poster carried another frame and a unit-key badge. The intro also exposed the internal `EX-0004` identifier and diagnostic boundary copy. Entering the activity then switched to a thick brown timber frame, plaque, perimeter clip-art props, boxed unit equation, bottom legend, and separate shadowed control/status panels. The result looked like a graybox board embedded inside a themed shell rather than one pond game; the generated image was technically present but visually incidental.
+## Core mechanic
 
-### Replacement hierarchy and generated-art role
+- One grid-cell side equals one `unité-saut`.
+- The tutorial advances only when the pupil touches the frog.
+- Prediction scenes accept one integer from `1` to `9`.
+- Entering a valid integer starts resolution automatically.
+- Each action leaves exact route evidence on the grid.
+- A short or long answer preserves the mismatch and its measured gap.
+- The obstacle scene forces one two-unit jump over the orange frog.
 
-The replacement uses one continuous atmosphere while keeping authored mathematics sovereign:
+No drag gesture, timer, score, lives, or free-form movement belongs in this prototype.
 
-- the intro is a full-bleed, bright rendering of the dedicated unbranded `pond-garden-intro.webp` bookend with the title, explanation, and start action integrated through a light cream readability gradient; there is no duplicate poster, internal identifier, diagnostic copy, unit badge, dark mask, logo, or title treatment copied from a source;
-- the active state uses a restrained text HUD and a desktop two-column composition, collapsing to one compact flow at narrow widths; title, board, direct frog control or prediction input, status, and retry are no longer independent graybox cards;
-- the same local WebP supplies blurred, cropped color and texture behind the page and exact board. The active board layer uses a 9px blur, celadon wash, and top-biased crop, so koi/foliage/water color reads as painterly atmosphere while the image’s perspective tile lines cannot function as a second mathematical grid;
-- per-round success keeps the same decorative active-world backing and exact authored trace; final completion changes to the distinct unbranded `pond-garden-outro.webp` bookend, preserving the same garden journey while providing real narrative closure rather than reusing the intro image;
-- the only playable geometry remains inspectable HTML/SVG. The decorative image has empty alt text, `aria-hidden="true"`, no controls or state, and deleting it cannot alter a prompt, answer, endpoint, trace, discrepancy, obstacle, outcome, or completion;
-- a single in-world 10-unit bracket labelled `1 saut` provides the visible unit cue. Its accessible label states that one square side equals one unit-jump; the former boxed equation and repeated bottom legend are gone;
-- jade dimensional frog forms, warm dimensional endpoints, retained landing rings, gold ordinary traces, a wider dashed persimmon double trace, labelled discrepancy, and the stationary orange obstacle preserve redundant non-color meaning.
+## Scene sequence
 
-All generated assets remain bundled locally with adjacent provenance records. No remote request, external dependency, copied board shape, branded/reference character, recognizable source composition, logo, trademark, watermark, or image-authored mathematical state was introduced.
+| Scene | Mode | Direction | Distance | Expected action count |
+| --- | --- | --- | ---: | ---: |
+| Tutoriel | direct frog taps | horizontal | 4 units | 4 |
+| Prédiction | integer prediction | horizontal | 5 units | 5 |
+| Direction orthogonale | integer prediction | vertical | 6 units | 6 |
+| Saut double | integer prediction | horizontal | 6 units | 5 |
 
-### Reference-track production-polish correction
+In the final scene, four ordinary one-unit actions plus one two-unit action cover six units.
 
-The successful EX-0002/EX-0003 track is used as a division of responsibilities, not as an art style or layout to copy:
+## Visual direction
 
-1. generated art owns a coherent, replaceable narrative intro and outro;
-2. HTML/CSS/SVG own every title, control, prompt, quantity, endpoint, trace, outcome, and exact mathematical relation;
-3. the active surface is designed as the same world rather than a preserved graybox placed over a poster;
-4. motion explains action, consequence, and state changes without becoming an input skill.
+### Intro
 
-The first replacement slice corrected the active hierarchy but still reused one atmosphere for both bookends. ImageGen assets `ig_05319fa5252b745a016a5ac3bc7f5c8191ad4856fd89c427b5` and `ig_0a2ceff730b7c824016a5ac45fd0208191afed2a73c2b9621b` now provide distinct intro and completion scenes. The image pixels remain decorative and hidden from assistive technology; they cannot answer, validate, or execute a round.
+`assets/pond-garden-intro.webp` is owner-approved and pixel-locked.
 
-### Emil design-engineering audit
+- Required SHA-256: `49db4ae90b24ff78b6c5e3c0361615af5735477548c67f4979211116cd857e85`
+- Do not regenerate, replace, crop destructively, or edit this file.
+- Intro copy and composition remain unchanged unless the owner explicitly reopens them.
 
-| Before | After | Why |
-| --- | --- | --- |
-| One generated atmosphere reused as intro, active backing, and final completion | Dedicated intro and outro narrative bookends; the active board retains a separate blurred decorative atmosphere beneath exact SVG | State transitions now have spatial and narrative purpose instead of feeling like one static poster with copy changes |
-| Final view washed the reused image to near-white | Distinct warm completion art remains visible through a localized radial readability field | Preserve legibility without erasing the world or making completion feel unfinished |
-| Pupil-facing graybox frame/card hierarchy survived under added motion | One HUD, one active pond stage, unboxed control/status flow, and no duplicate poster/plaque/legend | Cohesion matters more than adding animated details to old surfaces |
-| Button feedback depended mainly on shadow/vertical movement | Existing targeted 150 ms transform, shadow, and color transitions plus a subtle `scale(.98)` press state are retained | Immediate tactile feedback; no `transition: all`, no sluggish easing, and no new input skill |
-| Frog/trace feedback risked decorative flourish | One-unit and forced two-unit hops differ in arc; traces, landing dots, discrepancy, and final state persist after motion | Motion explains distance, causality, and outcome rather than merely decorating the board |
-| Motion could compete with repeated play or reduced-motion preference | UI transitions remain under 300 ms; longer effects are rare explanatory feedback; reduced motion removes transforms/ripples while retaining authored evidence | Match frequency and purpose, and preserve equivalent state without timing dependence |
+### Play surface
 
-### Preserved render and interaction invariants
+The board is a calm pond whose mathematical scene remains static while a restrained optical water layer moves underneath it. Its visual hierarchy follows the mechanic:
 
-- Both maps retain a `120 × 100` viewBox, a `10 × 10` pattern, and a rendered `6 / 5` aspect ratio. No perspective or non-uniform transform is applied to the grid or mechanic layer.
-- `vectorFor()` remains exactly `{ x: 10, y: 0 }` or `{ x: 0, y: -10 }`; ordinary jumps therefore equal one cell side. The forced obstacle trace remains one 20-unit segment produced by one action.
-- Origins, endpoints, obstacle location, automatic execution, retry behavior, and every deterministic smoke selector remain unchanged.
-- The tutorial control remains the real transparent HTML button over the visible frog. At a 320px viewport its measured hit area is 44.4 by 44.4 CSS pixels.
-- Reduced motion still resolves a prediction immediately and disables frog, trace, landing, discrepancy-entry, and arrival motion without hiding the final landing, trace, discrepancy label, outcome, focus transition, or completion path. The generated atmosphere is static in every motion mode.
+1. frog;
+2. start and finish pads;
+3. route and completed jumps;
+4. exact square grid and one-unit reference;
+5. varied static perimeter flora and stones;
+6. water cues.
 
-## Corrected game model
+Current vocabulary:
 
-The tutorial is separate from the challenge loop.
+- celadon water with a shallow-to-deep gradient;
+- a true `10 × 10` SVG grid pattern inside a `120 × 100` view box;
+- a generated overhead green nénuphar for `Départ`, without an extra halo, center dot, or tap ring;
+- a generated overhead flowering nénuphar for `Arrivée`;
+- a direction-aware, strict top-view generated green frog;
+- a strict top-view orange frog only where the two-unit jump is required;
+- twelve true-overhead perimeter placements from the reference-led replacement family: three rocks plus varied-size, varied-orientation lotus and nénuphar repetitions;
+- persistent landing ripples without decorative white wave strokes;
+- two low-contrast, independently drifting noise fields that create ambient caustic interference below the grid;
+- gold ordinary route evidence and persimmon two-unit evidence.
+
+The endpoint nénuphars and frogs are semantic gameplay markers. Perimeter rocks, flowers, and repeated nénuphars are decorative, remain below the exact grid, and stay outside the active route, labels, unit reference, and discrepancy areas. No koi, sprite loops, perspective scenery, board-background artwork, or additional decorative animation is permitted on the active surface. Water motion is limited to the approved caustic system and short landing response described below.
+
+### Generated top-view asset system
+
+`assets/pond-top-view/` preserves the replacement ImageGen source scene, deterministic extraction script, transparent production crops, and full provenance. The former checker-sheet family was discarded rather than iterated. The new family follows the owner-supplied pond reference with flatter color, round overhead silhouettes, coral flowers, and a genuinely vertical camera:
+
+- `frog-green.png` and its locally hue-derived orange obstacle variant;
+- generated plain and flowering nénuphars;
+- two generated coral/red lotus flowers;
+- round, light, and clustered partially submerged rocks.
+
+Every production silhouette was reviewed for a direct 90-degree overhead read. The full generated pond scene, koi, tiny petals, edge foliage, and baked water are extraction context only and are never rendered on the board. Assets have transparent backgrounds, no baked water or grid, no text or branding, and no required state. The source prompt, owner-reference hash, crop boxes, alpha process, derivation, checksums, and responsibility boundary are recorded in `assets/pond-top-view/provenance.json`.
+
+### Success surface
+
+The success map preserves the same pond, grid, endpoint pads, route, obstacle, final frog position, and isolated caustic treatment. Success may change surrounding copy and framing, but it must not replace evidence with a celebratory illustration.
+
+### Water-caustic system
+
+The implementation adapts the two-noise recipe from [Cyanilux’s 2D Water Shader Breakdown](https://www.cyanilux.com/tutorials/2d-water-shader-breakdown/): differently scaled seamless noise fields drift in opposing directions, producing continuously changing interference rather than translating one obvious line tile. The wider source comparison and rejected alternatives are captured in the [water-caustics research brief](../../../design/reviews/ex-0004-water-caustics-research-2026-07-18.md).
+
+Current rendering contract:
+
+- CC0 source textures live in `assets/water/`; provenance is recorded in `assets/water/README.md`;
+- value noise repeats at `48 × 48` SVG units with a `-6°` pattern rotation;
+- gradient noise repeats at `64 × 64` SVG units with a `9°` pattern rotation;
+- the layers use non-synchronized linear cycles of `8s` and `11s`;
+- static `feColorMatrix` / `feComponentTransfer` filters turn luminance peaks into warm highlights and low values into restrained teal depth;
+- highlight opacities are `.08` and `.2`; the depth layer is `.08`;
+- only oversized water rects transform; the SVG root and gameplay evidence never do;
+- reduced motion freezes both fields at their authored initial position without removing the texture.
+
+Required paint order:
+
+1. celadon water gradient;
+2. static radial light;
+3. animated caustic depth and highlights;
+4. static generated perimeter rocks, flowers, and nénuphars;
+5. exact grid;
+6. route and measurement evidence;
+7. semantic endpoint nénuphars, frogs, labels, and discrepancy evidence.
+
+## Implementation design
+
+`PondBoard.svelte` is the deep visual module for the playable surface. Its interface is deliberately small:
+
+- `scene`: direction, distance, mode, and obstacle positions;
+- `journey`: covered units, actions, prediction, outcome, and trace;
+- `variant`: active or success;
+- optional `onJump`: the tutorial action.
+
+The implementation hides SVG geometry, generated-asset layout, endpoint rendering, discrepancy measurement, pond styling, caustic composition, responsive treatment, and active/success differences behind that seam. `Prototype.svelte` owns exercise progression, timing, focus, messages, and smoke metadata. This split keeps visual change local and prevents the success map from becoming a second board implementation.
+
+Both dependencies are in-process; no adapter or additional seam is justified.
+
+## Geometry invariants
+
+The SVG coordinate system is authoritative.
+
+- Board `viewBox`: `0 0 120 100`
+- Grid pattern: `10 × 10`
+- Horizontal origin: `(20, 60)`
+- Horizontal vector: `(10, 0)`
+- Vertical origin: `(60, 80)`
+- Vertical vector: `(0, -10)`
+- The unit reference spans exactly one vector.
+- Start, finish, frog, obstacle, traces, and discrepancy evidence derive from these coordinates.
+
+CSS atmosphere may frame the board but must never define or distort measurement.
+
+## Interaction and feedback
 
 ### Tutorial
 
-```text
-tap the frog → one immediate invariant jump → one consequence mark
-```
+- The frog itself is the control.
+- The invisible hit target remains at least `44 × 44` CSS pixels on narrow touch screens.
+- Each tap advances exactly one unit and leaves a landing marker.
 
-This lets the pupil see what one unit-jump means. It is onboarding, not independent evidence.
+### Prediction
 
-### Round 2 onward
+- A valid digit begins the chain without a separate submit button.
+- While resolving, the input is unavailable.
+- Reduced-motion mode resolves immediately while preserving all final evidence.
 
-```text
-inspect span + visible unit
-→ enter one integer prediction
-→ automatic execution of exactly that many actions
-→ inspect short / exact / over
-→ retry after failure
-```
+### Error
 
-There is no manual jump queue, wind-up control, separate launch button, timing window, aiming, drag, explanation, or written report. Entering a valid one-digit integer triggers execution immediately.
+A wrong prediction must show:
 
-## Learning Microgame Card
+- where the frog stopped;
+- whether it stopped short or passed the finish;
+- the measured discrepancy;
+- a replay control for the same scene.
 
-| Field | Graybox decision |
-|---|---|
-| **Player feeling** | Anticipation followed by a readable physical reveal: “Will the last jump land exactly?” |
-| **Tutorial command** | **Fais sauter** |
-| **Challenge command** | **Combien de sauts ?** |
-| **Primary challenge action** | Enter one integer; resolution is automatic. |
-| **Opening state** | One frog at a named origin, one endpoint, and a square grid whose cell side is exactly one unit-saut. |
-| **Goal** | Predict the number of physical actions that lands the frog exactly at the endpoint. |
-| **Failure** | Too few actions leave a visible gap; too many leave the frog visibly beyond the endpoint. |
-| **Recovery** | Inspect the retained trace, retry, and enter a revised integer. |
-| **Success** | Final action lands exactly at the endpoint; the completed trace remains visible. |
-| **Accessibility** | Native text input with numeric keyboard hint, ordinary keyboard entry, large controls, reduced-motion instant resolution, and no precision route. |
+### Success
 
-## Bounded rounds
+A correct prediction must show the complete route ending exactly at `Arrivée` before progression is offered.
 
-### Round 1 — Tutorial: one-unit jumps
+## Motion rule
 
-- Horizontal four-unit span.
-- Tapping the frog immediately advances exactly one unit.
-- Four taps reach the endpoint.
-- Each action leaves one same-length consequence segment.
+Gameplay state advances between fixed positions. The grid, route, endpoints, frogs, labels, perimeter assets, and persistent evidence remain motionless.
 
-### Round 2 — Horizontal prediction
+Two narrow exceptions are approved:
 
-- Horizontal five-unit span on a true square unit grid; no target number is shown.
-- Every horizontal cell side is exactly one unit-saut.
-- The pupil enters one integer.
-- The frog automatically performs exactly that many one-unit jumps.
-- A short prediction is the deterministic smoke error; retry preserves cheap recovery.
+- ambient caustic depth/highlight fields may drift continuously beneath `.grid-surface` on `8s` and `11s` loops;
+- the newest landing may emit one `280ms` response ellipse; persistent landing ripples remain static.
 
-### Round 3 — Vertical orthogonal transfer
+Still prohibited:
 
-- Six-unit straight vertical span on the same square unit grid.
-- Every vertical cell side is exactly the same one-unit length as a horizontal cell side.
-- The pupil predicts before any verification trace appears.
-- This tests orientation transfer without diagonal-length ambiguity, aiming, or route planning.
+- sprite-sheet animation;
+- frog jump, bounce, bob, idle, rotation, or squash animation;
+- grid, route, marker, label, or scene distortion;
+- animated trace reveal;
+- koi loops or additional decorative motion.
 
-### Round 4 — One mandatory double jump
+Reduced-motion mode freezes the caustic fields and suppresses the one-shot landing response while preserving the attractive static water texture and all final evidence.
 
-- Horizontal six-unit span.
-- A stationary obstacle frog occupies the third unit position.
-- An ordinary action covers one unit; the forced jump over the obstacle covers two units in one action.
-- Correct prediction is five physical actions: `1 + 1 + 2 + 1 + 1 = 6 units`.
-- The obstacle remains; no piece is captured or removed.
+## Accessibility
 
-The integer in Round 4 means **physical actions**, not the path’s unit-length measure. This is a later additive-composition hypothesis, not MES-01 evidence.
+- All controls are keyboard reachable and have visible focus treatment.
+- The tutorial frog has an explicit action label.
+- SVG titles/descriptions announce direction, action count, and covered units.
+- Feedback uses live/status semantics and receives focus when required.
+- Decorative atmosphere images use empty alt text and `aria-hidden="true"`.
+- Color is reinforced by shape, labels, line treatment, and position.
 
-## Mathematical and diagnostic mapping
+## Responsive contract
 
-| Relation | Game state/action | Observable signal |
-|---|---|---|
-| One invariant unit | Square grid with 10-by-10 viewBox cells and equal ordinary displacements | Every horizontal or vertical cell side and ordinary trace segment has length 10 |
-| Mental projection | Integer is committed before trace appears | First prediction exists independently of verification |
-| Verification | Automatic chain executes exactly the entered action count | Landing is spatially short, exact, or over |
-| Calibration | Retry follows retained discrepancy | Revised prediction can respond directionally to the gap/overshoot |
-| Orthogonal transfer | Same square-side unit appears on horizontal and vertical straight spans | Success cannot rely only on left-to-right progression |
-| Two-unit composition | Visible obstacle forces one double displacement | Six unit-lengths require five actions |
+- Desktop uses a two-column learning layout: instruction on the left, pond on the right.
+- Narrow layouts stack heading, pond, control, and feedback in that order.
+- At `320px` width, required controls remain inside the viewport, the frog hit target stays at least `44px`, and no horizontal scrolling is introduced.
 
-A final success after sequential guessing is supported completion, not mastery. Stronger evidence would require a fresh first prediction after practice. The graybox does not persist or submit that evidence.
+## Test contract
 
-## Smoke contract
+`experiments/tests/smoke/ex-0004-visual-polish.spec.ts` protects:
 
-Runner states remain `ready → active → success → complete`.
+- the locked intro artwork checksum;
+- intro and outro presentation;
+- exact grid geometry and unit vector;
+- generated overhead frog and endpoint nénuphars;
+- a static twelve-placement perimeter layer with varied flower and nénuphar scale/orientation between the caustics and exact grid;
+- isolated ambient caustic motion below a static grid;
+- static frog, decorative assets, route, and persistent landing evidence, with no decorative white wave strokes;
+- direct frog control and mobile hit-target size;
+- route persistence on success;
+- reduced-motion behavior;
+- clean completion of all four scenes.
 
-- Tutorial success: four real `jump` activations.
-- First prediction recoverable error: fill the real prediction input with an under-target integer.
-- Recovery: activate the real `retry` control; it clears only the failed attempt and preserves the current `sceneIndex`, so the same passage restarts instead of returning to the tutorial or intro.
-- Prediction success: fill the same input with the ordinary pupil-facing correct integer.
-- Vertical and obstacle rounds use the same prediction control.
-- Reduced-motion and 320px touch paths traverse all four rounds.
+## Scope boundary
 
-## Technical validation record
+Allowed follow-up work:
 
-### Validated mechanic baseline
+- spacing, contrast, typography, and endpoint legibility;
+- SVG refinement that directly supports the mechanic while respecting the motion rule;
+- tuning or replacing individual static generated components while preserving strict top-view presentation, the perimeter-only layout, and asset provenance;
+- tuning the existing caustic density, opacity, or timing within its isolated layer;
+- accessibility and responsive fixes;
+- test/documentation updates that preserve this contract.
 
-Completed 2026-07-17:
+Requires explicit owner approval:
 
-- `npm --prefix experiments run check` — 0 Svelte errors/warnings; catalog valid with 5 exercises.
-- `npm --prefix experiments run build` — production build passed.
-- `SMOKE_EXERCISES=EX-0004 npm --prefix experiments run test:smoke` — 6/6 passed, including reduced-motion keyboard and 320px touch paths.
-- `npx playwright test tests/smoke/ex-0004-round-retry.spec.ts` — a failed prediction resets in the same round with an empty enabled input; the scene identity does not return to the tutorial.
-- root `npm run check` — 0 errors/warnings.
-- `git diff --check` — passed.
-- manual desktop and 320px browser traversal — no console/page errors or horizontal overflow; tutorial, shortage, horizontal/vertical grid, and obstacle states inspected.
-- unit-grid geometry inspection — SVG viewBox cells are 10-by-10, ordinary orthogonal displacement is exactly 10, origins/endpoints lie on grid intersections, and the CSS viewport preserves the 6:5 viewBox ratio so cells render as squares.
-
-A first smoke run exposed `Cannot read properties of undefined (reading 'chapter')` after continuing; the next scene index is now captured before scene loading. Independent review then found that a separate tutorial button weakened direct action and that success removed the exact trace. The tutorial control now overlays the visible world frog, and every success view retains the completed trace, endpoint, frog, and obstacle where applicable. The full smoke suite passed again after both repairs.
-
-### Historical pond-board UI/art validation (superseded presentation)
-
-Completed 2026-07-17:
-
-- `npm --prefix experiments run check` — 0 Svelte errors/warnings; catalog valid with 5 exercises.
-- `npm --prefix experiments run build` — production build passed after compiling the expanded inline SVG/CSS art.
-- `SMOKE_EXERCISES=EX-0004 npm --prefix experiments run test:smoke` — 6/6 passed; tutorial, recoverable horizontal error, horizontal success, vertical transfer, obstacle round, reduced-motion keyboard, and 320px touch routes retained their deterministic hooks and behavior.
-- `git diff --check` — passed.
-- Headless Chrome inspection at 1440px and 320px — no console/page errors and document `scrollWidth` equaled viewport width in both cases.
-- Rendered geometry instrumentation — the desktop map measured `786 × 655` CSS pixels and the mobile map `294 × 245`, producing equal cell width and height (`65.5px` desktop; `24.5px` mobile) from the unchanged 12-by-10 visible grid.
-- Visual-state inspection — intro, tutorial, horizontal success, vertical, obstacle, and final map states retained readable endpoints, unit reference, trace, and perimeter-only scenery; the 320px tutorial frog target measured `44.1 × 44.1` CSS pixels.
-- Source inspection — all pond, frog, bridge, lantern, lotus, mountain, pavilion, and completion art in that slice was hand-authored in `Prototype.svelte`; no external asset, copied board shape, new dependency, or network request was introduced.
-
-### Previous animation and generated-art integration (superseded presentation)
-
-The following record describes the pre-replacement treatment retained for implementation history. The image is no longer intro-only in the current presentation.
-
-The committed `assets/pond-garden-atmosphere.webp` was an **optional decorative intro layer**, not a board. `Prototype.svelte` rendered it as an empty-alt, `aria-hidden` image behind the intro copy and original foreground illustration. The upper atmospheric strip was cropped with `object-fit: cover` / `object-position: center top`, reduced to 22% opacity on desktop and 18% at 320 px, and faded out with a vertical mask. That crop kept the bridge, willow, and architecture as framing while the generated perspective-tile field did not enter an active mathematical corridor. Removing or replacing the image could not change a prompt, control, answer, endpoint, trace, target quantity, or outcome.
-
-Manual source-and-image review found no readable text, title treatment, logo, watermark, trademark, copied character, branding, or recognizable source composition in the generated pixels. The local asset depicted only generic pond, bridge, pavilion, plant, stone, and koi forms. Its decorative tile perspective was excluded from the active and success maps in that superseded presentation, whose sole playable grid remained the exact orthogonal SVG pattern.
-
-Motion is explanatory feedback rather than a new mechanic:
-
-- state advances immediately on the existing action; a 240 ms visual hop runs inside the frog’s exact translated position, so there is no wind-up gate or timing skill;
-- a one-unit hop uses a low arc, while the one-action two-unit obstacle jump uses a higher arc and retains its wider persimmon dashed segment;
-- each committed segment draws from its origin, each landing leaves its permanent dot and a brief nonessential ripple, and the slow perimeter water ripples never move the grid or route;
-- short/over outcomes retain the frog and trace and add a static labelled discrepancy segment; for accepted extreme overruns, only the exact out-of-view evidence layers may overflow the decorative frame while the root clips page-level horizontal scrolling, preserving the original coordinates, viewBox, grid, and prediction behavior; exact arrival replays the retained trace, endpoint halo, and final frog settle;
-- timeout progression remains the source of truth and carries a generation token invalidated by scene loading, retry, restart, and destruction, so no stale callback can mutate a later scene;
-- `prefers-reduced-motion: reduce` applies all state synchronously and removes every new transform/loop animation while preserving final evidence and focus.
-
-Final-polish review and technical evidence:
-
-- desktop headless review at 1440 px loaded the committed 1536 × 1024 WebP locally in a 760.2 × 189.9 CSS-pixel masked intro crop with no horizontal overflow or console/page errors;
-- 320 px touch review loaded the same static crop at 302 × 92 CSS pixels, retained no horizontal overflow, measured the board at 294 × 245, preserved square 24.5 × 24.5 cells, and kept the tutorial frog hit target at 44.1 × 44.1 CSS pixels;
-- active desktop geometry remained 786 × 655, or square 65.5 × 65.5 cells; the ordinary displacement functions remain 10 units and the obstacle action produced one dashed 20-unit trace from unit 2 to unit 4;
-- visual traversal covered intro, tutorial takeoff/landing, horizontal shortage with retained `écart 2`, vertical transfer, in-flight double jump, obstacle success, and the final exact trace;
-- reduced-motion traversal retained three short-attempt segments plus `écart 2`, then five exact-arrival segments and success focus with computed animation name `none`; additional desktop/320 px reduced-motion probes kept vertical predictions 8/9 and obstacle prediction 9 visible outside the decorative frame at their exact coordinates without page-level horizontal overflow;
-- `npm --prefix experiments run check` — passed with 0 Svelte errors/warnings and a valid five-exercise catalog;
-- `npm --prefix experiments run build` — passed;
-- `SMOKE_EXERCISES=EX-0004 npm --prefix experiments run test:smoke` — passed all 8 tests, including desktop, keyboard reduced-motion, and 320 px touch paths;
-- `git diff --check` — passed.
-
-These checks establish implementation operability and rendered geometry only. Owner replay, pupil reasoning, non-guessing behavior, French comprehension, practical accessibility equivalence, and pupil efficacy remain untested. This polish does not approve MES-02 or promotion.
-
-### Cohesive replacement validation
-
-Completed for Issue Slice `ex-0004-remove-graybox-artifact`:
-
-- `npm --prefix experiments run check` — passed with 0 Svelte errors/warnings and a valid five-exercise catalog;
-- `npm --prefix experiments run build` — passed;
-- `npx playwright test tests/smoke/ex-0004-visual-polish.spec.ts tests/smoke/ex-0004-round-retry.spec.ts` — passed the dedicated removed-artifact/hero/HUD/geometry/desktop/320/reduced-motion structure checks and same-round retry check;
-- `SMOKE_EXERCISES=EX-0004 npm --prefix experiments run test:smoke` — passed the ordinary traversal, reduced-motion keyboard path, recoverable discrepancy, retry-in-place, exact success, all four scenes, and 320px touch path with guarded local-only networking;
-- `git diff --check` — passed;
-- headless visual review at 1280 × 800 showed the full-bleed bright hero, integrated readable copy, two-column active hierarchy, restrained HUD, one subtle exact lattice, one in-world unit bracket, painterly board color, dimensional frog/endpoints/traces, and no former poster/frame/plaque/legend/panel stack;
-- the desktop active SVG measured `713.7 × 594.8` CSS pixels, yielding effectively equal `59.48 × 59.48` square cells; the title, board, direct control, tutorial instruction, and feedback all ended above y=`776.4` in the 800px viewport;
-- at 320 × 800 the document `scrollWidth` remained exactly 320; the full-bleed hero remained dominant and the intro title, lead, and start action (ending at y=`772`) were fully visible; the active SVG measured `296 × 246.7`, cells remained effectively square at `24.67 × 24.67`, the direct frog control measured `44.4 × 44.4`, and all required active elements ended above y=`574.7`;
-- source and rendered-structure review found no visible internal identifier inside the prototype, duplicate intro SVG, diagnostic boundary copy, unit badge, thick brown frame, plaque, bottom legend, perimeter clip-art, logo, trademark, watermark, external asset, network request, or image-authored mechanic state;
-- both active and success SVGs retain `viewBox="0 0 120 100"`, a `10 × 10` authored pattern, orthogonal 10-unit ordinary vectors, one 20-unit obstacle trace, inspectable endpoints/traces/discrepancy/obstacle/frog state, and the original reduced-motion/focus behavior.
-
-This visual review verifies the replacement hierarchy and operability, not pupil efficacy. The efficacy boundary remains unchanged.
-
-## Kill criteria
-
-Reject or revise if:
-
-1. pupils solve by trying consecutive numbers without attending to the unit;
-2. the result reads as a hidden-number guessing game rather than spatial projection;
-3. pupils count decorative pixels rather than use the explicit square-side unit relation;
-4. vertical performance depends on aiming, scrolling, or pointer precision;
-5. the obstacle reads as decoration rather than a causal two-unit action;
-6. pupils confuse physical action count with length in unit-lengths;
-7. failure animation replaces or hides the actual shortage/overshoot state.
-
-## Deferred advanced mechanics
-
-- **Diagonal movement:** intentionally deferred because one square’s diagonal is `√2` times its side. A later contract must decide whether that longer displacement is a new unit or a distinct action value.
-- **Direction-changing component:** a later board element may rotate the frog’s heading by 90°. That would create a polyline path and a new planning mechanic, so it is not silently added to this straight-span graybox.
-
-## Scope exclusions
-
-- No diagonal move, curved path, turn within a path, direction-changing component, branching route, optional obstacle, capture/removal, timer, lives, score, random events, ruler, conversion, fractions, area, persistence, network activity, runtime image generation, teacher UI, or pupil prose.
-- No claim of learning, fun, French comprehension, accessibility equivalence, efficacy, or promotion readiness.
-
-## Current disposition
-
-The cohesive pond-game presentation is implemented without changing the validated loop, authored evidence, square lattice, or motion semantics. The presentation evidence establishes structure, operability, responsive fit, and rendered geometry only. It does not establish pupil reasoning, non-guessing behavior, French comprehension, practical accessibility equivalence, learning efficacy, MES-02 contract approval, or promotion readiness; those remain separate later decisions.
+- changing the learning objective or scene sequence;
+- changing distances, answer counts, or obstacle behavior;
+- adding scoring, timing, lives, ranking, or free movement;
+- replacing the locked intro;
+- introducing animated sprites, scene distortion, or decorative motion beyond the approved water and landing exceptions.
