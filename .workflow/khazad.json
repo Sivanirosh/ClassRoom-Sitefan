@@ -11,7 +11,7 @@
   "gate_fail_fast": true,
   "worktree_setup": [
     {
-      "command": "npm ci --prefix experiments",
+      "command": "npm ci",
       "timeout_seconds": 600
     }
   ],

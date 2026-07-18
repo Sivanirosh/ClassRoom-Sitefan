@@ -2,6 +2,10 @@
 
 Application SvelteKit pour une classe. Les élèves ouvrent le QG, choisissent leur prénom, puis explorent cinq mondes de travail. Les résultats sont enregistrés dans une base SQLite locale. L'enseignant suit la progression depuis un tableau protégé par une session serveur. Tout fonctionne sur une seule machine, sans service externe.
 
+## Laboratoire de prototypes
+
+Le catalogue expérimental vit désormais dans le dépôt privé indépendant [`Sivanirosh/game-study-lab`](https://github.com/Sivanirosh/game-study-lab). Cette application n'a aucune dépendance d'exécution envers ce laboratoire ; seuls les prototypes explicitement promus doivent être intégrés ici.
+
 ## Prérequis
 
 * Node.js 20 ou plus récent
